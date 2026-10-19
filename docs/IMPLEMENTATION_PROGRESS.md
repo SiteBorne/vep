@@ -35,3 +35,7 @@ Model `qwen2.5-coder:7b` (pulled with user approval; the 32B model was then dele
 
 ## Phase D: dependency graph
 `src/vep/depgraph.py`, `tests/test_depgraph.py` (10 tests), `vep graph`, `vep compose`. Found while testing: policy already blocks edits to required tests (REQUIRED_TEST_MODIFIED), covered by a test. Remaining Phase D: build/cache CLI, CI integration of build cache.
+
+## Phases E and F
+E: TokenReceipt `usage_source` gained `caller_supplied` (backward-compatible enum extension); `agents.record_usage` never fabricates usage; `tokens.usage_report` separates provenance. F: `benchmarks/controller_scaling.py`, results and honest reading in `docs/CONTROLLER_SCALING.md` (about 4.4x at 8 workers, no gain at 16, about 7% controller overhead).
+Not done in E: build/verification/coordination cost categories beyond seconds, cache-hit receipts from providers (none exist locally), routing wired to real execution.

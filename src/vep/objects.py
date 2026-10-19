@@ -78,7 +78,7 @@ SPECS: dict[str, dict[str, Any]] = {
         "reasoning_tokens_in_output": _f("int", min=0),
         "other_provider_charges": _f("decimal"),
         "prices_per_million": _f("map:decimal"),
-        "usage_source": _f("enum", values=["provider_reported", "simulated", "local_estimate"]),
+        "usage_source": _f("enum", values=["provider_reported", "simulated", "local_estimate", "caller_supplied"]),
         "cost_usd": _f("decimal"), "context_id": _f("id:ContextManifest", False),
         "status": _f("enum", values=["RECORDED", "SETTLED"]),
         "idempotency_key": _f("str")}),
