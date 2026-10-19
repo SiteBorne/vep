@@ -37,6 +37,16 @@ Columns: **Identifier | Description | Type | Units | Default | Allowed range | V
 | job.mode | Execution mode a job requires (`trusted-local` or `isolated`) | enum | - | trusted-local | trusted-local \| isolated | claim filters on worker.mode; no cross-mode fallback | isolated jobs are never run on the host | controller.enqueue/claim | implemented | n/a |
 | job.auto_certify | Whether the worker certifies after PASS evidence | bool | - | true | true/false | worker pipeline; certification guarded by fence and policy trust | certification remains bound to exact snapshot and evidence | controller._pipeline | implemented | n/a |
 
+## Agent adapters
+
+| Identifier | Description | Type | Units | Default | Allowed range | Validation rules | Security implications | Location | Status | Calibration |
+|---|---|---|---|---|---|---|---|---|---|---|
+| ADAPTER_INTERFACE_VERSION | Version of the AgentAdapter interface (capabilities, prepare_task, execute_task, collect_result, collect_usage, cancel) | int | - | 1 | 1 | carried in every result | interface drift between adapters and controller | agents.ADAPTER_INTERFACE_VERSION | implemented | n/a |
+| allowlist[tool].executable | Absolute path of a permitted executable | path | - | - | absolute, executable file | checked at adapter construction; unlisted tools return NOT_ALLOWED | no arbitrary command execution from task or model output | agents.StructuredSubprocessAdapter | implemented | n/a |
+| task.params (argv) | Caller values substituted into argv via {param:name} | str | - | - | <=4096 chars, no NUL, no leading '-' | agents._argv | blocks option and shell-metacharacter injection (no shell is used) | agents.py | implemented | n/a |
+| usage.source | Provenance of a usage figure | enum | - | - | provider_reported \| locally_measured \| caller_supplied \| estimated \| simulated \| none | usage_record rejects unknown values; tool-claimed usage is always caller_supplied | adapter claims are never promoted | agents.USAGE_SOURCES | implemented | n/a |
+| AgentTask.timeout_s | Wall-clock limit for one adapter execution | int | s | 120 | >0 | process group SIGKILL on expiry; error_class TIMEOUT | bounded resource use | agents.AgentTask | implemented | illustrative |
+
 ## Object serialization
 
 | Identifier | Description | Type | Units | Default | Allowed range | Validation rules | Security implications | Location | Status | Calibration |
