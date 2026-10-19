@@ -11,16 +11,57 @@ import sys
 import unittest
 
 
+def place_roots(paths):
+    """Put the candidate's import roots after the standard library but BEFORE site-packages, so an installed
+    copy of the project under test can never shadow the staged source. Standard-library names still win."""
+    idx = len(sys.path)
+    for i, entry in enumerate(sys.path):
+        if "site-packages" in entry or "dist-packages" in entry:
+            idx = i
+            break
+    for p in paths:
+        if p not in sys.path:
+            sys.path.insert(idx, p)
+            idx += 1
+
+
+def provided_names(roots):
+    """Top-level importable names the staged tree provides (packages with __init__.py, and plain modules)."""
+    names = set()
+    for r in roots:
+        try:
+            entries = list(os.scandir(r))
+        except OSError:
+            continue
+        for e in entries:
+            if e.is_dir() and os.path.isfile(os.path.join(e.path, "__init__.py")):
+                names.add(e.name)
+            elif e.is_file() and e.name.endswith(".py") and e.name != "__init__.py":
+                names.add(e.name[:-3])
+    return names
+
+
+def shadowed_modules(roots, modules):
+    """Names the staged tree provides but that were imported from somewhere else (for example an installed copy).
+    Order of sys.path is not trusted: this inspects what was actually loaded."""
+    real_roots = [os.path.realpath(r) + os.sep for r in roots]
+    out = []
+    for name in sorted(provided_names(roots)):
+        f = getattr(modules.get(name), "__file__", None)
+        if f and not any(os.path.realpath(f).startswith(rr) for rr in real_roots):
+            out.append(name)
+    return out
+
+
 def main() -> int:
     cfg = json.loads(sys.argv[1])
     root = os.path.abspath(cfg["root"])
-    for r in cfg["import_roots"]:
-        p = os.path.abspath(os.path.join(root, r))
-        if p not in sys.path:
-            sys.path.append(p)
+    roots = [os.path.abspath(os.path.join(root, r)) for r in cfg["import_roots"]]
+    place_roots(roots)
     start = os.path.abspath(os.path.join(root, cfg["start_dir"]))
     if start not in sys.path:
         sys.path.append(start)
+    roots = roots + [start]
     loader = unittest.TestLoader()
     suite = loader.discover(start, pattern=cfg["pattern"], top_level_dir=start)
     discovered = suite.countTestCases()
@@ -43,7 +84,8 @@ def main() -> int:
 
     runner = unittest.TextTestRunner(stream=sys.stderr, verbosity=2, resultclass=Rec)
     result = runner.run(suite)
-    report = {"kind": "unittest", "discovered": discovered, "run": result.testsRun, **out}
+    report = {"kind": "unittest", "discovered": discovered, "run": result.testsRun, **out,
+              "shadowed_modules": shadowed_modules(roots, sys.modules)}
     if cfg["report_path"] == "-":  # isolated mode: no writable host path; parent parses this marker line
         sys.stdout.write("\nVEP_REPORT_V1:" + json.dumps(report, sort_keys=True) + "\n")
         sys.stdout.flush()

@@ -1,0 +1,143 @@
+{
+ "baseline": {
+  "files_in_snapshot": 39,
+  "min_passing_tests": 500,
+  "policy_id": "pol-7ce899091d5b2fff578448e8cc8af7ed3701f5e73dda7feb8c23c8d3f53d7af6",
+  "required_test_files": 2,
+  "snapshot_id": "snap-810d0ec0dbf099789126759c096a4913b8a8cd51e0933b4b1bd385be83cc7ac4"
+ },
+ "candidates": {
+  "benign": {
+   "candidate_id": "cand-12d08923c3cb0628012b457cb625ca5564d6f9821bf23210bd8a445190155ff7",
+   "cost": {
+    "child_cpu_s": 5.548,
+    "wall_s": 6.622
+   },
+   "result": {
+    "candidate_id": "cand-12d08923c3cb0628012b457cb625ca5564d6f9821bf23210bd8a445190155ff7",
+    "candidate_status": "CERTIFIED",
+    "certificate_id": "cert-1f700c6ebd2ced9123af7a6d3fbb8cb51c334b75ba6b28b109d4c9e4001cc5e9",
+    "evidence_id": "evd-590ad9561851dfec1b738d609e0fbc942a2b362fadf3fc7daf90794d7cf0b9ae",
+    "job": "job-20580c40e3c0b8bcb24a2ab67835fc25",
+    "outcome": "SUCCEEDED",
+    "reason": null,
+    "trust_level": "TRUSTED_LOCAL",
+    "verdict": "PASS"
+   },
+   "snapshot_id": "snap-2533462bf472ae4bfa2dac81e56ed6bfc7eb01d329ee6441cf856ab21ad1c40f",
+   "tests": {
+    "tests_discovered": 931,
+    "tests_failed": 0,
+    "tests_passed": 926,
+    "tests_run": 931,
+    "tests_skipped": 5
+   }
+  },
+  "mutant": {
+   "candidate_id": "cand-d3c9ea1dcc71fef251c9c0bf5d9d71d323d80c99adb1f5eea6724e055c71ff20",
+   "cost": {
+    "child_cpu_s": 5.541,
+    "wall_s": 6.597
+   },
+   "result": {
+    "candidate_id": "cand-d3c9ea1dcc71fef251c9c0bf5d9d71d323d80c99adb1f5eea6724e055c71ff20",
+    "candidate_status": "CERTIFIED",
+    "certificate_id": "cert-5b1c656919425d4e0719fd96535b36840c264509d15d6ca1dbe81413463b277a",
+    "evidence_id": "evd-7a30091c998372d5f5beea7ba43d870f98ab0a32a0bb62ecd0e9f49a6021fc3a",
+    "job": "job-ee72a090c9075b36ceb079a4ce3ece2a",
+    "outcome": "SUCCEEDED",
+    "reason": null,
+    "trust_level": "TRUSTED_LOCAL",
+    "verdict": "PASS"
+   },
+   "snapshot_id": "snap-c2fc79f38256d587e083ae085956bfca02854ac816fc863fac8a8d521007aaef",
+   "tests": {
+    "tests_discovered": 930,
+    "tests_failed": 0,
+    "tests_passed": 925,
+    "tests_run": 930,
+    "tests_skipped": 5
+   }
+  },
+  "upstream": {
+   "candidate_id": "cand-9a2b059c8e7ab0cb59493266345522fedc6b11bdd62c1d705a9c6bfc61168ce0",
+   "cost": {
+    "child_cpu_s": 5.566,
+    "wall_s": 6.602
+   },
+   "result": {
+    "candidate_id": "cand-9a2b059c8e7ab0cb59493266345522fedc6b11bdd62c1d705a9c6bfc61168ce0",
+    "candidate_status": "CERTIFIED",
+    "certificate_id": "cert-6564fadca9f7be5e070cf9a11bda02901e9b3547cd485ecfb11afb05a2af88aa",
+    "evidence_id": "evd-5d9889b6fb8fc43411a7130f6e382a60d52e93c0f40632b5db04c733d9c24dc9",
+    "job": "job-ffbc761399c4a99a9a87950da56cc316",
+    "outcome": "SUCCEEDED",
+    "reason": null,
+    "trust_level": "TRUSTED_LOCAL",
+    "verdict": "PASS"
+   },
+   "snapshot_id": "snap-810d0ec0dbf099789126759c096a4913b8a8cd51e0933b4b1bd385be83cc7ac4",
+   "tests": {
+    "tests_discovered": 930,
+    "tests_failed": 0,
+    "tests_passed": 925,
+    "tests_run": 930,
+    "tests_skipped": 5
+   }
+  }
+ },
+ "classification": "LOCALLY_VERIFIED (trusted-local, one host)",
+ "direct_reference": {
+  "child_cpu_s": 5.568,
+  "command": "python -I -m unittest discover -s tests -p test_*.py -t .",
+  "returncode": 0,
+  "summary": [
+   "Ran 930 tests in 6.426s",
+   "OK (skipped=5)"
+  ],
+  "wall_s": 6.578
+ },
+ "kind": "external project through VEP",
+ "limits": [
+  "project tests ran as the invoking user with NO isolation (explicitly authorized for these vetted projects)",
+  "no changes were pushed to the project; candidates are local and disposable",
+  "one host, one run per candidate: no statistical claim"
+ ],
+ "outcome": {
+  "all_expected": false,
+  "benign_certified": true,
+  "edited_tree_rejected": true,
+  "mutant_rejected": false,
+  "upstream_certified": true
+ },
+ "project": {
+  "commit": "4aeb4338ae1407d8da9723e86da99efeb446f719",
+  "kind": "library with a large unit-test suite",
+  "license": "MIT",
+  "license_file": "LICENSE",
+  "name": "more-itertools",
+  "tag": "v11.2.1",
+  "url": "https://github.com/more-itertools/more-itertools"
+ },
+ "report_version": 1,
+ "tool": {
+  "package": "0.4.0a1",
+  "platform": "macOS-15.6-arm64-arm-64bit-Mach-O",
+  "python": "3.14.7",
+  "vep_commit": "a0a2d88c4ddc87672ea00f100c02480d3489ec7d"
+ },
+ "verification": {
+  "bundle_node_independent": true,
+  "bundle_python_reference": true,
+  "edited_tree_reason": "SOURCE_CHANGED: current tree snap-fa5ef9ebff5ca230b617a214f0",
+  "edited_tree_rejected": true,
+  "live_tree_checks": [
+   "certificate signature",
+   "evidence signature",
+   "evidence binding",
+   "candidate/objective/policy binding",
+   "current source equals certified snapshot"
+  ],
+  "upstream_certified": true
+ }
+}
