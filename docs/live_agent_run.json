@@ -1,0 +1,18 @@
+{
+ "status": "FAILED",
+ "error_class": "RUNTIME_UNAVAILABLE",
+ "changes": {
+  "added": [],
+  "removed": [],
+  "modified": [],
+  "mode_changed": []
+ },
+ "usage": {
+  "source": "locally_measured",
+  "wall_s": 900.088543
+ },
+ "candidate_id": null,
+ "detail": "timed out",
+ "elapsed_s": 900.2,
+ "model": "deepseek-r1:32b-qwen-distill-q4_K_M"
+}
