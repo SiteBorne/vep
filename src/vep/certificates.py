@@ -12,7 +12,7 @@ from .snapshots import tree_snapshot_id
 from .workspace import Workspace, utcnow
 
 
-def certify(ws: Workspace, candidate_id: str) -> VEPObject:
+def certify(ws: Workspace, candidate_id: str, guard=None) -> VEPObject:
     st = candidates.get_state(ws, candidate_id)
     if st["status"] != "EVIDENCE_READY":
         raise StateError(f"candidate must be EVIDENCE_READY to certify (is {st['status']})")
@@ -44,6 +44,8 @@ def certify(ws: Workspace, candidate_id: str) -> VEPObject:
         "trust_level": ev_trust, "evaluator_id": ev["evaluator_id"]})
     env_digest = store_signed(ws, cert, keystore)
     with ws.db.tx() as c:
+        if guard is not None:
+            guard(c)  # controller fencing: raises StaleLease if the caller lost its lease
         c.execute("INSERT INTO certificates(id,candidate_id,objective_id,snapshot_id,policy_id,evidence_id,envelope_digest,trust_level)"
                   " VALUES(?,?,?,?,?,?,?,?)", (cert.id, candidate_id, objective.id, cand["snapshot_id"],
                                                objective["policy_id"], ev.id, env_digest, ev_trust))
