@@ -23,7 +23,7 @@ DENIED_MODULES = frozenset(sys.stdlib_module_names) | RUNNER_NAMES
 PATTERN_RE = re.compile(r"^[A-Za-z0-9_*?.\-]{1,64}$")
 
 EVALUATOR_GRAMMAR = {
-    "unittest": {"kind", "start_dir", "pattern", "import_roots", "min_tests"},
+    "unittest": {"kind", "start_dir", "pattern", "import_roots", "min_tests", "allow_module_names"},
     "pytest": {"kind", "targets", "import_roots", "min_tests"},
 }
 DEFAULT_LIMITS = {"timeout_s": 120, "max_output_bytes": 4_000_000, "evaluation_cost_micro_usd": 1000}
@@ -52,6 +52,10 @@ def validate_evaluator(ev: Any) -> dict:
     for r in roots:
         if r != ".":
             _rel(r)
+    allow = ev.get("allow_module_names", [])
+    if not isinstance(allow, list) or any(not isinstance(n, str) or n not in RUNNER_NAMES for n in allow):
+        raise SchemaError("evaluator.allow_module_names may only list names from RUNNER_NAMES "
+                          "(standard-library names can never be allowed); it applies to the unittest evaluator only")
     if ev["kind"] == "unittest":
         _rel(ev.get("start_dir", "tests"))
         if not PATTERN_RE.match(ev.get("pattern", "test*.py")):
@@ -141,7 +145,7 @@ def shadowing_paths(ev: dict, paths: list[str]) -> list[str]:
             if rel is None:
                 continue
             first = rel.split("/")[0].split(".")[0]
-            if first in DENIED_MODULES:
+            if first in DENIED_MODULES - set(ev.get("allow_module_names", [])):
                 bad.append(p)
                 break
     return bad
