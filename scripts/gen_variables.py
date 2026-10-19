@@ -56,6 +56,12 @@ SECTIONS: list[tuple[str, list[tuple]]] = [
   ("BuildAction.timeout_s", "Wall-clock limit per execution", "int", "s", "300", ">0", "process-group SIGKILL", "bounded resource use", "builds.BuildAction", I, ILL),
   ("build_cache entry", "action id to stored result; reused only if result and every output blob re-hash", "row", "-", "-", "exit_code 0 only", "builds.lookup", "corrupt entries are misses, never reused", "builds.lookup", I, N),
  ]),
+ ("Dependency graph and evidence validity", [
+  ("REUSE_MODE", "Evidence reuse rule", "enum", "-", "EXACT_ONLY", "EXACT_ONLY", "depgraph.evidence_validity compares snapshot, policy, verdict and optional trust level", "static analysis cannot prove behavioural independence, so evidence is never reused across snapshots", "depgraph.REUSE_MODE", I, N),
+  ("edge.basis", "Why an edge exists", "enum", "-", "-", "STATIC_IMPORT | DECLARED | SIGNED_BINDING | PATH_OVERLAP", "build_graph; no edge without a basis", "no invented dependencies", "depgraph.py", I, N),
+  ("impact.required_evaluation", "Evaluation required after any change", "enum", "-", "FULL", "FULL", "depgraph.impact", "impact only prioritises tests; mandatory tests are never skipped", "depgraph.impact", I, N),
+  ("composite.requires_composite_evaluation", "A clean three-way merge is a new, unevaluated candidate", "bool", "-", "true", "true", "depgraph.compose_candidates", "textual cleanliness is not behavioural compatibility", "depgraph.compose_candidates", I, N),
+ ]),
  ("Object serialization", [
   ("CANON_VERSION", "Canonical serialization version (VEP-C1)", "int", "-", "1", "1", "documented in RFC-0001", "changing it changes every identity", "canonical.py", I, N),
   ("SCHEMA_VERSION", "Object schema version embedded in every object and identity domain", "int", "-", "1", "1", "from_bytes rejects other versions", "domain separation across versions", "objects.SCHEMA_VERSION", I, N),

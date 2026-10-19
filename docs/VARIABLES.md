@@ -58,6 +58,15 @@ Columns: **Identifier | Description | Type | Units | Default | Allowed range | V
 | BuildAction.timeout_s | Wall-clock limit per execution | int | s | 300 | >0 | process-group SIGKILL | bounded resource use | builds.BuildAction | implemented | illustrative |
 | build_cache entry | action id to stored result; reused only if result and every output blob re-hash | row | - | - | exit_code 0 only | builds.lookup | corrupt entries are misses, never reused | builds.lookup | implemented | n/a |
 
+## Dependency graph and evidence validity
+
+| Identifier | Description | Type | Units | Default | Allowed range | Validation rules | Security implications | Location | Status | Calibration |
+|---|---|---|---|---|---|---|---|---|---|---|
+| REUSE_MODE | Evidence reuse rule | enum | - | EXACT_ONLY | EXACT_ONLY | depgraph.evidence_validity compares snapshot, policy, verdict and optional trust level | static analysis cannot prove behavioural independence, so evidence is never reused across snapshots | depgraph.REUSE_MODE | implemented | n/a |
+| edge.basis | Why an edge exists | enum | - | - | STATIC_IMPORT \| DECLARED \| SIGNED_BINDING \| PATH_OVERLAP | build_graph; no edge without a basis | no invented dependencies | depgraph.py | implemented | n/a |
+| impact.required_evaluation | Evaluation required after any change | enum | - | FULL | FULL | depgraph.impact | impact only prioritises tests; mandatory tests are never skipped | depgraph.impact | implemented | n/a |
+| composite.requires_composite_evaluation | A clean three-way merge is a new, unevaluated candidate | bool | - | true | true | depgraph.compose_candidates | textual cleanliness is not behavioural compatibility | depgraph.compose_candidates | implemented | n/a |
+
 ## Object serialization
 
 | Identifier | Description | Type | Units | Default | Allowed range | Validation rules | Security implications | Location | Status | Calibration |

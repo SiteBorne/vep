@@ -32,3 +32,6 @@ KNOWN_LIMITATIONS: cancellation does not kill running subprocesses; `check_polic
 
 ## Live agent attempt 2 (positive, N=1)
 Model `qwen2.5-coder:7b` (pulled with user approval; the 32B model was then deleted at the user's request). `scripts/live_agent_check.py qwen2.5-coder:7b 600`: 4.1 s, runtime-reported 135 input / 106 output tokens, one file modified, candidate evaluated by the controller: PASS, CERTIFIED (TRUSTED_LOCAL). Output in `docs/live_agent_run.json`. Single run on a toy task; says nothing about reliability or the 32B model's slowness beyond the earlier timeout.
+
+## Phase D: dependency graph
+`src/vep/depgraph.py`, `tests/test_depgraph.py` (10 tests), `vep graph`, `vep compose`. Found while testing: policy already blocks edits to required tests (REQUIRED_TEST_MODIFIED), covered by a test. Remaining Phase D: build/cache CLI, CI integration of build cache.
