@@ -25,7 +25,10 @@ KNOWN_LIMITATIONS: cancellation does not kill running subprocesses; `check_polic
 `src/vep/agents.py`, `tests/test_agents.py` (10 tests). Full suite: 336 passed. Adapters never certify; output is registered as a PROPOSED candidate and must pass the controller/evaluator. A test confirms an agent that deletes the tests is not certified.
 
 ## Live agent attempt (recorded, negative)
-`scripts/live_agent_check.py` against local Ollama `deepseek-r1:32b-qwen-distill-q4_K_M`, 900 s model timeout: **timed out with no output** (`docs/live_agent_run.json`, error_class RUNTIME_UNAVAILABLE, detail "timed out"). The test suite was also running on the same machine for part of that window, so this is not a clean measurement of the model. LIVE_AGENT_EXECUTION remains UNVERIFIED. A smaller model or a longer limit on an idle machine is needed.
+`scripts/live_agent_check.py` against local Ollama `deepseek-r1:32b-qwen-distill-q4_K_M`, 900 s model timeout: **timed out with no output** (`docs/live_agent_run.json`, error_class RUNTIME_UNAVAILABLE, detail "timed out"). The test suite was also running on the same machine for part of that window, so this is not a clean measurement of the model. LIVE_AGENT_EXECUTION remains UNVERIFIED. (Superseded by attempt 2 below.)
 
 ## Phase D so far
 `src/vep/builds.py`, `tests/test_builds.py` (8 tests). Full suite: 344 passed.
+
+## Live agent attempt 2 (positive, N=1)
+Model `qwen2.5-coder:7b` (pulled with user approval; the 32B model was then deleted at the user's request). `scripts/live_agent_check.py qwen2.5-coder:7b 600`: 4.1 s, runtime-reported 135 input / 106 output tokens, one file modified, candidate evaluated by the controller: PASS, CERTIFIED (TRUSTED_LOCAL). Output in `docs/live_agent_run.json`. Single run on a toy task; says nothing about reliability or the 32B model's slowness beyond the earlier timeout.
