@@ -1,5 +1,6 @@
 import json
 import os
+import sys
 import unittest
 from decimal import Decimal
 
@@ -184,3 +185,52 @@ class EvaluationTests(VepTestCase):
 
 if __name__ == "__main__":
     unittest.main()
+
+
+class ShadowedCodeUnderTestTests(VepTestCase):
+    """The staged candidate must be the code that actually ran, even if an installed copy exists."""
+
+    def runner(self):
+        import importlib.util
+        spec = importlib.util.spec_from_file_location("vep_runner_under_test", execution.RUNNER_PATH)
+        mod = importlib.util.module_from_spec(spec)
+        spec.loader.exec_module(mod)
+        return mod
+
+    def test_roots_are_placed_before_site_packages_and_after_stdlib(self):
+        r = self.runner()
+        saved = list(sys.path)
+        self.addCleanup(lambda: sys.path.__setitem__(slice(None), saved))
+        sys.path[:] = ["/stdlib", "/stdlib/lib-dynload", "/venv/lib/python3/site-packages"]
+        r.place_roots(["/staged/src", "/staged"])
+        self.assertEqual(sys.path, ["/stdlib", "/stdlib/lib-dynload", "/staged/src", "/staged", "/venv/lib/python3/site-packages"])
+
+    def test_module_loaded_from_outside_the_staged_roots_is_reported(self):
+        import types
+        r = self.runner()
+        staged = self.tmp / "staged"
+        (staged / "pkg").mkdir(parents=True)
+        (staged / "pkg" / "__init__.py").write_text("")
+        (staged / "solo.py").write_text("")
+        mods = {"pkg": types.SimpleNamespace(__file__="/elsewhere/site-packages/pkg/__init__.py"),
+                "solo": types.SimpleNamespace(__file__=str(staged / "solo.py")), "other": types.SimpleNamespace(__file__="/x/other.py")}
+        self.assertEqual(r.shadowed_modules([str(staged)], mods), ["pkg"])
+
+    def test_a_shadowed_report_can_never_pass(self):
+        from vep.errors import FalseGreen
+        e = self.env()
+        rep = {"kind": "unittest", "discovered": 1, "run": 1, "passed": ["tests.test_arithmetic.T.test_add"], "failed": [], "errors": [],
+               "skipped": [], "expected_failures": [], "unexpected_successes": [], "shadowed_modules": ["arithmetic"]}
+        with self.assertRaises(FalseGreen) as cm:
+            execution.validate_report(rep, e.ws.get_object(e.policy.id, "ExecutionPolicy"), 0)
+        self.assertIn("CODE_UNDER_TEST_SHADOWED:arithmetic", str(cm.exception))
+        rep["shadowed_modules"] = "arithmetic"
+        with self.assertRaises(FalseGreen):
+            p = self.tmp / "r.json"
+            p.write_text(json.dumps(rep))
+            execution.parse_unittest_report(p)
+
+    def test_a_normal_project_run_reports_no_shadowing(self):
+        e = self.env()
+        out = e.evaluate(e.candidate({"extra.py": "X = 1\n"}))
+        self.assertEqual(out["status"], "EVIDENCE_READY")

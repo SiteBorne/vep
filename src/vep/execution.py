@@ -113,6 +113,8 @@ def parse_unittest_report(path: Path) -> dict:
     if not isinstance(rep, dict) or rep.get("kind") != "unittest" or not all(isinstance(rep.get(k), list) for k in keys) \
             or not isinstance(rep.get("run"), int) or not isinstance(rep.get("discovered"), int):
         raise FalseGreen("MALFORMED_REPORT: missing fields")
+    if not isinstance(rep.get("shadowed_modules", []), list):
+        raise FalseGreen("MALFORMED_REPORT: shadowed_modules")
     return rep
 
 
@@ -150,6 +152,8 @@ def validate_report(rep: dict, policy: VEPObject, exit_code: int) -> tuple[str, 
         raise FalseGreen("REPORT_INCONSISTENT: outcome list does not match run count")
     if rep["run"] > rep["discovered"] and rep["kind"] == "unittest":
         raise FalseGreen("REPORT_INCONSISTENT: ran more tests than discovered")
+    if rep.get("shadowed_modules"):  # the tests exercised code that is not the staged candidate
+        raise FalseGreen("CODE_UNDER_TEST_SHADOWED:" + ",".join(map(str, rep["shadowed_modules"])))
     if rep["run"] == 0:
         raise FalseGreen("ZERO_TESTS: no tests were discovered and executed")
     if len(skipped) == rep["run"]:
