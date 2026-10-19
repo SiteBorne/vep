@@ -8,7 +8,7 @@ import sys
 from decimal import Decimal
 from pathlib import Path
 
-from . import (audits, budgets, cache_planner, candidates, certificates, context, controller, execution, git_adapter,
+from . import (audits, budgets, cache_planner, candidates, certificates, context, controller, depgraph, execution, git_adapter,
                isolation, objectives, policies, routing, simulation, snapshots, tokens, versions)
 from .canonical import strict_loads
 from .errors import VepError
@@ -149,6 +149,20 @@ def cmd_jobs(a):
             _emit(a, {"job": controller.get_job(ws, a.job), "events": controller.events(ws, a.job)})
         else:
             _emit(a, controller.cancel(ws, a.job))
+
+
+def cmd_graph(a):
+    ws = _ws(a)
+    g = depgraph.build_graph(ws, a.snapshot)
+    if a.old:
+        g = {"graph": g, "impact": depgraph.impact(ws, g, a.old, a.snapshot)}
+    _emit(a, g)
+
+
+def cmd_compose(a):
+    r = depgraph.compose_candidates(_ws(a), a.objective, a.candidate_a, a.candidate_b)
+    _emit(a, r)
+    return 0 if r["status"] == "TEXTUALLY_CLEAN" else 3
 
 
 def cmd_certify(a):
@@ -296,6 +310,10 @@ def build_parser() -> argparse.ArgumentParser:
     s.add_argument("--no-certify", action="store_true"); s.add_argument("--max-attempts", type=int, default=3)
     s = add("jobs", cmd_jobs, "inspect, recover or cancel controller jobs")
     s.add_argument("action", choices=["list", "show", "recover", "cancel"]); s.add_argument("--job")
+    s = add("graph", cmd_graph, "dependency graph of a snapshot (static imports only); --old adds change impact (prioritisation only)")
+    s.add_argument("--snapshot", required=True); s.add_argument("--old")
+    s = add("compose", cmd_compose, "compose two candidates; a clean merge still needs full evaluation")
+    s.add_argument("--objective", required=True); s.add_argument("candidate_a"); s.add_argument("candidate_b")
     s = add("evaluate", cmd_evaluate, "run the protected evaluator (requires explicit trusted-local authorization)")
     s.add_argument("--candidate", required=True)
     s.add_argument("--trusted-local-execution", action="store_true",
