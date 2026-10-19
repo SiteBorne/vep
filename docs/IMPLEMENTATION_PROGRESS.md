@@ -45,3 +45,6 @@ Not done in E: build/verification/coordination cost categories beyond seconds, c
 
 ## Phase H: dogfood (VEP on VEP)
 `scripts/dogfood.py`, `docs/dogfood/` (4 reports + README). Run 3 PASS: real full suite through the controller, certified TRUSTED_LOCAL, negative control rejected, tampered tree rejected, Node and Python bundle verification agree. Three real defects in VEP found and fixed on the way (shadowing rule vs own package name; tests not hermetic against installed vep; demo/quickstart environment assumptions). Branch `dogfood/vep-build-cli` holds the candidate change (not merged). Not done: second and third external projects (Phase H asks for two more), untrusted-code isolation for them.
+
+## Phase H (continued): external projects
+Merged `dogfood/vep-build-cli` into main (c83bb9d; 367 tests pass on the merged tree). Evaluated pyflakes 4.0.3 and more-itertools v11.2.1 (`docs/external/`). Found and fixed a real false-green path: installed copy of the project shadowing the staged tree (runner now orders roots before site-packages and fails closed on shadowing). Also added `make_policy(required_exclude=...)`. Full suite 372 passed. TODO: re-run the VEP-on-VEP dogfood and external runs with the final runner/commit as part of the launch gate; pytest evaluator lacks the shadow check; a project with real dependencies is still NOT_RUN.
