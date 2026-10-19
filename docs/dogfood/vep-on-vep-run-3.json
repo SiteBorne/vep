@@ -1,0 +1,210 @@
+{
+ "baseline": {
+  "base_snapshot_id": "snap-62bf8365e19b7f2fb2268bd12d8328bf2b32b624ceae6805b24b624b05f61070",
+  "min_passing_tests": 300,
+  "objective_id": "obj-8480501c323e09091e153e231c78444c021c7da55718cfcaeb2d102575d07139",
+  "policy_id": "pol-d4d8f0dd0782cce3a7520f45fce31dc57ec1a41f3f28174f237b157410fd097f",
+  "protected_patterns": [
+   "conftest.py",
+   "*/conftest.py",
+   "pytest.ini",
+   "tox.ini",
+   "setup.cfg",
+   "pyproject.toml",
+   "unittest.cfg",
+   ".coveragerc",
+   "sitecustomize.py",
+   "usercustomize.py",
+   "*.pth",
+   ".vep/*",
+   "vep-policy*.json"
+  ],
+  "required_test_files": 29
+ },
+ "candidate": {
+  "candidate_id": "cand-e99e3f35ed41a36f9c8dced4afa45f85ae261876a0142e78ac6ca668adfd5e76",
+  "diff": {
+   "added": [
+    "tests/test_cli_build.py"
+   ],
+   "mode_changed": [],
+   "modified": [
+    "src/vep/cli.py"
+   ],
+   "removed": []
+  },
+  "snapshot_id": "snap-d26273f8ec3a9b5576dd6c8549cd3da410845b4f55e7c71d4902a7fa293288f7"
+ },
+ "classification": "LOCALLY_VERIFIED (trusted-local, one host)",
+ "impact_hint": {
+  "affected_by_static_analysis": [
+   "src/vep/__main__.py",
+   "src/vep/cli.py",
+   "tests/test_cli_build.py",
+   "tests/test_docs.py"
+  ],
+  "affected_tests": [
+   "tests/test_cli_build.py",
+   "tests/test_docs.py"
+  ],
+  "changed": [
+   "src/vep/cli.py",
+   "tests/test_cli_build.py"
+  ],
+  "note": "affected_tests is a prioritisation hint only",
+  "required_evaluation": "FULL",
+  "semantic_impact_established": false,
+  "unanalysable_changes": []
+ },
+ "invalidation": {
+  "certificate_rejected_for_changed_tree": true,
+  "changed_snapshot_id": "snap-1b5c7973abbd450b814b2c2a4dfc6b8ca1b82bfff45d3b9630e6a2838a658fe4",
+  "edit": "appended a comment to src/vep/versions.py",
+  "evidence_reasons": [
+   "SNAPSHOT_CHANGED"
+  ],
+  "evidence_reusable_for_changed_tree": false,
+  "reason": "SOURCE_CHANGED: current tree snap-1b5c7973abbd450b814b2c2a4dfc6b8ca1b82bfff45d3b9630e6a2838a658fe4 != certified snap-d26273f8ec3a9b5576dd6c8549cd3da410845b4f55e",
+  "required_evaluation_after_change": "FULL",
+  "static_impact": [
+   "benchmarks/controller_scaling.py",
+   "examples/run_demo.py",
+   "scripts/dogfood.py",
+   "scripts/gen_conformance_vectors.py",
+   "scripts/gen_variables.py",
+   "scripts/live_agent_check.py",
+   "src/vep/__main__.py",
+   "src/vep/agents.py",
+   "src/vep/audits.py",
+   "src/vep/budgets.py",
+   "src/vep/builds.py",
+   "src/vep/candidates.py"
+  ]
+ },
+ "kind": "vep-on-vep dogfood",
+ "limits": [
+  "trusted-local execution: no isolation; the evaluator ran this repository's own tests as the invoking user",
+  "tests that need tools absent from the scrubbed PATH (for example node) are skipped by the evaluator and counted as skipped",
+  "one change, one host, one run: no statistical claim"
+ ],
+ "negative_control": {
+  "as_expected": true,
+  "candidate_id": "cand-bba21bc47c79f7792b9045a09ce763f800d78e6b76b5a79c3d68ec66a98db40c",
+  "cost": {
+   "child_cpu_s": 25.325,
+   "peak_child_rss_mb": 73.9,
+   "wall_s": 49.318
+  },
+  "description": "candidate's new tests with the base implementation of src files",
+  "expected": "REJECTED",
+  "result": {
+   "candidate_id": "cand-bba21bc47c79f7792b9045a09ce763f800d78e6b76b5a79c3d68ec66a98db40c",
+   "candidate_status": "REJECTED",
+   "evidence_id": "evd-b115f7052a9af20caf09e49aeb41ad95eedca008b3e56bcec4a08da4d9c99874",
+   "job": "job-33e8b441682470def33cc19eb126cade",
+   "outcome": "SUCCEEDED",
+   "reason": null,
+   "trust_level": "TRUSTED_LOCAL",
+   "verdict": "FAIL"
+  }
+ },
+ "outcome": "DOGFOOD_PASS",
+ "report_version": 1,
+ "run": {
+  "budget": {
+   "account": "objective:obj-8480501c323e09091e153e231c78444c021c7da55718cfcaeb2d102575d07139",
+   "available": "0.998",
+   "kind": "objective",
+   "limit": "1",
+   "overrun": "0",
+   "overspent": false,
+   "reserved": "0",
+   "settled": "0.002",
+   "uncertain": "0"
+  },
+  "controller_result": {
+   "candidate_id": "cand-e99e3f35ed41a36f9c8dced4afa45f85ae261876a0142e78ac6ca668adfd5e76",
+   "candidate_status": "CERTIFIED",
+   "certificate_id": "cert-2c30b36f648c2288f8751691a5f23cf2ab5fa30d8acf5393cdbf95ae0a10c5f2",
+   "evidence_id": "evd-8025492f8f77752c05e1f54588c2e35f5266829798f13a0c0e2fe26712360819",
+   "job": "job-185597ef9e064a23e6776d3f6d83cfba",
+   "outcome": "SUCCEEDED",
+   "reason": null,
+   "trust_level": "TRUSTED_LOCAL",
+   "verdict": "PASS"
+  },
+  "cost": {
+   "child_cpu_s": 25.805,
+   "peak_child_rss_mb": 73.9,
+   "wall_s": 50.101
+  },
+  "evidence_trust_level": "TRUSTED_LOCAL",
+  "job": {
+   "attempts": 1,
+   "failure_class": null,
+   "fence": 1,
+   "id": "job-185597ef9e064a23e6776d3f6d83cfba",
+   "mode": "trusted-local",
+   "state": "SUCCEEDED"
+  },
+  "note": "no model tokens were used by the evaluation; CPU/wall are measured, not monetized",
+  "tests": {
+   "tests_discovered": 367,
+   "tests_failed": 0,
+   "tests_passed": 365,
+   "tests_run": 367,
+   "tests_skipped": 2
+  },
+  "token_usage": {}
+ },
+ "subject": {
+  "base_commit": "11391feb4969afc1cd14afa8ed23bbf1c5f1dffc",
+  "candidate_author_note": "change written by Claude Code in an interactive session; not an autonomous-agent run",
+  "candidate_commit": "9d79210111af34cbf67982d2406041bd11462c5e",
+  "candidate_subject": "Add 'vep build run|stats' CLI over build actions (dogfood candidate)",
+  "license": "Apache-2.0",
+  "repository": "VEP (this repository)"
+ },
+ "tool": {
+  "db_schema": 3,
+  "evaluator_python": "/private/tmp/claude-501/-Users-meta4ickal-VEP/570a6066-b34d-4f71-83ea-ff68a69aede1/scratchpad/evalenv/bin/python",
+  "package": "0.4.0a1",
+  "platform": "macOS-15.6-arm64-arm-64bit-Mach-O",
+  "protocol": "0.3",
+  "python": "3.14.7",
+  "tool_commit": "11391feb4969afc1cd14afa8ed23bbf1c5f1dffc",
+  "tool_tree_dirty": true
+ },
+ "verification": {
+  "bundle_node_independent": {
+   "certificate_id": "cert-2c30b36f648c2288f8751691a5f23cf2ab5fa30d8acf5393cdbf95ae0a10c5f2",
+   "code": null,
+   "snapshot_id": "snap-d26273f8ec3a9b5576dd6c8549cd3da410845b4f55e7c71d4902a7fa293288f7",
+   "trust_level": "TRUSTED_LOCAL",
+   "valid": true
+  },
+  "bundle_python_reference": {
+   "certificate_id": "cert-2c30b36f648c2288f8751691a5f23cf2ab5fa30d8acf5393cdbf95ae0a10c5f2",
+   "code": null,
+   "snapshot_id": "snap-d26273f8ec3a9b5576dd6c8549cd3da410845b4f55e7c71d4902a7fa293288f7",
+   "trust_level": "TRUSTED_LOCAL",
+   "valid": true
+  },
+  "certificate_id": "cert-2c30b36f648c2288f8751691a5f23cf2ab5fa30d8acf5393cdbf95ae0a10c5f2",
+  "certified": true,
+  "certified_snapshot_id": "snap-d26273f8ec3a9b5576dd6c8549cd3da410845b4f55e7c71d4902a7fa293288f7",
+  "current_source_check": [
+   "certificate signature",
+   "evidence signature",
+   "evidence binding",
+   "candidate/objective/policy binding",
+   "current source equals certified snapshot"
+  ],
+  "historical_check": [
+   "certificate signature",
+   "evidence signature",
+   "evidence binding",
+   "candidate/objective/policy binding"
+  ]
+ }
+}

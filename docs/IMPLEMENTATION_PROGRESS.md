@@ -42,3 +42,6 @@ Not done in E: build/verification/coordination cost categories beyond seconds, c
 
 ## Phase G: conformance
 `conformance/vectors/suite-1.0.json` (119 vectors), `conformance/node/verify.mjs`, `src/vep/conformance.py`, `docs/CONFORMANCE.md`, `scripts/conformance_check.sh`, `tests/test_conformance.py`. Node 26 used (Go absent; nothing installed). Real finding: reference regexes used `$`/`\d`, accepting trailing-newline ids/digests and non-ASCII digits; fixed with `\Z` + ASCII and recorded in CHANGELOG as a compatibility note. Not done: golden v0.4.0a1 fixtures for the bundle format (the existing `tests/test_compat.py` covers v1/v2 decoding), a third implementation.
+
+## Phase H: dogfood (VEP on VEP)
+`scripts/dogfood.py`, `docs/dogfood/` (4 reports + README). Run 3 PASS: real full suite through the controller, certified TRUSTED_LOCAL, negative control rejected, tampered tree rejected, Node and Python bundle verification agree. Three real defects in VEP found and fixed on the way (shadowing rule vs own package name; tests not hermetic against installed vep; demo/quickstart environment assumptions). Branch `dogfood/vep-build-cli` holds the candidate change (not merged). Not done: second and third external projects (Phase H asks for two more), untrusted-code isolation for them.

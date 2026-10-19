@@ -34,6 +34,7 @@ Categories (RFC rule R10): **IMPLEMENTED** (code exists), **TESTED** (automated 
 | Usage receipts with provenance (`agents.record_usage`, `tokens.usage_report`, `caller_supplied` source) | IMPLEMENTED, TESTED | Local-model tokens priced at 0 (unpriced), not a cost claim; wall/CPU time is reported, not monetized |
 | Controller scaling at 1/2/4/8/16 real processes | LOCALLY_VERIFIED (observation, `docs/CONTROLLER_SCALING.md`) | One host, tiny jobs; no distributed claim |
 | Conformance suite 1.0 (119 frozen vectors) + independent Node verifier + portable bundles (`vep conformance`) | IMPLEMENTED, TESTED; both verifiers agree 119/119 | Second implementation written by the same author, not externally reviewed. Go verifier **NOT_IMPLEMENTED** (Go not installed). Bundle proof limits in `docs/CONFORMANCE.md` section 5 |
+| VEP-on-VEP dogfood (`scripts/dogfood.py`, `docs/dogfood/`) | LOCALLY_VERIFIED (one change, one host); not REAL_WORLD_VALIDATED | Trusted-local; change authored interactively, not by an autonomous agent; two further external projects NOT_RUN |
 | Distributed coordination, remote execution, merge queues | DESIGNED only | |
 | Live LLM / provider integration | OUT OF SCOPE | |
 | Production readiness | **NOT CLAIMED** | |
