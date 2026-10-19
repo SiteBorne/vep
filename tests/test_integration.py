@@ -7,14 +7,14 @@ import sys
 import unittest
 from pathlib import Path
 
-from tests.helpers import BASE_FILES, VepTestCase, write_tree
+from tests.helpers import BASE_FILES, VepTestCase, src_env, write_tree
 
 ROOT = Path(__file__).resolve().parents[1]
 VEP = [sys.executable, "-m", "vep"]
 
 
 def run(args, cwd, ok=(0,)):
-    r = subprocess.run(VEP + args, cwd=cwd, capture_output=True, text=True)
+    r = subprocess.run(VEP + args, cwd=cwd, capture_output=True, text=True, env=src_env())
     assert r.returncode in ok, (args, r.returncode, r.stdout, r.stderr)
     return r
 
@@ -107,7 +107,7 @@ class CLITests(VepTestCase):
         self.assertIn("context_id", m)
         run(["context", "--snapshot", snap, "--policy", pol, "--max-tokens", "1"], self.proj, ok=(6,))
         run(["context", "--snapshot", snap, "--policy", pol, "--max-tokens", "100", "--path", "../x"], self.proj, ok=(14,))
-        r = subprocess.run(VEP + ["nonsense"], cwd=self.proj, capture_output=True, text=True)
+        r = subprocess.run(VEP + ["nonsense"], cwd=self.proj, capture_output=True, text=True, env=src_env())
         self.assertEqual(r.returncode, 2)
 
     def test_commands_outside_a_workspace_fail_cleanly(self):
@@ -122,7 +122,7 @@ class CLITests(VepTestCase):
 
 class ScriptTests(unittest.TestCase):
     def test_demo_runs_the_real_implementation(self):
-        r = subprocess.run([sys.executable, str(ROOT / "examples" / "run_demo.py")], capture_output=True, text=True)
+        r = subprocess.run([sys.executable, str(ROOT / "examples" / "run_demo.py")], capture_output=True, text=True, env=src_env())
         self.assertEqual(r.returncode, 0, r.stderr)
         for needle in ("refused: AuthorizationError", "'current source equals certified snapshot'", "rejected: SOURCE_CHANGED",
                        "REQUIRED_TEST_MODIFIED", "DEMO OK"):
@@ -131,7 +131,8 @@ class ScriptTests(unittest.TestCase):
     def test_benchmark_script_reports_reproducibility(self):
         d = Path(__import__("tempfile").mkdtemp()); self.addCleanup(shutil.rmtree, d, True)
         r = subprocess.run([sys.executable, str(ROOT / "benchmarks" / "run_simulation.py"), "--tasks", "400",
-                            "--out-json", str(d / "r.json"), "--out-md", str(d / "r.md")], capture_output=True, text=True)
+                            "--out-json", str(d / "r.json"), "--out-md", str(d / "r.md")], capture_output=True, text=True,
+                           env=src_env())
         self.assertEqual(r.returncode, 0, r.stderr)
         self.assertIn("reproducible: yes", r.stdout)
         self.assertIn("SIMULATED", (d / "r.md").read_text())

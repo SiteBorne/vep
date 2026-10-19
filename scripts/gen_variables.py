@@ -120,6 +120,7 @@ SECTIONS: list[tuple[str, list[tuple]]] = [
   ("evaluator.targets", "pytest targets", "list[str]", "paths", "[tests]", "safe relative paths, non-empty", "validate_evaluator", "-", "policies.py", I, N),
   ("evaluator.import_roots", "Directories added to the import path", "list[str]", "paths", "[.]", "safe relative paths", "validate_evaluator", "must also be shadow-checked", "policies.py", I, N),
   ("evaluator.min_tests", "Minimum PASSED tests required", "int", "tests", "1", ">=1", "validate_evaluator; validate_report", "zero-test results can never pass", "execution.validate_report", I, ILL),
+  ("evaluator.allow_module_names", "Runner-dependency module names (subset of RUNNER_NAMES, e.g. vep) the subject project legitimately owns and may change", "list[str]", "-", "[]", "names in RUNNER_NAMES only; never standard-library names; unittest evaluator only", "validate_evaluator; shadowing_paths", "weakens RUNNER_SHADOWING for the listed names only; frozen in the policy, so a candidate cannot widen it; safe only because the unittest runner imports no third-party code", "policies.shadowing_paths", I, N),
   ("false-green rules", "ZERO_TESTS, ALL_SKIPPED, REPORT_INCONSISTENT, EXIT_REPORT_MISMATCH, REQUIRED_SUITE_NOT_EXECUTED, REQUIRED_SUITE_ALL_SKIPPED, TOO_FEW_PASSING_TESTS, MALFORMED_REPORT", "rule", "-", "on", "fixed", "execution.validate_report", "exit code 0 alone never certifies", "execution.py", I, N),
  ]),
  ("Evidence validity", [
