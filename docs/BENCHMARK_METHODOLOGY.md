@@ -63,3 +63,7 @@ Cold = first run in a fresh state; warm = repeated. The machine is otherwise idl
 Two projects with no third-party dependencies, one machine (12 logical CPUs), small repetition counts, wall time and CPU
 only. No token or monetary cost is involved (no model is used), so no cost comparison is made. Results are observations,
 not proofs, and are not extrapolated to larger repositories or remote execution.
+
+## Deviations from this plan (added after the first measurement run)
+* **The machine was not idle.** `load_avg_1m_at_start` was 9.9 (pyflakes) and 22.4 (more-itertools, inflated by the preceding run), and a process listing taken right afterwards showed other applications using several cores (`corespeechd` about 190%, Notes about 100%, a ChatGPT renderer about 100%) with the system load average staying near 10 on 12 logical CPUs. The condition "otherwise idle" was therefore NOT met. All numbers below were taken under that background load; absolute times may be inflated and parallel results (4 workers) are the most exposed. Effects reported as large are far outside the observed noise; small ones (a few percent) are not reliable. A re-run on a quiet machine is recommended before quoting any figure.
+* Peak RSS is not reported (`ru_maxrss` of children is a running maximum, not a per-run figure).
