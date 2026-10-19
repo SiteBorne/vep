@@ -23,6 +23,18 @@ BASE_FILES = {
 AUTH = execution.TRUSTED_LOCAL_AUTH
 
 
+def src_env() -> dict:
+    """Environment for child processes that must run the *same* vep source tree the tests import.
+
+    Without this, a child `python -m vep` resolves whatever vep is installed, so an evaluation of a staged
+    candidate could silently test an installed copy instead of the candidate."""
+    import os
+    import vep
+    env = dict(os.environ)
+    env["PYTHONPATH"] = os.pathsep.join([str(Path(vep.__file__).resolve().parent.parent)] + ([env["PYTHONPATH"]] if env.get("PYTHONPATH") else []))
+    return env
+
+
 def write_tree(root: Path, files: dict[str, str | None]) -> None:
     for rel, content in files.items():
         p = root / rel

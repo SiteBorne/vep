@@ -146,6 +146,7 @@ Columns: **Identifier | Description | Type | Units | Default | Allowed range | V
 | evaluator.targets | pytest targets | list[str] | paths | [tests] | safe relative paths, non-empty | validate_evaluator | - | policies.py | implemented | n/a |
 | evaluator.import_roots | Directories added to the import path | list[str] | paths | [.] | safe relative paths | validate_evaluator | must also be shadow-checked | policies.py | implemented | n/a |
 | evaluator.min_tests | Minimum PASSED tests required | int | tests | 1 | >=1 | validate_evaluator; validate_report | zero-test results can never pass | execution.validate_report | implemented | illustrative |
+| evaluator.allow_module_names | Runner-dependency module names (subset of RUNNER_NAMES, e.g. vep) the subject project legitimately owns and may change | list[str] | - | [] | names in RUNNER_NAMES only; never standard-library names; unittest evaluator only | validate_evaluator; shadowing_paths | weakens RUNNER_SHADOWING for the listed names only; frozen in the policy, so a candidate cannot widen it; safe only because the unittest runner imports no third-party code | policies.shadowing_paths | implemented | n/a |
 | false-green rules | ZERO_TESTS, ALL_SKIPPED, REPORT_INCONSISTENT, EXIT_REPORT_MISMATCH, REQUIRED_SUITE_NOT_EXECUTED, REQUIRED_SUITE_ALL_SKIPPED, TOO_FEW_PASSING_TESTS, MALFORMED_REPORT | rule | - | on | fixed | execution.validate_report | exit code 0 alone never certifies | execution.py | implemented | n/a |
 
 ## Evidence validity
@@ -574,5 +575,5 @@ All fields are validated by `VEPObject.create`; unknown fields are rejected; opt
 
 ## Policy structure (generated)
 
-* Evaluator grammar: `{'unittest': ['import_roots', 'kind', 'min_tests', 'pattern', 'start_dir'], 'pytest': ['import_roots', 'kind', 'min_tests', 'targets']}`
+* Evaluator grammar: `{'unittest': ['allow_module_names', 'import_roots', 'kind', 'min_tests', 'pattern', 'start_dir'], 'pytest': ['import_roots', 'kind', 'min_tests', 'targets']}`
 * Default limits: `{'timeout_s': 120, 'max_output_bytes': 4000000, 'evaluation_cost_micro_usd': 1000}`

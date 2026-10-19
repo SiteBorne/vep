@@ -13,7 +13,7 @@ from vep.errors import CanonicalError, SchemaError, VerificationFailed
 from vep.evidence import load_signed
 from vep.objects import VEPObject
 from vep.workspace import Workspace
-from tests.helpers import VepTestCase
+from tests.helpers import VepTestCase, src_env
 
 FIX = Path(__file__).parent / "fixtures"
 LEGACY = json.loads((FIX / "legacy_v1_objects.json").read_text())
@@ -176,7 +176,7 @@ class LegacyCertificateTests(VepTestCase):
 
 class CliContractTests(VepTestCase):
     def run_cli(self, *args, cwd=None):
-        return subprocess.run([sys.executable, "-m", "vep", *args], cwd=cwd or self.tmp, capture_output=True, text=True)
+        return subprocess.run([sys.executable, "-m", "vep", *args], cwd=cwd or self.tmp, capture_output=True, text=True, env=src_env())
 
     def test_R007_failures_return_distinct_nonzero_exit_codes(self):
         e = self.env()
