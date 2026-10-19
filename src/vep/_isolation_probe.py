@@ -61,4 +61,5 @@ def main():
     print("VEP_ISOLATION_PROBE:" + json.dumps(out, sort_keys=True))
 
 
-main()
+if __name__ == "__main__":
+    main()
