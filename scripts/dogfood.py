@@ -100,7 +100,7 @@ def main() -> int:
         git_adapter.associate(ws, base.id, base_dir)
         policy = make_policy(ws, base, name="vep-on-vep", evaluator={
             "kind": "unittest", "start_dir": "tests", "pattern": "test*.py", "import_roots": ["src", "."],
-            "min_tests": a.require_count}, limits={"timeout_s": a.timeout})
+            "min_tests": a.require_count, "allow_module_names": ["vep"]}, limits={"timeout_s": a.timeout})
         obj = create_objective(ws, "vep build CLI", "Expose build actions through `vep build run|stats` with an authorization gate and tests.",
                                base.id, policy.id, created_by="dogfood")
         budgets.create_account(ws, f"objective:{obj.id}", "objective", "1.00")
