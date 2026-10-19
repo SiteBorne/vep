@@ -62,6 +62,12 @@ SECTIONS: list[tuple[str, list[tuple]]] = [
   ("impact.required_evaluation", "Evaluation required after any change", "enum", "-", "FULL", "FULL", "depgraph.impact", "impact only prioritises tests; mandatory tests are never skipped", "depgraph.impact", I, N),
   ("composite.requires_composite_evaluation", "A clean three-way merge is a new, unevaluated candidate", "bool", "-", "true", "true", "depgraph.compose_candidates", "textual cleanliness is not behavioural compatibility", "depgraph.compose_candidates", I, N),
  ]),
+ ("Conformance", [
+  ("suite_version", "Frozen conformance suite version", "str", "-", "1.0", "1.0", "gen_conformance_vectors.py --check fails on drift", "a silent change to expected results would hide a protocol change", "conformance/vectors/suite-1.0.json", I, N),
+  ("bundle_version", "Portable certificate bundle format", "int", "-", "1", "1", "verify_bundle rejects others with UNSUPPORTED_BUNDLE_VERSION", "unknown formats must fail explicitly", "conformance.BUNDLE_VERSION", I, N),
+  ("expect.require_trust", "Minimum trust level the verifier demands", "enum", "-", "TRUSTED_LOCAL", "TRUSTED_LOCAL | ISOLATED_VERIFIED", "UNVERIFIED is never a valid requirement", "TRUSTED_LOCAL evidence can never satisfy ISOLATED_VERIFIED", "conformance._verify", I, N),
+  ("reason codes", "Machine-readable verification failure codes", "enum", "-", "-", "see docs/CONFORMANCE.md section 4", "every code is exercised by a vector (tested)", "deterministic failure reporting", "conformance.CODES", I, N),
+ ]),
  ("Object serialization", [
   ("CANON_VERSION", "Canonical serialization version (VEP-C1)", "int", "-", "1", "1", "documented in RFC-0001", "changing it changes every identity", "canonical.py", I, N),
   ("SCHEMA_VERSION", "Object schema version embedded in every object and identity domain", "int", "-", "1", "1", "from_bytes rejects other versions", "domain separation across versions", "objects.SCHEMA_VERSION", I, N),

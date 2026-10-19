@@ -8,7 +8,7 @@ import sys
 from decimal import Decimal
 from pathlib import Path
 
-from . import (audits, budgets, cache_planner, candidates, certificates, context, controller, depgraph, execution, git_adapter,
+from . import (audits, budgets, cache_planner, candidates, certificates, conformance, context, controller, depgraph, execution, git_adapter,
                isolation, objectives, policies, routing, simulation, snapshots, tokens, versions)
 from .canonical import strict_loads
 from .errors import VepError
@@ -165,6 +165,26 @@ def cmd_compose(a):
     return 0 if r["status"] == "TEXTUALLY_CLEAN" else 3
 
 
+def cmd_conformance(a):
+    ws = _ws(a) if a.action == "export" else None
+    if a.action == "export":
+        b = conformance.export_bundle(ws, a.certificate, a.require_trust)
+        if a.out:
+            Path(a.out).write_text(json.dumps(b, indent=1, sort_keys=True))
+            _emit(a, {"bundle": a.out, "certificate_id": a.certificate})
+        else:
+            _emit(a, b)
+        return 0
+    if a.action == "verify":
+        r = conformance.verify_bundle(json.loads(Path(a.bundle).read_text()))
+    else:
+        suite = conformance.load_suite(a.suite)
+        bad = [v["id"] for v in suite["vectors"] if not conformance.check_vector(v, conformance.run_vector(v))]
+        r = {"valid": not bad, "vectors": len(suite["vectors"]), "disagreements": bad, "verifier": "reference (python)"}
+    _emit(a, r)
+    return 0 if r["valid"] else 4
+
+
 def cmd_certify(a):
     ws = _ws(a)
     cert = certificates.certify(ws, a.candidate)
@@ -314,6 +334,10 @@ def build_parser() -> argparse.ArgumentParser:
     s.add_argument("--snapshot", required=True); s.add_argument("--old")
     s = add("compose", cmd_compose, "compose two candidates; a clean merge still needs full evaluation")
     s.add_argument("--objective", required=True); s.add_argument("candidate_a"); s.add_argument("candidate_b")
+    s = add("conformance", cmd_conformance, "export a portable certificate bundle, verify one offline, or run the frozen vectors (reference verifier)")
+    s.add_argument("action", choices=["export", "verify", "vectors"]); s.add_argument("--certificate"); s.add_argument("--bundle")
+    s.add_argument("--out"); s.add_argument("--suite", default="conformance/vectors/suite-1.0.json")
+    s.add_argument("--require-trust", default="TRUSTED_LOCAL", choices=["TRUSTED_LOCAL", "ISOLATED_VERIFIED"])
     s = add("evaluate", cmd_evaluate, "run the protected evaluator (requires explicit trusted-local authorization)")
     s.add_argument("--candidate", required=True)
     s.add_argument("--trusted-local-execution", action="store_true",

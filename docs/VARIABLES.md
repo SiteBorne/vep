@@ -67,6 +67,15 @@ Columns: **Identifier | Description | Type | Units | Default | Allowed range | V
 | impact.required_evaluation | Evaluation required after any change | enum | - | FULL | FULL | depgraph.impact | impact only prioritises tests; mandatory tests are never skipped | depgraph.impact | implemented | n/a |
 | composite.requires_composite_evaluation | A clean three-way merge is a new, unevaluated candidate | bool | - | true | true | depgraph.compose_candidates | textual cleanliness is not behavioural compatibility | depgraph.compose_candidates | implemented | n/a |
 
+## Conformance
+
+| Identifier | Description | Type | Units | Default | Allowed range | Validation rules | Security implications | Location | Status | Calibration |
+|---|---|---|---|---|---|---|---|---|---|---|
+| suite_version | Frozen conformance suite version | str | - | 1.0 | 1.0 | gen_conformance_vectors.py --check fails on drift | a silent change to expected results would hide a protocol change | conformance/vectors/suite-1.0.json | implemented | n/a |
+| bundle_version | Portable certificate bundle format | int | - | 1 | 1 | verify_bundle rejects others with UNSUPPORTED_BUNDLE_VERSION | unknown formats must fail explicitly | conformance.BUNDLE_VERSION | implemented | n/a |
+| expect.require_trust | Minimum trust level the verifier demands | enum | - | TRUSTED_LOCAL | TRUSTED_LOCAL \| ISOLATED_VERIFIED | UNVERIFIED is never a valid requirement | TRUSTED_LOCAL evidence can never satisfy ISOLATED_VERIFIED | conformance._verify | implemented | n/a |
+| reason codes | Machine-readable verification failure codes | enum | - | - | see docs/CONFORMANCE.md section 4 | every code is exercised by a vector (tested) | deterministic failure reporting | conformance.CODES | implemented | n/a |
+
 ## Object serialization
 
 | Identifier | Description | Type | Units | Default | Allowed range | Validation rules | Security implications | Location | Status | Calibration |

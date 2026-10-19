@@ -39,3 +39,6 @@ Model `qwen2.5-coder:7b` (pulled with user approval; the 32B model was then dele
 ## Phases E and F
 E: TokenReceipt `usage_source` gained `caller_supplied` (backward-compatible enum extension); `agents.record_usage` never fabricates usage; `tokens.usage_report` separates provenance. F: `benchmarks/controller_scaling.py`, results and honest reading in `docs/CONTROLLER_SCALING.md` (about 4.4x at 8 workers, no gain at 16, about 7% controller overhead).
 Not done in E: build/verification/coordination cost categories beyond seconds, cache-hit receipts from providers (none exist locally), routing wired to real execution.
+
+## Phase G: conformance
+`conformance/vectors/suite-1.0.json` (119 vectors), `conformance/node/verify.mjs`, `src/vep/conformance.py`, `docs/CONFORMANCE.md`, `scripts/conformance_check.sh`, `tests/test_conformance.py`. Node 26 used (Go absent; nothing installed). Real finding: reference regexes used `$`/`\d`, accepting trailing-newline ids/digests and non-ASCII digits; fixed with `\Z` + ASCII and recorded in CHANGELOG as a compatibility note. Not done: golden v0.4.0a1 fixtures for the bundle format (the existing `tests/test_compat.py` covers v1/v2 decoding), a third implementation.

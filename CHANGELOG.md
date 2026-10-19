@@ -1,5 +1,12 @@
 # Changelog
 
+## Unreleased (0.5.0b1 work)
+
+* Added: durable execution controller, agent adapters, build actions, dependency graph, usage provenance, frozen conformance suite 1.0 with an independent Node verifier.
+* **Compatibility note (C22):** object id, digest, timestamp and decimal patterns now use `\Z` and ASCII digits. Previously a value with a trailing newline (e.g. a digest followed by `\n`) or non-ASCII digits in a timestamp passed validation. VEP never produced such values; objects containing them are now rejected. Found while writing the independent verifier.
+* `TokenReceipt.usage_source` gained `caller_supplied` (backward-compatible enum extension). Database schema 3 adds job and build tables (additive).
+
+
 All notable changes. Format: [Keep a Changelog](https://keepachangelog.com/en/1.1.0/). Versions: [PEP 440](https://peps.python.org/pep-0440/).
 
 ## [0.4.0a1] - 2026-10-19

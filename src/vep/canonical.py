@@ -20,7 +20,7 @@ from .errors import CanonicalError
 CANON_VERSION = 1
 MAX_INT = 2**63 - 1
 MAX_DEPTH = 64
-HEX64 = re.compile(r"^[0-9a-f]{64}$")
+HEX64 = re.compile(r"^[0-9a-f]{64}\Z")  # \Z, not $: "$" would accept a trailing newline
 
 
 def _check(value: Any, depth: int = 0) -> None:
