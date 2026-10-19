@@ -3,12 +3,13 @@ from __future__ import annotations
 
 import argparse
 import json
+import sqlite3
 import sys
 from decimal import Decimal
 from pathlib import Path
 
 from . import (audits, budgets, cache_planner, candidates, certificates, context, execution, git_adapter,
-               isolation, objectives, policies, routing, simulation, snapshots, tokens)
+               isolation, objectives, policies, routing, simulation, snapshots, tokens, versions)
 from .canonical import strict_loads
 from .errors import VepError
 from .evidence import KeyStore
@@ -18,6 +19,12 @@ EXIT_UNEXPECTED = 70
 
 
 def _emit(args, data) -> None:
+    field = getattr(args, "field", None)
+    if field:
+        if not isinstance(data, dict) or field not in data:
+            raise KeyError(f"no field {field!r} in output")
+        print(data[field])
+        return
     if getattr(args, "json", False):
         print(json.dumps(data, indent=2, sort_keys=True, default=str))
     elif isinstance(data, (dict, list)):
@@ -82,6 +89,8 @@ def cmd_objective(a):
         evaluator["min_tests"] = int(evaluator["min_tests"])
     pol = policies.make_policy(ws, base_snap, name=a.policy_name, evaluator=evaluator, audits=audit_specs)
     obj = objectives.create_objective(ws, a.title, a.description, base, pol.id)
+    if a.budget:
+        budgets.create_account(ws, f"objective:{obj.id}", "objective", a.budget)
     _emit(a, {"objective_id": obj.id, "policy_id": pol.id, "base_snapshot_id": base,
               "required_tests": sorted(pol["required_tests"])})
 
@@ -105,8 +114,9 @@ def cmd_candidate(a):
 def cmd_evaluate(a):
     ws = _ws(a)
     auth = execution.TRUSTED_LOCAL_AUTH if a.trusted_local_execution else None
+    att = json.loads(Path(a.attestation_file).read_text()) if a.attestation_file else None
     r = execution.evaluate(ws, a.candidate, trusted_local_authorization=auth,
-                           mode="isolated" if a.isolated else "trusted-local")
+                           mode="isolated" if a.isolated else "trusted-local", image=a.image, attestation=att)
     _emit(a, r)
     return 0 if r["status"] == "EVIDENCE_READY" else 3
 
@@ -120,7 +130,8 @@ def cmd_certify(a):
 def cmd_verify(a):
     ws = _ws(a)
     r = certificates.verify_certificate(ws, a.certificate, current_root=None if a.historical else ws.root,
-                                        expect_objective_id=a.objective, expect_policy_id=a.policy)
+                                        expect_objective_id=a.objective, expect_policy_id=a.policy,
+                                        require_trust=a.require_trust)
     r["mode"] = "historical" if a.historical else "current-source"
     _emit(a, r)
 
@@ -189,7 +200,21 @@ def cmd_audit(a):
     return 3 if any(out.values()) else 0
 
 
+def cmd_version(a):
+    _emit(a, versions.summary())
+
+
 def cmd_isolation(a):
+    if a.action == "detect":
+        return _emit(a, isolation.detect_capabilities(a.image))
+    if a.action == "verify":
+        if not a.image:
+            raise ValueError("--image is required")
+        att = isolation.verify_runtime(a.image)
+        if a.out:
+            Path(a.out).write_text(json.dumps(att, indent=1, sort_keys=True))
+        _emit(a, att)
+        return 0 if att["status"] == "ISOLATED_VERIFIED" else 8
     if a.action == "probe":
         r = isolation.probe(a.image)
         _emit(a, r.to_dict())
@@ -206,6 +231,7 @@ def cmd_simulate(a):
 def _common(sp):
     sp.add_argument("--json", action="store_true", help="machine-readable JSON output")
     sp.add_argument("--root", default=".", help="workspace root (default: cwd)")
+    sp.add_argument("--field", help="print only this top-level field of the result (for scripting)")
 
 
 def build_parser() -> argparse.ArgumentParser:
@@ -220,6 +246,7 @@ def build_parser() -> argparse.ArgumentParser:
         return sp
 
     add("init", cmd_init, "create .vep state and the Ed25519 signing key")
+    add("version", cmd_version, "show package, protocol, schema and format versions")
     add("status", cmd_status, "show workspace status")
     s = add("snapshot", cmd_snapshot, "take a source snapshot"); s.add_argument("--path")
     s = add("diff", cmd_diff, "diff two snapshots or a candidate against its base")
@@ -229,6 +256,7 @@ def build_parser() -> argparse.ArgumentParser:
     s.add_argument("--title", default="objective"); s.add_argument("--description", default="")
     s.add_argument("--base"); s.add_argument("--policy-name", default="default")
     s.add_argument("--evaluator-file"); s.add_argument("--audit-file")
+    s.add_argument("--budget", help="also create the objective budget account with this USD limit (e.g. 1.00)")
     s = add("candidate", cmd_candidate, "register/check/show/list candidates")
     s.add_argument("action", choices=["create", "check", "show", "list"]); s.add_argument("--id")
     s.add_argument("--objective"); s.add_argument("--snapshot"); s.add_argument("--author", default="agent")
@@ -237,11 +265,15 @@ def build_parser() -> argparse.ArgumentParser:
     s.add_argument("--trusted-local-execution", action="store_true",
                    help="acknowledge: runs candidate code on this host WITHOUT security isolation")
     s.add_argument("--isolated", action="store_true", help="request container isolation (fails closed if unavailable)")
+    s.add_argument("--image", help="digest-pinned local image for --isolated")
+    s.add_argument("--attestation-file", help="output of `vep isolation verify` for --image")
     s = add("certify", cmd_certify, "issue a signed certificate for EVIDENCE_READY candidate")
     s.add_argument("--candidate", required=True)
     s = add("verify", cmd_verify, "verify a certificate (against current source unless --historical)")
     s.add_argument("--certificate", required=True); s.add_argument("--historical", action="store_true")
     s.add_argument("--objective"); s.add_argument("--policy")
+    s.add_argument("--require-trust", choices=["TRUSTED_LOCAL", "ISOLATED_VERIFIED"], default="TRUSTED_LOCAL",
+                   help="minimum evidence trust level to accept (default TRUSTED_LOCAL; reported in the output)")
     s = add("budget", cmd_budget, "transactional budgets")
     s.add_argument("action", choices=["create", "reserve", "settle", "release", "uncertain", "show", "history"])
     s.add_argument("--account"); s.add_argument("--kind", default="objective"); s.add_argument("--limit")
@@ -266,7 +298,7 @@ def build_parser() -> argparse.ArgumentParser:
     s = add("audit", cmd_audit, "run static readiness/consistency audits on a JSON file")
     s.add_argument("--audit-file", required=True); s.add_argument("--target")
     s = add("isolation", cmd_isolation, "probe or plan Docker+gVisor isolation (offline)")
-    s.add_argument("action", choices=["probe", "plan"]); s.add_argument("--image")
+    s.add_argument("action", choices=["probe", "plan", "detect", "verify"]); s.add_argument("--image"); s.add_argument("--out")
     s.add_argument("--source"); s.add_argument("--cmd", nargs="+")
     s = add("simulate", cmd_simulate, "seeded synthetic cost/reliability simulation")
     s.add_argument("--tasks", type=int, default=20000); s.add_argument("--seed", type=int, default=20261019)
@@ -282,7 +314,7 @@ def main(argv: list[str] | None = None) -> int:
     except VepError as exc:
         print(f"vep: {exc.__class__.__name__}: {exc}", file=sys.stderr)
         return exc.exit_code
-    except (OSError, ValueError, KeyError, TypeError) as exc:
+    except (OSError, ValueError, KeyError, TypeError, ArithmeticError, sqlite3.Error) as exc:
         print(f"vep: error: {exc.__class__.__name__}: {exc}", file=sys.stderr)
         return EXIT_UNEXPECTED
 

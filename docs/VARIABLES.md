@@ -296,6 +296,41 @@ Columns: **Identifier | Description | Type | Units | Default | Allowed range | V
 | SimParams.router_noise / router_threshold | Adaptive routing difficulty-estimate noise and cutoff | float | - | 0.15 / 0.5 | - | - | illustrative | simulation.py | implemented | illustrative |
 | sensitivity grid | fp {0.02,0.10,0.30} x rho {0,0.5,1}; price ratio {2,12,60}; difficulty; retries {0,2,5} | grid | - | - | - | sensitivity() | - | simulation.py | implemented | illustrative |
 
+## Trust levels and versions
+
+| Identifier | Description | Type | Units | Default | Allowed range | Validation rules | Security implications | Location | Status | Calibration |
+|---|---|---|---|---|---|---|---|---|---|---|
+| Evidence.trust_level / Certificate.trust_level | TRUSTED_LOCAL \| ISOLATED_VERIFIED \| UNVERIFIED (inside the signed bytes) | enum | - | - | 3 values | objects._check_trust_consistency; verify_certificate | relabeling breaks the signature; ISOLATED_VERIFIED needs DOCKER_GVISOR + attestation; UNVERIFIED cannot be PASS | objects.py; trust.py | implemented | n/a |
+| Evidence.evaluator_id / Certificate.evaluator_id | `vep-local-evaluator/<package version>/<trust level>`; certificate must equal evidence | str | - | - | <=256 chars | verify_certificate | binds the evaluator generation to the certificate | versions.evaluator_id | implemented | n/a |
+| Evidence.execution_environment | What actually ran: host-subprocess facts, or image + runtime identity | json | - | - | any canonical JSON | recorded by the evaluator | descriptive; the attestation is authoritative for isolation | execution.evaluate | implemented | n/a |
+| Evidence.isolation_attestation_digest | CAS digest of the T1-T12 attestation used | digest | - | absent | required iff ISOLATED_VERIFIED | objects._check_trust_consistency | a local run cannot carry one | objects.py | implemented | n/a |
+| ExecutionPolicy.required_trust | Minimum evidence trust the policy accepts | enum | - | absent (verifier states its own) | TRUSTED_LOCAL \| ISOLATED_VERIFIED | evaluate refuses trusted-local when ISOLATED_VERIFIED; certify enforces | no silent downgrade | execution.evaluate; certificates.certify | implemented | n/a |
+| verify --require-trust | Verifier's minimum acceptable trust (echoed in output) | enum | - | TRUSTED_LOCAL | TRUSTED_LOCAL \| ISOLATED_VERIFIED | trust.require | UNVERIFIED can never satisfy a requirement | cli.py; trust.py | implemented | n/a |
+| legacy trust mapping | Schema-v1 evidence: NONE_TRUSTED_LOCAL -> TRUSTED_LOCAL, anything else -> UNVERIFIED; v1 certificate rows -> LEGACY_V1 | rule | - | fixed | closed mapping | trust.legacy_trust_level; migrations | old objects are never upgraded to ISOLATED_VERIFIED | trust.py | implemented | n/a |
+| PACKAGE_VERSION | Distribution version (PEP 440) | str | - | 0.4.0a1 | must equal pyproject and vep.__version__ | release gate SOURCE_INTEGRITY; tests | - | versions.py | implemented | n/a |
+| PROTOCOL_VERSION | Wire-level semantics version | str | - | 0.3 | - | reported by `vep version` | unchanged by package releases | versions.py | implemented | n/a |
+| DB_SCHEMA_VERSION | SQLite layout version stored in meta.schema_version | int | - | 2 | database newer than build is refused | migrations.migrate | future-version databases are rejected, not guessed | versions.py; migrations.py | implemented | n/a |
+| EVIDENCE_FORMAT_VERSION / objects.CURRENT_VERSION | Per-type object schema version (Evidence, Certificate = 2; others 1) | int | - | see left | SUPPORTED_VERSIONS per type | objects.spec_for | unknown versions raise UNSUPPORTED_SCHEMA_VERSION | objects.py | implemented | n/a |
+
+## Isolation verification (T1-T12)
+
+| Identifier | Description | Type | Units | Default | Allowed range | Validation rules | Security implications | Location | Status | Calibration |
+|---|---|---|---|---|---|---|---|---|---|---|
+| isolation.LIMITS | Limits used by the verification matrix: cpus 1, memory 128m, pids 64, tmpfs 16m, timeout 20 s | map | mixed | see left | - | isolation._plan | tests assert the limits are actually enforced | isolation.py | implemented | illustrative |
+| isolation.T9_TIMEOUT_S | Seconds a sleeping container may run before the host kills it in T9 | int | s | 4 | >=1 | isolation.verify_runtime | T9 passes only if no container is left | isolation.py | implemented | illustrative |
+| attestation.status | ISOLATED_VERIFIED only if all of T1..T12 are PASS; otherwise ISOLATION_UNVERIFIED; unrun tests are NOT_RUN | enum | - | ISOLATION_UNVERIFIED | - | verify_runtime; attestation_is_current | stale or mismatching attestations are refused | isolation.py | implemented | n/a |
+| attestation.runtime_identity | Runtime/network/readonly/privileged/memory/pids read from `docker inspect` of a started container | map | - | null | - | T12 | corroboration is docker-inspect-only | isolation.py | implemented | n/a |
+| VEP_ISOLATION_IMAGE | Environment variable naming a local digest-pinned image for the release gate's optional isolation check | str | - | unset | name@sha256:<64 hex> | release_gate.g_isolation | unset => OPTIONAL_ISOLATION=UNVERIFIED | scripts/release/release_gate.py | implemented | n/a |
+
+## Release gates
+
+| Identifier | Description | Type | Units | Default | Allowed range | Validation rules | Security implications | Location | Status | Calibration |
+|---|---|---|---|---|---|---|---|---|---|---|
+| release_policy.required_gates | Gates that must all be PASS for GO | list | - | 17 gates | - | gates.decide | NOT_RUN/UNVERIFIED/FAIL block release | scripts/release/release_policy.json | implemented | n/a |
+| release_policy.forbidden_claims | Regexes for unsupported security and readiness claims (see the policy file for the list) | list | - | 6 rules | negated statements allowed | gates.scan_claims | stops documentation from over-claiming | scripts/release/release_policy.json | implemented | n/a |
+| release_policy.secret_patterns | Secret formats scanned in tree, history and artifacts | list | - | 8 rules | - | gates.scan_text_for_secrets | findings never echo the secret | scripts/release/release_policy.json | implemented | n/a |
+| release_policy.workflow_rules | Pinned SHA regex, forbidden triggers, required permissions block | map | - | - | - | gates.lint_workflow | least-privilege CI | scripts/release/release_policy.json | implemented | n/a |
+
 ## CLI and process
 
 | Identifier | Description | Type | Units | Default | Allowed range | Validation rules | Security implications | Location | Status | Calibration |
@@ -385,6 +420,10 @@ All fields are validated by `VEPObject.create`; unknown fields are rejected; opt
 | Evidence.started_at | ts | yes | - | started at |
 | Evidence.finished_at | ts | yes | - | finished at |
 | Evidence.budget_reservation | str | yes | - | budget reservation |
+| Evidence.trust_level | enum | yes | values=['TRUSTED_LOCAL', 'ISOLATED_VERIFIED', 'UNVERIFIED'] | trust level |
+| Evidence.evaluator_id | str | yes | max_len=256 | evaluator id |
+| Evidence.execution_environment | json | yes | - | execution environment |
+| Evidence.isolation_attestation_digest | digest | no | - | isolation attestation digest |
 
 ### Certificate (id prefix `cert-`)
 
@@ -398,6 +437,8 @@ All fields are validated by `VEPObject.create`; unknown fields are rejected; opt
 | Certificate.evidence_envelope_digest | digest | yes | - | evidence envelope digest |
 | Certificate.issuer_key_id | digest | yes | - | issuer key id |
 | Certificate.issued_at | ts | yes | - | issued at |
+| Certificate.trust_level | enum | yes | values=['TRUSTED_LOCAL', 'ISOLATED_VERIFIED', 'UNVERIFIED'] | trust level |
+| Certificate.evaluator_id | str | yes | max_len=256 | evaluator id |
 
 ### Observation (id prefix `obs-`)
 
@@ -464,6 +505,7 @@ All fields are validated by `VEPObject.create`; unknown fields are rejected; opt
 | ExecutionPolicy.required_tests | map:digest | yes | - | required tests |
 | ExecutionPolicy.limits | json | yes | - | limits |
 | ExecutionPolicy.audits | json | yes | - | audits |
+| ExecutionPolicy.required_trust | enum | no | values=['TRUSTED_LOCAL', 'ISOLATED_VERIFIED'] | required trust |
 
 ### OptimizationExperiment (id prefix `exp-`)
 

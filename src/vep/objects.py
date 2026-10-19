@@ -102,7 +102,59 @@ SPECS: dict[str, dict[str, Any]] = {
         "status": _f("enum", values=["PROPOSED", "RUNNING", "ADOPTED", "REJECTED", "INCONCLUSIVE"]),
         "created_at": _f("ts")}),
 }
+TRUST_LEVELS = ["TRUSTED_LOCAL", "ISOLATED_VERIFIED", "UNVERIFIED"]
+ISOLATION_VALUES = ["NONE_TRUSTED_LOCAL", "DOCKER_GVISOR"]
+
+# Schema versions are per type. Evidence and Certificate moved to v2 in package 0.4.0a1 (trust levels).
+# v1 objects stay decodable (their identities never change) but carry no trust claim of their own.
+LEGACY_SPECS: dict[tuple[str, int], dict[str, Any]] = {
+    ("Evidence", 1): SPECS["Evidence"],
+    ("Certificate", 1): SPECS["Certificate"],
+}
+CURRENT_VERSION: dict[str, int] = {"Evidence": 2, "Certificate": 2}
+SUPPORTED_VERSIONS: dict[str, tuple[int, ...]] = {"Evidence": (1, 2), "Certificate": (1, 2)}
+
+SPECS["Evidence"] = S(prefix="evd", fields={
+    **SPECS["Evidence"]["fields"],
+    "trust_level": _f("enum", values=TRUST_LEVELS),
+    "evaluator_id": _f("str", max_len=256),
+    "execution_environment": _f("json"),
+    "isolation_attestation_digest": _f("digest", False)})
+SPECS["Certificate"] = S(prefix="cert", fields={
+    **SPECS["Certificate"]["fields"],
+    "trust_level": _f("enum", values=TRUST_LEVELS), "evaluator_id": _f("str", max_len=256)})
+SPECS["ExecutionPolicy"]["fields"]["required_trust"] = _f("enum", False, values=["TRUSTED_LOCAL", "ISOLATED_VERIFIED"])
+
 PREFIX_TO_TYPE = {v["prefix"]: k for k, v in SPECS.items()}
+
+
+def version_of(type_name: str) -> int:
+    return CURRENT_VERSION.get(type_name, 1)
+
+
+def spec_for(type_name: str, version: int) -> dict[str, Any]:
+    if type_name not in SPECS:
+        raise SchemaError(f"unknown object type {type_name!r}")
+    if version not in SUPPORTED_VERSIONS.get(type_name, (1,)):
+        raise SchemaError(f"UNSUPPORTED_SCHEMA_VERSION: {type_name} v{version!r}")
+    if version == version_of(type_name):
+        return SPECS[type_name]
+    return LEGACY_SPECS[(type_name, version)]
+
+
+def _check_trust_consistency(type_name: str, version: int, f: dict) -> None:
+    """Cross-field rules: a trust level must be backed by matching isolation facts."""
+    if version < 2 or type_name not in ("Evidence", "Certificate"):
+        return
+    tl = f["trust_level"]
+    if type_name == "Evidence":
+        att = "isolation_attestation_digest" in f
+        if tl == "TRUSTED_LOCAL" and (f["isolation"] != "NONE_TRUSTED_LOCAL" or att):
+            raise SchemaError("TRUSTED_LOCAL evidence must be non-isolated and carry no isolation attestation")
+        if tl == "ISOLATED_VERIFIED" and (f["isolation"] != "DOCKER_GVISOR" or not att):
+            raise SchemaError("ISOLATED_VERIFIED evidence requires DOCKER_GVISOR isolation and an attestation digest")
+        if tl == "UNVERIFIED" and f["verdict"] == "PASS":
+            raise SchemaError("UNVERIFIED evidence cannot carry a PASS verdict")
 ID_RE = re.compile(r"^([a-z]+)-([0-9a-f]{64})$")
 
 
@@ -183,10 +235,9 @@ class VEPObject:
         return strict_loads(self._fields_bytes)
 
     @classmethod
-    def create(cls, type_name: str, fields: dict[str, Any]) -> "VEPObject":
-        spec = SPECS.get(type_name)
-        if spec is None:
-            raise SchemaError(f"unknown object type {type_name!r}")
+    def create(cls, type_name: str, fields: dict[str, Any], schema_version: int | None = None) -> "VEPObject":
+        version = version_of(type_name) if schema_version is None else schema_version
+        spec = spec_for(type_name, version)
         if not isinstance(fields, dict):
             raise SchemaError("fields must be an object")
         fields = {k: v for k, v in fields.items()}
@@ -201,7 +252,8 @@ class VEPObject:
                 fields.pop(name, None)  # optional absent == omitted, never null
                 continue
             _validate_value(name, kind, opts, fields[name])
-        return cls(type_name, SCHEMA_VERSION, canonical_bytes(fields))
+        _check_trust_consistency(type_name, version, fields)
+        return cls(type_name, version, canonical_bytes(fields))
 
     @property
     def domain(self) -> str:
@@ -221,9 +273,9 @@ class VEPObject:
         doc = strict_loads(data)
         if not isinstance(doc, dict) or set(doc) != {"type", "schema_version", "fields"}:
             raise SchemaError("malformed object envelope")
-        if doc["schema_version"] != SCHEMA_VERSION:
-            raise SchemaError(f"unsupported schema_version {doc['schema_version']!r}")
-        obj = cls.create(doc["type"], doc["fields"])
+        if isinstance(doc["schema_version"], bool) or not isinstance(doc["schema_version"], int):
+            raise SchemaError("schema_version must be an integer")
+        obj = cls.create(doc["type"], doc["fields"], doc["schema_version"])
         if obj.canonical_bytes() != data:
             raise SchemaError("object bytes are not in canonical form")
         return obj

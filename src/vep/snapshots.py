@@ -87,12 +87,29 @@ def scan_tree(root: Path, excludes: tuple[str, ...] = DEFAULT_EXCLUDES) -> dict[
     return found
 
 
+def read_regular_nofollow(path: str) -> bytes:
+    """Read a regular file without following a symlink swapped in after the scan (TOCTOU)."""
+    try:
+        fd = os.open(path, os.O_RDONLY | getattr(os, "O_NOFOLLOW", 0))
+    except OSError as exc:
+        raise SnapshotError(f"cannot open {path!r} safely: {exc.strerror}") from exc
+    try:
+        if not stat.S_ISREG(os.fstat(fd).st_mode):
+            raise SnapshotError(f"not a regular file: {path!r}")
+        with os.fdopen(fd, "rb", closefd=False) as fh:
+            return fh.read(MAX_FILE_BYTES + 1)
+    finally:
+        os.close(fd)
+
+
 def build_entries(ws: Workspace | None, root: Path, excludes: tuple[str, ...] = DEFAULT_EXCLUDES,
                   store: bool = True) -> list[dict]:
     import hashlib
     entries = []
     for rel, info in sorted(scan_tree(root, excludes).items()):
-        data = Path(info["full"]).read_bytes()
+        data = read_regular_nofollow(info["full"])
+        if len(data) > MAX_FILE_BYTES:
+            raise SnapshotError(f"file too large: {rel}")
         digest = ws.cas.put(data) if (store and ws is not None) else hashlib.sha256(data).hexdigest()
         entries.append({"path": rel, "digest": digest, "type": "file", "executable": info["executable"]})
     return entries

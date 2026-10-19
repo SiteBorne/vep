@@ -1,6 +1,7 @@
 """Workspace: the .vep state directory (CAS, database, keys) beside the source tree."""
 from __future__ import annotations
 
+import os
 import time
 from pathlib import Path
 
@@ -26,11 +27,15 @@ class Workspace:
         self.cas = CAS(self.state / "cas")
         self.db = Database(self.state / "vep.db")
         self.keys_dir = self.state / "keys"
+        from .migrations import migrate
+        migrate(self)
 
     @classmethod
     def init(cls, root: str | Path) -> "Workspace":
         root = Path(root).resolve()
-        (root / cls.STATE_DIR).mkdir(parents=True, exist_ok=True)
+        state = root / cls.STATE_DIR
+        state.mkdir(parents=True, exist_ok=True)
+        os.chmod(state, 0o700)  # state holds the signing key and the transition/budget ledgers
         return cls(root)
 
     # --- generic immutable object store ---------------------------------

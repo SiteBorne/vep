@@ -1,0 +1,197 @@
+{
+  "policy_version": 1,
+  "package": "vep-protocol",
+  "release_channel": "prerelease",
+  "allowed_statuses": [
+    "PASS",
+    "FAIL",
+    "NOT_RUN",
+    "UNVERIFIED",
+    "NOT_APPLICABLE"
+  ],
+  "required_gates": [
+    "SOURCE_INTEGRITY",
+    "TEST_DISCOVERY",
+    "UNIT_TESTS",
+    "ADVERSARIAL_TESTS",
+    "INVARIANT_TESTS",
+    "DEMO",
+    "SIMULATION_REPRODUCIBILITY",
+    "PACKAGE_BUILD",
+    "PACKAGE_INSTALLATION",
+    "CLI_SMOKE_TEST",
+    "ARTIFACT_INTEGRITY",
+    "SECRET_SCAN",
+    "SECURITY_REVIEW",
+    "DOCUMENTATION",
+    "PROTOCOL_COMPATIBILITY",
+    "RELEASE_PROVENANCE",
+    "PYTHON_COMPATIBILITY"
+  ],
+  "optional_gates": [
+    "OPTIONAL_ISOLATION",
+    "DEPENDENCY_AUDIT",
+    "HOSTED_CI",
+    "HOSTED_ATTESTATION"
+  ],
+  "capabilities": {
+    "PUBLIC_DEVELOPER_PREVIEW": {
+      "requires_all": "required_gates"
+    },
+    "UNTRUSTED_EXECUTION_ISOLATION": {
+      "requires_all": [
+        "OPTIONAL_ISOLATION"
+      ]
+    }
+  },
+  "required_docs": [
+    "README.md",
+    "LICENSE",
+    "SECURITY.md",
+    "CONTRIBUTING.md",
+    "CODE_OF_CONDUCT.md",
+    "CHANGELOG.md",
+    "SUPPORT.md",
+    "docs/QUICKSTART.md",
+    "docs/ARCHITECTURE.md",
+    "docs/COMPATIBILITY.md",
+    "docs/MIGRATIONS.md",
+    "docs/RELEASE_NOTES.md",
+    "docs/RELEASE_BASELINE.md",
+    "docs/RELEASE_PROVENANCE.md",
+    "docs/THREAT_MODEL.md",
+    "docs/SECURITY_ARCHITECTURE.md",
+    "docs/SECURITY_REVIEW.md",
+    "docs/RFC-0001.md",
+    "docs/VARIABLES.md",
+    "docs/INVARIANTS.md",
+    "docs/EVIDENCE.md",
+    "docs/BENCHMARKS.md",
+    "docs/IMPLEMENTATION_STATUS.md",
+    "docs/RELEASE_PROGRESS.md"
+  ],
+  "claim_scan_paths": [
+    "README.md",
+    "SECURITY.md",
+    "CONTRIBUTING.md",
+    "SUPPORT.md",
+    "CHANGELOG.md",
+    "docs/*.md"
+  ],
+  "negation_markers": [
+    "not ",
+    "never",
+    "no ",
+    "cannot",
+    "can't",
+    "without",
+    "isn't",
+    "doesn't",
+    "unverified",
+    "must not",
+    "do not",
+    "n't",
+    "nor ",
+    "neither"
+  ],
+  "forbidden_claims": [
+    {
+      "id": "CLAIM_SAFE_UNTRUSTED",
+      "unless_capability": "UNTRUSTED_EXECUTION_ISOLATION",
+      "pattern": "(safe|secure)(ly)?( to)? (run|execute|evaluate)[^.\\n]{0,40}(untrusted|hostile|arbitrary)"
+    },
+    {
+      "id": "CLAIM_PRODUCTION",
+      "unless_capability": "NEVER",
+      "pattern": "production[- ]ready"
+    },
+    {
+      "id": "CLAIM_SLSA_LEVEL",
+      "unless_capability": "NEVER",
+      "pattern": "\\bSLSA (build )?(level|l)\\s*[1-4]\\b"
+    },
+    {
+      "id": "CLAIM_FULLY_ISOLATED",
+      "unless_capability": "UNTRUSTED_EXECUTION_ISOLATION",
+      "pattern": "(fully|completely|strongly) (isolated|sandboxed)"
+    },
+    {
+      "id": "CLAIM_CORRECTNESS",
+      "unless_capability": "NEVER",
+      "pattern": "guarantees? (software )?correctness"
+    },
+    {
+      "id": "CLAIM_GLOBAL_OPTIMUM",
+      "unless_capability": "NEVER",
+      "pattern": "globally optimal"
+    }
+  ],
+  "forbidden_artifact_names": [
+    "*.pem",
+    "*.key",
+    "*.p12",
+    ".env",
+    ".env.*",
+    "*.db",
+    "*.db-wal",
+    "*.db-shm",
+    "id_rsa*",
+    "id_ed25519*",
+    "signing.*"
+  ],
+  "forbidden_artifact_dirs": [
+    ".vep",
+    ".git",
+    ".venv",
+    "__pycache__",
+    ".pytest_cache",
+    "node_modules"
+  ],
+  "forbidden_artifact_text": [
+    "%2FUsers%2F",
+    "%2Fhome%2F",
+    "C:%5CUsers%5C"
+  ],
+  "secret_patterns": [
+    {
+      "id": "PEM_PRIVATE_KEY",
+      "pattern": "-----BEGIN (?:[A-Z]+ )?PRIVATE KEY-----"
+    },
+    {
+      "id": "AWS_ACCESS_KEY",
+      "pattern": "\\bAKIA[0-9A-Z]{16}\\b"
+    },
+    {
+      "id": "GITHUB_TOKEN",
+      "pattern": "\\bgh[pousr]_[A-Za-z0-9]{36,}\\b"
+    },
+    {
+      "id": "GITHUB_FINE_GRAINED",
+      "pattern": "\\bgithub_pat_[A-Za-z0-9_]{50,}\\b"
+    },
+    {
+      "id": "PYPI_TOKEN",
+      "pattern": "\\bpypi-AgEI[A-Za-z0-9_\\-]{20,}"
+    },
+    {
+      "id": "SLACK_TOKEN",
+      "pattern": "\\bxox[baprs]-[A-Za-z0-9-]{10,}"
+    },
+    {
+      "id": "GENERIC_ASSIGNED_SECRET",
+      "pattern": "(?i)\\b(api[_-]?key|secret|passwd|password|token)\\b\\s*[:=]\\s*[\"'][A-Za-z0-9/+_\\-]{16,}[\"']"
+    },
+    {
+      "id": "ANTHROPIC_OR_OPENAI_KEY",
+      "pattern": "\\bsk-(?:ant-)?[A-Za-z0-9_\\-]{32,}"
+    }
+  ],
+  "workflow_rules": {
+    "pinned_sha_regex": "^[0-9a-f]{40}$",
+    "forbid_triggers": [
+      "pull_request_target"
+    ],
+    "require_top_level_permissions": true
+  },
+  "forbidden_artifact_text_encoding": "percent-encoded so this file does not trip its own scan"
+}

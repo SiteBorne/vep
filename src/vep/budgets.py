@@ -14,6 +14,7 @@ from .workspace import Workspace, utcnow
 
 RANK = {"organization": 0, "project": 1, "objective": 2, "candidate": 3, "operation": 4}
 MICRO = Decimal(1_000_000)
+MAX_MICRO = 2**62  # headroom below SQLite's signed 64-bit INTEGER for sums
 
 
 def to_micro(amount: Any, rounding: str | None = None) -> int:
@@ -30,6 +31,8 @@ def to_micro(amount: Any, rounding: str | None = None) -> int:
         if rounding != "ceil":
             raise BudgetError("amount has sub-micro-dollar precision")
         scaled = scaled.to_integral_value(rounding=ROUND_CEILING)
+    if abs(scaled) > MAX_MICRO:
+        raise BudgetError("amount exceeds the supported range")
     return int(scaled)
 
 

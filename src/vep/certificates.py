@@ -3,7 +3,7 @@ from __future__ import annotations
 
 from pathlib import Path
 
-from . import candidates
+from . import candidates, trust
 from .errors import StateError, VerificationFailed
 from .evidence import KeyStore, load_signed, store_signed
 from .objects import VEPObject
@@ -32,21 +32,29 @@ def certify(ws: Workspace, candidate_id: str) -> VEPObject:
     if ev.id != row["id"] or ev["staged_tree_snapshot_id"] != cand["snapshot_id"]:
         raise VerificationFailed("evidence binding mismatch")
     keystore = KeyStore(ws)
+    ev_trust = trust.trust_level_of(ev)
+    if ev_trust == "UNVERIFIED" or ev.schema_version < 2:
+        raise VerificationFailed(f"evidence trust level {ev_trust} (schema v{ev.schema_version}) cannot be certified")
+    pol = load_policy(ws, objective["policy_id"])
+    if pol.get("required_trust"):
+        trust.require(ev_trust, pol["required_trust"])
     cert = VEPObject.create("Certificate", {
         **expect, "evidence_id": ev.id, "evidence_envelope_digest": row["envelope_digest"],
-        "issuer_key_id": keystore.key_id(), "issued_at": utcnow()})
+        "issuer_key_id": keystore.key_id(), "issued_at": utcnow(),
+        "trust_level": ev_trust, "evaluator_id": ev["evaluator_id"]})
     env_digest = store_signed(ws, cert, keystore)
     with ws.db.tx() as c:
-        c.execute("INSERT INTO certificates(id,candidate_id,objective_id,snapshot_id,policy_id,evidence_id,envelope_digest)"
-                  " VALUES(?,?,?,?,?,?,?)", (cert.id, candidate_id, objective.id, cand["snapshot_id"],
-                                             objective["policy_id"], ev.id, env_digest))
+        c.execute("INSERT INTO certificates(id,candidate_id,objective_id,snapshot_id,policy_id,evidence_id,envelope_digest,trust_level)"
+                  " VALUES(?,?,?,?,?,?,?,?)", (cert.id, candidate_id, objective.id, cand["snapshot_id"],
+                                               objective["policy_id"], ev.id, env_digest, ev_trust))
         candidates.transition(ws, candidate_id, "CERTIFIED", st["version"], "vep-certifier",
                               "certificate issued", cert.id, conn=c)
     return cert
 
 
 def verify_certificate(ws: Workspace, certificate_id: str, *, current_root: Path | None = None,
-                       expect_objective_id: str | None = None, expect_policy_id: str | None = None) -> dict:
+                       expect_objective_id: str | None = None, expect_policy_id: str | None = None,
+                       require_trust: str = "TRUSTED_LOCAL") -> dict:
     """Cryptographically verify a certificate, its evidence, and every binding.
 
     If current_root is given the live source tree must hash to the certified snapshot.
@@ -66,6 +74,16 @@ def verify_certificate(ws: Workspace, certificate_id: str, *, current_root: Path
     for k in ("candidate_id", "objective_id", "snapshot_id", "policy_id"):
         if ev[k] != cert[k]:
             raise VerificationFailed(f"evidence/certificate {k} mismatch")
+    ev_trust = trust.trust_level_of(ev)
+    if cert.schema_version >= 2:
+        if cert["trust_level"] != ev_trust or cert["evaluator_id"] != ev["evaluator_id"]:
+            raise VerificationFailed("certificate trust level/evaluator does not match its evidence")
+        cert_trust = cert["trust_level"]
+    else:
+        cert_trust = ev_trust  # legacy v1 certificate: classification derived from its evidence, never upgraded
+    if ev_trust == "UNVERIFIED":
+        raise VerificationFailed("TRUST_LEVEL_INSUFFICIENT: evidence is UNVERIFIED")
+    trust.require(cert_trust, require_trust)
     if ev["verdict"] != "PASS" or ev["tests_passed"] < 1 or ev["tests_skipped"] >= ev["tests_run"] or ev["tests_failed"]:
         raise VerificationFailed("evidence does not establish a passing run")
     if ev["staged_tree_snapshot_id"] != cert["snapshot_id"]:
@@ -85,6 +103,10 @@ def verify_certificate(ws: Workspace, certificate_id: str, *, current_root: Path
         if now != cert["snapshot_id"]:
             raise VerificationFailed(f"SOURCE_CHANGED: current tree {now} != certified {cert['snapshot_id']}")
         checks.append("current source equals certified snapshot")
-    return {"certificate_id": cert.id, "snapshot_id": cert["snapshot_id"], "policy_id": cert["policy_id"],
+    return {"trust_level": cert_trust, "required_trust": require_trust,
+            "evaluator_id": ev["evaluator_id"] if ev.schema_version >= 2 else "legacy-v1 (not recorded)",
+            "legacy_schema": cert.schema_version < 2 or ev.schema_version < 2,
+            "certificate_id": cert.id, "snapshot_id": cert["snapshot_id"], "policy_id": cert["policy_id"],
             "objective_id": cert["objective_id"], "checks_passed": checks,
             "isolation_of_evidence": ev["isolation"]}
+

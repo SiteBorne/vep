@@ -20,11 +20,11 @@ CREATE TABLE IF NOT EXISTS transitions(
 CREATE TABLE IF NOT EXISTS evidence(
   id TEXT PRIMARY KEY, candidate_id TEXT NOT NULL, objective_id TEXT NOT NULL,
   snapshot_id TEXT NOT NULL, policy_id TEXT NOT NULL, action_id TEXT NOT NULL,
-  verdict TEXT NOT NULL, envelope_digest TEXT NOT NULL);
+  verdict TEXT NOT NULL, envelope_digest TEXT NOT NULL, trust_level TEXT);
 CREATE TABLE IF NOT EXISTS certificates(
   id TEXT PRIMARY KEY, candidate_id TEXT NOT NULL UNIQUE, objective_id TEXT NOT NULL,
   snapshot_id TEXT NOT NULL, policy_id TEXT NOT NULL, evidence_id TEXT NOT NULL,
-  envelope_digest TEXT NOT NULL);
+  envelope_digest TEXT NOT NULL, trust_level TEXT);
 CREATE TABLE IF NOT EXISTS action_cache(action_id TEXT PRIMARY KEY, evidence_id TEXT NOT NULL);
 CREATE TABLE IF NOT EXISTS trusted_keys(
   key_id TEXT PRIMARY KEY, public_key_hex TEXT NOT NULL, created_at TEXT NOT NULL,
@@ -58,10 +58,6 @@ CREATE TRIGGER IF NOT EXISTS ledger_immutable_u BEFORE UPDATE ON ledger
 BEGIN SELECT RAISE(ABORT,'ledger is append-only'); END;
 CREATE TRIGGER IF NOT EXISTS ledger_immutable_d BEFORE DELETE ON ledger
 BEGIN SELECT RAISE(ABORT,'ledger is append-only'); END;
-CREATE TRIGGER IF NOT EXISTS evidence_immutable_u BEFORE UPDATE ON evidence
-BEGIN SELECT RAISE(ABORT,'evidence is immutable'); END;
-CREATE TRIGGER IF NOT EXISTS cert_immutable_u BEFORE UPDATE ON certificates
-BEGIN SELECT RAISE(ABORT,'certificates are immutable'); END;
 CREATE TRIGGER IF NOT EXISTS cand_certified_guard BEFORE UPDATE OF status ON candidates
 WHEN NEW.status='CERTIFIED' AND NOT EXISTS
   (SELECT 1 FROM certificates c WHERE c.candidate_id=NEW.id AND c.snapshot_id=NEW.snapshot_id AND c.objective_id=NEW.objective_id)
@@ -75,6 +71,22 @@ BEGIN SELECT RAISE(ABORT,'candidate identity is immutable'); END;
 """
 
 
+# Rows are immutable. The single exception is the one-time classification of a NULL trust_level during
+# migration of a pre-0.4 database; every other column must be unchanged.
+IMMUTABLE_TRIGGERS = """
+CREATE TRIGGER IF NOT EXISTS evidence_immutable_u BEFORE UPDATE ON evidence
+WHEN NOT (OLD.trust_level IS NULL AND NEW.trust_level IS NOT NULL AND NEW.id=OLD.id AND NEW.candidate_id=OLD.candidate_id
+  AND NEW.objective_id=OLD.objective_id AND NEW.snapshot_id=OLD.snapshot_id AND NEW.policy_id=OLD.policy_id
+  AND NEW.action_id=OLD.action_id AND NEW.verdict=OLD.verdict AND NEW.envelope_digest=OLD.envelope_digest)
+BEGIN SELECT RAISE(ABORT,'evidence is immutable'); END;
+CREATE TRIGGER IF NOT EXISTS cert_immutable_u BEFORE UPDATE ON certificates
+WHEN NOT (OLD.trust_level IS NULL AND NEW.trust_level IS NOT NULL AND NEW.id=OLD.id AND NEW.candidate_id=OLD.candidate_id
+  AND NEW.objective_id=OLD.objective_id AND NEW.snapshot_id=OLD.snapshot_id AND NEW.policy_id=OLD.policy_id
+  AND NEW.evidence_id=OLD.evidence_id AND NEW.envelope_digest=OLD.envelope_digest)
+BEGIN SELECT RAISE(ABORT,'certificates are immutable'); END;
+"""
+
+
 class Database:
     def __init__(self, path: str | Path):
         self.path = str(path)
@@ -82,6 +94,8 @@ class Database:
         conn = self.connect()
         try:
             conn.executescript(SCHEMA)
+            conn.executescript("DROP TRIGGER IF EXISTS evidence_immutable_u; DROP TRIGGER IF EXISTS cert_immutable_u;")
+            conn.executescript(IMMUTABLE_TRIGGERS)
         finally:
             conn.close()
 

@@ -1,0 +1,9 @@
+include LICENSE README.md SECURITY.md CONTRIBUTING.md CODE_OF_CONDUCT.md CHANGELOG.md SUPPORT.md pyproject.toml MANIFEST.in
+recursive-include docs *.md
+recursive-include examples *.py *.json
+recursive-include tests *.py *.json *.sql
+recursive-include scripts *.py *.sh *.json
+recursive-include benchmarks *.py
+recursive-include .github *.yml
+prune tests/__pycache__
+global-exclude __pycache__ *.py[cod] *.pem *.key *.db .env

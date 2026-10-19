@@ -39,12 +39,12 @@ class DocsTests(unittest.TestCase):
             self.assertRegex(src, rf"def {meth}\(", f"{path}::{cls}.{meth}")
 
     def test_every_cli_subcommand_is_documented(self):
-        readme = (ROOT / "README.md").read_text()
+        readme = (ROOT / "README.md").read_text() + (ROOT / "docs" / "QUICKSTART.md").read_text()
         for name in ("init", "status", "snapshot", "diff", "objective", "candidate", "evaluate", "verify", "budget",
                      "tokens", "context", "route", "cache", "audit", "isolation", "simulate"):
             self.assertIn(name, cli.build_parser().format_help())
         for name in ("init", "objective", "candidate", "evaluate", "certify", "verify", "route", "cache", "simulate", "isolation"):
-            self.assertIn(f"vep {name}", readme)
+            self.assertTrue(f"vep {name}" in readme, f"vep {name} is not documented in README/QUICKSTART")
 
     def test_failure_matrix_has_a_test_for_every_failure_id(self):
         src = (ROOT / "tests" / "test_adversarial.py").read_text()

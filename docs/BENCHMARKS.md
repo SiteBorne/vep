@@ -91,3 +91,61 @@ Distinct lowest-cost policies across the sensitivity grid: ['C_cheap_first_casca
 * Lower cost per correct acceptance is not safer: compare the incorrect-acceptance counts.
 * Raising `verifier_rho` weakens the benefit of double verification (see axis rows with `verifier_rho`).
 * Compare to the closed-form checks in `docs/EVIDENCE.md` (geometric retry cost, false-acceptance product).
+
+## Result classification
+
+| Class | Where |
+|---|---|
+| SYNTHETIC model results | every table above (illustrative assumptions, seeded, reproducible) |
+| MEASURED local performance | the timing line below (machine-dependent) |
+| LITERATURE-REPORTED results | none are reproduced here; see `docs/EVIDENCE.md` for citations used only as motivation |
+
+## Prompt-cache sensitivity (SYNTHETIC, closed-form)
+
+Prefix 10,000 tokens, suffix 500, output 1,000; input $3/Mtok, output $15/Mtok; write 1.25x, read 0.10x (placeholder multipliers).
+
+| hit probability | reuses | recommendation | break-even total requests | expected savings (USD) |
+|---|---|---|---|---|
+| 1 | 1 | USE_CACHE | 1.277777777777777777777777778 | 0.0195 |
+| 1 | 3 | USE_CACHE | 1.277777777777777777777777778 | 0.0735 |
+| 1 | 10 | USE_CACHE | 1.277777777777777777777777778 | 0.2625 |
+| 0.9 | 1 | USE_CACHE | 1.318471337579617834394904459 | 0.01605 |
+| 0.9 | 3 | USE_CACHE | 1.318471337579617834394904459 | 0.06315 |
+| 0.9 | 10 | USE_CACHE | 1.318471337579617834394904459 | 0.22800 |
+| 0.5 | 1 | USE_CACHE | 1.769230769230769230769230769 | 0.00225 |
+| 0.5 | 3 | USE_CACHE | 1.769230769230769230769230769 | 0.02175 |
+| 0.5 | 10 | USE_CACHE | 1.769230769230769230769230769 | 0.09000 |
+| 0.2 | 1 | DO_NOT_CACHE | None | -0.00810 |
+| 0.2 | 3 | DO_NOT_CACHE | None | -0.00930 |
+| 0.2 | 10 | DO_NOT_CACHE | None | -0.01350 |
+
+## Routing sensitivity (SYNTHETIC)
+
+Cheap model: $0.25/$1.25 per Mtok; strong: $3/$15. Task: 8,000 input / 1,500 output tokens, requires success lower bound 0.9.
+
+| cheap false-accept bound | cheap acceptance A | verification cost (USD) | budget (USD) | decision | selected |
+|---|---|---|---|---|---|
+| 0.001 | 0.8 | 0 | none | SELECTED | cascade: cheap->strong |
+| 0.001 | 0.8 | 0.05 | none | SELECTED | cascade: cheap->strong |
+| 0.001 | 0.8 | 0 | 0.05 | SELECTED | single: strong |
+| 0.001 | 0.3 | 0 | none | SELECTED | cascade: cheap->strong |
+| 0.001 | 0.3 | 0.05 | none | SELECTED | single: strong |
+| 0.001 | 0.3 | 0 | 0.05 | SELECTED | single: strong |
+| 0.05 | 0.8 | 0 | none | SELECTED | single: strong |
+| 0.05 | 0.8 | 0.05 | none | SELECTED | single: strong |
+| 0.05 | 0.8 | 0 | 0.05 | SELECTED | single: strong |
+| 0.05 | 0.3 | 0 | none | SELECTED | single: strong |
+| 0.05 | 0.3 | 0.05 | none | SELECTED | single: strong |
+| 0.05 | 0.3 | 0 | 0.05 | SELECTED | single: strong |
+| None | 0.8 | 0 | none | SELECTED | single: strong |
+| None | 0.8 | 0.05 | none | SELECTED | single: strong |
+| None | 0.8 | 0 | 0.05 | SELECTED | single: strong |
+| None | 0.3 | 0 | none | SELECTED | single: strong |
+| None | 0.3 | 0.05 | none | SELECTED | single: strong |
+| None | 0.3 | 0 | 0.05 | SELECTED | single: strong |
+
+Reading: a cascade is chosen only when the cheap model's false-accept bound is *measured and small enough*, its expected cost is lower after verification costs, and the worst-case cost fits the budget. Changing any of these flips the decision, which is the point of the sensitivity sweep.
+
+## Measured local performance (MEASURED, machine-dependent, not part of the reproducibility hash)
+
+Simulation of 20000 tasks x 5 policies took 0.26 s wall-clock on macOS-15.6-arm64-arm-64bit-Mach-O, Python 3.14.7 (single run; use for regression spotting only, not as a benchmark of any model or provider).

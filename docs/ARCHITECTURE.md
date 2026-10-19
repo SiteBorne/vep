@@ -33,7 +33,8 @@
 | `audits` | policy-defined readiness/consistency audits |
 | `routing`, `cache_planner`, `simulation` | offline economics and synthetic experiments |
 | `git_adapter` | read-only Git inspection |
-| `isolation` | Docker+gVisor plan and probe; fail-closed |
+| `isolation` | Docker+gVisor capability detector, plan, T1–T12 verification matrix, attestation; fail-closed |
+| `trust`, `versions`, `migrations` | trust levels and classification; independent version axes; validated DB migration |
 | `cli` | `vep` command, stable exit codes (`errors.py`) |
 
 ## Trust boundaries

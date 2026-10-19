@@ -5,7 +5,9 @@ sandbox. It is disabled unless the caller passes an explicit trusted-local-execu
 """
 from __future__ import annotations
 
+import importlib.util
 import os
+import re
 import shutil
 import signal
 import subprocess
@@ -17,6 +19,7 @@ from pathlib import Path
 from typing import Any
 
 from . import audits as audits_mod
+from . import versions
 from . import budgets, candidates
 from .canonical import canonical_bytes, sha256_hex, strict_loads
 from .errors import (AuthorizationError, BudgetError, ExecutionError, FalseGreen, IsolationUnavailable,
@@ -166,6 +169,27 @@ def validate_report(rep: dict, policy: VEPObject, exit_code: int) -> tuple[str, 
     return verdict, counts
 
 
+RAN_RE = re.compile(r"^Ran (\d+) tests? in ", re.M)
+RESULT_RE = re.compile(r"^(OK|FAILED)\b", re.M)
+
+
+def crosscheck_unittest_stderr(rep: dict, stderr: bytes) -> None:
+    """Defense in depth against a forged JSON report: the runner's own stderr (captured by the parent
+    from the process's file descriptor) must agree on the test count and overall result.
+
+    This catches careless forgery only. Code running inside the runner process can also write to
+    stderr, so this is NOT a boundary; see docs/SECURITY_ARCHITECTURE.md.
+    """
+    text = stderr.decode("utf-8", "replace")
+    ran = RAN_RE.findall(text)
+    res = RESULT_RE.findall(text)
+    if not ran or not res:
+        raise FalseGreen("REPORT_STDERR_MISMATCH: runner summary missing from captured stderr")
+    bad = len(rep["failed"]) + len(rep["errors"]) + len(rep["unexpected_successes"])
+    if int(ran[-1]) != rep["run"] or (res[-1] == "OK") != (bad == 0):
+        raise FalseGreen("REPORT_STDERR_MISMATCH: report disagrees with captured runner output")
+
+
 # ---------------------------------------------------------------- pipeline
 def _run_limited(argv: list[str], cwd: Path, env: dict, scratch: Path, timeout: int, max_bytes: int) -> tuple[int, bytes, bytes, bool]:
     out_p, err_p = scratch / "stdout.txt", scratch / "stderr.txt"
@@ -196,24 +220,59 @@ def _cand_account(ws: Workspace, objective_id: str, candidate_id: str) -> str:
     return acct
 
 
+def _run_isolated(image: str, policy: VEPObject, staged: Path, scratch: Path) -> tuple[int, bytes, bytes, bool, Path]:
+    """Run the protected runner inside the verified container; report comes back on stdout (marker line)."""
+    import json
+    import uuid
+    from . import isolation as iso
+    docker = shutil.which("docker")
+    ev = policy["evaluator"]
+    cfg = {"root": "/work", "start_dir": ev.get("start_dir", "tests"), "pattern": ev.get("pattern", "test*.py"),
+           "import_roots": ev.get("import_roots", ["."]), "report_path": "-"}
+    plan = iso._plan(image, str(staged), [(str(RUNNER_PATH), "/vep/_runner.py")],
+                     ["python", "-I", "/vep/_runner.py", json.dumps(cfg, sort_keys=True)], f"vep-eval-{uuid.uuid4().hex[:12]}",
+                     limits={**iso.LIMITS, "memory": "512m", "pids": 128, "timeout_s": policy["limits"]["timeout_s"]})
+    rc, out, err, timed_out = iso._docker_run(docker, plan, policy["limits"]["timeout_s"])
+    report = scratch / "report.json"
+    marker = [l for l in out.splitlines() if l.startswith("VEP_REPORT_V1:")]
+    report.write_text(marker[-1].split(":", 1)[1] if marker else "")
+    cap = policy["limits"]["max_output_bytes"]
+    return (rc if rc is not None else -9), out.encode()[:cap], err.encode()[:cap], timed_out, report
+
+
 def evaluate(ws: Workspace, candidate_id: str, *, trusted_local_authorization: str | None = None,
-             mode: str = "trusted-local", actor: str = "vep-evaluator") -> dict:
+             mode: str = "trusted-local", actor: str = "vep-evaluator", image: str | None = None,
+             attestation: dict | None = None) -> dict:
     # 0. authorization / isolation gates (before any state change or execution)
     if mode == "isolated":
-        p = probe()
-        raise IsolationUnavailable(
-            f"{p.status}: containerized evaluation is not implemented in this MVP "
-            f"({'; '.join(p.reasons) or 'runtime present'}); no host fallback")
-    if mode != "trusted-local":
+        from . import isolation as iso
+        if attestation is None or image is None:
+            p = probe(image)
+            raise IsolationUnavailable(
+                f"{p.status}: isolated evaluation needs --image and a passing verification attestation "
+                f"({'; '.join(p.reasons) or 'none supplied'}); no host fallback")
+        ok, why = iso.attestation_is_current(attestation, image)
+        if not ok:
+            raise IsolationUnavailable(f"ISOLATION_UNVERIFIED: {why}; no host fallback")
+    elif mode == "trusted-local":
+        if trusted_local_authorization != TRUSTED_LOCAL_AUTH:
+            raise AuthorizationError("non-isolated local execution requires explicit trusted-local authorization; "
+                                     "this mode provides NO security isolation")
+    else:
         raise VepError(f"unknown mode {mode!r}")
-    if trusted_local_authorization != TRUSTED_LOCAL_AUTH:
-        raise AuthorizationError("non-isolated local execution requires explicit trusted-local authorization; "
-                                 "this mode provides NO security isolation")
     # 1-5. identity, snapshot, policy, evaluator config, required suite
     st = candidates.get_state(ws, candidate_id)
     cand = ws.get_object(candidate_id, "Candidate")
     objective = ws.get_object(cand["objective_id"], "Objective")
     policy = load_policy(ws, objective["policy_id"])
+    if policy["evaluator"]["kind"] == "pytest" and mode == "trusted-local" and importlib.util.find_spec("pytest") is None:
+        raise VepError("the pytest evaluator needs the optional dependency 'pytest' (pip install 'vep-protocol[pytest]'); "
+                       "nothing was executed")
+    if mode == "isolated" and policy["evaluator"]["kind"] != "unittest":
+        raise IsolationUnavailable("isolated evaluation supports the unittest evaluator only")
+    if mode == "trusted-local" and policy.get("required_trust") == "ISOLATED_VERIFIED":
+        raise AuthorizationError("policy requires ISOLATED_VERIFIED evidence; trusted-local execution can never satisfy it "
+                                 "and VEP will not fall back or relabel")
     snap = ws.get_object(cand["snapshot_id"], "Snapshot")
     if st["status"] == "PROPOSED":
         viol = candidates.check_policy(ws, candidate_id)
@@ -244,7 +303,7 @@ def evaluate(ws: Workspace, candidate_id: str, *, trusted_local_authorization: s
     action = VEPObject.create("Action", {
         "argv": ["<runner>", policy["evaluator"]["kind"]], "input_snapshot_id": snap.id,
         "policy_id": policy.id, "runner_digest": runner_digest(), "env": {},
-        "isolation": "NONE_TRUSTED_LOCAL"})
+        "isolation": "DOCKER_GVISOR" if mode == "isolated" else "NONE_TRUSTED_LOCAL"})
     ws.put_object(action)
     v = candidates.transition(ws, candidate_id, "EVALUATING", v, actor, "staging", proof_id=action.id)
     scratch = Path(tempfile.mkdtemp(prefix="vep-eval-"))
@@ -258,10 +317,13 @@ def evaluate(ws: Workspace, candidate_id: str, *, trusted_local_authorization: s
         if tree_snapshot_id(staged, excludes=()) != snap.id:
             raise ExecutionError("staged tree does not match snapshot")
         started = utcnow()
-        argv, report_path = build_argv(policy, staged, scratch)
-        code, out, err, timed_out = _run_limited(
-            argv, staged, _safe_env(scratch), scratch, policy["limits"]["timeout_s"],
-            policy["limits"]["max_output_bytes"])
+        if mode == "isolated":
+            code, out, err, timed_out, report_path = _run_isolated(image, policy, staged, scratch)
+        else:
+            argv, report_path = build_argv(policy, staged, scratch)
+            code, out, err, timed_out = _run_limited(
+                argv, staged, _safe_env(scratch), scratch, policy["limits"]["timeout_s"],
+                policy["limits"]["max_output_bytes"])
         finished = utcnow()
         # post-run integrity: workspace mutation (F05), VEP state (F06)
         mutated = tree_snapshot_id(staged, excludes=()) != snap.id
@@ -282,6 +344,8 @@ def evaluate(ws: Workspace, candidate_id: str, *, trusted_local_authorization: s
                 rep = parse_unittest_report(report_path) if policy["evaluator"]["kind"] == "unittest" \
                     else parse_junit_report(report_path)
                 verdict, counts = validate_report(rep, policy, code)
+                if policy["evaluator"]["kind"] == "unittest":
+                    crosscheck_unittest_stderr(rep, err)
             except FalseGreen as exc:
                 reject_reason = f"FALSE_GREEN:{exc}"
         if reject_reason:
@@ -290,6 +354,15 @@ def evaluate(ws: Workspace, candidate_id: str, *, trusted_local_authorization: s
             return {"candidate_id": candidate_id, "status": "REJECTED", "reason": reject_reason}
         ids_digest = sha256_hex(canonical_bytes(sorted(
             rep["passed"] + rep["failed"] + rep["errors"] + rep["skipped"])))
+        if mode == "isolated":
+            trust_level, isolation_name = "ISOLATED_VERIFIED", "DOCKER_GVISOR"
+            att_field = {"isolation_attestation_digest": ws.cas.put(canonical_bytes(attestation))}
+            env_desc = {"kind": "docker-gvisor", "image": image, "runtime": attestation["runtime_identity"],
+                        "attestation_status": attestation["status"]}
+        else:
+            trust_level, isolation_name, att_field = "TRUSTED_LOCAL", "NONE_TRUSTED_LOCAL", {}
+            env_desc = {"kind": "host-subprocess", "python": sys.version.split()[0], "platform": sys.platform,
+                        "python_flags": "-I", "isolation": "none"}
         evidence = VEPObject.create("Evidence", {
             "candidate_id": candidate_id, "objective_id": objective.id, "snapshot_id": snap.id,
             "policy_id": policy.id, "action_id": action.id, "runner_digest": runner_digest(),
@@ -298,13 +371,15 @@ def evaluate(ws: Workspace, candidate_id: str, *, trusted_local_authorization: s
             "tests_passed": counts["passed"], "tests_failed": counts["failed"],
             "tests_skipped": counts["skipped"], "executed_ids_digest": ids_digest,
             "stdout_digest": ws.cas.put(out), "stderr_digest": ws.cas.put(err),
-            "staged_tree_snapshot_id": snap.id, "isolation": "NONE_TRUSTED_LOCAL",
-            "started_at": started, "finished_at": finished, "budget_reservation": rkey})
+            "staged_tree_snapshot_id": snap.id, "isolation": isolation_name,
+            "trust_level": trust_level, "evaluator_id": versions.evaluator_id(trust_level),
+            "execution_environment": env_desc,
+            "started_at": started, "finished_at": finished, "budget_reservation": rkey, **att_field})
         env_digest = store_signed(ws, evidence, keystore)
         with ws.db.tx() as c:
-            c.execute("INSERT INTO evidence(id,candidate_id,objective_id,snapshot_id,policy_id,action_id,verdict,envelope_digest)"
-                      " VALUES(?,?,?,?,?,?,?,?)", (evidence.id, candidate_id, objective.id, snap.id, policy.id,
-                                                    action.id, verdict, env_digest))
+            c.execute("INSERT INTO evidence(id,candidate_id,objective_id,snapshot_id,policy_id,action_id,verdict,envelope_digest,trust_level)"
+                      " VALUES(?,?,?,?,?,?,?,?,?)", (evidence.id, candidate_id, objective.id, snap.id, policy.id,
+                                                      action.id, verdict, env_digest, trust_level))
             budgets.settle(ws, rkey, Decimal(cost_micro) / Decimal(1_000_000), f"eval-settle:{candidate_id}", conn=c)
             if verdict == "PASS":
                 c.execute("INSERT OR REPLACE INTO action_cache(action_id,evidence_id) VALUES(?,?)", (action.id, evidence.id))
@@ -313,7 +388,8 @@ def evaluate(ws: Workspace, candidate_id: str, *, trusted_local_authorization: s
                 candidates.transition(ws, candidate_id, "REJECTED", v, actor, "tests failed", evidence.id, conn=c)
         return {"candidate_id": candidate_id, "status": "EVIDENCE_READY" if verdict == "PASS" else "REJECTED",
                 "verdict": verdict, "evidence_id": evidence.id, "counts": counts,
-                "isolation": "NONE_TRUSTED_LOCAL (no security isolation)"}
+                "trust_level": trust_level,
+                "isolation": "NONE_TRUSTED_LOCAL (no security isolation)" if trust_level == "TRUSTED_LOCAL" else "DOCKER_GVISOR (attested)"}
     except BaseException as exc:
         # outcome unknown: keep funds held as UNCERTAIN, never leave the candidate stuck in EVALUATING
         cur = candidates.get_state(ws, candidate_id)

@@ -44,8 +44,12 @@ def main() -> int:
     runner = unittest.TextTestRunner(stream=sys.stderr, verbosity=2, resultclass=Rec)
     result = runner.run(suite)
     report = {"kind": "unittest", "discovered": discovered, "run": result.testsRun, **out}
-    with open(cfg["report_path"], "w", encoding="utf-8") as fh:
-        json.dump(report, fh, sort_keys=True)
+    if cfg["report_path"] == "-":  # isolated mode: no writable host path; parent parses this marker line
+        sys.stdout.write("\nVEP_REPORT_V1:" + json.dumps(report, sort_keys=True) + "\n")
+        sys.stdout.flush()
+    else:
+        with open(cfg["report_path"], "w", encoding="utf-8") as fh:
+            json.dump(report, fh, sort_keys=True)
     return 0 if result.wasSuccessful() else 1
 
 

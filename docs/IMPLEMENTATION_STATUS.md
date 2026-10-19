@@ -1,4 +1,4 @@
-# Implementation Status
+# Implementation Status (0.4.0a1)
 
 Categories (RFC rule R10): **IMPLEMENTED** (code exists), **TESTED** (automated test observed passing in this build), **SIMULATED** (synthetic model, not a measurement), **DESIGNED** (specified, not built), **UNVERIFIED** (could not be exercised here).
 
@@ -23,8 +23,10 @@ Categories (RFC rule R10): **IMPLEMENTED** (code exists), **TESTED** (automated 
 | Synthetic simulation | IMPLEMENTED, TESTED, SIMULATED | Illustrative parameters only |
 | Git inspection | IMPLEMENTED, TESTED | Read-only; needs `git` |
 | Docker+gVisor plan + probe | IMPLEMENTED, TESTED (plan/probe logic with stubs and the real host probe) | |
-| Container execution of the evaluator | **DESIGNED / UNVERIFIED** | `evaluate(mode='isolated')` always fails closed |
-| gVisor escape resistance | **UNVERIFIED** | No runtime available on the build host |
+| Trust levels (TRUSTED_LOCAL / ISOLATED_VERIFIED / UNVERIFIED), schema v2 evidence/certificates, migration | IMPLEMENTED, TESTED | `trust.py`, `migrations.py`, `tests/test_trust.py`, `tests/test_compat.py` |
+| Isolation capability detector, T1–T12 matrix, attestation, isolated evaluator path | IMPLEMENTED, TESTED (decision logic with a stub docker CLI) | **UNVERIFIED against a real runtime**: macOS host, Docker daemon down, no `runsc`; matrix results are `NOT_RUN` |
+| Release gate, clean-room test, secret/artifact/claim scans, workflows | IMPLEMENTED, TESTED locally | Hosted CI/CodeQL/attestation NOT_RUN |
+| gVisor / container escape resistance | **UNVERIFIED** | No runtime available on the build host; no claim is made |
 | Distributed coordination, remote execution, merge queues | DESIGNED only | |
 | Live LLM / provider integration | OUT OF SCOPE | |
 | Production readiness | **NOT CLAIMED** | |

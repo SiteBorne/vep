@@ -1,0 +1,114 @@
+name: Release
+
+# Builds, verifies and publishes a GitHub PRERELEASE for a pushed v* tag. Publishing authority is confined to the
+# last jobs; build/verify jobs have read-only tokens and run only code from the tagged commit (never from a PR).
+on:
+  push:
+    tags: ["v*"]
+
+permissions:
+  contents: read
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    outputs:
+      version: ${{ steps.v.outputs.version }}
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+          fetch-depth: 0
+      - uses: actions/setup-python@5fda3b95a4ea91299a34e894583c3862153e4b97 # v7.0.0
+        with:
+          python-version: "3.13"
+      - id: v
+        name: Tag must equal the package version
+        run: |
+          python -m pip install -e ".[dev]"
+          VERSION=$(python -c "import vep; print(vep.__version__)")
+          test "${GITHUB_REF_NAME}" = "v${VERSION}" || { echo "tag ${GITHUB_REF_NAME} != v${VERSION}"; exit 1; }
+          echo "version=${VERSION}" >> "$GITHUB_OUTPUT"
+      - name: Test
+        run: |
+          python -m unittest discover -s tests -t .
+          python -m pytest -q
+          python scripts/release/ci_checks.py
+      - name: Build, check, checksum
+        run: |
+          python -m build --outdir dist
+          python -m twine check --strict dist/*
+          python scripts/release/ci_checks.py --dist dist
+          (cd dist && sha256sum -- *.whl *.tar.gz > SHA256SUMS)
+      - uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
+        with:
+          name: dist
+          path: dist/
+          if-no-files-found: error
+
+  verify:
+    needs: build
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+      - uses: actions/setup-python@5fda3b95a4ea91299a34e894583c3862153e4b97 # v7.0.0
+        with:
+          python-version: "3.13"
+      - uses: actions/download-artifact@9000827ccba6bdab643e8b6fd33ac0654aef8333 # v8.0.2
+        with:
+          name: dist
+          path: dist/
+      - name: Verify checksums, install the wheel and run the clean-room test
+        run: |
+          (cd dist && sha256sum -c SHA256SUMS)
+          python -m venv "$RUNNER_TEMP/v"
+          "$RUNNER_TEMP/v/bin/pip" install dist/*.whl
+          python scripts/release/cleanroom.py --venv "$RUNNER_TEMP/v"
+          python scripts/release/quickstart_runner.py --bin-dir "$RUNNER_TEMP/v/bin"
+
+  github-release:
+    needs: [build, verify]
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write        # create the release
+      id-token: write        # keyless build attestation
+      attestations: write
+    steps:
+      - uses: actions/download-artifact@9000827ccba6bdab643e8b6fd33ac0654aef8333 # v8.0.2
+        with:
+          name: dist
+          path: dist/
+      - uses: actions/attest-build-provenance@4d101475d8b20a2381f78447822ac1eab6504dd8 # v4.2.2
+        with:
+          subject-path: |
+            dist/*.whl
+            dist/*.tar.gz
+      - name: Create PRERELEASE (never a stable release)
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          gh release create "${GITHUB_REF_NAME}" dist/*.whl dist/*.tar.gz dist/SHA256SUMS \
+            --repo "${GITHUB_REPOSITORY}" --prerelease --verify-tag \
+            --title "VEP ${GITHUB_REF_NAME} (developer preview)" \
+            --notes "Developer preview. Trusted-local evaluation only; hostile-code isolation is UNVERIFIED. See docs/RELEASE_NOTES.md in the tagged source. Verify artifacts: docs/RELEASE_PROVENANCE.md."
+
+  pypi:
+    # Runs only when the maintainers have configured a PyPI trusted publisher AND set the repository variable
+    # PYPI_TRUSTED_PUBLISHING=true. No long-lived token is used or accepted.
+    if: ${{ vars.PYPI_TRUSTED_PUBLISHING == 'true' }}
+    needs: [build, verify, github-release]
+    runs-on: ubuntu-latest
+    environment: pypi
+    permissions:
+      id-token: write
+    steps:
+      - uses: actions/download-artifact@9000827ccba6bdab643e8b6fd33ac0654aef8333 # v8.0.2
+        with:
+          name: dist
+          path: dist/
+      - run: rm -f dist/SHA256SUMS
+      - uses: pypa/gh-action-pypi-publish@dc37677b2e1c63e2034f94d8a5b11f265b73ba33 # v1.14.2
+        with:
+          packages-dir: dist/

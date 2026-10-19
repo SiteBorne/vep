@@ -1,0 +1,12 @@
+{
+ "generated_by": "vep 0.3.0 (git aba193d)",
+ "note": "frozen legacy schema-v1 objects; no key material",
+ "evidence": {
+  "id": "evd-edcccd9b39316387f4448a97106ae26250e7c8e15f9a6034dcacec3d62e59df6",
+  "canonical": "{\"fields\":{\"action_id\":\"act-5555555555555555555555555555555555555555555555555555555555555555\",\"argv\":[\"<protected-runner>\",\"unittest\"],\"budget_reservation\":\"eval:x\",\"candidate_id\":\"cand-1111111111111111111111111111111111111111111111111111111111111111\",\"executed_ids_digest\":\"7777777777777777777777777777777777777777777777777777777777777777\",\"exit_code\":0,\"finished_at\":\"2026-01-01T00:00:01Z\",\"isolation\":\"NONE_TRUSTED_LOCAL\",\"objective_id\":\"obj-2222222222222222222222222222222222222222222222222222222222222222\",\"policy_id\":\"pol-4444444444444444444444444444444444444444444444444444444444444444\",\"runner_digest\":\"6666666666666666666666666666666666666666666666666666666666666666\",\"snapshot_id\":\"snap-3333333333333333333333333333333333333333333333333333333333333333\",\"staged_tree_snapshot_id\":\"snap-3333333333333333333333333333333333333333333333333333333333333333\",\"started_at\":\"2026-01-01T00:00:00Z\",\"stderr_digest\":\"9999999999999999999999999999999999999999999999999999999999999999\",\"stdout_digest\":\"8888888888888888888888888888888888888888888888888888888888888888\",\"tests_discovered\":2,\"tests_failed\":0,\"tests_passed\":2,\"tests_run\":2,\"tests_skipped\":0,\"verdict\":\"PASS\"},\"schema_version\":1,\"type\":\"Evidence\"}"
+ },
+ "certificate": {
+  "id": "cert-c6a89d00c442db87e25dde8417349f536a426c15c2d622f09c87c65c65861a73",
+  "canonical": "{\"fields\":{\"candidate_id\":\"cand-1111111111111111111111111111111111111111111111111111111111111111\",\"evidence_envelope_digest\":\"bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb\",\"evidence_id\":\"evd-aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa\",\"issued_at\":\"2026-01-01T00:00:02Z\",\"issuer_key_id\":\"cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc\",\"objective_id\":\"obj-2222222222222222222222222222222222222222222222222222222222222222\",\"policy_id\":\"pol-4444444444444444444444444444444444444444444444444444444444444444\",\"snapshot_id\":\"snap-3333333333333333333333333333333333333333333333333333333333333333\"},\"schema_version\":1,\"type\":\"Certificate\"}"
+ }
+}
