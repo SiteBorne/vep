@@ -8,10 +8,10 @@ import sys
 from decimal import Decimal
 from pathlib import Path
 
-from . import (audits, budgets, cache_planner, candidates, certificates, conformance, context, controller, depgraph, execution, git_adapter,
+from . import (audits, budgets, builds, cache_planner, candidates, certificates, conformance, context, controller, depgraph, execution, git_adapter,
                isolation, objectives, policies, routing, simulation, snapshots, tokens, versions)
 from .canonical import strict_loads
-from .errors import VepError
+from .errors import AuthorizationError, VepError
 from .evidence import KeyStore
 from .workspace import Workspace
 
@@ -134,6 +134,26 @@ def cmd_run(a):
     out = {"job": controller.get_job(ws, job["id"]), "run": r}
     _emit(a, out)
     return 0 if r and r.get("outcome") == "SUCCEEDED" and r.get("candidate_status") in ("CERTIFIED", "EVIDENCE_READY") else 3
+
+
+def cmd_build(a):
+    ws = _ws(a)
+    if a.action == "stats":
+        _emit(a, builds.stats(ws))
+        return 0
+    if not a.trusted_local_execution:
+        raise AuthorizationError("build actions run commands as the invoking user with no isolation; "
+                                 "pass --trusted-local-execution to authorize")
+    argv = json.loads(a.argv_json or "null")
+    if not isinstance(argv, list) or not argv or not all(isinstance(x, str) for x in argv):
+        raise ValueError("--argv-json must be a non-empty JSON array of strings")
+    action = builds.BuildAction(tuple(argv), a.snapshot, tuple(a.output), timeout_s=a.timeout,
+                                cache_policy="none" if a.no_cache else "deterministic",
+                                verify_determinism=not a.no_verify_determinism)
+    r = builds.run(ws, action, use_cache=not a.no_cache)
+    r["action_id"] = builds.action_id(action)
+    _emit(a, r)
+    return 0 if r["failure"] is None else 3
 
 
 def cmd_jobs(a):
@@ -338,6 +358,11 @@ def build_parser() -> argparse.ArgumentParser:
     s.add_argument("action", choices=["export", "verify", "vectors"]); s.add_argument("--certificate"); s.add_argument("--bundle")
     s.add_argument("--out"); s.add_argument("--suite", default="conformance/vectors/suite-1.0.json")
     s.add_argument("--require-trust", default="TRUSTED_LOCAL", choices=["TRUSTED_LOCAL", "ISOLATED_VERIFIED"])
+    s = add("build", cmd_build, "run a content-addressed build action over a snapshot, with verified result cache")
+    s.add_argument("action", choices=["run", "stats"]); s.add_argument("--snapshot"); s.add_argument("--output", action="append", default=[])
+    s.add_argument("--timeout", type=int, default=300); s.add_argument("--trusted-local-execution", action="store_true")
+    s.add_argument("--no-cache", action="store_true"); s.add_argument("--no-verify-determinism", action="store_true")
+    s.add_argument("--argv-json", help='command as a JSON array of strings; argv[0] is "{python}" or an absolute path (no shell)')
     s = add("evaluate", cmd_evaluate, "run the protected evaluator (requires explicit trusted-local authorization)")
     s.add_argument("--candidate", required=True)
     s.add_argument("--trusted-local-execution", action="store_true",
