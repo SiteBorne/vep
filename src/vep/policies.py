@@ -89,8 +89,14 @@ def validate_policy(policy: VEPObject) -> None:
 
 def make_policy(ws: Workspace, base: VEPObject, name: str = "default",
                 evaluator: dict | None = None, protected: list[str] | None = None,
-                audits: list | None = None, limits: dict | None = None) -> VEPObject:
-    """Build a policy from the *trusted base snapshot*; required tests are frozen by digest."""
+                audits: list | None = None, limits: dict | None = None,
+                required_exclude: list[str] | None = None) -> VEPObject:
+    """Build a policy from the *trusted base snapshot*; required tests are frozen by digest.
+
+    `required_exclude` is an operator decision made here, at policy creation, never by a candidate: the listed
+    test files are left out of the required set (for example a suite that is entirely skipped on this platform
+    and would otherwise be rejected as ALL_SKIPPED). They still run, but are no longer protected by digest.
+    Callers should record the exclusion and its reason; unknown paths are an error."""
     ev = validate_evaluator(evaluator or {"kind": "unittest", "start_dir": "tests",
                                           "pattern": "test*.py", "import_roots": ["."], "min_tests": 1})
     required = {}
@@ -104,6 +110,11 @@ def make_policy(ws: Workspace, base: VEPObject, name: str = "default",
         for p, e in entries_of(base).items():
             if any(p == t or p.startswith(t.rstrip("/") + "/") for t in ev["targets"]) and p.endswith(".py"):
                 required[p] = e["digest"]
+    unknown = set(required_exclude or []) - set(required)
+    if unknown:
+        raise SchemaError(f"required_exclude names files that are not required tests: {sorted(unknown)}")
+    for p in required_exclude or []:
+        del required[p]
     pol = VEPObject.create("ExecutionPolicy", {
         "name": name, "policy_version": 1, "evaluator": ev,
         "protected_patterns": list(DEFAULT_PROTECTED if protected is None else protected),
