@@ -282,3 +282,34 @@ def run_agent_task(ws: Workspace, adapter: AgentAdapter, task: AgentTask, author
         return result
     finally:
         adapter.cleanup(prepared)
+
+
+ZERO_PRICES = {"input": "0", "cached_input": "0", "cache_write": "0", "output": "0"}
+
+
+def record_usage(ws: Workspace, result: dict, *, attempt: int = 0, prices_per_million: dict | None = None,
+                 pricing_version: str = "unpriced-local-runtime", reservation_key: str | None = None) -> dict | None:
+    """Persist an adapter's token usage as a TokenReceipt, preserving provenance. Never fabricates usage.
+
+    Runtime-reported figures become `provider_reported`; a tool's own claim becomes `caller_supplied`.
+    Wall/CPU measurements are not tokens and are not receipted. Returns None when no token usage exists
+    or the run produced no candidate to attach it to.
+    """
+    from . import tokens
+    cid, usage = result.get("candidate_id"), result["usage"]
+    if not cid:
+        return None
+    pick = None
+    if "provider" in usage:
+        pick, model = usage["provider"], result["runtime"].get("model", result["adapter"])
+    elif "tool_claimed" in usage and {"input_tokens", "output_tokens"} <= usage["tool_claimed"].keys():
+        pick, model = usage["tool_claimed"], result["adapter"]
+    if pick is None:
+        return None
+    rc = tokens.make_receipt(
+        provider=result["adapter"], model=str(model), pricing_version=pricing_version, candidate_id=cid, attempt=attempt,
+        ordinary_input_tokens=pick["input_tokens"], cached_input_tokens=0, cache_write_tokens=0,
+        output_tokens=pick["output_tokens"], reasoning_tokens_in_output=0,
+        prices_per_million=prices_per_million or ZERO_PRICES, usage_source=pick["source"],
+        idempotency_key=f"agent:{result['adapter']}:{result['input_snapshot_id']}:{result['output_snapshot_id']}:{attempt}")
+    return tokens.record_receipt(ws, rc, reservation_key)

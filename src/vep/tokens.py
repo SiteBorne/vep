@@ -43,7 +43,7 @@ def make_receipt(*, provider: str, model: str, pricing_version: str, candidate_i
                  usage_source: str, idempotency_key: str, other_provider_charges: Any = "0",
                  context_id: str | None = None, status: str = "RECORDED") -> VEPObject:
     if usage_source is None:
-        raise SchemaError("usage_source is mandatory (provider_reported | simulated | local_estimate)")
+        raise SchemaError("usage_source is mandatory (provider_reported | caller_supplied | local_estimate | simulated)")
     usage = {"ordinary_input_tokens": ordinary_input_tokens, "cached_input_tokens": cached_input_tokens,
              "cache_write_tokens": cache_write_tokens, "output_tokens": output_tokens}
     for k, v in {**usage, "reasoning_tokens_in_output": reasoning_tokens_in_output}.items():
@@ -96,3 +96,21 @@ def totals(ws: Workspace, candidate_id: str) -> dict:
         rows = c.execute("SELECT cost_micro_usd FROM token_receipts WHERE candidate_id=?", (candidate_id,)).fetchall()
     micro = sum(int(r["cost_micro_usd"]) for r in rows)
     return {"candidate_id": candidate_id, "receipts": len(rows), "cost_usd": format(Decimal(micro) / Decimal(1_000_000), "f")}
+
+
+def usage_report(ws: Workspace, candidate_id: str) -> dict:
+    """Token usage and cost for a candidate, split by provenance so measured and claimed figures never mix."""
+    from .canonical import strict_loads
+    out: dict[str, dict] = {}
+    with ws.db.read() as c:
+        rows = c.execute("SELECT cas_digest FROM token_receipts WHERE candidate_id=? ORDER BY id", (candidate_id,)).fetchall()
+    for r in rows:
+        rc = VEPObject.from_bytes(ws.cas.get(r["cas_digest"]))
+        b = out.setdefault(rc["usage_source"], {"receipts": 0, "input_tokens": 0, "output_tokens": 0, "cost_usd": Decimal(0)})
+        b["receipts"] += 1
+        b["input_tokens"] += rc["ordinary_input_tokens"] + rc["cached_input_tokens"] + rc["cache_write_tokens"]
+        b["output_tokens"] += rc["output_tokens"]
+        b["cost_usd"] += Decimal(rc["cost_usd"])
+    return {"candidate_id": candidate_id,
+            "by_source": {k: {**v, "cost_usd": format(v["cost_usd"], "f")} for k, v in sorted(out.items())},
+            "note": "model cost only; local CPU/wall time has no assigned dollar cost"}

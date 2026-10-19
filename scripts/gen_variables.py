@@ -144,7 +144,7 @@ SECTIONS: list[tuple[str, list[tuple]]] = [
   ("cache_write_tokens", "Tokens written to cache", "int", "tokens", "-", ">=0", "make_receipt", "-", "tokens.py", I, N),
   ("output_tokens", "Billed output tokens (includes reasoning)", "int", "tokens", "-", ">=0", "make_receipt", "-", "tokens.py", I, N),
   ("reasoning_tokens_in_output", "Reasoning tokens already inside output_tokens; never added to cost", "int", "tokens", "-", "0..output_tokens", "make_receipt", "prevents double counting", "tokens.py", I, N),
-  ("usage_source", "provider_reported | simulated | local_estimate (mandatory, no default)", "enum", "-", "-", "enum", "make_receipt", "usage is caller-supplied and unauthenticated in this MVP", "tokens.py", I, N),
+  ("usage_source", "provider_reported | caller_supplied | local_estimate | simulated (mandatory, no default; caller_supplied added in 0.5 as a backward-compatible enum extension)", "enum", "-", "-", "enum", "make_receipt", "usage is caller-supplied and unauthenticated in this MVP", "tokens.py", I, N),
   ("idempotency_key", "Uniquely identifies a receipt", "str", "-", "-", "non-empty, unique", "token_receipts UNIQUE", "duplicate usage cannot be recorded twice", "tokens.record_receipt", I, N),
   ("receipt.status", "RECORDED | SETTLED", "enum", "-", "RECORDED", "enum", "-", "-", "objects.py", I, N),
  ]),

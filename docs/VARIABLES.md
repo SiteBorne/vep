@@ -179,7 +179,7 @@ Columns: **Identifier | Description | Type | Units | Default | Allowed range | V
 | cache_write_tokens | Tokens written to cache | int | tokens | - | >=0 | make_receipt | - | tokens.py | implemented | n/a |
 | output_tokens | Billed output tokens (includes reasoning) | int | tokens | - | >=0 | make_receipt | - | tokens.py | implemented | n/a |
 | reasoning_tokens_in_output | Reasoning tokens already inside output_tokens; never added to cost | int | tokens | - | 0..output_tokens | make_receipt | prevents double counting | tokens.py | implemented | n/a |
-| usage_source | provider_reported \| simulated \| local_estimate (mandatory, no default) | enum | - | - | enum | make_receipt | usage is caller-supplied and unauthenticated in this MVP | tokens.py | implemented | n/a |
+| usage_source | provider_reported \| caller_supplied \| local_estimate \| simulated (mandatory, no default; caller_supplied added in 0.5 as a backward-compatible enum extension) | enum | - | - | enum | make_receipt | usage is caller-supplied and unauthenticated in this MVP | tokens.py | implemented | n/a |
 | idempotency_key | Uniquely identifies a receipt | str | - | - | non-empty, unique | token_receipts UNIQUE | duplicate usage cannot be recorded twice | tokens.record_receipt | implemented | n/a |
 | receipt.status | RECORDED \| SETTLED | enum | - | RECORDED | enum | - | - | objects.py | implemented | n/a |
 
@@ -508,7 +508,7 @@ All fields are validated by `VEPObject.create`; unknown fields are rejected; opt
 | TokenReceipt.reasoning_tokens_in_output | int | yes | min=0 | reasoning tokens in output |
 | TokenReceipt.other_provider_charges | decimal | yes | - | other provider charges |
 | TokenReceipt.prices_per_million | map:decimal | yes | - | prices per million |
-| TokenReceipt.usage_source | enum | yes | values=['provider_reported', 'simulated', 'local_estimate'] | usage source |
+| TokenReceipt.usage_source | enum | yes | values=['provider_reported', 'simulated', 'local_estimate', 'caller_supplied'] | usage source |
 | TokenReceipt.cost_usd | decimal | yes | - | cost usd |
 | TokenReceipt.context_id | id:ContextManifest | no | - | context id |
 | TokenReceipt.status | enum | yes | values=['RECORDED', 'SETTLED'] | status |
