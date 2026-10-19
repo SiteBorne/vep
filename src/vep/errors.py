@@ -62,3 +62,8 @@ class ExecutionError(VepError):
 
 class ContextBudgetExceeded(VepError):
     exit_code = 6
+
+
+class StaleLease(VepError):
+    """A worker tried to commit work under a lease it no longer holds (fencing check failed)."""
+    exit_code = 17

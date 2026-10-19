@@ -27,6 +27,7 @@ Categories (RFC rule R10): **IMPLEMENTED** (code exists), **TESTED** (automated 
 | Isolation capability detector, T1–T12 matrix, attestation, isolated evaluator path | IMPLEMENTED, TESTED (decision logic with a stub docker CLI) | **UNVERIFIED against a real runtime**: macOS host, Docker daemon down, no `runsc`; matrix results are `NOT_RUN` |
 | Release gate, clean-room test, secret/artifact/claim scans, workflows | IMPLEMENTED, TESTED locally | Hosted CI/CodeQL/attestation NOT_RUN |
 | gVisor / container escape resistance | **UNVERIFIED** | No runtime available on the build host; no claim is made |
+| Durable execution controller (leases, fencing, recovery, `vep run`/`vep jobs`) | IMPLEMENTED, TESTED (incl. 4 real processes) | Single-host SQLite; cancel is cooperative; no scale claim |
 | Distributed coordination, remote execution, merge queues | DESIGNED only | |
 | Live LLM / provider integration | OUT OF SCOPE | |
 | Production readiness | **NOT CLAIMED** | |

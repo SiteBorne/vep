@@ -49,6 +49,20 @@ CREATE TABLE IF NOT EXISTS token_receipts(
 CREATE TABLE IF NOT EXISTS git_links(
   snapshot_id TEXT NOT NULL, commit_id TEXT NOT NULL, dirty INTEGER NOT NULL, at TEXT NOT NULL,
   PRIMARY KEY(snapshot_id, commit_id, dirty));
+CREATE TABLE IF NOT EXISTS jobs(
+  id TEXT PRIMARY KEY, objective_id TEXT NOT NULL, candidate_id TEXT NOT NULL, kind TEXT NOT NULL,
+  mode TEXT NOT NULL, auto_certify INTEGER NOT NULL,
+  state TEXT NOT NULL CHECK(state IN ('QUEUED','LEASED','SUCCEEDED','FAILED','CANCELLED')),
+  attempts INTEGER NOT NULL DEFAULT 0, max_attempts INTEGER NOT NULL,
+  fence INTEGER NOT NULL DEFAULT 0, owner TEXT, lease_expires REAL,
+  failure_class TEXT, result TEXT, created_at TEXT NOT NULL, UNIQUE(candidate_id, kind));
+CREATE TABLE IF NOT EXISTS job_events(
+  seq INTEGER PRIMARY KEY AUTOINCREMENT, job_id TEXT NOT NULL, event TEXT NOT NULL,
+  worker TEXT, fence INTEGER, detail TEXT NOT NULL, at TEXT NOT NULL);
+CREATE TRIGGER IF NOT EXISTS job_events_immutable_u BEFORE UPDATE ON job_events
+BEGIN SELECT RAISE(ABORT,'job events are append-only'); END;
+CREATE TRIGGER IF NOT EXISTS job_events_immutable_d BEFORE DELETE ON job_events
+BEGIN SELECT RAISE(ABORT,'job events are append-only'); END;
 
 CREATE TRIGGER IF NOT EXISTS transitions_immutable_u BEFORE UPDATE ON transitions
 BEGIN SELECT RAISE(ABORT,'transitions are append-only'); END;

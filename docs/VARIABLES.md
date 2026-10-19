@@ -26,6 +26,17 @@ Columns: **Identifier | Description | Type | Units | Default | Allowed range | V
 | cas.digest | Address of an object | digest | hex | - | 64 lowercase hex | regex-checked before any path is built; content re-hashed on get | blocks traversal and filename spoofing | storage.CAS._path/get | implemented | n/a |
 | cas.write_mode | Atomic temp-file + fsync + rename; duplicate puts skip when content verifies | rule | - | atomic | fixed | tests in test_storage | torn writes; corruption repair on rewrite | storage.CAS.put | implemented | n/a |
 
+## Execution controller
+
+| Identifier | Description | Type | Units | Default | Allowed range | Validation rules | Security implications | Location | Status | Calibration |
+|---|---|---|---|---|---|---|---|---|---|---|
+| job.id | Deterministic job identity `job-<sha256(candidate,kind)[:32]>` | str | - | - | one job per (candidate, kind) | enqueue is INSERT OR IGNORE + UNIQUE(candidate_id, kind) | replayed enqueue cannot create duplicate work or settlement | controller.job_id_for | implemented | n/a |
+| job.fence | Per-job fencing token, incremented on every claim | int | - | 0 | >=0, monotonic | assert_fence inside every committing transaction (evidence, rejection, certificate) | a stale worker cannot commit or certify after losing its lease | controller.claim/assert_fence | implemented | n/a |
+| job.max_attempts | Bound on claims per job | int | attempts | 3 | 1..10 | enqueue; recover and fail() requeue only while attempts < max | bounds retry cost; unknown-outcome work is never retried | controller.enqueue | implemented | illustrative |
+| LEASE_MARGIN_S | Seconds added to the policy evaluator timeout to form the default lease | int | s | 60 | >=0 | claim | too short causes needless fencing; too long delays recovery | controller.LEASE_MARGIN_S | implemented | illustrative |
+| job.mode | Execution mode a job requires (`trusted-local` or `isolated`) | enum | - | trusted-local | trusted-local \| isolated | claim filters on worker.mode; no cross-mode fallback | isolated jobs are never run on the host | controller.enqueue/claim | implemented | n/a |
+| job.auto_certify | Whether the worker certifies after PASS evidence | bool | - | true | true/false | worker pipeline; certification guarded by fence and policy trust | certification remains bound to exact snapshot and evidence | controller._pipeline | implemented | n/a |
+
 ## Object serialization
 
 | Identifier | Description | Type | Units | Default | Allowed range | Validation rules | Security implications | Location | Status | Calibration |

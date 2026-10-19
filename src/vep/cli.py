@@ -8,7 +8,7 @@ import sys
 from decimal import Decimal
 from pathlib import Path
 
-from . import (audits, budgets, cache_planner, candidates, certificates, context, execution, git_adapter,
+from . import (audits, budgets, cache_planner, candidates, certificates, context, controller, execution, git_adapter,
                isolation, objectives, policies, routing, simulation, snapshots, tokens, versions)
 from .canonical import strict_loads
 from .errors import VepError
@@ -119,6 +119,36 @@ def cmd_evaluate(a):
                            mode="isolated" if a.isolated else "trusted-local", image=a.image, attestation=att)
     _emit(a, r)
     return 0 if r["status"] == "EVIDENCE_READY" else 3
+
+
+def cmd_run(a):
+    ws = _ws(a)
+    job = controller.enqueue(ws, a.candidate, mode="isolated" if a.isolated else "trusted-local",
+                             auto_certify=not a.no_certify, max_attempts=a.max_attempts)
+    if a.isolated:
+        att = json.loads(Path(a.attestation_file).read_text()) if a.attestation_file else None
+        w = controller.IsolatedWorker("vep-cli-isolated", a.image, att)
+    else:
+        w = controller.LocalToolWorker("vep-cli-local", execution.TRUSTED_LOCAL_AUTH if a.trusted_local_execution else None)
+    r = controller.run_one(ws, w)
+    out = {"job": controller.get_job(ws, job["id"]), "run": r}
+    _emit(a, out)
+    return 0 if r and r.get("outcome") == "SUCCEEDED" and r.get("candidate_status") in ("CERTIFIED", "EVIDENCE_READY") else 3
+
+
+def cmd_jobs(a):
+    ws = _ws(a)
+    if a.action == "list":
+        _emit(a, controller.list_jobs(ws))
+    elif a.action == "recover":
+        _emit(a, controller.recover(ws))
+    else:
+        if not a.job:
+            raise ValueError("--job is required")
+        if a.action == "show":
+            _emit(a, {"job": controller.get_job(ws, a.job), "events": controller.events(ws, a.job)})
+        else:
+            _emit(a, controller.cancel(ws, a.job))
 
 
 def cmd_certify(a):
@@ -260,6 +290,12 @@ def build_parser() -> argparse.ArgumentParser:
     s = add("candidate", cmd_candidate, "register/check/show/list candidates")
     s.add_argument("action", choices=["create", "check", "show", "list"]); s.add_argument("--id")
     s.add_argument("--objective"); s.add_argument("--snapshot"); s.add_argument("--author", default="agent")
+    s = add("run", cmd_run, "enqueue a candidate and run it through the durable controller (evaluate, then certify)")
+    s.add_argument("--candidate", required=True); s.add_argument("--trusted-local-execution", action="store_true")
+    s.add_argument("--isolated", action="store_true"); s.add_argument("--image"); s.add_argument("--attestation-file")
+    s.add_argument("--no-certify", action="store_true"); s.add_argument("--max-attempts", type=int, default=3)
+    s = add("jobs", cmd_jobs, "inspect, recover or cancel controller jobs")
+    s.add_argument("action", choices=["list", "show", "recover", "cancel"]); s.add_argument("--job")
     s = add("evaluate", cmd_evaluate, "run the protected evaluator (requires explicit trusted-local authorization)")
     s.add_argument("--candidate", required=True)
     s.add_argument("--trusted-local-execution", action="store_true",
