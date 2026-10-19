@@ -12,10 +12,10 @@ This file is a resumable work log, **not evidence**. Only the output of `scripts
 * Release tooling: gate, clean-room installer test, quickstart runner, SHA-pinned workflows (CI, release, CodeQL), Dependabot.
 
 ## CURRENT
-Final qualification run and publication-readiness handoff.
+Release candidate qualified locally (decision GO, see `release-gate.json`); local tag `v0.4.0a1` points at the gated commit. Awaiting a verified GitHub destination and explicit publication authorization.
 
 ## FAILED_GATES
-None recorded at time of writing; see `release-gate.json` for the authoritative state.
+Final run: none. Earlier runs failed and were fixed: PYTHON_COMPATIBILITY (a build test depended on a git checkout; scans now fall back to a directory walk), ARTIFACT_INTEGRITY precursor (generated report leaked a machine path into the sdist; paths are scrubbed and generated reports excluded from the sdist).
 
 ## NEXT_ACTION
 1. Create/identify the public GitHub repository (owner/slug unknown — not guessed).

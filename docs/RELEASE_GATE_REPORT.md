@@ -1,30 +1,28 @@
 # Release Gate Report
 
-**Decision: NO_GO**  ·  package `vep-protocol 0.4.0a1`  ·  source `6fd5d83c30cf84a30aedef22b269f69bca9bf6be`
+**Decision: GO**  ·  package `vep-protocol 0.4.0a1`  ·  source `1256ee6fd606a2b3733ee48d0fdc4367e2c7f51d`
 
-Generated 2026-10-19T17:48:21Z on macOS-15.6-arm64-arm-64bit-Mach-O / Python 3.14.7. Produced by `scripts/release_check.sh`; machine-readable twin: `release-gate.json`.
-
-**Blocking:** PYTHON_COMPATIBILITY=FAIL
+Generated 2026-10-19T17:54:21Z on macOS-15.6-arm64-arm-64bit-Mach-O / Python 3.14.7. Produced by `scripts/release_check.sh`; machine-readable twin: `release-gate.json`.
 
 ## Capabilities
 
 | Capability | Status |
 |---|---|
-| PUBLIC_DEVELOPER_PREVIEW | FAIL |
+| PUBLIC_DEVELOPER_PREVIEW | PASS |
 | UNTRUSTED_EXECUTION_ISOLATION | UNVERIFIED |
 
 ## Gates
 
 | Gate | Required | Status | Detail |
 |---|---|---|---|
-| SOURCE_INTEGRITY | yes | **PASS** | clean tree at 6fd5d83c30cf, version 0.4.0a1 |
+| SOURCE_INTEGRITY | yes | **PASS** | clean tree at 1256ee6fd606, version 0.4.0a1 |
 | TEST_DISCOVERY | yes | **PASS** | unittest=312 pytest=312 |
 | UNIT_TESTS | yes | **PASS** | unittest ran=312 rc=0 skipped=0; pytest passed=312 failed=0 skipped=0 |
 | ADVERSARIAL_TESTS | yes | **PASS** | adversarial+trust+isolation+release regression: ran=92 rc=0 |
 | INVARIANT_TESTS | yes | **PASS** | invariant suites: ran=84 rc=0 |
 | DEMO | yes | **PASS** | rc=0 |
 | SIMULATION_REPRODUCIBILITY | yes | **PASS** | identical=True |
-| PACKAGE_BUILD | yes | **PASS** | vep_protocol-0.4.0a1-py3-none-any.whl, vep_protocol-0.4.0a1.tar.gz; twine check rc=0 Checking /Users/meta4ickal/VEP/dist/vep_protocol-0.4.0a1-py3-none-any.whl: [32mPASSED[0m Checking /Users/meta4ickal/VEP/dist/vep_protocol-0.4.0a1.tar.gz: [32mPASSED[0m  |
+| PACKAGE_BUILD | yes | **PASS** | vep_protocol-0.4.0a1-py3-none-any.whl, vep_protocol-0.4.0a1.tar.gz; twine check rc=0 Checking <repo>/dist/vep_protocol-0.4.0a1-py3-none-any.whl: [32mPASSED[0m Checking <repo>/dist/vep_protocol-0.4.0a1.tar.gz: [32mPASSED[0m  |
 | PACKAGE_INSTALLATION | yes | **PASS** | wheel and sdist install cleanly; pip check ok |
 | CLI_SMOKE_TEST | yes | **PASS** | 18 clean-room checks; failing: [] |
 | ARTIFACT_INTEGRITY | yes | **PASS** | checksums verified; no keys/db/env/machine paths/secrets in wheel or sdist |
@@ -32,10 +30,10 @@ Generated 2026-10-19T17:48:21Z on macOS-15.6-arm64-arm-64bit-Mach-O / Python 3.1
 | SECURITY_REVIEW | yes | **PASS** | 18 findings recorded, none open; each fixed/mitigated finding has an existing regression test |
 | DOCUMENTATION | yes | **PASS** | 24 required docs present; no unsupported claims; quickstart executed against installed wheel |
 | PROTOCOL_COMPATIBILITY | yes | **PASS** | frozen-fixture compatibility: ran=13 rc=0 |
-| PYTHON_COMPATIBILITY | yes | **FAIL** | 3.11: ^^^^^^^^^^^^^^^^^^^^^^^^^^^^ FileNotFoundError: [Errno 2] No such file or directory: '/var/folders/g7/s4llc2490d17ndcmkp40yk0h0000gn/T/vep-build-jekgr5g3/src_copy/src/vep/signing.pem'  ---------------------------------------------------------------------- Ran 309 tests in 36.990s  FAILED (erro |
+| PYTHON_COMPATIBILITY | yes | **PASS** | tests run from the extracted sdist against the installed wheel on every supported interpreter |
 | RELEASE_PROVENANCE | yes | **PASS** | local build record written and re-verified; workflows pass static checks (SHA-pinned, least-privilege, no pull_request_target); hosted attestation NOT_RUN |
 | OPTIONAL_ISOLATION | no | **UNVERIFIED** | no VEP_ISOLATION_IMAGE configured; capability report only |
-| DEPENDENCY_AUDIT | no | **PASS** | Name         Skip Reason ------------ ----------------------------------------------------------------------------- vep-protocol Dependency not found on PyPI and could not be audited: vep-protocol (0.4.0a1) No known vulnerabilities found |
+| DEPENDENCY_AUDIT | no | **PASS** | No known vulnerabilities found |
 | HOSTED_CI | no | **NOT_RUN** | requires the public GitHub repository; not executed locally |
 | HOSTED_ATTESTATION | no | **NOT_RUN** | requires the public GitHub repository; not executed locally |
 

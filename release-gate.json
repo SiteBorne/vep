@@ -1,13 +1,11 @@
 {
- "blocking": [
-  "PYTHON_COMPATIBILITY=FAIL"
- ],
+ "blocking": [],
  "capabilities": {
-  "PUBLIC_DEVELOPER_PREVIEW": "FAIL",
+  "PUBLIC_DEVELOPER_PREVIEW": "PASS",
   "UNTRUSTED_EXECUTION_ISOLATION": "UNVERIFIED"
  },
- "decision": "NO_GO",
- "elapsed_seconds": 314.2,
+ "decision": "GO",
+ "elapsed_seconds": 316.6,
  "environment": {
   "platform": "macOS-15.6-arm64-arm-64bit-Mach-O",
   "python": "3.14.7"
@@ -16,14 +14,14 @@
   "ADVERSARIAL_TESTS": {
    "detail": "adversarial+trust+isolation+release regression: ran=92 rc=0",
    "ran": 92,
-   "seconds": 29.7,
+   "seconds": 30.1,
    "status": "PASS",
    "tail": ""
   },
   "ARTIFACT_INTEGRITY": {
    "artifacts": {
-    "vep_protocol-0.4.0a1-py3-none-any.whl": "674047792a961d694a25e765eab35648796288d93a2b57287588a3257847b55b",
-    "vep_protocol-0.4.0a1.tar.gz": "fa428c231956a24c3ce4202744365a9e76565792d5c36909b931016aa2eae881"
+    "vep_protocol-0.4.0a1-py3-none-any.whl": "1dd970a300536b65d5f81d6476d9b4db65abb5306fa02342fae00714368f263c",
+    "vep_protocol-0.4.0a1.tar.gz": "63911862cc60949034e557bfd46df807dd5c75fb153c1a70b9f3f7440c632bc8"
    },
    "detail": "checksums verified; no keys/db/env/machine paths/secrets in wheel or sdist",
    "seconds": 0.1,
@@ -32,7 +30,7 @@
   "CLI_SMOKE_TEST": {
    "checks": 18,
    "detail": "18 clean-room checks; failing: []",
-   "seconds": 1.8,
+   "seconds": 1.9,
    "status": "PASS"
   },
   "DEMO": {
@@ -41,13 +39,13 @@
    "status": "PASS"
   },
   "DEPENDENCY_AUDIT": {
-   "detail": "Name         Skip Reason\n------------ -----------------------------------------------------------------------------\nvep-protocol Dependency not found on PyPI and could not be audited: vep-protocol (0.4.0a1)\nNo known vulnerabilities found",
-   "seconds": 1.3,
+   "detail": "No known vulnerabilities found",
+   "seconds": 1.1,
    "status": "PASS"
   },
   "DOCUMENTATION": {
    "detail": "24 required docs present; no unsupported claims; quickstart executed against installed wheel",
-   "seconds": 1.3,
+   "seconds": 1.4,
    "status": "PASS"
   },
   "HOSTED_ATTESTATION": {
@@ -61,7 +59,7 @@
   "INVARIANT_TESTS": {
    "detail": "invariant suites: ran=84 rc=0",
    "ran": 84,
-   "seconds": 2.5,
+   "seconds": 2.3,
    "status": "PASS",
    "tail": ""
   },
@@ -76,7 +74,7 @@
     "machine": "arm64",
     "notes": [
      "macOS: containers run in a Linux VM; runsc must be registered in THAT daemon. Docker Desktop does not ship gVisor.",
-     "docker daemon unreachable: Cannot connect to the Docker daemon at unix:///Users/meta4ickal/.colima/default/docker.sock. Is the docker daemon running?"
+     "docker daemon unreachable: Cannot connect to the Docker daemon at unix://~/.colima/default/docker.sock. Is the docker daemon running?"
     ],
     "os": "Darwin",
     "os_release": "24.6.0",
@@ -92,32 +90,32 @@
    "untrusted_code_claim": "NOT ALLOWED"
   },
   "PACKAGE_BUILD": {
-   "detail": "vep_protocol-0.4.0a1-py3-none-any.whl, vep_protocol-0.4.0a1.tar.gz; twine check rc=0 Checking /Users/meta4ickal/VEP/dist/vep_protocol-0.4.0a1-py3-none-any.whl: \u001b[32mPASSED\u001b[0m\nChecking /Users/meta4ickal/VEP/dist/vep_protocol-0.4.0a1.tar.gz: \u001b[32mPASSED\u001b[0m\n",
-   "seconds": 2.8,
+   "detail": "vep_protocol-0.4.0a1-py3-none-any.whl, vep_protocol-0.4.0a1.tar.gz; twine check rc=0 Checking <repo>/dist/vep_protocol-0.4.0a1-py3-none-any.whl: \u001b[32mPASSED\u001b[0m\nChecking <repo>/dist/vep_protocol-0.4.0a1.tar.gz: \u001b[32mPASSED\u001b[0m\n",
+   "seconds": 2.4,
    "status": "PASS"
   },
   "PACKAGE_INSTALLATION": {
    "detail": "wheel and sdist install cleanly; pip check ok",
-   "seconds": 7.8,
+   "seconds": 8.1,
    "status": "PASS"
   },
   "PROTOCOL_COMPATIBILITY": {
    "detail": "frozen-fixture compatibility: ran=13 rc=0",
    "fixture_sha256": "3979f34b945424be84347a327a3b0bc9ba56615d533b95bff86e5b2344137e63",
    "ran": 13,
-   "seconds": 0.8,
+   "seconds": 0.7,
    "status": "PASS",
    "tail": ""
   },
   "PYTHON_COMPATIBILITY": {
-   "detail": "3.11: ^^^^^^^^^^^^^^^^^^^^^^^^^^^^\nFileNotFoundError: [Errno 2] No such file or directory: '/var/folders/g7/s4llc2490d17ndcmkp40yk0h0000gn/T/vep-build-jekgr5g3/src_copy/src/vep/signing.pem'\n\n----------------------------------------------------------------------\nRan 309 tests in 36.990s\n\nFAILED (errors=1)\n; 3.12: ^^^^^^^^^^^^^^^^^^^^^^^^^^^^\nFileNotFoundError: [Errno 2] No such file or directory: '/var/folders/g7/s4llc2490d17ndcmkp40yk0h0000gn/T/vep-build-t1na9h0s/src_copy/src/vep/signing.pem'\n\n----------------------------------------------------------------------\nRan 309 tests in 39.710s\n\nFAILED (errors=1)\n; 3.13: ^^^^^^^^^^^^^^^^^^^^^^^^^^^^\nFileNotFoundError: [Errno 2] No such file or directory: '/var/folders/g7/s4llc2490d17ndcmkp40yk0h0000gn/T/vep-build-lywrrp4r/src_copy/src/vep/signing.pem'\n\n----------------------------------------------------------------------\nRan 309 tests in 39.930s\n\nFAILED (errors=1)\n",
-   "seconds": 177.1,
-   "status": "FAIL",
+   "detail": "tests run from the extracted sdist against the installed wheel on every supported interpreter",
+   "seconds": 180.1,
+   "status": "PASS",
    "versions": {
-    "3.11": "FAIL ran=309",
-    "3.12": "FAIL ran=309",
-    "3.13": "FAIL ran=309",
-    "3.14": "FAIL ran=309"
+    "3.11": "PASS ran=312",
+    "3.12": "PASS ran=312",
+    "3.13": "PASS ran=312",
+    "3.14": "PASS ran=312"
    }
   },
   "RELEASE_PROVENANCE": {
@@ -132,7 +130,7 @@
   },
   "SECRET_SCAN": {
    "detail": "0 findings; working tree, all reachable history and release artifacts scanned (values are never printed)",
-   "seconds": 1.7,
+   "seconds": 2.0,
    "status": "PASS"
   },
   "SECURITY_REVIEW": {
@@ -145,15 +143,15 @@
    "classification": "SYNTHETIC",
    "detail": "identical=True",
    "result_sha256": "f79dda0d25e3e90b48aa6718aa6b1ce261d0a7657de458d1a0f92352a62c0ebf",
-   "seconds": 0.8,
+   "seconds": 0.7,
    "status": "PASS"
   },
   "SOURCE_INTEGRITY": {
-   "commit": "6fd5d83c30cf84a30aedef22b269f69bca9bf6be",
-   "detail": "clean tree at 6fd5d83c30cf, version 0.4.0a1",
+   "commit": "1256ee6fd606a2b3733ee48d0fdc4367e2c7f51d",
+   "detail": "clean tree at 1256ee6fd606, version 0.4.0a1",
    "seconds": 0.1,
    "status": "PASS",
-   "tree": "dc277b73d4dbfdb40dbc65cb3bc8829cf48173d8",
+   "tree": "e5f8e4830b9e119b4315be4b3d5c625f2eda3908",
    "versions": {
     "CHANGELOG": "0.4.0a1",
     "__init__": "0.4.0a1",
@@ -164,7 +162,7 @@
   "TEST_DISCOVERY": {
    "detail": "unittest=312 pytest=312",
    "pytest": 312,
-   "seconds": 0.5,
+   "seconds": 0.4,
    "status": "PASS",
    "unittest": 312
   },
@@ -173,13 +171,13 @@
    "failed": 0,
    "not_run": 0,
    "pytest_passed": 312,
-   "seconds": 85.9,
+   "seconds": 84.9,
    "skipped": 0,
    "status": "PASS",
    "unittest_ran": 312
   }
  },
- "generated_at": "2026-10-19T17:48:21Z",
+ "generated_at": "2026-10-19T17:54:21Z",
  "package": "vep-protocol",
  "required_gates": [
   "SOURCE_INTEGRITY",
@@ -201,8 +199,8 @@
   "PYTHON_COMPATIBILITY"
  ],
  "schema": "vep-release-gate/1",
- "source_commit": "6fd5d83c30cf84a30aedef22b269f69bca9bf6be",
- "source_tree": "dc277b73d4dbfdb40dbc65cb3bc8829cf48173d8",
+ "source_commit": "1256ee6fd606a2b3733ee48d0fdc4367e2c7f51d",
+ "source_tree": "e5f8e4830b9e119b4315be4b3d5c625f2eda3908",
  "test_counts": {
   "discovered": 312,
   "pytest": 312,
