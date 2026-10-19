@@ -1,0 +1,111 @@
+{
+ "baseline": {
+  "files_in_snapshot": 35,
+  "min_passing_tests": 500,
+  "policy_id": "pol-e60dcb77e927e0430f37530ec02a2dbfe63567d4a127bd5360ebf595aea9c645",
+  "required_test_files": 13,
+  "snapshot_id": "snap-019cbc4c1072470cf0620d011dac93837c0de663cd3b9210d2ad46b379a9b4fa"
+ },
+ "candidates": {
+  "benign": {
+   "candidate_id": "cand-1a278756375292b4fea34746804cf05067399e3b5653438ed2bb3d3652cf1f96",
+   "cost": {
+    "child_cpu_s": 0.524,
+    "wall_s": 0.582
+   },
+   "result": {
+    "candidate_id": "cand-1a278756375292b4fea34746804cf05067399e3b5653438ed2bb3d3652cf1f96",
+    "candidate_status": "REJECTED",
+    "evidence_id": null,
+    "job": "job-18b373d60b66c511e2a7c827a4c62da8",
+    "outcome": "SUCCEEDED",
+    "reason": "FALSE_GREEN:REQUIRED_SUITE_ALL_SKIPPED:pyflakes/test/test_lazy_imports.py",
+    "trust_level": null,
+    "verdict": null
+   },
+   "snapshot_id": "snap-512dbe2d5d32644b1d34cef0c26e27505f2b805796f3f6bb41791ec54c31a251",
+   "tests": null
+  },
+  "mutant": {
+   "candidate_id": "cand-889f8281b117a841fe8b2d1242bd4a89066444326387c72a0ba8cf1735bd24d4",
+   "cost": {
+    "child_cpu_s": 0.559,
+    "wall_s": 0.632
+   },
+   "result": {
+    "candidate_id": "cand-889f8281b117a841fe8b2d1242bd4a89066444326387c72a0ba8cf1735bd24d4",
+    "candidate_status": "REJECTED",
+    "evidence_id": null,
+    "job": "job-e4fb619bf67e12a151d3b291ce348954",
+    "outcome": "SUCCEEDED",
+    "reason": "FALSE_GREEN:REQUIRED_SUITE_ALL_SKIPPED:pyflakes/test/test_lazy_imports.py",
+    "trust_level": null,
+    "verdict": null
+   },
+   "snapshot_id": "snap-3459d2c55223e3b0e459589551f5d0b84707b98ec6b4d8347e7984565e928491",
+   "tests": null
+  },
+  "upstream": {
+   "candidate_id": "cand-746cd43f4999e64c080a6f66b663c7fbcfa9218722d19985c85711028c707d17",
+   "cost": {
+    "child_cpu_s": 0.529,
+    "wall_s": 0.588
+   },
+   "result": {
+    "candidate_id": "cand-746cd43f4999e64c080a6f66b663c7fbcfa9218722d19985c85711028c707d17",
+    "candidate_status": "REJECTED",
+    "evidence_id": null,
+    "job": "job-1b1f20d2961ec7b63ea7b41057f122ae",
+    "outcome": "SUCCEEDED",
+    "reason": "FALSE_GREEN:REQUIRED_SUITE_ALL_SKIPPED:pyflakes/test/test_lazy_imports.py",
+    "trust_level": null,
+    "verdict": null
+   },
+   "snapshot_id": "snap-019cbc4c1072470cf0620d011dac93837c0de663cd3b9210d2ad46b379a9b4fa",
+   "tests": null
+  }
+ },
+ "classification": "LOCALLY_VERIFIED (trusted-local, one host)",
+ "direct_reference": {
+  "child_cpu_s": 0.488,
+  "command": "python -I -m unittest discover -s pyflakes/test -p test_*.py -t .",
+  "returncode": 0,
+  "summary": [
+   "Ran 795 tests in 0.400s",
+   "OK (skipped=28)"
+  ],
+  "wall_s": 0.508
+ },
+ "kind": "external project through VEP",
+ "limits": [
+  "project tests ran as the invoking user with NO isolation (explicitly authorized for these vetted projects)",
+  "no changes were pushed to the project; candidates are local and disposable",
+  "one host, one run per candidate: no statistical claim"
+ ],
+ "outcome": {
+  "all_expected": false,
+  "benign_certified": false,
+  "edited_tree_rejected": false,
+  "mutant_rejected": true,
+  "upstream_certified": false
+ },
+ "project": {
+  "commit": "8526af8494a831803bbc1eae24b8f9d2a24aa2f7",
+  "kind": "small real Python application (static checker)",
+  "license": "MIT",
+  "license_file": "LICENSE",
+  "name": "pyflakes",
+  "tag": "4.0.3",
+  "url": "https://github.com/PyCQA/pyflakes"
+ },
+ "report_version": 1,
+ "tool": {
+  "package": "0.4.0a1",
+  "platform": "macOS-15.6-arm64-arm-64bit-Mach-O",
+  "python": "3.14.7",
+  "vep_commit": "a0a2d88c4ddc87672ea00f100c02480d3489ec7d"
+ },
+ "verification": {
+  "upstream_certified": false
+ }
+}

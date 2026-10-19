@@ -83,11 +83,13 @@ def main() -> int:
         ws = Workspace.init(ws_root)
         KeyStore(ws).ensure()
         base = snapshots.take_snapshot(ws, tree)
-        policy = make_policy(ws, base, name=a.project, evaluator=spec["evaluator"], limits={"timeout_s": 900})
+        excl = spec.get("required_exclude", [])
+        policy = make_policy(ws, base, name=a.project, evaluator=spec["evaluator"], limits={"timeout_s": 900},
+                             required_exclude=[x["path"] for x in excl])
         obj = create_objective(ws, f"{a.project} verification", "evaluate pinned upstream revision and local variants", base.id, policy.id)
         budgets.create_account(ws, f"objective:{obj.id}", "objective", "1.00")
         report["baseline"] = {"snapshot_id": base.id, "policy_id": policy.id, "required_test_files": len(policy["required_tests"]),
-                              "files_in_snapshot": len(snapshots.entries_of(base)), "min_passing_tests": spec["evaluator"]["min_tests"]}
+                              "files_in_snapshot": len(snapshots.entries_of(base)), "required_exclude": excl, "min_passing_tests": spec["evaluator"]["min_tests"]}
 
         def variant(name: str, edit):
             d = work / name
@@ -105,12 +107,17 @@ def main() -> int:
             assert spec["mutant"]["old"] in text, "mutation site not found"
             p.write_text(text.replace(spec["mutant"]["old"], spec["mutant"]["new"], 1))
 
-        cands = {"upstream": base, "benign": variant("benign", add_benign), "mutant": variant("mutant", mutate)}
+        def mutate_and_test(d: Path):
+            mutate(d)
+            add_benign(d)
+
+        cands = {"upstream": base, "benign": variant("benign", add_benign), "mutant": variant("mutant", mutate),
+                 "mutant_plus_new_test": variant("mutant_plus_new_test", mutate_and_test)}
         report["candidates"] = {}
         ids = {}
         for name, snap in cands.items():
             ids[name] = candidates.register_candidate(ws, obj.id, snap.id, f"external-eval:{name}").id
-        for name in ("upstream", "benign", "mutant"):
+        for name in ("upstream", "benign", "mutant", "mutant_plus_new_test"):
             controller.enqueue(ws, ids[name])
             res, cost = timed(lambda: controller.run_one(ws, controller.LocalToolWorker(f"ext-{name}", execution.TRUSTED_LOCAL_AUTH)))
             ev = None
@@ -147,9 +154,11 @@ def main() -> int:
         report["outcome"] = {
             "upstream_certified": c["upstream"]["result"].get("candidate_status") == "CERTIFIED",
             "benign_certified": c["benign"]["result"].get("candidate_status") == "CERTIFIED",
-            "mutant_rejected": c["mutant"]["result"].get("candidate_status") == "REJECTED",
+            "mutant_rejected_by_projects_own_tests": c["mutant"]["result"].get("candidate_status") == "REJECTED",
+            "mutant_rejected_once_a_covering_test_is_added": c["mutant_plus_new_test"]["result"].get("candidate_status") == "REJECTED",
             "edited_tree_rejected": report["verification"].get("edited_tree_rejected", False)}
-        report["outcome"]["all_expected"] = all(report["outcome"].values())
+        # a surviving mutant is a finding about the project's tests, reported but not a VEP failure
+        report["outcome"]["all_expected"] = all(v for k, v in report["outcome"].items() if k != "mutant_rejected_by_projects_own_tests")
     finally:
         shutil.rmtree(work, ignore_errors=True)
     Path(a.report).parent.mkdir(parents=True, exist_ok=True)

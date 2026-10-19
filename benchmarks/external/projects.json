@@ -2,6 +2,7 @@
  "pyflakes": {
   "url": "https://github.com/PyCQA/pyflakes", "tag": "4.0.3", "commit": "8526af8494a831803bbc1eae24b8f9d2a24aa2f7",
   "license": "MIT", "kind": "small real Python application (static checker)",
+  "required_exclude": [{"path": "pyflakes/test/test_lazy_imports.py", "reason": "every test in this file is skipped on this interpreter (Python 3.14); VEP rejects a required file that cannot run (REQUIRED_SUITE_ALL_SKIPPED), so the operator excludes it from the required set explicitly"}],
   "evaluator": {"kind": "unittest", "start_dir": "pyflakes/test", "pattern": "test_*.py", "import_roots": ["."], "min_tests": 500},
   "direct_cmd": ["-I", "-m", "unittest", "discover", "-s", "pyflakes/test", "-p", "test_*.py", "-t", "."],
   "benign": {"path": "pyflakes/test/test_vep_extra.py", "content": "import io\nimport unittest\n\nfrom pyflakes import api, reporter\n\n\nclass VepExtra(unittest.TestCase):\n    def test_unused_import_is_reported_once(self):\n        out, err = io.StringIO(), io.StringIO()\n        n = api.check('import os\\n', 'x.py', reporter.Reporter(out, err))\n        self.assertEqual(n, 1)\n        self.assertIn('imported but unused', out.getvalue())\n"},

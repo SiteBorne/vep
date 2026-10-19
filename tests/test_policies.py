@@ -83,3 +83,21 @@ class AllowModuleNamesTests(unittest.TestCase):
                 policies.validate_evaluator({**base, "allow_module_names": bad})
         with self.assertRaises(SchemaError):
             policies.validate_evaluator({"kind": "pytest", "targets": ["tests"], "allow_module_names": ["vep"]})
+
+
+class RequiredExcludeTests(VepTestCase):
+    SECOND = "import unittest\n\n\nclass T(unittest.TestCase):\n    def test_x(self):\n        self.assertTrue(True)\n"
+
+    def test_exclusion_is_explicit_and_validated(self):
+        from tests.helpers import BASE_FILES
+        from vep.policies import make_policy
+        e = self.env(files={**BASE_FILES, "tests/test_second.py": self.SECOND})
+        full = make_policy(e.ws, e.base, name="full")
+        self.assertEqual(set(full["required_tests"]), {"tests/test_arithmetic.py", "tests/test_second.py"})
+        ex = make_policy(e.ws, e.base, name="ex", required_exclude=["tests/test_second.py"])
+        self.assertEqual(set(ex["required_tests"]), {"tests/test_arithmetic.py"})
+        self.assertNotEqual(ex.id, full.id)  # the exclusion is part of the policy identity
+        with self.assertRaises(SchemaError):
+            make_policy(e.ws, e.base, name="bad", required_exclude=["tests/nope.py"])
+        with self.assertRaises(SchemaError):  # cannot exclude everything
+            make_policy(e.ws, e.base, name="none", required_exclude=list(full["required_tests"]))
