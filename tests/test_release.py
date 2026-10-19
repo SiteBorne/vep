@@ -170,15 +170,13 @@ class ArtifactAuditTests(unittest.TestCase):
         self.assertEqual(G.verify_checksums(d / "SHA256SUMS")[0], "a.whl")
 
 
-@unittest.skipUnless(shutil.which("git"), "git required")
 class RealBuildTests(unittest.TestCase):
     """Builds the real project from tracked+untracked sources in a temp copy (never plants files in the repo)."""
     @classmethod
     def setUpClass(cls):
         cls.tmp = Path(tempfile.mkdtemp(prefix="vep-build-"))
         src = cls.tmp / "src_copy"
-        files = subprocess.run(["git", "ls-files", "-co", "--exclude-standard"], cwd=ROOT, capture_output=True, text=True).stdout.split()
-        for f in files:
+        for f in G.list_files(ROOT):
             if (ROOT / f).is_file():
                 (src / f).parent.mkdir(parents=True, exist_ok=True)
                 shutil.copy2(ROOT / f, src / f)

@@ -85,8 +85,25 @@ def _git(*args, cwd=ROOT) -> subprocess.CompletedProcess:
     return subprocess.run(["git", *args], cwd=cwd, capture_output=True, text=True, check=False)
 
 
+SKIP_DIRS = {".git", ".venv", "venv", "build", "dist", "__pycache__", ".pytest_cache", "node_modules"}
+
+
+def list_files(root: Path) -> list[str]:
+    """Tracked + untracked-but-not-ignored files; falls back to a directory walk outside a git checkout
+    (e.g. an extracted sdist) so scans never silently cover nothing."""
+    r = _git("ls-files", "-co", "--exclude-standard", cwd=root)
+    names = [n for n in r.stdout.split("\n") if n] if r.returncode == 0 else []
+    if names:
+        return names
+    out = []
+    for dp, dn, fn in __import__("os").walk(root):
+        dn[:] = [d for d in dn if d not in SKIP_DIRS and not d.endswith(".egg-info")]
+        out += [str((Path(dp) / f).relative_to(root)) for f in fn]
+    return out
+
+
 def scan_tree(policy: dict, root: Path = ROOT) -> list[dict]:
-    files = _git("ls-files", "-co", "--exclude-standard", cwd=root).stdout.split("\n")
+    files = list_files(root)
     out = []
     for f in filter(None, files):
         p = root / f

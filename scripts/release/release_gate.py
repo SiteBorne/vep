@@ -310,7 +310,7 @@ def g_pycompat(c, skip=False):
             continue
         v = c.venv(f"py{ver}", exe)
         pip = str(v / "bin" / "pip")
-        r = G.run([pip, "install", "-q", "--no-cache-dir", str(c.wheel), "pytest"])
+        r = G.run([pip, "install", "-q", "--no-cache-dir", str(c.wheel), "pytest", "build", "setuptools>=68"])
         if r.returncode:
             out[ver] = "FAIL (install)"; problems.append(f"{ver} install"); continue
         t = G.run([str(v / "bin" / "python"), "-m", "unittest", "discover", "-s", "tests", "-t", "."], cwd=srcdir)
@@ -343,7 +343,8 @@ def g_depaudit(c):
     r = G.run(["pip-audit", "--path", str(next((c.wheel_venv / "lib").glob("python*/site-packages"))), "--progress-spinner", "off"], timeout=300)
     if "ConnectionError" in r.stderr or "Max retries" in r.stderr or "Name or service" in r.stderr:
         return G.gate("NOT_RUN", "vulnerability database unreachable")
-    return G.gate("PASS" if r.returncode == 0 else "FAIL", (r.stdout + r.stderr).strip()[-300:])
+    summary = [l for l in (r.stdout + r.stderr).splitlines() if "No known vulnerabilities" in l or "Found" in l]
+    return G.gate("PASS" if r.returncode == 0 else "FAIL", " ".join(summary) or (r.stdout + r.stderr).strip()[-300:])
 
 
 ORDER = [("SOURCE_INTEGRITY", g_source), ("TEST_DISCOVERY", g_discovery), ("UNIT_TESTS", g_units),
@@ -353,6 +354,20 @@ ORDER = [("SOURCE_INTEGRITY", g_source), ("TEST_DISCOVERY", g_discovery), ("UNIT
          ("SECURITY_REVIEW", g_security), ("DOCUMENTATION", g_docs), ("PROTOCOL_COMPATIBILITY", g_compat),
          ("PYTHON_COMPATIBILITY", None), ("RELEASE_PROVENANCE", g_provenance), ("OPTIONAL_ISOLATION", g_isolation),
          ("DEPENDENCY_AUDIT", g_depaudit)]
+
+
+def scrub(obj, c: "Ctx"):
+    """Remove machine-specific paths from anything written to the report."""
+    repl = [(str(c.tmp), "<tmp>"), (str(ROOT), "<repo>"), (str(Path.home()), "~"), (tempfile.gettempdir(), "<tmp>")]
+    if isinstance(obj, str):
+        for a, b in repl:
+            obj = obj.replace(a, b)
+        return obj
+    if isinstance(obj, dict):
+        return {k: scrub(v, c) for k, v in obj.items()}
+    if isinstance(obj, list):
+        return [scrub(v, c) for v in obj]
+    return obj
 
 
 def render_md(doc: dict) -> str:
@@ -386,6 +401,7 @@ def main() -> int:
                 res = fn(c) if name != "PYTHON_COMPATIBILITY" else g_pycompat(c, a.skip_matrix)
             except Exception as exc:
                 res = G.gate("FAIL", f"gate crashed: {exc!r}\n{traceback.format_exc()[-400:]}")
+            res = scrub(res, c)
             res["seconds"] = round(time.time() - t, 1)
             c.results[name] = res
             print(f"{name:28s} {res['status']:10s} {res['detail'].splitlines()[0][:110] if res['detail'] else ''}", flush=True)
