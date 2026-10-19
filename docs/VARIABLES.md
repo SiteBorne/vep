@@ -47,6 +47,17 @@ Columns: **Identifier | Description | Type | Units | Default | Allowed range | V
 | usage.source | Provenance of a usage figure | enum | - | - | provider_reported \| locally_measured \| caller_supplied \| estimated \| simulated \| none | usage_record rejects unknown values; tool-claimed usage is always caller_supplied | adapter claims are never promoted | agents.USAGE_SOURCES | implemented | n/a |
 | AgentTask.timeout_s | Wall-clock limit for one adapter execution | int | s | 120 | >0 | process group SIGKILL on expiry; error_class TIMEOUT | bounded resource use | agents.AgentTask | implemented | illustrative |
 
+## Build actions
+
+| Identifier | Description | Type | Units | Default | Allowed range | Validation rules | Security implications | Location | Status | Calibration |
+|---|---|---|---|---|---|---|---|---|---|---|
+| BuildAction.argv | Command; argv[0] is an absolute path or {python} | tuple[str] | - | - | NUL-free; no shell | BuildAction.validate | no shell parsing; trusted-local execution, not a sandbox | builds.BuildAction | implemented | n/a |
+| BuildAction.env | Extra environment, restricted to SAFE_ENV_KEYS | tuple[(str,str)] | - | () | PYTHONHASHSEED, LANG, PYTHONDONTWRITEBYTECODE, SOURCE_DATE_EPOCH | validate | blocks LD_PRELOAD-style injection; part of the action id | builds.SAFE_ENV_KEYS | implemented | n/a |
+| BuildAction.cache_policy | deterministic = cacheable after verification; none = never cached | enum | - | deterministic | deterministic \| none | validate | a wrong cache hit would reuse a stale result | builds.CACHE_POLICIES | implemented | n/a |
+| BuildAction.verify_determinism | Run twice on a miss; cache only if outputs, stdout, stderr and exit code are identical | bool | - | true | true/false | builds.run | turning it off trusts the caller's determinism claim; costs one extra run when on | builds.run | implemented | n/a |
+| BuildAction.timeout_s | Wall-clock limit per execution | int | s | 300 | >0 | process-group SIGKILL | bounded resource use | builds.BuildAction | implemented | illustrative |
+| build_cache entry | action id to stored result; reused only if result and every output blob re-hash | row | - | - | exit_code 0 only | builds.lookup | corrupt entries are misses, never reused | builds.lookup | implemented | n/a |
+
 ## Object serialization
 
 | Identifier | Description | Type | Units | Default | Allowed range | Validation rules | Security implications | Location | Status | Calibration |

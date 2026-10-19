@@ -29,6 +29,7 @@ Categories (RFC rule R10): **IMPLEMENTED** (code exists), **TESTED** (automated 
 | gVisor / container escape resistance | **UNVERIFIED** | No runtime available on the build host; no claim is made |
 | Durable execution controller (leases, fencing, recovery, `vep run`/`vep jobs`) | IMPLEMENTED, TESTED (incl. 4 real processes) | Single-host SQLite; cancel is cooperative; no scale claim |
 | Agent adapter interface v1 + structured-subprocess adapter (allowlist, usage provenance) + Ollama adapter | IMPLEMENTED, TESTED (subprocess adapter with real processes; Ollama adapter against a local STUB server only) | **LIVE_AGENT_EXECUTION = UNVERIFIED**: no real model run recorded. Subprocess tools are not sandboxed. Usage is not yet written to TokenReceipts |
+| Build actions + content-addressed result cache (`builds.py`) | IMPLEMENTED, TESTED (hit/miss accounting, determinism check, corruption, invalidation) | Python-callable only (no CLI yet); trusted-local; REAPI **NOT_IMPLEMENTED** |
 | Distributed coordination, remote execution, merge queues | DESIGNED only | |
 | Live LLM / provider integration | OUT OF SCOPE | |
 | Production readiness | **NOT CLAIMED** | |
