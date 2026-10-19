@@ -5,6 +5,7 @@ cd "$(dirname "$0")/.."
 PY=python3; [ -x .venv/bin/python ] && PY=.venv/bin/python
 echo "== unit tests (unittest)";            $PY -m unittest discover -s tests -t . 
 echo "== unit tests (pytest)";              $PY -m pytest -q
+echo "== conformance suite (frozen + independent verifier)"; scripts/conformance_check.sh
 echo "== registry up to date";              $PY scripts/gen_variables.py --check
 echo "== demo";                             $PY examples/run_demo.py | tail -3
 echo "== simulation reproducibility";       $PY benchmarks/run_simulation.py --out-json /dev/null --out-md /dev/null

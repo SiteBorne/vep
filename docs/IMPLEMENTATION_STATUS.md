@@ -33,6 +33,7 @@ Categories (RFC rule R10): **IMPLEMENTED** (code exists), **TESTED** (automated 
 | Dependency graph, claim relations/scheduling, composite candidates, EXACT_ONLY evidence validity (`depgraph.py`, `vep graph`, `vep compose`) | IMPLEMENTED, TESTED (independent, overlapping, contract-conflicting, textually-clean-but-incompatible composites; invalidation) | Static Python imports only; sound incremental test-skipping is **NOT_IMPLEMENTED** by design |
 | Usage receipts with provenance (`agents.record_usage`, `tokens.usage_report`, `caller_supplied` source) | IMPLEMENTED, TESTED | Local-model tokens priced at 0 (unpriced), not a cost claim; wall/CPU time is reported, not monetized |
 | Controller scaling at 1/2/4/8/16 real processes | LOCALLY_VERIFIED (observation, `docs/CONTROLLER_SCALING.md`) | One host, tiny jobs; no distributed claim |
+| Conformance suite 1.0 (119 frozen vectors) + independent Node verifier + portable bundles (`vep conformance`) | IMPLEMENTED, TESTED; both verifiers agree 119/119 | Second implementation written by the same author, not externally reviewed. Go verifier **NOT_IMPLEMENTED** (Go not installed). Bundle proof limits in `docs/CONFORMANCE.md` section 5 |
 | Distributed coordination, remote execution, merge queues | DESIGNED only | |
 | Live LLM / provider integration | OUT OF SCOPE | |
 | Production readiness | **NOT CLAIMED** | |

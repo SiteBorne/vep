@@ -15,8 +15,8 @@ from .canonical import canonical_bytes, domain_hash, is_digest, strict_loads
 from .errors import SchemaError
 
 SCHEMA_VERSION = 1
-TS_RE = re.compile(r"^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}Z$")
-DEC_RE = re.compile(r"^-?\d+(\.\d+)?$")
+TS_RE = re.compile(r"^[0-9]{4}-[0-9]{2}-[0-9]{2}T[0-9]{2}:[0-9]{2}:[0-9]{2}Z\Z")  # ASCII digits only; no trailing newline
+DEC_RE = re.compile(r"^-?[0-9]+(\.[0-9]+)?\Z")
 
 # kind -> description; fields: name -> (kind, required, options)
 # kinds: str, int, bool, digest, id:<Type>, ts, decimal, list:<kind>, map:<kind>, json, enum
@@ -155,7 +155,7 @@ def _check_trust_consistency(type_name: str, version: int, f: dict) -> None:
             raise SchemaError("ISOLATED_VERIFIED evidence requires DOCKER_GVISOR isolation and an attestation digest")
         if tl == "UNVERIFIED" and f["verdict"] == "PASS":
             raise SchemaError("UNVERIFIED evidence cannot carry a PASS verdict")
-ID_RE = re.compile(r"^([a-z]+)-([0-9a-f]{64})$")
+ID_RE = re.compile(r"^([a-z]+)-([0-9a-f]{64})\Z")
 
 
 def parse_id(object_id: str) -> tuple[str, str]:
