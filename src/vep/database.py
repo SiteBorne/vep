@@ -56,6 +56,11 @@ CREATE TABLE IF NOT EXISTS jobs(
   attempts INTEGER NOT NULL DEFAULT 0, max_attempts INTEGER NOT NULL,
   fence INTEGER NOT NULL DEFAULT 0, owner TEXT, lease_expires REAL,
   failure_class TEXT, result TEXT, created_at TEXT NOT NULL, UNIQUE(candidate_id, kind));
+CREATE TABLE IF NOT EXISTS build_cache(
+  action_id TEXT PRIMARY KEY, result_digest TEXT NOT NULL, created_at TEXT NOT NULL);
+CREATE TABLE IF NOT EXISTS build_log(
+  seq INTEGER PRIMARY KEY AUTOINCREMENT, action_id TEXT NOT NULL, outcome TEXT NOT NULL,
+  wall_s REAL NOT NULL, cpu_s REAL NOT NULL, at TEXT NOT NULL);
 CREATE TABLE IF NOT EXISTS job_events(
   seq INTEGER PRIMARY KEY AUTOINCREMENT, job_id TEXT NOT NULL, event TEXT NOT NULL,
   worker TEXT, fence INTEGER, detail TEXT NOT NULL, at TEXT NOT NULL);

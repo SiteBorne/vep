@@ -48,6 +48,14 @@ SECTIONS: list[tuple[str, list[tuple]]] = [
   ("usage.source", "Provenance of a usage figure", "enum", "-", "-", "provider_reported | locally_measured | caller_supplied | estimated | simulated | none", "usage_record rejects unknown values; tool-claimed usage is always caller_supplied", "adapter claims are never promoted", "agents.USAGE_SOURCES", I, N),
   ("AgentTask.timeout_s", "Wall-clock limit for one adapter execution", "int", "s", "120", ">0", "process group SIGKILL on expiry; error_class TIMEOUT", "bounded resource use", "agents.AgentTask", I, ILL),
  ]),
+ ("Build actions", [
+  ("BuildAction.argv", "Command; argv[0] is an absolute path or {python}", "tuple[str]", "-", "-", "NUL-free; no shell", "BuildAction.validate", "no shell parsing; trusted-local execution, not a sandbox", "builds.BuildAction", I, N),
+  ("BuildAction.env", "Extra environment, restricted to SAFE_ENV_KEYS", "tuple[(str,str)]", "-", "()", "PYTHONHASHSEED, LANG, PYTHONDONTWRITEBYTECODE, SOURCE_DATE_EPOCH", "validate", "blocks LD_PRELOAD-style injection; part of the action id", "builds.SAFE_ENV_KEYS", I, N),
+  ("BuildAction.cache_policy", "deterministic = cacheable after verification; none = never cached", "enum", "-", "deterministic", "deterministic | none", "validate", "a wrong cache hit would reuse a stale result", "builds.CACHE_POLICIES", I, N),
+  ("BuildAction.verify_determinism", "Run twice on a miss; cache only if outputs, stdout, stderr and exit code are identical", "bool", "-", "true", "true/false", "builds.run", "turning it off trusts the caller's determinism claim; costs one extra run when on", "builds.run", I, N),
+  ("BuildAction.timeout_s", "Wall-clock limit per execution", "int", "s", "300", ">0", "process-group SIGKILL", "bounded resource use", "builds.BuildAction", I, ILL),
+  ("build_cache entry", "action id to stored result; reused only if result and every output blob re-hash", "row", "-", "-", "exit_code 0 only", "builds.lookup", "corrupt entries are misses, never reused", "builds.lookup", I, N),
+ ]),
  ("Object serialization", [
   ("CANON_VERSION", "Canonical serialization version (VEP-C1)", "int", "-", "1", "1", "documented in RFC-0001", "changing it changes every identity", "canonical.py", I, N),
   ("SCHEMA_VERSION", "Object schema version embedded in every object and identity domain", "int", "-", "1", "1", "from_bytes rejects other versions", "domain separation across versions", "objects.SCHEMA_VERSION", I, N),
