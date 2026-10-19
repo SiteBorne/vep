@@ -1,0 +1,977 @@
+{
+ "assumptions": [
+  "task difficulty d in [0,1]; P(correct) is linear in d with the stated base/slope",
+  "verifier accepts correct output with prob sensitivity and incorrect with prob fp",
+  "second verifier's false accept prob = fp + rho*(1-fp) given the first accepted an incorrect output",
+  "adaptive routing observes difficulty with Gaussian noise; thresholded",
+  "prices are illustrative placeholders, not any vendor's pricing",
+  "no policy here is claimed globally optimal; comparisons hold only under these assumptions"
+ ],
+ "label": "SIMULATED - synthetic assumptions, not measurements of real models",
+ "params": {
+  "cheap_base": 0.8,
+  "cheap_in_price": "0.25",
+  "cheap_out_price": "1.25",
+  "cheap_slope": 0.7,
+  "difficulty": "uniform",
+  "in_tokens": 4000,
+  "n_tasks": 20000,
+  "out_tokens": 1000,
+  "retries": 2,
+  "router_noise": 0.15,
+  "router_threshold": 0.5,
+  "seed": 20261019,
+  "strong_base": 0.97,
+  "strong_in_price": "3.00",
+  "strong_out_price": "15.00",
+  "strong_slope": 0.25,
+  "verifier_fp": 0.1,
+  "verifier_rho": 0.5,
+  "verifier_sensitivity": 0.98,
+  "verify_tokens": 500
+ },
+ "result_sha256": "e98e2a562d7a5df09f90cc03a532376b80ed8c36790add89f644167e902c3b2f",
+ "results": {
+  "A_strong_once": {
+   "correctly_accepted_fraction": "0.826000",
+   "cost_per_correct_acceptance_usd": "0.032839",
+   "incorrect_acceptance_fraction": "0.016100",
+   "incorrect_acceptances": 322,
+   "total_cost_usd": "542.500000",
+   "total_tokens": 110000000,
+   "unaccepted_tasks": 3158
+  },
+  "B_strong_retry": {
+   "correctly_accepted_fraction": "0.975650",
+   "cost_per_correct_acceptance_usd": "0.033032",
+   "incorrect_acceptance_fraction": "0.017800",
+   "incorrect_acceptances": 356,
+   "total_cost_usd": "644.544250",
+   "total_tokens": 130691000,
+   "unaccepted_tasks": 131
+  },
+  "C_cheap_first_cascade": {
+   "correctly_accepted_fraction": "0.849950",
+   "cost_per_correct_acceptance_usd": "0.018804",
+   "incorrect_acceptance_fraction": "0.064150",
+   "incorrect_acceptances": 1283,
+   "total_cost_usd": "319.645125",
+   "total_tokens": 165181500,
+   "unaccepted_tasks": 1718
+  },
+  "D_adaptive_routing": {
+   "correctly_accepted_fraction": "0.840400",
+   "cost_per_correct_acceptance_usd": "0.023564",
+   "incorrect_acceptance_fraction": "0.033050",
+   "incorrect_acceptances": 661,
+   "total_cost_usd": "396.068750",
+   "total_tokens": 130438000,
+   "unaccepted_tasks": 2531
+  },
+  "E_double_verified_cascade": {
+   "correctly_accepted_fraction": "0.861200",
+   "cost_per_correct_acceptance_usd": "0.019796",
+   "incorrect_acceptance_fraction": "0.035850",
+   "incorrect_acceptances": 717,
+   "total_cost_usd": "340.959375",
+   "total_tokens": 178441500,
+   "unaccepted_tasks": 2059
+  }
+ },
+ "sensitivity": [
+  {
+   "axis": {
+    "verifier_fp": 0.02,
+    "verifier_rho": 0.0
+   },
+   "results": {
+    "A_strong_once": {
+     "correctly_accepted_fraction": "0.822200",
+     "cost_per_correct_acceptance_usd": "0.032991",
+     "incorrect_acceptance_fraction": "0.003400",
+     "incorrect_acceptances": 17,
+     "total_cost_usd": "135.625000",
+     "total_tokens": 27500000,
+     "unaccepted_tasks": 872
+    },
+    "B_strong_retry": {
+     "correctly_accepted_fraction": "0.991600",
+     "cost_per_correct_acceptance_usd": "0.032782",
+     "incorrect_acceptance_fraction": "0.002400",
+     "incorrect_acceptances": 12,
+     "total_cost_usd": "162.533000",
+     "total_tokens": 32956000,
+     "unaccepted_tasks": 30
+    },
+    "C_cheap_first_cascade": {
+     "correctly_accepted_fraction": "0.879000",
+     "cost_per_correct_acceptance_usd": "0.019650",
+     "incorrect_acceptance_fraction": "0.013400",
+     "incorrect_acceptances": 67,
+     "total_cost_usd": "86.360250",
+     "total_tokens": 42603000,
+     "unaccepted_tasks": 538
+    },
+    "D_adaptive_routing": {
+     "correctly_accepted_fraction": "0.850400",
+     "cost_per_correct_acceptance_usd": "0.023705",
+     "incorrect_acceptance_fraction": "0.008800",
+     "incorrect_acceptances": 44,
+     "total_cost_usd": "100.793625",
+     "total_tokens": 32983500,
+     "unaccepted_tasks": 704
+    },
+    "E_double_verified_cascade": {
+     "correctly_accepted_fraction": "0.884000",
+     "cost_per_correct_acceptance_usd": "0.019809",
+     "incorrect_acceptance_fraction": "0.000200",
+     "incorrect_acceptances": 1,
+     "total_cost_usd": "87.556500",
+     "total_tokens": 45019000,
+     "unaccepted_tasks": 579
+    }
+   }
+  },
+  {
+   "axis": {
+    "verifier_fp": 0.02,
+    "verifier_rho": 0.5
+   },
+   "results": {
+    "A_strong_once": {
+     "correctly_accepted_fraction": "0.822200",
+     "cost_per_correct_acceptance_usd": "0.032991",
+     "incorrect_acceptance_fraction": "0.003400",
+     "incorrect_acceptances": 17,
+     "total_cost_usd": "135.625000",
+     "total_tokens": 27500000,
+     "unaccepted_tasks": 872
+    },
+    "B_strong_retry": {
+     "correctly_accepted_fraction": "0.991600",
+     "cost_per_correct_acceptance_usd": "0.032782",
+     "incorrect_acceptance_fraction": "0.002400",
+     "incorrect_acceptances": 12,
+     "total_cost_usd": "162.533000",
+     "total_tokens": 32956000,
+     "unaccepted_tasks": 30
+    },
+    "C_cheap_first_cascade": {
+     "correctly_accepted_fraction": "0.879000",
+     "cost_per_correct_acceptance_usd": "0.019650",
+     "incorrect_acceptance_fraction": "0.013400",
+     "incorrect_acceptances": 67,
+     "total_cost_usd": "86.360250",
+     "total_tokens": 42603000,
+     "unaccepted_tasks": 538
+    },
+    "D_adaptive_routing": {
+     "correctly_accepted_fraction": "0.850400",
+     "cost_per_correct_acceptance_usd": "0.023705",
+     "incorrect_acceptance_fraction": "0.008800",
+     "incorrect_acceptances": 44,
+     "total_cost_usd": "100.793625",
+     "total_tokens": 32983500,
+     "unaccepted_tasks": 704
+    },
+    "E_double_verified_cascade": {
+     "correctly_accepted_fraction": "0.878800",
+     "cost_per_correct_acceptance_usd": "0.019728",
+     "incorrect_acceptance_fraction": "0.007800",
+     "incorrect_acceptances": 39,
+     "total_cost_usd": "86.684875",
+     "total_tokens": 44828500,
+     "unaccepted_tasks": 567
+    }
+   }
+  },
+  {
+   "axis": {
+    "verifier_fp": 0.02,
+    "verifier_rho": 1.0
+   },
+   "results": {
+    "A_strong_once": {
+     "correctly_accepted_fraction": "0.822200",
+     "cost_per_correct_acceptance_usd": "0.032991",
+     "incorrect_acceptance_fraction": "0.003400",
+     "incorrect_acceptances": 17,
+     "total_cost_usd": "135.625000",
+     "total_tokens": 27500000,
+     "unaccepted_tasks": 872
+    },
+    "B_strong_retry": {
+     "correctly_accepted_fraction": "0.991600",
+     "cost_per_correct_acceptance_usd": "0.032782",
+     "incorrect_acceptance_fraction": "0.002400",
+     "incorrect_acceptances": 12,
+     "total_cost_usd": "162.533000",
+     "total_tokens": 32956000,
+     "unaccepted_tasks": 30
+    },
+    "C_cheap_first_cascade": {
+     "correctly_accepted_fraction": "0.879000",
+     "cost_per_correct_acceptance_usd": "0.019650",
+     "incorrect_acceptance_fraction": "0.013400",
+     "incorrect_acceptances": 67,
+     "total_cost_usd": "86.360250",
+     "total_tokens": 42603000,
+     "unaccepted_tasks": 538
+    },
+    "D_adaptive_routing": {
+     "correctly_accepted_fraction": "0.850400",
+     "cost_per_correct_acceptance_usd": "0.023705",
+     "incorrect_acceptance_fraction": "0.008800",
+     "incorrect_acceptances": 44,
+     "total_cost_usd": "100.793625",
+     "total_tokens": 32983500,
+     "unaccepted_tasks": 704
+    },
+    "E_double_verified_cascade": {
+     "correctly_accepted_fraction": "0.874400",
+     "cost_per_correct_acceptance_usd": "0.019665",
+     "incorrect_acceptance_fraction": "0.014200",
+     "incorrect_acceptances": 71,
+     "total_cost_usd": "85.976750",
+     "total_tokens": 44674000,
+     "unaccepted_tasks": 557
+    }
+   }
+  },
+  {
+   "axis": {
+    "verifier_fp": 0.1,
+    "verifier_rho": 0.0
+   },
+   "results": {
+    "A_strong_once": {
+     "correctly_accepted_fraction": "0.822200",
+     "cost_per_correct_acceptance_usd": "0.032991",
+     "incorrect_acceptance_fraction": "0.017000",
+     "incorrect_acceptances": 85,
+     "total_cost_usd": "135.625000",
+     "total_tokens": 27500000,
+     "unaccepted_tasks": 804
+    },
+    "B_strong_retry": {
+     "correctly_accepted_fraction": "0.978000",
+     "cost_per_correct_acceptance_usd": "0.032783",
+     "incorrect_acceptance_fraction": "0.017400",
+     "incorrect_acceptances": 87,
+     "total_cost_usd": "160.308750",
+     "total_tokens": 32505000,
+     "unaccepted_tasks": 23
+    },
+    "C_cheap_first_cascade": {
+     "correctly_accepted_fraction": "0.843800",
+     "cost_per_correct_acceptance_usd": "0.019010",
+     "incorrect_acceptance_fraction": "0.066600",
+     "incorrect_acceptances": 333,
+     "total_cost_usd": "80.202875",
+     "total_tokens": 41354500,
+     "unaccepted_tasks": 448
+    },
+    "D_adaptive_routing": {
+     "correctly_accepted_fraction": "0.840200",
+     "cost_per_correct_acceptance_usd": "0.023496",
+     "incorrect_acceptance_fraction": "0.034200",
+     "incorrect_acceptances": 171,
+     "total_cost_usd": "98.705000",
+     "total_tokens": 32560000,
+     "unaccepted_tasks": 628
+    },
+    "E_double_verified_cascade": {
+     "correctly_accepted_fraction": "0.878200",
+     "cost_per_correct_acceptance_usd": "0.019847",
+     "incorrect_acceptance_fraction": "0.008000",
+     "incorrect_acceptances": 40,
+     "total_cost_usd": "87.150125",
+     "total_tokens": 45041500,
+     "unaccepted_tasks": 569
+    }
+   }
+  },
+  {
+   "axis": {
+    "verifier_fp": 0.1,
+    "verifier_rho": 0.5
+   },
+   "results": {
+    "A_strong_once": {
+     "correctly_accepted_fraction": "0.822200",
+     "cost_per_correct_acceptance_usd": "0.032991",
+     "incorrect_acceptance_fraction": "0.017000",
+     "incorrect_acceptances": 85,
+     "total_cost_usd": "135.625000",
+     "total_tokens": 27500000,
+     "unaccepted_tasks": 804
+    },
+    "B_strong_retry": {
+     "correctly_accepted_fraction": "0.978000",
+     "cost_per_correct_acceptance_usd": "0.032783",
+     "incorrect_acceptance_fraction": "0.017400",
+     "incorrect_acceptances": 87,
+     "total_cost_usd": "160.308750",
+     "total_tokens": 32505000,
+     "unaccepted_tasks": 23
+    },
+    "C_cheap_first_cascade": {
+     "correctly_accepted_fraction": "0.843800",
+     "cost_per_correct_acceptance_usd": "0.019010",
+     "incorrect_acceptance_fraction": "0.066600",
+     "incorrect_acceptances": 333,
+     "total_cost_usd": "80.202875",
+     "total_tokens": 41354500,
+     "unaccepted_tasks": 448
+    },
+    "D_adaptive_routing": {
+     "correctly_accepted_fraction": "0.840200",
+     "cost_per_correct_acceptance_usd": "0.023496",
+     "incorrect_acceptance_fraction": "0.034200",
+     "incorrect_acceptances": 171,
+     "total_cost_usd": "98.705000",
+     "total_tokens": 32560000,
+     "unaccepted_tasks": 628
+    },
+    "E_double_verified_cascade": {
+     "correctly_accepted_fraction": "0.858000",
+     "cost_per_correct_acceptance_usd": "0.019490",
+     "incorrect_acceptance_fraction": "0.038800",
+     "incorrect_acceptances": 194,
+     "total_cost_usd": "83.610250",
+     "total_tokens": 44272000,
+     "unaccepted_tasks": 516
+    }
+   }
+  },
+  {
+   "axis": {
+    "verifier_fp": 0.1,
+    "verifier_rho": 1.0
+   },
+   "results": {
+    "A_strong_once": {
+     "correctly_accepted_fraction": "0.822200",
+     "cost_per_correct_acceptance_usd": "0.032991",
+     "incorrect_acceptance_fraction": "0.017000",
+     "incorrect_acceptances": 85,
+     "total_cost_usd": "135.625000",
+     "total_tokens": 27500000,
+     "unaccepted_tasks": 804
+    },
+    "B_strong_retry": {
+     "correctly_accepted_fraction": "0.978000",
+     "cost_per_correct_acceptance_usd": "0.032783",
+     "incorrect_acceptance_fraction": "0.017400",
+     "incorrect_acceptances": 87,
+     "total_cost_usd": "160.308750",
+     "total_tokens": 32505000,
+     "unaccepted_tasks": 23
+    },
+    "C_cheap_first_cascade": {
+     "correctly_accepted_fraction": "0.843800",
+     "cost_per_correct_acceptance_usd": "0.019010",
+     "incorrect_acceptance_fraction": "0.066600",
+     "incorrect_acceptances": 333,
+     "total_cost_usd": "80.202875",
+     "total_tokens": 41354500,
+     "unaccepted_tasks": 448
+    },
+    "D_adaptive_routing": {
+     "correctly_accepted_fraction": "0.840200",
+     "cost_per_correct_acceptance_usd": "0.023496",
+     "incorrect_acceptance_fraction": "0.034200",
+     "incorrect_acceptances": 171,
+     "total_cost_usd": "98.705000",
+     "total_tokens": 32560000,
+     "unaccepted_tasks": 628
+    },
+    "E_double_verified_cascade": {
+     "correctly_accepted_fraction": "0.839600",
+     "cost_per_correct_acceptance_usd": "0.019203",
+     "incorrect_acceptance_fraction": "0.064200",
+     "incorrect_acceptances": 321,
+     "total_cost_usd": "80.614750",
+     "total_tokens": 43620000,
+     "unaccepted_tasks": 481
+    }
+   }
+  },
+  {
+   "axis": {
+    "verifier_fp": 0.3,
+    "verifier_rho": 0.0
+   },
+   "results": {
+    "A_strong_once": {
+     "correctly_accepted_fraction": "0.822200",
+     "cost_per_correct_acceptance_usd": "0.032991",
+     "incorrect_acceptance_fraction": "0.049600",
+     "incorrect_acceptances": 248,
+     "total_cost_usd": "135.625000",
+     "total_tokens": 27500000,
+     "unaccepted_tasks": 641
+    },
+    "B_strong_retry": {
+     "correctly_accepted_fraction": "0.947200",
+     "cost_per_correct_acceptance_usd": "0.032732",
+     "incorrect_acceptance_fraction": "0.050200",
+     "incorrect_acceptances": 251,
+     "total_cost_usd": "155.019375",
+     "total_tokens": 31432500,
+     "unaccepted_tasks": 13
+    },
+    "C_cheap_first_cascade": {
+     "correctly_accepted_fraction": "0.752400",
+     "cost_per_correct_acceptance_usd": "0.017339",
+     "incorrect_acceptance_fraction": "0.193000",
+     "incorrect_acceptances": 965,
+     "total_cost_usd": "65.229875",
+     "total_tokens": 38318500,
+     "unaccepted_tasks": 273
+    },
+    "D_adaptive_routing": {
+     "correctly_accepted_fraction": "0.807000",
+     "cost_per_correct_acceptance_usd": "0.023071",
+     "incorrect_acceptance_fraction": "0.097200",
+     "incorrect_acceptances": 486,
+     "total_cost_usd": "93.090125",
+     "total_tokens": 31421500,
+     "unaccepted_tasks": 479
+    },
+    "E_double_verified_cascade": {
+     "correctly_accepted_fraction": "0.844000",
+     "cost_per_correct_acceptance_usd": "0.019117",
+     "incorrect_acceptance_fraction": "0.062800",
+     "incorrect_acceptances": 314,
+     "total_cost_usd": "80.672875",
+     "total_tokens": 43955500,
+     "unaccepted_tasks": 466
+    }
+   }
+  },
+  {
+   "axis": {
+    "verifier_fp": 0.3,
+    "verifier_rho": 0.5
+   },
+   "results": {
+    "A_strong_once": {
+     "correctly_accepted_fraction": "0.822200",
+     "cost_per_correct_acceptance_usd": "0.032991",
+     "incorrect_acceptance_fraction": "0.049600",
+     "incorrect_acceptances": 248,
+     "total_cost_usd": "135.625000",
+     "total_tokens": 27500000,
+     "unaccepted_tasks": 641
+    },
+    "B_strong_retry": {
+     "correctly_accepted_fraction": "0.947200",
+     "cost_per_correct_acceptance_usd": "0.032732",
+     "incorrect_acceptance_fraction": "0.050200",
+     "incorrect_acceptances": 251,
+     "total_cost_usd": "155.019375",
+     "total_tokens": 31432500,
+     "unaccepted_tasks": 13
+    },
+    "C_cheap_first_cascade": {
+     "correctly_accepted_fraction": "0.752400",
+     "cost_per_correct_acceptance_usd": "0.017339",
+     "incorrect_acceptance_fraction": "0.193000",
+     "incorrect_acceptances": 965,
+     "total_cost_usd": "65.229875",
+     "total_tokens": 38318500,
+     "unaccepted_tasks": 273
+    },
+    "D_adaptive_routing": {
+     "correctly_accepted_fraction": "0.807000",
+     "cost_per_correct_acceptance_usd": "0.023071",
+     "incorrect_acceptance_fraction": "0.097200",
+     "incorrect_acceptances": 486,
+     "total_cost_usd": "93.090125",
+     "total_tokens": 31421500,
+     "unaccepted_tasks": 479
+    },
+    "E_double_verified_cascade": {
+     "correctly_accepted_fraction": "0.799400",
+     "cost_per_correct_acceptance_usd": "0.018235",
+     "incorrect_acceptance_fraction": "0.128000",
+     "incorrect_acceptances": 640,
+     "total_cost_usd": "72.884250",
+     "total_tokens": 42259000,
+     "unaccepted_tasks": 363
+    }
+   }
+  },
+  {
+   "axis": {
+    "verifier_fp": 0.3,
+    "verifier_rho": 1.0
+   },
+   "results": {
+    "A_strong_once": {
+     "correctly_accepted_fraction": "0.822200",
+     "cost_per_correct_acceptance_usd": "0.032991",
+     "incorrect_acceptance_fraction": "0.049600",
+     "incorrect_acceptances": 248,
+     "total_cost_usd": "135.625000",
+     "total_tokens": 27500000,
+     "unaccepted_tasks": 641
+    },
+    "B_strong_retry": {
+     "correctly_accepted_fraction": "0.947200",
+     "cost_per_correct_acceptance_usd": "0.032732",
+     "incorrect_acceptance_fraction": "0.050200",
+     "incorrect_acceptances": 251,
+     "total_cost_usd": "155.019375",
+     "total_tokens": 31432500,
+     "unaccepted_tasks": 13
+    },
+    "C_cheap_first_cascade": {
+     "correctly_accepted_fraction": "0.752400",
+     "cost_per_correct_acceptance_usd": "0.017339",
+     "incorrect_acceptance_fraction": "0.193000",
+     "incorrect_acceptances": 965,
+     "total_cost_usd": "65.229875",
+     "total_tokens": 38318500,
+     "unaccepted_tasks": 273
+    },
+    "D_adaptive_routing": {
+     "correctly_accepted_fraction": "0.807000",
+     "cost_per_correct_acceptance_usd": "0.023071",
+     "incorrect_acceptance_fraction": "0.097200",
+     "incorrect_acceptances": 486,
+     "total_cost_usd": "93.090125",
+     "total_tokens": 31421500,
+     "unaccepted_tasks": 479
+    },
+    "E_double_verified_cascade": {
+     "correctly_accepted_fraction": "0.751400",
+     "cost_per_correct_acceptance_usd": "0.017334",
+     "incorrect_acceptance_fraction": "0.190400",
+     "incorrect_acceptances": 952,
+     "total_cost_usd": "65.122125",
+     "total_tokens": 40565500,
+     "unaccepted_tasks": 291
+    }
+   }
+  },
+  {
+   "axis": {
+    "strong_to_cheap_price_ratio": "2"
+   },
+   "results": {
+    "A_strong_once": {
+     "correctly_accepted_fraction": "0.822200",
+     "cost_per_correct_acceptance_usd": "0.005625",
+     "incorrect_acceptance_fraction": "0.017000",
+     "incorrect_acceptances": 85,
+     "total_cost_usd": "23.125000",
+     "total_tokens": 27500000,
+     "unaccepted_tasks": 804
+    },
+    "B_strong_retry": {
+     "correctly_accepted_fraction": "0.978000",
+     "cost_per_correct_acceptance_usd": "0.005590",
+     "incorrect_acceptance_fraction": "0.017400",
+     "incorrect_acceptances": 87,
+     "total_cost_usd": "27.333750",
+     "total_tokens": 32505000,
+     "unaccepted_tasks": 23
+    },
+    "C_cheap_first_cascade": {
+     "correctly_accepted_fraction": "0.843800",
+     "cost_per_correct_acceptance_usd": "0.005576",
+     "incorrect_acceptance_fraction": "0.066600",
+     "incorrect_acceptances": 333,
+     "total_cost_usd": "23.525375",
+     "total_tokens": 41354500,
+     "unaccepted_tasks": 448
+    },
+    "D_adaptive_routing": {
+     "correctly_accepted_fraction": "0.840200",
+     "cost_per_correct_acceptance_usd": "0.005179",
+     "incorrect_acceptance_fraction": "0.034200",
+     "incorrect_acceptances": 171,
+     "total_cost_usd": "21.755000",
+     "total_tokens": 32560000,
+     "unaccepted_tasks": 628
+    },
+    "E_double_verified_cascade": {
+     "correctly_accepted_fraction": "0.858000",
+     "cost_per_correct_acceptance_usd": "0.005733",
+     "incorrect_acceptance_fraction": "0.038800",
+     "incorrect_acceptances": 194,
+     "total_cost_usd": "24.592750",
+     "total_tokens": 44272000,
+     "unaccepted_tasks": 516
+    }
+   }
+  },
+  {
+   "axis": {
+    "strong_to_cheap_price_ratio": "12"
+   },
+   "results": {
+    "A_strong_once": {
+     "correctly_accepted_fraction": "0.822200",
+     "cost_per_correct_acceptance_usd": "0.032991",
+     "incorrect_acceptance_fraction": "0.017000",
+     "incorrect_acceptances": 85,
+     "total_cost_usd": "135.625000",
+     "total_tokens": 27500000,
+     "unaccepted_tasks": 804
+    },
+    "B_strong_retry": {
+     "correctly_accepted_fraction": "0.978000",
+     "cost_per_correct_acceptance_usd": "0.032783",
+     "incorrect_acceptance_fraction": "0.017400",
+     "incorrect_acceptances": 87,
+     "total_cost_usd": "160.308750",
+     "total_tokens": 32505000,
+     "unaccepted_tasks": 23
+    },
+    "C_cheap_first_cascade": {
+     "correctly_accepted_fraction": "0.843800",
+     "cost_per_correct_acceptance_usd": "0.019010",
+     "incorrect_acceptance_fraction": "0.066600",
+     "incorrect_acceptances": 333,
+     "total_cost_usd": "80.202875",
+     "total_tokens": 41354500,
+     "unaccepted_tasks": 448
+    },
+    "D_adaptive_routing": {
+     "correctly_accepted_fraction": "0.840200",
+     "cost_per_correct_acceptance_usd": "0.023496",
+     "incorrect_acceptance_fraction": "0.034200",
+     "incorrect_acceptances": 171,
+     "total_cost_usd": "98.705000",
+     "total_tokens": 32560000,
+     "unaccepted_tasks": 628
+    },
+    "E_double_verified_cascade": {
+     "correctly_accepted_fraction": "0.858000",
+     "cost_per_correct_acceptance_usd": "0.019490",
+     "incorrect_acceptance_fraction": "0.038800",
+     "incorrect_acceptances": 194,
+     "total_cost_usd": "83.610250",
+     "total_tokens": 44272000,
+     "unaccepted_tasks": 516
+    }
+   }
+  },
+  {
+   "axis": {
+    "strong_to_cheap_price_ratio": "60"
+   },
+   "results": {
+    "A_strong_once": {
+     "correctly_accepted_fraction": "0.822200",
+     "cost_per_correct_acceptance_usd": "0.164346",
+     "incorrect_acceptance_fraction": "0.017000",
+     "incorrect_acceptances": 85,
+     "total_cost_usd": "675.625000",
+     "total_tokens": 27500000,
+     "unaccepted_tasks": 804
+    },
+    "B_strong_retry": {
+     "correctly_accepted_fraction": "0.978000",
+     "cost_per_correct_acceptance_usd": "0.163311",
+     "incorrect_acceptance_fraction": "0.017400",
+     "incorrect_acceptances": 87,
+     "total_cost_usd": "798.588750",
+     "total_tokens": 32505000,
+     "unaccepted_tasks": 23
+    },
+    "C_cheap_first_cascade": {
+     "correctly_accepted_fraction": "0.843800",
+     "cost_per_correct_acceptance_usd": "0.083493",
+     "incorrect_acceptance_fraction": "0.066600",
+     "incorrect_acceptances": 333,
+     "total_cost_usd": "352.254875",
+     "total_tokens": 41354500,
+     "unaccepted_tasks": 448
+    },
+    "D_adaptive_routing": {
+     "correctly_accepted_fraction": "0.840200",
+     "cost_per_correct_acceptance_usd": "0.111418",
+     "incorrect_acceptance_fraction": "0.034200",
+     "incorrect_acceptances": 171,
+     "total_cost_usd": "468.065000",
+     "total_tokens": 32560000,
+     "unaccepted_tasks": 628
+    },
+    "E_double_verified_cascade": {
+     "correctly_accepted_fraction": "0.858000",
+     "cost_per_correct_acceptance_usd": "0.085523",
+     "incorrect_acceptance_fraction": "0.038800",
+     "incorrect_acceptances": 194,
+     "total_cost_usd": "366.894250",
+     "total_tokens": 44272000,
+     "unaccepted_tasks": 516
+    }
+   }
+  },
+  {
+   "axis": {
+    "difficulty": "uniform"
+   },
+   "results": {
+    "A_strong_once": {
+     "correctly_accepted_fraction": "0.822200",
+     "cost_per_correct_acceptance_usd": "0.032991",
+     "incorrect_acceptance_fraction": "0.017000",
+     "incorrect_acceptances": 85,
+     "total_cost_usd": "135.625000",
+     "total_tokens": 27500000,
+     "unaccepted_tasks": 804
+    },
+    "B_strong_retry": {
+     "correctly_accepted_fraction": "0.978000",
+     "cost_per_correct_acceptance_usd": "0.032783",
+     "incorrect_acceptance_fraction": "0.017400",
+     "incorrect_acceptances": 87,
+     "total_cost_usd": "160.308750",
+     "total_tokens": 32505000,
+     "unaccepted_tasks": 23
+    },
+    "C_cheap_first_cascade": {
+     "correctly_accepted_fraction": "0.843800",
+     "cost_per_correct_acceptance_usd": "0.019010",
+     "incorrect_acceptance_fraction": "0.066600",
+     "incorrect_acceptances": 333,
+     "total_cost_usd": "80.202875",
+     "total_tokens": 41354500,
+     "unaccepted_tasks": 448
+    },
+    "D_adaptive_routing": {
+     "correctly_accepted_fraction": "0.840200",
+     "cost_per_correct_acceptance_usd": "0.023496",
+     "incorrect_acceptance_fraction": "0.034200",
+     "incorrect_acceptances": 171,
+     "total_cost_usd": "98.705000",
+     "total_tokens": 32560000,
+     "unaccepted_tasks": 628
+    },
+    "E_double_verified_cascade": {
+     "correctly_accepted_fraction": "0.858000",
+     "cost_per_correct_acceptance_usd": "0.019490",
+     "incorrect_acceptance_fraction": "0.038800",
+     "incorrect_acceptances": 194,
+     "total_cost_usd": "83.610250",
+     "total_tokens": 44272000,
+     "unaccepted_tasks": 516
+    }
+   }
+  },
+  {
+   "axis": {
+    "difficulty": "hard_skew"
+   },
+   "results": {
+    "A_strong_once": {
+     "correctly_accepted_fraction": "0.785200",
+     "cost_per_correct_acceptance_usd": "0.034545",
+     "incorrect_acceptance_fraction": "0.020400",
+     "incorrect_acceptances": 102,
+     "total_cost_usd": "135.625000",
+     "total_tokens": 27500000,
+     "unaccepted_tasks": 972
+    },
+    "B_strong_retry": {
+     "correctly_accepted_fraction": "0.966200",
+     "cost_per_correct_acceptance_usd": "0.034424",
+     "incorrect_acceptance_fraction": "0.026200",
+     "incorrect_acceptances": 131,
+     "total_cost_usd": "166.303375",
+     "total_tokens": 33720500,
+     "unaccepted_tasks": 38
+    },
+    "C_cheap_first_cascade": {
+     "correctly_accepted_fraction": "0.798000",
+     "cost_per_correct_acceptance_usd": "0.023439",
+     "incorrect_acceptance_fraction": "0.078600",
+     "incorrect_acceptances": 393,
+     "total_cost_usd": "93.521250",
+     "total_tokens": 44055000,
+     "unaccepted_tasks": 617
+    },
+    "D_adaptive_routing": {
+     "correctly_accepted_fraction": "0.800400",
+     "cost_per_correct_acceptance_usd": "0.030286",
+     "incorrect_acceptance_fraction": "0.032800",
+     "incorrect_acceptances": 164,
+     "total_cost_usd": "121.204250",
+     "total_tokens": 30844000,
+     "unaccepted_tasks": 834
+    },
+    "E_double_verified_cascade": {
+     "correctly_accepted_fraction": "0.803400",
+     "cost_per_correct_acceptance_usd": "0.024744",
+     "incorrect_acceptance_fraction": "0.042000",
+     "incorrect_acceptances": 210,
+     "total_cost_usd": "99.398625",
+     "total_tokens": 47376500,
+     "unaccepted_tasks": 773
+    }
+   }
+  },
+  {
+   "axis": {
+    "retries": 0
+   },
+   "results": {
+    "A_strong_once": {
+     "correctly_accepted_fraction": "0.822200",
+     "cost_per_correct_acceptance_usd": "0.032991",
+     "incorrect_acceptance_fraction": "0.017000",
+     "incorrect_acceptances": 85,
+     "total_cost_usd": "135.625000",
+     "total_tokens": 27500000,
+     "unaccepted_tasks": 804
+    },
+    "B_strong_retry": {
+     "correctly_accepted_fraction": "0.831200",
+     "cost_per_correct_acceptance_usd": "0.032634",
+     "incorrect_acceptance_fraction": "0.014600",
+     "incorrect_acceptances": 73,
+     "total_cost_usd": "135.625000",
+     "total_tokens": 27500000,
+     "unaccepted_tasks": 771
+    },
+    "C_cheap_first_cascade": {
+     "correctly_accepted_fraction": "0.842600",
+     "cost_per_correct_acceptance_usd": "0.019095",
+     "incorrect_acceptance_fraction": "0.068000",
+     "incorrect_acceptances": 340,
+     "total_cost_usd": "80.447000",
+     "total_tokens": 41404000,
+     "unaccepted_tasks": 447
+    },
+    "D_adaptive_routing": {
+     "correctly_accepted_fraction": "0.842800",
+     "cost_per_correct_acceptance_usd": "0.023397",
+     "incorrect_acceptance_fraction": "0.033600",
+     "incorrect_acceptances": 168,
+     "total_cost_usd": "98.596500",
+     "total_tokens": 32538000,
+     "unaccepted_tasks": 618
+    },
+    "E_double_verified_cascade": {
+     "correctly_accepted_fraction": "0.858600",
+     "cost_per_correct_acceptance_usd": "0.019571",
+     "incorrect_acceptance_fraction": "0.039600",
+     "incorrect_acceptances": 198,
+     "total_cost_usd": "84.019125",
+     "total_tokens": 44362500,
+     "unaccepted_tasks": 509
+    }
+   }
+  },
+  {
+   "axis": {
+    "retries": 2
+   },
+   "results": {
+    "A_strong_once": {
+     "correctly_accepted_fraction": "0.822200",
+     "cost_per_correct_acceptance_usd": "0.032991",
+     "incorrect_acceptance_fraction": "0.017000",
+     "incorrect_acceptances": 85,
+     "total_cost_usd": "135.625000",
+     "total_tokens": 27500000,
+     "unaccepted_tasks": 804
+    },
+    "B_strong_retry": {
+     "correctly_accepted_fraction": "0.978000",
+     "cost_per_correct_acceptance_usd": "0.032783",
+     "incorrect_acceptance_fraction": "0.017400",
+     "incorrect_acceptances": 87,
+     "total_cost_usd": "160.308750",
+     "total_tokens": 32505000,
+     "unaccepted_tasks": 23
+    },
+    "C_cheap_first_cascade": {
+     "correctly_accepted_fraction": "0.843800",
+     "cost_per_correct_acceptance_usd": "0.019010",
+     "incorrect_acceptance_fraction": "0.066600",
+     "incorrect_acceptances": 333,
+     "total_cost_usd": "80.202875",
+     "total_tokens": 41354500,
+     "unaccepted_tasks": 448
+    },
+    "D_adaptive_routing": {
+     "correctly_accepted_fraction": "0.840200",
+     "cost_per_correct_acceptance_usd": "0.023496",
+     "incorrect_acceptance_fraction": "0.034200",
+     "incorrect_acceptances": 171,
+     "total_cost_usd": "98.705000",
+     "total_tokens": 32560000,
+     "unaccepted_tasks": 628
+    },
+    "E_double_verified_cascade": {
+     "correctly_accepted_fraction": "0.858000",
+     "cost_per_correct_acceptance_usd": "0.019490",
+     "incorrect_acceptance_fraction": "0.038800",
+     "incorrect_acceptances": 194,
+     "total_cost_usd": "83.610250",
+     "total_tokens": 44272000,
+     "unaccepted_tasks": 516
+    }
+   }
+  },
+  {
+   "axis": {
+    "retries": 5
+   },
+   "results": {
+    "A_strong_once": {
+     "correctly_accepted_fraction": "0.822200",
+     "cost_per_correct_acceptance_usd": "0.032991",
+     "incorrect_acceptance_fraction": "0.017000",
+     "incorrect_acceptances": 85,
+     "total_cost_usd": "135.625000",
+     "total_tokens": 27500000,
+     "unaccepted_tasks": 804
+    },
+    "B_strong_retry": {
+     "correctly_accepted_fraction": "0.982600",
+     "cost_per_correct_acceptance_usd": "0.032795",
+     "incorrect_acceptance_fraction": "0.017400",
+     "incorrect_acceptances": 87,
+     "total_cost_usd": "161.122500",
+     "total_tokens": 32670000,
+     "unaccepted_tasks": 0
+    },
+    "C_cheap_first_cascade": {
+     "correctly_accepted_fraction": "0.844000",
+     "cost_per_correct_acceptance_usd": "0.018993",
+     "incorrect_acceptance_fraction": "0.066600",
+     "incorrect_acceptances": 333,
+     "total_cost_usd": "80.148625",
+     "total_tokens": 41343500,
+     "unaccepted_tasks": 447
+    },
+    "D_adaptive_routing": {
+     "correctly_accepted_fraction": "0.840200",
+     "cost_per_correct_acceptance_usd": "0.023496",
+     "incorrect_acceptance_fraction": "0.034200",
+     "incorrect_acceptances": 171,
+     "total_cost_usd": "98.705000",
+     "total_tokens": 32560000,
+     "unaccepted_tasks": 628
+    },
+    "E_double_verified_cascade": {
+     "correctly_accepted_fraction": "0.858000",
+     "cost_per_correct_acceptance_usd": "0.019490",
+     "incorrect_acceptance_fraction": "0.039000",
+     "incorrect_acceptances": 195,
+     "total_cost_usd": "83.610375",
+     "total_tokens": 44272500,
+     "unaccepted_tasks": 515
+    }
+   }
+  }
+ ],
+ "sensitivity_n_tasks": 5000
+}

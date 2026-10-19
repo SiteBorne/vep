@@ -1,0 +1,10 @@
+{
+  "evaluator": {"kind": "unittest", "start_dir": "tests", "pattern": "test*.py", "import_roots": ["."], "min_tests": 2},
+  "audits": [
+    {"id": "readiness", "file": "status.json", "rules": [
+      {"type": "aggregate_all", "aggregate": "ready", "components": "components", "component_flag": "ready", "min_components": 1},
+      {"type": "implies", "if": {"path": "ready", "equals": true}, "then": {"path": "credentials.present", "equals": true}},
+      {"type": "forbid_when", "when": {"path": "mode", "equals": "production"}, "forbidden": {"path": "backend", "in": ["fixture", "mock"]}}
+    ]}
+  ]
+}
