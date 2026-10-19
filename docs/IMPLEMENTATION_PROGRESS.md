@@ -4,8 +4,8 @@ Resumable ledger, **not evidence**. Evidence is test output and gate results.
 
 BASELINE_COMMIT: 551612a (v0.4.0a1)
 CURRENT_COMMIT: uncommitted work on top of 551612a
-COMPLETED_PHASES: A, B; C partial (adapters done, live run and TokenReceipt wiring not)
-CURRENT_PHASE: C
+COMPLETED_PHASES: A, B; C partial (adapters done; live run attempted and FAILED; TokenReceipt wiring not done)
+CURRENT_PHASE: D (build actions + cache done and tested; evidence-validity checks, dependency graph, CLI not done)
 
 ## Phase B: what exists
 `src/vep/controller.py`: SQLite jobs with leases, per-job fencing token checked inside every committing transaction (reserve, EVALUATING, evidence, rejection, certificate), idempotent enqueue, bounded attempts, budget admission check, cooperative cancel, crash recovery (unknown-outcome work is failed and funds held UNCERTAIN, never re-run), `LocalToolWorker`, `IsolatedWorker` (fails closed). CLI: `vep run`, `vep jobs list|show|recover|cancel`.
@@ -23,3 +23,9 @@ KNOWN_LIMITATIONS: cancellation does not kill running subprocesses; `check_polic
 
 ## Phase C so far
 `src/vep/agents.py`, `tests/test_agents.py` (10 tests). Full suite: 336 passed. Adapters never certify; output is registered as a PROPOSED candidate and must pass the controller/evaluator. A test confirms an agent that deletes the tests is not certified.
+
+## Live agent attempt (recorded, negative)
+`scripts/live_agent_check.py` against local Ollama `deepseek-r1:32b-qwen-distill-q4_K_M`, 900 s model timeout: **timed out with no output** (`docs/live_agent_run.json`, error_class RUNTIME_UNAVAILABLE, detail "timed out"). The test suite was also running on the same machine for part of that window, so this is not a clean measurement of the model. LIVE_AGENT_EXECUTION remains UNVERIFIED. A smaller model or a longer limit on an idle machine is needed.
+
+## Phase D so far
+`src/vep/builds.py`, `tests/test_builds.py` (8 tests). Full suite: 344 passed.
