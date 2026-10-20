@@ -8,6 +8,6 @@ Be respectful, assume good faith, give and accept constructive technical critici
 ## Scope and enforcement
 This applies to issues, pull requests, discussions and any space where someone represents the project. Maintainers may edit or remove contributions, and temporarily or permanently restrict participation, for behavior that violates this code.
 
-> **CONFIGURATION REQUIRED BEFORE PUBLICATION:** maintainers must add a private enforcement contact (for example the repository's private reporting channel or a monitored address). None is invented here.
+> **Reporting conduct problems.** Use the repository's private reporting channel: <https://github.com/SiteBorne/vep/security/advisories/new> (GitHub private vulnerability reporting, confirmed enabled on 2026-10-19; choose it for conduct reports too and say so in the title). No e-mail address is published or invented here.
 
 Reports are handled confidentially. This document is adapted in summary from the Contributor Covenant, which is licensed under CC BY 4.0; read the linked text for the full standard.
