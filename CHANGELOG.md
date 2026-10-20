@@ -6,6 +6,7 @@
 * **Compatibility note (C22):** object id, digest, timestamp and decimal patterns now use `\Z` and ASCII digits. Previously a value with a trailing newline (e.g. a digest followed by `\n`) or non-ASCII digits in a timestamp passed validation. VEP never produced such values; objects containing them are now rejected. Found while writing the independent verifier.
 * **Security fix (found by evaluating an external project):** the protected unittest runner now places candidate import roots before site-packages and fails closed (`CODE_UNDER_TEST_SHADOWED`) when a module the staged tree provides was loaded from elsewhere. Previously an installed copy of the project could be tested instead of the candidate, yielding a false green. Runner digest changed, so earlier cached evidence no longer matches.
 * Policy: `evaluator.allow_module_names` (explicit, unittest only) and `make_policy(required_exclude=...)`.
+* **Bug fix found by the first real-runtime run:** the isolation pinned-image check now compares repository and digest (Docker's `RepoDigests` omit the tag); previously a tagged pin never matched, so isolated evaluation could not verify on a real runtime (it failed closed).
 * `TokenReceipt.usage_source` gained `caller_supplied` (backward-compatible enum extension). Database schema 3 adds job and build tables (additive).
 
 
