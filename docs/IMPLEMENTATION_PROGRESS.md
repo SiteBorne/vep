@@ -3,7 +3,7 @@
 Resumable ledger, **not evidence**. Evidence is test output and gate results.
 
 BASELINE_COMMIT: 551612a (v0.4.0a1)
-CURRENT_COMMIT: uncommitted work on top of 551612a
+CURRENT_COMMIT: see `launch-gate.json` (source_commit); work is committed locally on main, 29+ commits ahead of origin/main, NOT pushed (only branch isolation-ci was pushed)
 COMPLETED_PHASES: A, B; C partial (adapters done; live run attempted and FAILED; TokenReceipt wiring not done)
 CURRENT_PHASE: D (build actions + cache done and tested; evidence-validity checks, dependency graph, CLI not done)
 
@@ -57,3 +57,7 @@ Workflow `.github/workflows/isolation.yml` and `scripts/release/isolated_e2e.py`
 
 ## Phase K: public docs (drafts; nothing posted or pushed)
 `docs/WHY_VEP.md`, `COMPARISON.md`, `SECURITY_LIMITATIONS.md`, `ROADMAP.md`, `FAQ.md`, `ANNOUNCEMENT.md` (channel drafts), refreshed `QUICKSTART.md` (9 executed blocks; steps 9-10 need the unreleased build), `README.md` status notes, `REAL_WORLD_RESULTS.md`, `BENCHMARK_METHODOLOGY.md`. Numbers are traced mechanically: `docs/claims.json` + `scripts/check_claims.py` + `tests/test_claims.py` (13 claims, untagged figures fail). Still TODO: LAUNCH_READINESS_REPORT (Phase L), QUICKSTART/README version text after any version bump, quiet-machine benchmark re-run.
+
+## Phase L: launch gate
+`scripts/launch_check.py` -> `launch-gate.json` + `docs/LAUNCH_READINESS_REPORT.md`; rules tested in `tests/test_launch_gate.py`. Result on a clean tree: LOCAL_BETA_READY = YES; PUBLIC_BETA_READY = NO (BENCHMARK_REPRODUCIBILITY UNVERIFIED; version not bumped; HEAD not pushed; no hosted CI for HEAD); UNTRUSTED_EXECUTION_READY = NO; PRODUCTION_READY = NO. ANNOUNCEMENT_READY = NO.
+NEXT_ACTION (highest value): re-run `benchmarks/compare.py` on a quiet machine (user said they will), then, with approval, bump to 0.5.0b1, push, get hosted CI green, re-run `scripts/launch_check.py`.
