@@ -1,15 +1,13 @@
 # Security Policy
 
 ## Supported versions
-Only the latest `0.4.x` prerelease receives fixes. VEP is alpha software; see the trust-model limits below before relying on it.
+Only the latest prerelease (`0.5.0b1` once published; before that `0.4.0a1`) receives fixes. VEP is pre-release software; see the trust-model limits below before relying on it.
 
 ## Reporting a vulnerability — privately
 **Please do not file public issues or pull requests for security problems.**
 
-1. Use GitHub's private vulnerability reporting for this repository: *Security → Report a vulnerability* (a private advisory visible only to maintainers).
-2. If that option is not available, contact the maintainers through the private channel listed in the repository's *About* section.
-
-> **CONFIGURATION REQUIRED BEFORE PUBLICATION:** the maintainers must (a) enable *Private vulnerability reporting* in the repository settings and (b) replace this notice with a monitored contact address if they want an email path. No address is invented here.
+1. Use GitHub's private vulnerability reporting for this repository: <https://github.com/SiteBorne/vep/security/advisories/new> (*Security → Report a vulnerability*). A private advisory is visible only to maintainers. Private vulnerability reporting was confirmed **enabled** for this repository on 2026-10-19 (`gh api repos/SiteBorne/vep/private-vulnerability-reporting` returned `{"enabled":true}`).
+2. No e-mail address is published for security reports; none is invented here. If the advisory form is unavailable, open a public issue that says only "security contact needed" (no details) and a maintainer will arrange a private channel.
 
 Please include: affected version (`vep version --json`), a minimal reproduction, expected vs. actual behavior, and impact. We aim to acknowledge reports within a few working days; this is a volunteer project and no response-time guarantee is made.
 
@@ -18,7 +16,7 @@ Examples: a way to obtain a `CERTIFIED` candidate without passing the frozen req
 
 ## Known, documented limitations (not vulnerabilities)
 * `TRUSTED_LOCAL` evaluation runs code with the operator's permissions and no isolation; evaluated code can read the signing key and forge parts of its own report. Only evaluate code you trust.
-* Hostile-code isolation is **unverified** on the development host; VEP makes no claim about evaluating untrusted code.
+* Docker + gVisor isolation passed its verification matrix on one GitHub-hosted runner (see [docs/isolation/README.md](docs/isolation/README.md)); it is unverified on other hosts, not escape-tested and not externally reviewed, so VEP makes no claim about evaluating untrusted code.
 * Provider token usage is supplied by the caller and is not authenticated.
 See [docs/SECURITY_ARCHITECTURE.md](docs/SECURITY_ARCHITECTURE.md) and [docs/SECURITY_REVIEW.md](docs/SECURITY_REVIEW.md).
 
