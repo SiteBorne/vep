@@ -1,16 +1,16 @@
 # Quickstart
 
-Ten minutes, no accounts, no network after installation. Steps 1-8 work with the published `0.4.0a1` wheel; steps 9-10 use commands added after that release (`vep run`, `vep jobs`, `vep conformance`) and need a build of the current source (`pip install -e .` from a checkout). Every ```` ```bash quickstart ```` block below is executed by the release gate (`scripts/release/quickstart_runner.py`) against the *installed* wheel, so these commands are tested, not illustrative.
+Ten minutes, no accounts, no network after installation. Steps 9-10 use commands introduced in `0.5.0b1` (`vep run`, `vep jobs`, `vep conformance`); the published `0.4.0a1` prerelease supports steps 1-8 only. Every ```` ```bash quickstart ```` block below is executed by the release gate (`scripts/release/quickstart_runner.py`) against the *installed* wheel, so these commands are tested, not illustrative.
 
 > **Safety:** `vep evaluate` runs the project's code on your machine with your permissions and **no isolation**. Only evaluate code you already trust. See [SECURITY.md](../SECURITY.md).
 
 ## 1. Install
 ```bash
 python3 -m venv .venv && . .venv/bin/activate
-pip install vep-protocol==0.4.0a1   # or: pip install dist/vep_protocol-0.4.0a1-py3-none-any.whl
+pip install ./vep_protocol-0.5.0b1-py3-none-any.whl   # wheel from the GitHub release; verify it first (docs/RELEASE_PROVENANCE.md)
 vep version
 ```
-(Until a PyPI release exists, install the wheel from the GitHub prerelease or a local build; see `docs/RELEASE_PROVENANCE.md` for verifying it first.)
+(There is no PyPI release; install the wheel from the GitHub prerelease or from `python -m build` in a checkout. See `docs/RELEASE_PROVENANCE.md` for verifying it first.)
 
 ## 2. A tiny trusted project
 ```bash quickstart

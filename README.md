@@ -1,10 +1,10 @@
 # VEP — Verified Evolution Protocol
 
-**Version 0.4.0a1 — initial public developer preview (prerelease).** A local reference implementation of an agent-native, evidence-oriented software development protocol. Apache-2.0. No accounts, no network, no paid services.
+**Version 0.5.0b1 — public beta (prerelease).** A local reference implementation of an agent-native, evidence-oriented software development protocol. Apache-2.0. No accounts, no network, no paid services.
 
 > **Read this first.** VEP's default execution mode, `TRUSTED_LOCAL`, runs a project's code on your machine **with your permissions and no isolation**, and only after you pass `--trusted-local-execution`. Use it for code you already trust. A Docker + gVisor path (`ISOLATED_VERIFIED`) exists; its verification matrix passed on one GitHub-hosted runner but has **not** been verified on every setup (it is `UNVERIFIED` on a typical laptop without `runsc`) and is not escape-tested, so VEP makes no claim about evaluating untrusted code. Details: [SECURITY_LIMITATIONS](docs/SECURITY_LIMITATIONS.md), [SECURITY_ARCHITECTURE](docs/SECURITY_ARCHITECTURE.md).
 
-> **Development status.** The published prerelease is `0.4.0a1`. The repository's development branch contains unreleased work toward `0.5.0b1` (durable controller, agent adapters, build actions, dependency graph, a frozen conformance suite with an independent verifier, hosted-runner isolation test). Start with [WHY_VEP](docs/WHY_VEP.md), [REAL_WORLD_RESULTS](docs/REAL_WORLD_RESULTS.md) and [COMPARISON](docs/COMPARISON.md); they include where VEP is slower or narrower than alternatives.
+> **Beta scope.** What this release claims, and what it does not, is in [BETA_SCOPE](docs/BETA_SCOPE.md); start with [WHY_VEP](docs/WHY_VEP.md), [REAL_WORLD_RESULTS](docs/REAL_WORLD_RESULTS.md) and [COMPARISON](docs/COMPARISON.md), which include where VEP is slower or narrower than alternatives. The previous prerelease is `0.4.0a1`.
 
 ## What VEP is
 A Python package and CLI (`vep`) that turns "an agent changed some code" into a checkable record: an **objective** bound to an exact **snapshot** of the source and a frozen acceptance policy; a **candidate** change; a protected **evaluation**; signed **evidence**; and a **certificate** that is valid for exactly that source, policy and trust level. It also ships offline tools for token accounting, transactional budgets, model-routing economics and prompt-cache break-even analysis, plus a seeded simulator.
@@ -31,7 +31,7 @@ Identities are domain-separated SHA-256 over canonical JSON. Candidates move thr
 ## Install (Python ≥ 3.11, Linux or macOS)
 ```bash
 python3 -m venv .venv && . .venv/bin/activate
-pip install ./dist/vep_protocol-0.4.0a1-py3-none-any.whl     # wheel from the GitHub prerelease (verify it first: docs/RELEASE_PROVENANCE.md)
+pip install ./vep_protocol-0.5.0b1-py3-none-any.whl     # wheel from the GitHub release (verify it first: docs/RELEASE_PROVENANCE.md)
 vep version
 ```
 From a checkout: `pip install -e ".[dev]"`. A PyPI release is **not** published yet; the distribution name is `vep-protocol`.
@@ -57,7 +57,7 @@ $ vep verify --certificate "$CERT"
 {
   "checks_passed": ["certificate signature", "evidence signature", "evidence binding",
                     "candidate/objective/policy binding", "current source equals certified snapshot"],
-  "evaluator_id": "vep-local-evaluator/0.4.0a1/TRUSTED_LOCAL",
+  "evaluator_id": "vep-local-evaluator/0.5.0b1/TRUSTED_LOCAL",
   "legacy_schema": false,
   "mode": "current-source",
   "required_trust": "TRUSTED_LOCAL",
@@ -84,7 +84,7 @@ scripts/release_check.sh                       # full release qualification (bui
 * Optional isolation: `vep isolation detect`, `vep isolation verify --image <name@sha256:…> --out att.json`, `vep evaluate --isolated --image … --attestation-file att.json`. Needs a Linux Docker daemon with gVisor (`runsc`) registered and a local digest-pinned Python image. On a machine without them every command reports `ISOLATION_UNVERIFIED` (exit 8) and nothing runs.
 
 ## Documentation map
-[QUICKSTART](docs/QUICKSTART.md) · [ARCHITECTURE](docs/ARCHITECTURE.md) · [RFC-0001](docs/RFC-0001.md) · [COMPATIBILITY](docs/COMPATIBILITY.md) · [MIGRATIONS](docs/MIGRATIONS.md) · [SECURITY_ARCHITECTURE](docs/SECURITY_ARCHITECTURE.md) · [THREAT_MODEL](docs/THREAT_MODEL.md) · [SECURITY_REVIEW](docs/SECURITY_REVIEW.md) · [INVARIANTS](docs/INVARIANTS.md) · [VARIABLES](docs/VARIABLES.md) · [EVIDENCE](docs/EVIDENCE.md) · [BENCHMARKS](docs/BENCHMARKS.md) · [IMPLEMENTATION_STATUS](docs/IMPLEMENTATION_STATUS.md) · [RELEASE_NOTES](docs/RELEASE_NOTES.md) · [RELEASE_PROVENANCE](docs/RELEASE_PROVENANCE.md)
+[QUICKSTART](docs/QUICKSTART.md) · [ARCHITECTURE](docs/ARCHITECTURE.md) · [RFC-0001](docs/RFC-0001.md) · [COMPATIBILITY](docs/COMPATIBILITY.md) · [MIGRATIONS](docs/MIGRATIONS.md) · [SECURITY_ARCHITECTURE](docs/SECURITY_ARCHITECTURE.md) · [THREAT_MODEL](docs/THREAT_MODEL.md) · [SECURITY_REVIEW](docs/SECURITY_REVIEW.md) · [INVARIANTS](docs/INVARIANTS.md) · [VARIABLES](docs/VARIABLES.md) · [EVIDENCE](docs/EVIDENCE.md) · [BENCHMARKS](docs/BENCHMARKS.md) · [IMPLEMENTATION_STATUS](docs/IMPLEMENTATION_STATUS.md) · [RELEASE_NOTES](docs/RELEASE_NOTES.md) · [BETA_SCOPE](docs/BETA_SCOPE.md) · [CONFORMANCE](docs/CONFORMANCE.md) · [RELEASE_PROVENANCE](docs/RELEASE_PROVENANCE.md)
 
 ## Contribute
 See [CONTRIBUTING.md](CONTRIBUTING.md): fork, `pip install -e ".[dev]"`, add a focused test for every behavior change, run the suite and `scripts/release_check.sh --skip-matrix`, open a pull request. Be kind: [CODE_OF_CONDUCT.md](CODE_OF_CONDUCT.md).

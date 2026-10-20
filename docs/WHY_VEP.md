@@ -15,7 +15,7 @@ VEP makes software changes evidence-carrying, resource-aware, and independently 
 * **Resource accounting.** Budgets are transactional, token usage keeps its provenance (runtime-reported, tool-claimed, estimated), and local compute is measured rather than priced.
 
 ## What it does not do
-* It does **not** make verification faster. Measured against running the tests directly it is slower on a small suite (+54% [C:t1-small]) and within noise on a longer one (+3% [C:t1-big]); change-based test selection with pytest-testmon was about 14x [C:testmon-edit] faster after a small edit ([REAL_WORLD_RESULTS.md](REAL_WORLD_RESULTS.md)). VEP re-runs the full suite after any change on purpose.
+* It does **not** make verification faster. Measured against running the tests directly it is slower on a small suite (+50.5% [C:t1-small]) and within noise on a longer one (+3.9% [C:t1-big]); change-based test selection with pytest-testmon was about 14.5x [C:testmon-edit] faster after a small edit ([REAL_WORLD_RESULTS.md](REAL_WORLD_RESULTS.md)). VEP re-runs the full suite after any change on purpose.
 * It does not replace Git, CI, Bazel or an agent framework ([COMPARISON.md](COMPARISON.md)).
 * It does not execute hostile code safely. Isolation was verified on one hosted runner and is not escape-tested ([SECURITY_LIMITATIONS.md](SECURITY_LIMITATIONS.md)).
 * It is not a guarantee of correctness: a certificate says *these tests passed against this exact source under this policy and trust level*.

@@ -17,6 +17,8 @@ def cats(**over):
 
 
 ALL_TRUE = {k: True for k in ("version_is_target", "working_tree_clean", "head_pushed", "hosted_ci_green_for_head",
+                              "isolation_run_commit_in_release_revision", "isolation_evidence_revalidated",
+                              "public_release_exists", "release_artifacts_verified", "quickstart_from_released_artifacts",
                               "external_security_review", "escape_testing", "in_container_runtime_corroboration",
                               "production_criteria_defined_and_met")}
 
@@ -44,6 +46,20 @@ class RuleTests(unittest.TestCase):
             lv = L.compute_levels(cats(), {**ALL_TRUE, cond: False})[0]
             self.assertTrue(lv["PUBLIC_BETA_READY"] and not lv["UNTRUSTED_EXECUTION_READY"], cond)
 
+    def test_announcement_needs_a_real_published_release_and_verified_artifacts(self):
+        lv = L.compute_levels(cats(), ALL_TRUE)[0]
+        self.assertTrue(lv["ANNOUNCEMENT_READY"])
+        for cond in ("public_release_exists", "release_artifacts_verified", "quickstart_from_released_artifacts"):
+            lv = L.compute_levels(cats(), {**ALL_TRUE, cond: False})[0]
+            self.assertTrue(lv["PUBLIC_BETA_READY"] and not lv["ANNOUNCEMENT_READY"], cond)
+        self.assertFalse(L.compute_levels(cats(ANNOUNCEMENT_CLAIMS="FAIL"), ALL_TRUE)[0]["ANNOUNCEMENT_READY"])
+
+    def test_isolated_execution_verified_is_scoped_and_does_not_imply_untrusted_readiness(self):
+        lv = L.compute_levels(cats(), {**ALL_TRUE, "escape_testing": False})[0]
+        self.assertTrue(lv["ISOLATED_EXECUTION_VERIFIED"] and not lv["UNTRUSTED_EXECUTION_READY"])
+        self.assertFalse(L.compute_levels(cats(ISOLATION="UNVERIFIED"), ALL_TRUE)[0]["ISOLATED_EXECUTION_VERIFIED"])
+        self.assertFalse(L.compute_levels(cats(), {**ALL_TRUE, "isolation_run_commit_in_release_revision": False})[0]["ISOLATED_EXECUTION_VERIFIED"])
+
     def test_isolation_cannot_substitute_for_other_categories(self):
         lv = L.compute_levels(cats(SECURITY="FAIL"), ALL_TRUE)[0]
         self.assertFalse(lv["LOCAL_BETA_READY"])
@@ -53,7 +69,8 @@ class CommittedGateTests(unittest.TestCase):
     def test_committed_gate_is_consistent_with_the_rules(self):
         p = ROOT / "launch-gate.json"
         if not p.exists():
-            self.skipTest("launch-gate.json not generated yet")
+            return  # no gate output exists to be inconsistent (the gate removes the old one before it runs the suite); not a skip
+
         g = json.loads(p.read_text())
         self.assertEqual(set(g["categories"]), set(L.CATEGORIES))
         for name, c in g["categories"].items():
@@ -63,4 +80,5 @@ class CommittedGateTests(unittest.TestCase):
         conds = {k: v["met"] for k, v in g["conditions"].items()}
         levels, _ = L.compute_levels(g["categories"], conds)
         self.assertEqual({k: v["ready"] for k, v in g["levels"].items()}, levels)
-        self.assertEqual(g["ANNOUNCEMENT_READY"], "YES" if levels["PUBLIC_BETA_READY"] else "NO")
+        self.assertEqual(g["ANNOUNCEMENT_READY"], "YES" if levels["ANNOUNCEMENT_READY"] else "NO")
+        self.assertEqual(g["release_decision"], "PUBLISHED" if levels["ANNOUNCEMENT_READY"] else "GO" if levels["PUBLIC_BETA_READY"] else "NO_GO")

@@ -1,5 +1,15 @@
 # Migrations
 
+## 0.4.0a1 → 0.5.0b1
+
+**Database (schema 2 → 3), automatic and idempotent.** Opening a workspace creates the new tables with `CREATE TABLE IF NOT EXISTS` (`jobs`, `job_events`, `build_cache`, `build_log` and their append-only triggers) and stamps `meta.schema_version = 3`. No existing row is rewritten. The migration steps from schema 1 still run first for pre-0.4 databases. A database stamped newer than the build is refused. **Back up `.vep/` first**: a 0.4 build can open the file but does not know the new tables.
+
+**Objects.** Nothing is rewritten; v1 and v2 `Evidence`/`Certificate` objects decode as before, and a published 0.4.0a1 certificate keeps verifying with the same trust classification.
+
+**Validated by tests, not assumed:** `tests/test_migration_fixtures.py` opens frozen workspaces produced by the real earlier builds (a schema-2 workspace generated with the `v0.4.0a1` tag's code, and the 0.3.0 layout) with the new code, checks the stamped version, that every pre-existing certificate still verifies with its original trust semantics, and that the new tables are usable.
+
+**What you may need to do.** Re-run evaluations that must benefit from the runner fix: evidence produced before it was computed with a different runner digest and is not reused.
+
 ## 0.3.0 → 0.4.0a1
 
 **Database (schema 1 → 2), automatic and idempotent.** Opening a workspace runs `vep.migrations.migrate`, inside one `BEGIN IMMEDIATE` transaction:

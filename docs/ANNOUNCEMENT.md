@@ -26,7 +26,7 @@ An objective freezes a source snapshot (content-addressed) and an acceptance pol
 * VEP verified its own change through its own pipeline: 365 tests [C:dogfood-tests] passed, a negative control was rejected and a post-certification edit invalidated the certificate ([dogfood/README.md](dogfood/README.md)).
 * On two small open-source projects at pinned commits, the one-line mutants were rejected by 259 tests [C:pyflakes-mutant] and by 43 tests [C:mit-mutant] of the projects' own suites ([external/README.md](external/README.md)).
 * Isolation: 12 of 12 [C:matrix] matrix tests passed on one GitHub-hosted runner with gVisor ([isolation/README.md](isolation/README.md)). Not escape-tested; not claimed for untrusted code.
-* Speed: no advantage. A single check cost +54% [C:t1-small] on a short suite and +3% [C:t1-big] on a longer one; pytest-testmon was about 14x [C:testmon-edit] faster after a small edit. Measured on a machine that was not idle ([BENCHMARK_METHODOLOGY.md](BENCHMARK_METHODOLOGY.md)).
+* Speed: no advantage. A single check cost +50.5% [C:t1-small] on a short suite and +3.9% [C:t1-big] on a longer one; pytest-testmon was about 14.5x [C:testmon-edit] faster after a small edit. Measured on a machine that was not idle ([BENCHMARK_METHODOLOGY.md](BENCHMARK_METHODOLOGY.md)).
 * While being tested VEP exposed several defects in itself, including a path where an installed copy of a project could be tested instead of the candidate ([SECURITY_LIMITATIONS.md](SECURITY_LIMITATIONS.md)). All were fixed with regression tests.
 
 ## 5. Hacker News (Show HN) — draft
@@ -35,7 +35,7 @@ An objective freezes a source snapshot (content-addressed) and an acceptance pol
 **First comment:**
 > I built VEP because agent-produced changes end up re-checked by hand, and a CI log doesn't tell you which exact source was tested or what could have tampered with the run. VEP binds the test result to a content-addressed snapshot, freezes the tests that existed at the start, rejects false greens (zero tests, all skipped, forged output, an installed copy of the package being tested instead of the candidate), signs the evidence, and lets you verify the certificate with a second implementation that shares no code with the first.
 >
-> What it is not: it is not faster than running your tests (+3% [C:t1-big] on a longer suite, +54% [C:t1-small] on a short one), pytest-testmon beats it badly on re-runs, and it does not make untrusted code safe to run. Default mode runs your own code unisolated; there is a gVisor path that passed 12 of 12 [C:matrix] checks on one CI run, not escape-tested. No external audit. Everything is local; no account, no model calls.
+> What it is not: it is not faster than running your tests (+3.9% [C:t1-big] on a longer suite, +50.5% [C:t1-small] on a short one), pytest-testmon beats it badly on re-runs, and it does not make untrusted code safe to run. Default mode runs your own code unisolated; there is a gVisor path that passed 12 of 12 [C:matrix] checks on one CI run, not escape-tested. No external audit. Everything is local; no account, no model calls.
 >
 > The part I found most useful: pointing it at its own repo and two small OSS projects turned up real bugs in VEP, which are documented. Repo, quickstart, failure records and the benchmark methodology (thresholds written before measuring) are all in the repo. Happy to be told what's wrong with it.
 
@@ -50,7 +50,7 @@ What I learned by testing it on itself and on two open-source projects: it adds 
 
 ## 8. X — draft (two posts)
 1/ VEP: make a code change carry its own evidence. Tests bound to an exact source snapshot, signed, checkable offline by an independent verifier. Early, local, Apache-2.0.
-2/ Honest bits: not faster (+3% [C:t1-big] to +54% [C:t1-small] vs plain runs; testmon ~14x [C:testmon-edit] faster on edits), gVisor path passed 12 of 12 [C:matrix] on one CI run, not for hostile code. Failure records in the repo.
+2/ Honest bits: not faster (+3.9% [C:t1-big] to +50.5% [C:t1-small] vs plain runs; testmon ~14.5x [C:testmon-edit] faster on edits), gVisor path passed 12 of 12 [C:matrix] on one CI run, not for hostile code. Failure records in the repo.
 
 ## 9. Before any of this is posted
 Blocking items are tracked in `docs/LAUNCH_READINESS_REPORT.md`. At minimum: the current work is unpushed and unreleased, the version is still `0.4.0a1`, the benchmark needs a quiet-machine re-run, and the launch gate must report `ANNOUNCEMENT_READY = YES`.

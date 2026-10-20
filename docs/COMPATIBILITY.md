@@ -4,22 +4,31 @@ Five version axes move independently. A change on one axis never silently change
 
 | Axis | Current | Where | Bumped when |
 |---|---|---|---|
-| Package | `0.4.0a1` | `pyproject.toml`, `vep.__version__`, `vep.versions.PACKAGE_VERSION` | any release |
+| Package | `0.5.0b1` | `pyproject.toml`, `vep.__version__`, `vep.versions.PACKAGE_VERSION` | any release |
 | Protocol | `0.3` | `vep.versions.PROTOCOL_VERSION` | lifecycle/identity/canonicalization **semantics** change |
 | Canonical format | `VEP-C1` | `canonical.py`, RFC-0001 §2 | serialization rules change (changes every identity) |
 | Object schema | per type; Evidence/Certificate = **2**, all others = 1 | `objects.CURRENT_VERSION` | a type's fields or cross-field rules change |
-| Database schema | **2** | `meta.schema_version`, `migrations.py` | table/trigger layout changes |
+| Database schema | **3** (2 plus `jobs`, `job_events`, `build_cache`, `build_log`) | `meta.schema_version`, `migrations.py` | table/trigger layout changes |
 | Evidence format | **2** | `versions.EVIDENCE_FORMAT_VERSION` | what evidence/certificates assert changes |
 
 `vep version --json` prints all of them.
 
-## Promises (for 0.4.x alpha)
+## Promises (for the 0.5 beta line; unchanged in kind from 0.4.x)
 * **Identities are stable.** An object's id is derived from `(type, schema_version, canonical fields)`. Unchanged types keep their 0.3.0 ids (pinned by `tests/test_compat.py`). Schema-v1 `Evidence`/`Certificate` keep decoding to the same bytes and ids (frozen fixtures in `tests/fixtures/`).
 * **Unknown versions fail predictably.** Decoding an unsupported `schema_version` raises `SchemaError("UNSUPPORTED_SCHEMA_VERSION …")` (CLI exit 11); a database newer than the build raises `UNSUPPORTED_DATABASE_VERSION`. Nothing is guessed.
 * **No silent reinterpretation.** v1 evidence has no trust field; it is classified by a closed mapping (`NONE_TRUSTED_LOCAL → TRUSTED_LOCAL`, anything else → `UNVERIFIED`) and **can never become `ISOLATED_VERIFIED`**. v1 evidence cannot be newly certified; existing v1 certificates still verify and report `legacy_schema: true`.
 * **Policies.** `required_trust` is an optional policy field, omitted when unused, so existing policy ids are unchanged. When absent, the *verifier* states its requirement (`--require-trust`, default `TRUSTED_LOCAL`, echoed in the output); there is no hidden default.
 * **CLI.** Commands and flags from 0.3.0 keep working. Additions in 0.4.0a1: `vep version`, `vep isolation detect|verify`, `--field`, `--budget` (objective), `--require-trust`, `--image`/`--attestation-file` (evaluate). Exit codes are stable (`docs/VARIABLES.md`, "CLI and process"). `--json` output is a JSON object/array; field *addition* is not considered breaking, removal/renaming is.
 * **Python API.** Modules named in the README quickstart and `docs/ARCHITECTURE.md` are the supported surface; names starting with `_` are private. In alpha, minor releases may change module-level APIs with a CHANGELOG entry.
+
+## Intentional behavior changes in 0.5.0b1
+| Change | Why | Compatibility effect |
+|---|---|---|
+| Ids, digests, timestamps, decimals reject a trailing newline and non-ASCII digits | independent verifier found the reference accepted them | none for objects VEP produced; hand-made objects containing such values are rejected. Protocol version stays 0.3 (strictly fewer inputs accepted) |
+| Unittest runner places staged roots before site-packages; shadowed modules fail the evaluation | an installed copy of the project could be tested instead of the candidate | new evaluations of projects whose package is also installed now test the staged copy; the runner digest changes, so earlier cached evidence is not reused |
+| `evaluate`/`certify` accept an optional `guard` | controller fencing | none for callers that omit it |
+| Database schema 3 | controller and build-cache tables | additive; opening a schema-2 workspace migrates it (see MIGRATIONS); a 0.4 build must not be pointed at a migrated workspace |
+| `TokenReceipt.usage_source` accepts `caller_supplied` | provenance of tool-claimed usage | older receipts decode unchanged |
 
 ## Intentional behavior changes in 0.4.0a1
 | Change | Why | Compatibility effect |
