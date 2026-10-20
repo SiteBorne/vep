@@ -150,11 +150,11 @@ def main() -> int:
     ap.add_argument("--skip-slow", action="store_true", help="skip build/clean-room (marks them NOT_RUN)")
     a = ap.parse_args()
     head = git("rev-parse", "HEAD")
-    old_gate = Path(a.out)
-    if old_gate.exists():
-        old_gate.unlink()  # a stale gate must not be able to fail (or pass) the suite that regenerates it
     gate: dict = {"gate_version": 1, "source_commit": head, "branch": git("rev-parse", "--abbrev-ref", "HEAD"),
                   "tracked_changes": git("status", "--porcelain", "--untracked-files=no").splitlines(), "categories": {}}
+    old_gate = Path(a.out)
+    if old_gate.exists():
+        old_gate.unlink()  # a stale gate must not fail (or pass) the suite that regenerates it; removed only AFTER the tree state was recorded above
     from vep import versions
     gate["package_version"], gate["protocol_version"] = versions.PACKAGE_VERSION, versions.PROTOCOL_VERSION
     gate["target_version"] = TARGET_VERSION
