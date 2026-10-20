@@ -1,0 +1,11 @@
+$ python -m vep.cli isolation probe --json
+# exit 8
+
+{
+  "detail": {},
+  "note": "RUNTIME_PRESENT means a gVisor runtime is registered; escape resistance is NOT tested.",
+  "reasons": [
+    "docker daemon unreachable: Cannot connect to the Docker daemon at unix://<home>/.colima/default/docker.sock. Is the docker daemon running?"
+  ],
+  "status": "ISOLATION_UNVERIFIED"
+}

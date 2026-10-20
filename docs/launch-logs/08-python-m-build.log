@@ -1,0 +1,451 @@
+$ python -m build --outdir <tmp>/tmp2vkugeih
+# exit 0
+
+running egg_info
+writing src/vep_protocol.egg-info/PKG-INFO
+writing dependency_links to src/vep_protocol.egg-info/dependency_links.txt
+writing entry points to src/vep_protocol.egg-info/entry_points.txt
+writing requirements to src/vep_protocol.egg-info/requires.txt
+writing top-level names to src/vep_protocol.egg-info/top_level.txt
+reading manifest file 'src/vep_protocol.egg-info/SOURCES.txt'
+reading manifest template 'MANIFEST.in'
+adding license file 'LICENSE'
+writing manifest file 'src/vep_protocol.egg-info/SOURCES.txt'
+running sdist
+running egg_info
+writing src/vep_protocol.egg-info/PKG-INFO
+writing dependency_links to src/vep_protocol.egg-info/dependency_links.txt
+writing entry points to src/vep_protocol.egg-info/entry_points.txt
+writing requirements to src/vep_protocol.egg-info/requires.txt
+writing top-level names to src/vep_protocol.egg-info/top_level.txt
+reading manifest file 'src/vep_protocol.egg-info/SOURCES.txt'
+reading manifest template 'MANIFEST.in'
+adding license file 'LICENSE'
+writing manifest file 'src/vep_protocol.egg-info/SOURCES.txt'
+running check
+creating vep_protocol-0.5.0b1
+creating vep_protocol-0.5.0b1/.github
+creating vep_protocol-0.5.0b1/.github/workflows
+creating vep_protocol-0.5.0b1/benchmarks
+creating vep_protocol-0.5.0b1/benchmarks/external
+creating vep_protocol-0.5.0b1/benchmarks/results
+creating vep_protocol-0.5.0b1/conformance/node
+creating vep_protocol-0.5.0b1/conformance/vectors
+creating vep_protocol-0.5.0b1/docs
+creating vep_protocol-0.5.0b1/docs/dogfood
+creating vep_protocol-0.5.0b1/docs/external
+creating vep_protocol-0.5.0b1/docs/external/earlier
+creating vep_protocol-0.5.0b1/docs/isolation
+creating vep_protocol-0.5.0b1/examples
+creating vep_protocol-0.5.0b1/examples/tiny_project
+creating vep_protocol-0.5.0b1/examples/tiny_project/tests
+creating vep_protocol-0.5.0b1/scripts
+creating vep_protocol-0.5.0b1/scripts/release
+creating vep_protocol-0.5.0b1/src/vep
+creating vep_protocol-0.5.0b1/src/vep_protocol.egg-info
+creating vep_protocol-0.5.0b1/tests
+creating vep_protocol-0.5.0b1/tests/fixtures
+creating vep_protocol-0.5.0b1/tests/fixtures/ws_v0_4_0a1
+creating vep_protocol-0.5.0b1/tests/fixtures/ws_v0_4_0a1/project
+creating vep_protocol-0.5.0b1/tests/fixtures/ws_v0_4_0a1/project/tests
+copying files to vep_protocol-0.5.0b1...
+copying CHANGELOG.md -> vep_protocol-0.5.0b1
+copying CODE_OF_CONDUCT.md -> vep_protocol-0.5.0b1
+copying CONTRIBUTING.md -> vep_protocol-0.5.0b1
+copying LICENSE -> vep_protocol-0.5.0b1
+copying MANIFEST.in -> vep_protocol-0.5.0b1
+copying README.md -> vep_protocol-0.5.0b1
+copying SECURITY.md -> vep_protocol-0.5.0b1
+copying SUPPORT.md -> vep_protocol-0.5.0b1
+copying pyproject.toml -> vep_protocol-0.5.0b1
+copying .github/dependabot.yml -> vep_protocol-0.5.0b1/.github
+copying .github/workflows/ci.yml -> vep_protocol-0.5.0b1/.github/workflows
+copying .github/workflows/codeql.yml -> vep_protocol-0.5.0b1/.github/workflows
+copying .github/workflows/isolation.yml -> vep_protocol-0.5.0b1/.github/workflows
+copying .github/workflows/release.yml -> vep_protocol-0.5.0b1/.github/workflows
+copying benchmarks/compare.py -> vep_protocol-0.5.0b1/benchmarks
+copying benchmarks/compare_vep_driver.py -> vep_protocol-0.5.0b1/benchmarks
+copying benchmarks/controller_scaling.py -> vep_protocol-0.5.0b1/benchmarks
+copying benchmarks/paired.py -> vep_protocol-0.5.0b1/benchmarks
+copying benchmarks/paired_report.py -> vep_protocol-0.5.0b1/benchmarks
+copying benchmarks/results.json -> vep_protocol-0.5.0b1/benchmarks
+copying benchmarks/run_simulation.py -> vep_protocol-0.5.0b1/benchmarks
+copying benchmarks/external/projects.json -> vep_protocol-0.5.0b1/benchmarks/external
+copying benchmarks/results/compare-more-itertools.json -> vep_protocol-0.5.0b1/benchmarks/results
+copying benchmarks/results/compare-pyflakes.json -> vep_protocol-0.5.0b1/benchmarks/results
+copying benchmarks/results/controller_scaling.json -> vep_protocol-0.5.0b1/benchmarks/results
+copying benchmarks/results/paired-more-itertools.json -> vep_protocol-0.5.0b1/benchmarks/results
+copying benchmarks/results/paired-pyflakes.json -> vep_protocol-0.5.0b1/benchmarks/results
+copying conformance/node/verify.mjs -> vep_protocol-0.5.0b1/conformance/node
+copying conformance/vectors/suite-1.0.json -> vep_protocol-0.5.0b1/conformance/vectors
+copying docs/ANNOUNCEMENT.md -> vep_protocol-0.5.0b1/docs
+copying docs/ARCHITECTURE.md -> vep_protocol-0.5.0b1/docs
+copying docs/BENCHMARKS.md -> vep_protocol-0.5.0b1/docs
+copying docs/BENCHMARK_METHODOLOGY.md -> vep_protocol-0.5.0b1/docs
+copying docs/BENCHMARK_RESULTS_PAIRED.md -> vep_protocol-0.5.0b1/docs
+copying docs/BETA_SCOPE.md -> vep_protocol-0.5.0b1/docs
+copying docs/COMPARISON.md -> vep_protocol-0.5.0b1/docs
+copying docs/COMPATIBILITY.md -> vep_protocol-0.5.0b1/docs
+copying docs/CONFORMANCE.md -> vep_protocol-0.5.0b1/docs
+copying docs/CONTROLLER_SCALING.md -> vep_protocol-0.5.0b1/docs
+copying docs/EVIDENCE.md -> vep_protocol-0.5.0b1/docs
+copying docs/FAQ.md -> vep_protocol-0.5.0b1/docs
+copying docs/IMPLEMENTATION_PROGRESS.md -> vep_protocol-0.5.0b1/docs
+copying docs/IMPLEMENTATION_STATUS.md -> vep_protocol-0.5.0b1/docs
+copying docs/INVARIANTS.md -> vep_protocol-0.5.0b1/docs
+copying docs/LAUNCH_READINESS_REPORT.md -> vep_protocol-0.5.0b1/docs
+copying docs/MIGRATIONS.md -> vep_protocol-0.5.0b1/docs
+copying docs/QUICKSTART.md -> vep_protocol-0.5.0b1/docs
+copying docs/REAL_WORLD_BASELINE.md -> vep_protocol-0.5.0b1/docs
+copying docs/REAL_WORLD_RESULTS.md -> vep_protocol-0.5.0b1/docs
+copying docs/RELEASE_BASELINE.md -> vep_protocol-0.5.0b1/docs
+copying docs/RELEASE_NOTES.md -> vep_protocol-0.5.0b1/docs
+copying docs/RELEASE_NOTES_0.4.0a1.md -> vep_protocol-0.5.0b1/docs
+copying docs/RELEASE_PROGRESS.md -> vep_protocol-0.5.0b1/docs
+copying docs/RELEASE_PROVENANCE.md -> vep_protocol-0.5.0b1/docs
+copying docs/RFC-0001.md -> vep_protocol-0.5.0b1/docs
+copying docs/ROADMAP.md -> vep_protocol-0.5.0b1/docs
+copying docs/SECURITY_ARCHITECTURE.md -> vep_protocol-0.5.0b1/docs
+copying docs/SECURITY_LIMITATIONS.md -> vep_protocol-0.5.0b1/docs
+copying docs/SECURITY_REVIEW.md -> vep_protocol-0.5.0b1/docs
+copying docs/THREAT_MODEL.md -> vep_protocol-0.5.0b1/docs
+copying docs/VARIABLES.md -> vep_protocol-0.5.0b1/docs
+copying docs/WHY_VEP.md -> vep_protocol-0.5.0b1/docs
+copying docs/claims.json -> vep_protocol-0.5.0b1/docs
+copying docs/live_agent_run.json -> vep_protocol-0.5.0b1/docs
+copying docs/dogfood/README.md -> vep_protocol-0.5.0b1/docs/dogfood
+copying docs/dogfood/vep-on-vep-run-0-policy-blocked.json -> vep_protocol-0.5.0b1/docs/dogfood
+copying docs/dogfood/vep-on-vep-run-1-tests-not-hermetic.json -> vep_protocol-0.5.0b1/docs/dogfood
+copying docs/dogfood/vep-on-vep-run-2-two-env-failures.json -> vep_protocol-0.5.0b1/docs/dogfood
+copying docs/dogfood/vep-on-vep-run-3.json -> vep_protocol-0.5.0b1/docs/dogfood
+copying docs/dogfood/vep-on-vep-run-4-final-runner.json -> vep_protocol-0.5.0b1/docs/dogfood
+copying docs/dogfood/vep-on-vep-run-5-release-candidate.json -> vep_protocol-0.5.0b1/docs/dogfood
+copying docs/external/README.md -> vep_protocol-0.5.0b1/docs/external
+copying docs/external/more-itertools.json -> vep_protocol-0.5.0b1/docs/external
+copying docs/external/pyflakes.json -> vep_protocol-0.5.0b1/docs/external
+copying docs/external/earlier/more-itertools-run-1.json -> vep_protocol-0.5.0b1/docs/external/earlier
+copying docs/external/earlier/more-itertools-run-2-installed-copy-shadowed-FALSE-GREEN.json -> vep_protocol-0.5.0b1/docs/external/earlier
+copying docs/external/earlier/more-itertools-run-3-before-0.5.0b1.json -> vep_protocol-0.5.0b1/docs/external/earlier
+copying docs/external/earlier/pyflakes-run-1-all-skipped-rejection.json -> vep_protocol-0.5.0b1/docs/external/earlier
+copying docs/external/earlier/pyflakes-run-2-before-runner-fix.json -> vep_protocol-0.5.0b1/docs/external/earlier
+copying docs/external/earlier/pyflakes-run-3-before-0.5.0b1.json -> vep_protocol-0.5.0b1/docs/external/earlier
+copying docs/isolation/README.md -> vep_protocol-0.5.0b1/docs/isolation
+copying docs/isolation/REVALIDATION.md -> vep_protocol-0.5.0b1/docs/isolation
+copying docs/isolation/ci-run-39347549501-attestation.json -> vep_protocol-0.5.0b1/docs/isolation
+copying docs/isolation/ci-run-39347549501-e2e-summary.json -> vep_protocol-0.5.0b1/docs/isolation
+copying docs/isolation/ci-run-39347549501-run.json -> vep_protocol-0.5.0b1/docs/isolation
+copying examples/example_policy.json -> vep_protocol-0.5.0b1/examples
+copying examples/run_demo.py -> vep_protocol-0.5.0b1/examples
+copying examples/tiny_project/arithmetic.py -> vep_protocol-0.5.0b1/examples/tiny_project
+copying examples/tiny_project/status.json -> vep_protocol-0.5.0b1/examples/tiny_project
+copying examples/tiny_project/tests/test_arithmetic.py -> vep_protocol-0.5.0b1/examples/tiny_project/tests
+copying scripts/check_claims.py -> vep_protocol-0.5.0b1/scripts
+copying scripts/conformance_check.sh -> vep_protocol-0.5.0b1/scripts
+copying scripts/dogfood.py -> vep_protocol-0.5.0b1/scripts
+copying scripts/external_eval.py -> vep_protocol-0.5.0b1/scripts
+copying scripts/gen_conformance_vectors.py -> vep_protocol-0.5.0b1/scripts
+copying scripts/gen_v040_fixture.py -> vep_protocol-0.5.0b1/scripts
+copying scripts/gen_variables.py -> vep_protocol-0.5.0b1/scripts
+copying scripts/launch_check.py -> vep_protocol-0.5.0b1/scripts
+copying scripts/live_agent_check.py -> vep_protocol-0.5.0b1/scripts
+copying scripts/release_check.sh -> vep_protocol-0.5.0b1/scripts
+copying scripts/verify.sh -> vep_protocol-0.5.0b1/scripts
+copying scripts/release/ci_checks.py -> vep_protocol-0.5.0b1/scripts/release
+copying scripts/release/cleanroom.py -> vep_protocol-0.5.0b1/scripts/release
+copying scripts/release/gates.py -> vep_protocol-0.5.0b1/scripts/release
+copying scripts/release/isolated_e2e.py -> vep_protocol-0.5.0b1/scripts/release
+copying scripts/release/quickstart_runner.py -> vep_protocol-0.5.0b1/scripts/release
+copying scripts/release/release_gate.py -> vep_protocol-0.5.0b1/scripts/release
+copying scripts/release/release_policy.json -> vep_protocol-0.5.0b1/scripts/release
+copying src/vep/__init__.py -> vep_protocol-0.5.0b1/src/vep
+copying src/vep/__main__.py -> vep_protocol-0.5.0b1/src/vep
+copying src/vep/_isolation_probe.py -> vep_protocol-0.5.0b1/src/vep
+copying src/vep/_runner.py -> vep_protocol-0.5.0b1/src/vep
+copying src/vep/agents.py -> vep_protocol-0.5.0b1/src/vep
+copying src/vep/audits.py -> vep_protocol-0.5.0b1/src/vep
+copying src/vep/budgets.py -> vep_protocol-0.5.0b1/src/vep
+copying src/vep/builds.py -> vep_protocol-0.5.0b1/src/vep
+copying src/vep/cache_planner.py -> vep_protocol-0.5.0b1/src/vep
+copying src/vep/candidates.py -> vep_protocol-0.5.0b1/src/vep
+copying src/vep/canonical.py -> vep_protocol-0.5.0b1/src/vep
+copying src/vep/certificates.py -> vep_protocol-0.5.0b1/src/vep
+copying src/vep/cli.py -> vep_protocol-0.5.0b1/src/vep
+copying src/vep/conformance.py -> vep_protocol-0.5.0b1/src/vep
+copying src/vep/context.py -> vep_protocol-0.5.0b1/src/vep
+copying src/vep/controller.py -> vep_protocol-0.5.0b1/src/vep
+copying src/vep/database.py -> vep_protocol-0.5.0b1/src/vep
+copying src/vep/depgraph.py -> vep_protocol-0.5.0b1/src/vep
+copying src/vep/errors.py -> vep_protocol-0.5.0b1/src/vep
+copying src/vep/evidence.py -> vep_protocol-0.5.0b1/src/vep
+copying src/vep/execution.py -> vep_protocol-0.5.0b1/src/vep
+copying src/vep/git_adapter.py -> vep_protocol-0.5.0b1/src/vep
+copying src/vep/isolation.py -> vep_protocol-0.5.0b1/src/vep
+copying src/vep/migrations.py -> vep_protocol-0.5.0b1/src/vep
+copying src/vep/objectives.py -> vep_protocol-0.5.0b1/src/vep
+copying src/vep/objects.py -> vep_protocol-0.5.0b1/src/vep
+copying src/vep/policies.py -> vep_protocol-0.5.0b1/src/vep
+copying src/vep/routing.py -> vep_protocol-0.5.0b1/src/vep
+copying src/vep/simulation.py -> vep_protocol-0.5.0b1/src/vep
+copying src/vep/snapshots.py -> vep_protocol-0.5.0b1/src/vep
+copying src/vep/storage.py -> vep_protocol-0.5.0b1/src/vep
+copying src/vep/tokens.py -> vep_protocol-0.5.0b1/src/vep
+copying src/vep/trust.py -> vep_protocol-0.5.0b1/src/vep
+copying src/vep/versions.py -> vep_protocol-0.5.0b1/src/vep
+copying src/vep/workspace.py -> vep_protocol-0.5.0b1/src/vep
+copying src/vep_protocol.egg-info/PKG-INFO -> vep_protocol-0.5.0b1/src/vep_protocol.egg-info
+copying src/vep_protocol.egg-info/SOURCES.txt -> vep_protocol-0.5.0b1/src/vep_protocol.egg-info
+copying src/vep_protocol.egg-info/dependency_links.txt -> vep_protocol-0.5.0b1/src/vep_protocol.egg-info
+copying src/vep_protocol.egg-info/entry_points.txt -> vep_protocol-0.5.0b1/src/vep_protocol.egg-info
+copying src/vep_protocol.egg-info/requires.txt -> vep_protocol-0.5.0b1/src/vep_protocol.egg-info
+copying src/vep_protocol.egg-info/top_level.txt -> vep_protocol-0.5.0b1/src/vep_protocol.egg-info
+copying tests/__init__.py -> vep_protocol-0.5.0b1/tests
+copying tests/helpers.py -> vep_protocol-0.5.0b1/tests
+copying tests/test_adversarial.py -> vep_protocol-0.5.0b1/tests
+copying tests/test_agents.py -> vep_protocol-0.5.0b1/tests
+copying tests/test_audits.py -> vep_protocol-0.5.0b1/tests
+copying tests/test_budgets.py -> vep_protocol-0.5.0b1/tests
+copying tests/test_builds.py -> vep_protocol-0.5.0b1/tests
+copying tests/test_cache.py -> vep_protocol-0.5.0b1/tests
+copying tests/test_candidates.py -> vep_protocol-0.5.0b1/tests
+copying tests/test_canonical.py -> vep_protocol-0.5.0b1/tests
+copying tests/test_certificates.py -> vep_protocol-0.5.0b1/tests
+copying tests/test_claims.py -> vep_protocol-0.5.0b1/tests
+copying tests/test_cli_build.py -> vep_protocol-0.5.0b1/tests
+copying tests/test_compat.py -> vep_protocol-0.5.0b1/tests
+copying tests/test_conformance.py -> vep_protocol-0.5.0b1/tests
+copying tests/test_context.py -> vep_protocol-0.5.0b1/tests
+copying tests/test_controller.py -> vep_protocol-0.5.0b1/tests
+copying tests/test_depgraph.py -> vep_protocol-0.5.0b1/tests
+copying tests/test_docs.py -> vep_protocol-0.5.0b1/tests
+copying tests/test_execution.py -> vep_protocol-0.5.0b1/tests
+copying tests/test_git.py -> vep_protocol-0.5.0b1/tests
+copying tests/test_hardening.py -> vep_protocol-0.5.0b1/tests
+copying tests/test_integration.py -> vep_protocol-0.5.0b1/tests
+copying tests/test_isolation.py -> vep_protocol-0.5.0b1/tests
+copying tests/test_isolation_matrix.py -> vep_protocol-0.5.0b1/tests
+copying tests/test_launch_gate.py -> vep_protocol-0.5.0b1/tests
+copying tests/test_math.py -> vep_protocol-0.5.0b1/tests
+copying tests/test_migration_fixtures.py -> vep_protocol-0.5.0b1/tests
+copying tests/test_policies.py -> vep_protocol-0.5.0b1/tests
+copying tests/test_release.py -> vep_protocol-0.5.0b1/tests
+copying tests/test_routing.py -> vep_protocol-0.5.0b1/tests
+copying tests/test_snapshots.py -> vep_protocol-0.5.0b1/tests
+copying tests/test_storage.py -> vep_protocol-0.5.0b1/tests
+copying tests/test_tokens.py -> vep_protocol-0.5.0b1/tests
+copying tests/test_trust.py -> vep_protocol-0.5.0b1/tests
+copying tests/fixtures/legacy_v1_objects.json -> vep_protocol-0.5.0b1/tests/fixtures
+copying tests/fixtures/schema_v030.sql -> vep_protocol-0.5.0b1/tests/fixtures
+copying tests/fixtures/stub_docker.py -> vep_protocol-0.5.0b1/tests/fixtures
+copying tests/fixtures/ws_v0_4_0a1/manifest.json -> vep_protocol-0.5.0b1/tests/fixtures/ws_v0_4_0a1
+copying tests/fixtures/ws_v0_4_0a1/vep.sql -> vep_protocol-0.5.0b1/tests/fixtures/ws_v0_4_0a1
+copying tests/fixtures/ws_v0_4_0a1/project/arithmetic.py -> vep_protocol-0.5.0b1/tests/fixtures/ws_v0_4_0a1/project
+copying tests/fixtures/ws_v0_4_0a1/project/extra.py -> vep_protocol-0.5.0b1/tests/fixtures/ws_v0_4_0a1/project
+copying tests/fixtures/ws_v0_4_0a1/project/status.json -> vep_protocol-0.5.0b1/tests/fixtures/ws_v0_4_0a1/project
+copying tests/fixtures/ws_v0_4_0a1/project/tests/test_arithmetic.py -> vep_protocol-0.5.0b1/tests/fixtures/ws_v0_4_0a1/project/tests
+Writing vep_protocol-0.5.0b1/setup.cfg
+Creating tar archive
+removing 'vep_protocol-0.5.0b1' (and everything under it)
+running egg_info
+writing src/vep_protocol.egg-info/PKG-INFO
+writing dependency_links to src/vep_protocol.egg-info/dependency_links.txt
+writing entry points to src/vep_protocol.egg-info/entry_points.txt
+writing requirements to src/vep_protocol.egg-info/requires.txt
+writing top-level names to src/vep_protocol.egg-info/top_level.txt
+reading manifest file 'src/vep_protocol.egg-info/SOURCES.txt'
+reading manifest template 'MANIFEST.in'
+adding license file 'LICENSE'
+writing manifest file 'src/vep_protocol.egg-info/SOURCES.txt'
+running bdist_wheel
+running build
+running build_py
+creating build/lib/vep
+copying src/vep/simulation.py -> build/lib/vep
+copying src/vep/isolation.py -> build/lib/vep
+copying src/vep/_isolation_probe.py -> build/lib/vep
+copying src/vep/snapshots.py -> build/lib/vep
+copying src/vep/audits.py -> build/lib/vep
+copying src/vep/execution.py -> build/lib/vep
+copying src/vep/controller.py -> build/lib/vep
+copying src/vep/depgraph.py -> build/lib/vep
+copying src/vep/database.py -> build/lib/vep
+copying src/vep/builds.py -> build/lib/vep
+copying src/vep/__init__.py -> build/lib/vep
+copying src/vep/certificates.py -> build/lib/vep
+copying src/vep/tokens.py -> build/lib/vep
+copying src/vep/agents.py -> build/lib/vep
+copying src/vep/objectives.py -> build/lib/vep
+copying src/vep/context.py -> build/lib/vep
+copying src/vep/cli.py -> build/lib/vep
+copying src/vep/trust.py -> build/lib/vep
+copying src/vep/routing.py -> build/lib/vep
+copying src/vep/canonical.py -> build/lib/vep
+copying src/vep/storage.py -> build/lib/vep
+copying src/vep/migrations.py -> build/lib/vep
+copying src/vep/conformance.py -> build/lib/vep
+copying src/vep/budgets.py -> build/lib/vep
+copying src/vep/versions.py -> build/lib/vep
+copying src/vep/cache_planner.py -> build/lib/vep
+copying src/vep/errors.py -> build/lib/vep
+copying src/vep/git_adapter.py -> build/lib/vep
+copying src/vep/workspace.py -> build/lib/vep
+copying src/vep/candidates.py -> build/lib/vep
+copying src/vep/objects.py -> build/lib/vep
+copying src/vep/_runner.py -> build/lib/vep
+copying src/vep/evidence.py -> build/lib/vep
+copying src/vep/policies.py -> build/lib/vep
+copying src/vep/__main__.py -> build/lib/vep
+running egg_info
+writing src/vep_protocol.egg-info/PKG-INFO
+writing dependency_links to src/vep_protocol.egg-info/dependency_links.txt
+writing entry points to src/vep_protocol.egg-info/entry_points.txt
+writing requirements to src/vep_protocol.egg-info/requires.txt
+writing top-level names to src/vep_protocol.egg-info/top_level.txt
+reading manifest file 'src/vep_protocol.egg-info/SOURCES.txt'
+reading manifest template 'MANIFEST.in'
+adding license file 'LICENSE'
+writing manifest file 'src/vep_protocol.egg-info/SOURCES.txt'
+installing to build/bdist.macosx-15.0-arm64/wheel
+running install
+running install_lib
+creating build/bdist.macosx-15.0-arm64/wheel
+creating build/bdist.macosx-15.0-arm64/wheel/vep
+copying build/lib/vep/simulation.py -> build/bdist.macosx-15.0-arm64/wheel/./vep
+copying build/lib/vep/isolation.py -> build/bdist.macosx-15.0-arm64/wheel/./vep
+copying build/lib/vep/_isolation_probe.py -> build/bdist.macosx-15.0-arm64/wheel/./vep
+copying build/lib/vep/snapshots.py -> build/bdist.macosx-15.0-arm64/wheel/./vep
+copying build/lib/vep/audits.py -> build/bdist.macosx-15.0-arm64/wheel/./vep
+copying build/lib/vep/execution.py -> build/bdist.macosx-15.0-arm64/wheel/./vep
+copying build/lib/vep/controller.py -> build/bdist.macosx-15.0-arm64/wheel/./vep
+copying build/lib/vep/depgraph.py -> build/bdist.macosx-15.0-arm64/wheel/./vep
+copying build/lib/vep/database.py -> build/bdist.macosx-15.0-arm64/wheel/./vep
+copying build/lib/vep/builds.py -> build/bdist.macosx-15.0-arm64/wheel/./vep
+copying build/lib/vep/__init__.py -> build/bdist.macosx-15.0-arm64/wheel/./vep
+copying build/lib/vep/certificates.py -> build/bdist.macosx-15.0-arm64/wheel/./vep
+copying build/lib/vep/tokens.py -> build/bdist.macosx-15.0-arm64/wheel/./vep
+copying build/lib/vep/agents.py -> build/bdist.macosx-15.0-arm64/wheel/./vep
+copying build/lib/vep/objectives.py -> build/bdist.macosx-15.0-arm64/wheel/./vep
+copying build/lib/vep/context.py -> build/bdist.macosx-15.0-arm64/wheel/./vep
+copying build/lib/vep/cli.py -> build/bdist.macosx-15.0-arm64/wheel/./vep
+copying build/lib/vep/trust.py -> build/bdist.macosx-15.0-arm64/wheel/./vep
+copying build/lib/vep/routing.py -> build/bdist.macosx-15.0-arm64/wheel/./vep
+copying build/lib/vep/canonical.py -> build/bdist.macosx-15.0-arm64/wheel/./vep
+copying build/lib/vep/storage.py -> build/bdist.macosx-15.0-arm64/wheel/./vep
+copying build/lib/vep/migrations.py -> build/bdist.macosx-15.0-arm64/wheel/./vep
+copying build/lib/vep/conformance.py -> build/bdist.macosx-15.0-arm64/wheel/./vep
+copying build/lib/vep/budgets.py -> build/bdist.macosx-15.0-arm64/wheel/./vep
+copying build/lib/vep/versions.py -> build/bdist.macosx-15.0-arm64/wheel/./vep
+copying build/lib/vep/cache_planner.py -> build/bdist.macosx-15.0-arm64/wheel/./vep
+copying build/lib/vep/errors.py -> build/bdist.macosx-15.0-arm64/wheel/./vep
+copying build/lib/vep/git_adapter.py -> build/bdist.macosx-15.0-arm64/wheel/./vep
+copying build/lib/vep/workspace.py -> build/bdist.macosx-15.0-arm64/wheel/./vep
+copying build/lib/vep/candidates.py -> build/bdist.macosx-15.0-arm64/wheel/./vep
+copying build/lib/vep/objects.py -> build/bdist.macosx-15.0-arm64/wheel/./vep
+copying build/lib/vep/_runner.py -> build/bdist.macosx-15.0-arm64/wheel/./vep
+copying build/lib/vep/evidence.py -> build/bdist.macosx-15.0-arm64/wheel/./vep
+copying build/lib/vep/policies.py -> build/bdist.macosx-15.0-arm64/wheel/./vep
+copying build/lib/vep/__main__.py -> build/bdist.macosx-15.0-arm64/wheel/./vep
+running install_egg_info
+Copying src/vep_protocol.egg-info to build/bdist.macosx-15.0-arm64/wheel/./vep_protocol-0.5.0b1-py3.14.egg-info
+running install_scripts
+creating build/bdist.macosx-15.0-arm64/wheel/vep_protocol-0.5.0b1.dist-info/WHEEL
+creating '<tmp>/tmp2vkugeih/.tmp-4ahd3dmc/vep_protocol-0.5.0b1-py3-none-any.whl' and adding 'build/bdist.macosx-15.0-arm64/wheel' to it
+adding 'vep/__init__.py'
+adding 'vep/__main__.py'
+adding 'vep/_isolation_probe.py'
+adding 'vep/_runner.py'
+adding 'vep/agents.py'
+adding 'vep/audits.py'
+adding 'vep/budgets.py'
+adding 'vep/builds.py'
+adding 'vep/cache_planner.py'
+adding 'vep/candidates.py'
+adding 'vep/canonical.py'
+adding 'vep/certificates.py'
+adding 'vep/cli.py'
+adding 'vep/conformance.py'
+adding 'vep/context.py'
+adding 'vep/controller.py'
+adding 'vep/database.py'
+adding 'vep/depgraph.py'
+adding 'vep/errors.py'
+adding 'vep/evidence.py'
+adding 'vep/execution.py'
+adding 'vep/git_adapter.py'
+adding 'vep/isolation.py'
+adding 'vep/migrations.py'
+adding 'vep/objectives.py'
+adding 'vep/objects.py'
+adding 'vep/policies.py'
+adding 'vep/routing.py'
+adding 'vep/simulation.py'
+adding 'vep/snapshots.py'
+adding 'vep/storage.py'
+adding 'vep/tokens.py'
+adding 'vep/trust.py'
+adding 'vep/versions.py'
+adding 'vep/workspace.py'
+adding 'vep_protocol-0.5.0b1.dist-info/licenses/LICENSE'
+adding 'vep_protocol-0.5.0b1.dist-info/METADATA'
+adding 'vep_protocol-0.5.0b1.dist-info/WHEEL'
+adding 'vep_protocol-0.5.0b1.dist-info/entry_points.txt'
+adding 'vep_protocol-0.5.0b1.dist-info/top_level.txt'
+adding 'vep_protocol-0.5.0b1.dist-info/RECORD'
+removing build/bdist.macosx-15.0-arm64/wheel
+Successfully built vep_protocol-0.5.0b1.tar.gz and vep_protocol-0.5.0b1-py3-none-any.whl
+* Creating isolated environment: venv+pip...
+* Installing packages in isolated environment:
+  - setuptools>=68
+* Getting build dependencies for sdist...
+no previously-included directories found matching 'tests/__pycache__'
+warning: no previously-included files matching '__pycache__' found anywhere in distribution
+warning: no previously-included files matching '*.py[cod]' found anywhere in distribution
+warning: no previously-included files matching '*.pem' found anywhere in distribution
+warning: no previously-included files matching '*.key' found anywhere in distribution
+warning: no previously-included files matching '*.db' found anywhere in distribution
+warning: no previously-included files matching '.env' found anywhere in distribution
+warning: no previously-included files found matching 'release-gate.json'
+warning: no previously-included files found matching 'launch-gate.json'
+* Installed build dependency versions:
+  - setuptools==84.2.0
+* Building sdist...
+no previously-included directories found matching 'tests/__pycache__'
+warning: no previously-included files matching '__pycache__' found anywhere in distribution
+warning: no previously-included files matching '*.py[cod]' found anywhere in distribution
+warning: no previously-included files matching '*.pem' found anywhere in distribution
+warning: no previously-included files matching '*.key' found anywhere in distribution
+warning: no previously-included files matching '*.db' found anywhere in distribution
+warning: no previously-included files matching '.env' found anywhere in distribution
+warning: no previously-included files found matching 'release-gate.json'
+warning: no previously-included files found matching 'launch-gate.json'
+* Building wheel from sdist
+* Creating isolated environment: venv+pip...
+* Installing packages in isolated environment:
+  - setuptools>=68
+* Getting build dependencies for wheel...
+no previously-included directories found matching 'tests/__pycache__'
+warning: no previously-included files matching '__pycache__' found anywhere in distribution
+warning: no previously-included files matching '*.py[cod]' found anywhere in distribution
+warning: no previously-included files matching '*.pem' found anywhere in distribution
+warning: no previously-included files matching '*.key' found anywhere in distribution
+warning: no previously-included files matching '*.db' found anywhere in distribution
+warning: no previously-included files matching '.env' found anywhere in distribution
+warning: no previously-included files found matching 'release-gate.json'
+warning: no previously-included files found matching 'docs/RELEASE_GATE_REPORT.md'
+warning: no previously-included files found matching 'launch-gate.json'
+* Installed build dependency versions:
+  - setuptools==84.2.0
+* Building wheel...
+no previously-included directories found matching 'tests/__pycache__'
+warning: no previously-included files matching '__pycache__' found anywhere in distribution
+warning: no previously-included files matching '*.py[cod]' found anywhere in distribution
+warning: no previously-included files matching '*.pem' found anywhere in distribution
+warning: no previously-included files matching '*.key' found anywhere in distribution
+warning: no previously-included files matching '*.db' found anywhere in distribution
+warning: no previously-included files matching '.env' found anywhere in distribution
+warning: no previously-included files found matching 'release-gate.json'
+warning: no previously-included files found matching 'docs/RELEASE_GATE_REPORT.md'
+warning: no previously-included files found matching 'launch-gate.json'
+warning: build_py: byte-compiling is disabled, skipping.
+
+warning: install_lib: byte-compiling is disabled, skipping.
+

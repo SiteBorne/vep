@@ -1,0 +1,5 @@
+$ python benchmarks/run_simulation.py --out-json /dev/null --out-md /dev/null
+# exit 0
+
+reproducible: yes (sha256 e98e2a562d7a5df09f90cc03a532376b80ed8c36790add89f644167e902c3b2f)
+wrote /dev/null and /dev/null
