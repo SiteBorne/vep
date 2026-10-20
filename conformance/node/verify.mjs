@@ -238,6 +238,25 @@ const RANK = { UNVERIFIED: 0, TRUSTED_LOCAL: 1, ISOLATED_VERIFIED: 2 };
 export function verifyBundle(bundleBytes) {
   try { return { ...verifyInner(bundleBytes) }; } catch (e) { if (e instanceof Reject) return { valid: false, code: e.code, detail: e.detail }; throw e; }
 }
+// Bindings between a certificate and its evidence; shared by the v1 internal check and the authorized check. Returns the certificate trust level.
+function crossChecks(cert, ev, evidenceEnvelope, requireTrust) {
+  const evCanon = canonBytes(parseStrict(Buffer.from(JSON.stringify(evidenceEnvelope), "utf8")));
+  if (sha256(evCanon) !== cert.f.get("evidence_envelope_digest")) throw new Reject("EVIDENCE_DIGEST_MISMATCH");
+  if (ev.id !== cert.f.get("evidence_id")) throw new Reject("IDENTITY_MISMATCH");
+  for (const k of ["candidate_id", "objective_id", "snapshot_id", "policy_id"]) if (ev.f.get(k) !== cert.f.get(k)) throw new Reject("BINDING_MISMATCH", k);
+  const evTrust = ev.ver >= 2 ? ev.f.get("trust_level") : (ev.f.get("isolation") === "NONE_TRUSTED_LOCAL" ? "TRUSTED_LOCAL" : "UNVERIFIED");
+  let certTrust = evTrust;
+  if (cert.ver >= 2) {
+    if (cert.f.get("trust_level") !== evTrust || cert.f.get("evaluator_id") !== ev.f.get("evaluator_id")) throw new Reject("TRUST_BINDING_MISMATCH");
+    certTrust = cert.f.get("trust_level");
+  }
+  if (evTrust === "UNVERIFIED" || RANK[certTrust] < RANK[requireTrust]) throw new Reject("TRUST_INSUFFICIENT");
+  const n = (k) => ev.f.get(k);
+  if (n("verdict") !== "PASS" || n("tests_passed") < 1n || n("tests_skipped") >= n("tests_run") || n("tests_failed") !== 0n) throw new Reject("EVIDENCE_NOT_PASSING");
+  if (n("staged_tree_snapshot_id") !== cert.f.get("snapshot_id")) throw new Reject("EVIDENCE_SNAPSHOT_MISMATCH");
+  return certTrust;
+}
+
 function verifyInner(bytes) {
   let raw; // plain JS view for envelope structure checks; ints as numbers are fine there (no big values are read from it)
   try { raw = JSON.parse(Buffer.isBuffer(bytes) ? bytes.toString("utf8") : bytes); } catch { throw new Reject("MALFORMED_BUNDLE"); }
@@ -259,24 +278,86 @@ function verifyInner(bytes) {
   }
   const cert = openEnvelope(raw.certificate_envelope, keys, "Certificate");
   const ev = openEnvelope(raw.evidence_envelope, keys, "Evidence");
-  // the evidence envelope digest is over the canonical form of the envelope object
-  const evCanon = canonBytes(parseStrict(Buffer.from(JSON.stringify(raw.evidence_envelope), "utf8")));
-  if (sha256(evCanon) !== cert.f.get("evidence_envelope_digest")) throw new Reject("EVIDENCE_DIGEST_MISMATCH");
-  if (ev.id !== cert.f.get("evidence_id")) throw new Reject("IDENTITY_MISMATCH");
-  for (const k of ["candidate_id", "objective_id", "snapshot_id", "policy_id"]) if (ev.f.get(k) !== cert.f.get(k)) throw new Reject("BINDING_MISMATCH", k);
-  const evTrust = ev.ver >= 2 ? ev.f.get("trust_level") : (ev.f.get("isolation") === "NONE_TRUSTED_LOCAL" ? "TRUSTED_LOCAL" : "UNVERIFIED");
-  let certTrust = evTrust;
-  if (cert.ver >= 2) {
-    if (cert.f.get("trust_level") !== evTrust || cert.f.get("evaluator_id") !== ev.f.get("evaluator_id")) throw new Reject("TRUST_BINDING_MISMATCH");
-    certTrust = cert.f.get("trust_level");
-  }
-  if (evTrust === "UNVERIFIED" || RANK[certTrust] < RANK[ex.require_trust]) throw new Reject("TRUST_INSUFFICIENT");
-  const n = (k) => ev.f.get(k);
-  if (n("verdict") !== "PASS" || n("tests_passed") < 1n || n("tests_skipped") >= n("tests_run") || n("tests_failed") !== 0n) throw new Reject("EVIDENCE_NOT_PASSING");
-  if (n("staged_tree_snapshot_id") !== cert.f.get("snapshot_id")) throw new Reject("EVIDENCE_SNAPSHOT_MISMATCH");
+  const certTrust = crossChecks(cert, ev, raw.evidence_envelope, ex.require_trust);
   for (const [f, code] of [["objective_id", "OBJECTIVE_MISMATCH"], ["policy_id", "POLICY_MISMATCH"], ["snapshot_id", "SNAPSHOT_MISMATCH"]])
     if (f in ex && ex[f] !== cert.f.get(f)) throw new Reject(code);
-  return { valid: true, code: null, trust_level: certTrust, certificate_id: cert.id, snapshot_id: cert.f.get("snapshot_id") };
+  return { valid: true, code: null, trust_level: certTrust, certificate_id: cert.id, snapshot_id: cert.f.get("snapshot_id"), assurance: "INTERNAL_CONSISTENCY_ONLY" };
+}
+
+
+// ---------------------------------------------------------------- authorized verification (relying-party trust policy, bundle format 2)
+const TS = /^[0-9]{4}-[0-9]{2}-[0-9]{2}T[0-9]{2}:[0-9]{2}:[0-9]{2}Z$/;
+const POLICY_KEYS = ["trust_policy_version", "name", "issuers", "authorized_evaluators", "require_trust", "permitted_evidence_versions", "permitted_certificate_versions", "allow_legacy_evidence", "expect"];
+const ISSUER_KEYS = ["key_id", "public_key_hex", "valid_from", "valid_until", "status", "status_effective_at"];
+const bad = (m) => new Reject("MALFORMED_TRUST_POLICY", m);
+function validatePolicy(p) {
+  if (!isPlain(p) || !keysEq(p, POLICY_KEYS) || p.trust_policy_version !== 1) throw bad("shape or version");
+  if (typeof p.name !== "string" || !p.name) throw bad("name");
+  if (!["TRUSTED_LOCAL", "ISOLATED_VERIFIED"].includes(p.require_trust)) throw bad("require_trust");
+  for (const f of ["permitted_evidence_versions", "permitted_certificate_versions"])
+    if (!Array.isArray(p[f]) || !p[f].length || p[f].some((x) => !Number.isInteger(x) || ![1, 2].includes(x))) throw bad(f);
+  if (typeof p.allow_legacy_evidence !== "boolean") throw bad("allow_legacy_evidence");
+  if (!Array.isArray(p.authorized_evaluators) || !p.authorized_evaluators.length || p.authorized_evaluators.some((x) => typeof x !== "string" || !x)) throw bad("authorized_evaluators");
+  const ex = p.expect;
+  if (!isPlain(ex) || !Object.keys(ex).every((k) => ["snapshot_id", "objective_id", "policy_id"].includes(k)) || !Object.values(ex).every((v) => typeof v === "string")) throw bad("expect");
+  if (!("snapshot_id" in ex)) throw new Reject("SUBJECT_UNSPECIFIED", "a relying party must state which source snapshot it expects");
+  if (!Array.isArray(p.issuers) || !p.issuers.length) throw bad("issuers");
+  const out = new Map();
+  for (const e of p.issuers) {
+    if (!isPlain(e) || !keysEq(e, ISSUER_KEYS) || !["active", "retired", "compromised"].includes(e.status)) throw bad("issuer entry");
+    if (typeof e.public_key_hex !== "string" || !/^([0-9a-fA-F]{2})*$/.test(e.public_key_hex)) throw bad("issuer key hex");
+    const raw = Buffer.from(e.public_key_hex, "hex");
+    if (raw.length !== 32 || sha256(raw) !== e.key_id) throw bad("issuer key_id is not the SHA-256 of the key");
+    for (const f of ["valid_from", "valid_until", "status_effective_at"]) if (e[f] !== null && (typeof e[f] !== "string" || !TS.test(e[f]))) throw bad(f);
+    if (typeof e.valid_from !== "string") throw bad("valid_from");
+    if (e.status === "retired" && e.status_effective_at === null) throw bad("retired issuer needs status_effective_at");
+    if (out.has(e.key_id)) throw bad("duplicate issuer");
+    out.set(e.key_id, { ...e, raw });
+  }
+  return out;
+}
+function keyOk(entry, signedAt, now) {
+  if (entry.status === "compromised") throw new Reject("REVOKED_KEY", "compromised");
+  if (entry.status === "retired" && signedAt >= entry.status_effective_at) throw new Reject("REVOKED_KEY", "retired");
+  if (signedAt < entry.valid_from) throw new Reject("KEY_NOT_YET_VALID");
+  if (entry.valid_until !== null && signedAt >= entry.valid_until) throw new Reject("KEY_EXPIRED");
+  if (signedAt > now) throw new Reject("ISSUED_IN_FUTURE");
+}
+const evaluatorOk = (id, pats) => pats.some((p) => id === p || (p.endsWith("*") && id.startsWith(p.slice(0, -1))));
+export function policyId(policyText) {
+  const v = parseStrict(Buffer.from(policyText, "utf8"));
+  return "tp-" + domainHash("vep.TrustPolicy.v1", canonBytes(v));
+}
+export function verifyAuthorized(bundleText, policyText, now) {
+  try { return authorizedInner(bundleText, policyText, now); } catch (e) { if (e instanceof Reject) return { valid: false, code: e.code, detail: e.detail }; throw e; }
+}
+function authorizedInner(bundleText, policyText, now) {
+  if (typeof now !== "string" || !TS.test(now)) throw bad("now must be a UTC timestamp supplied by the relying party");
+  let policy;
+  try { policy = JSON.parse(policyText); } catch { throw bad("not JSON"); }
+  const issuers = validatePolicy(policy);
+  let raw;
+  try { raw = JSON.parse(bundleText); } catch { throw new Reject("MALFORMED_BUNDLE"); }
+  if (!isPlain(raw) || !("bundle_version" in raw) || typeof raw.bundle_version !== "number" || !Number.isInteger(raw.bundle_version)) throw new Reject("MALFORMED_BUNDLE");
+  if (raw.bundle_version !== 2) throw new Reject("UNSUPPORTED_BUNDLE_VERSION", "authorized verification needs bundle format 2");
+  if (!keysEq(raw, ["bundle_version", "certificate_envelope", "evidence_envelope"])) throw new Reject("MALFORMED_BUNDLE");
+  const keys = new Map([...issuers].map(([k, e]) => [k, e.raw]));
+  const open = (env, kind) => { try { return openEnvelope(env, keys, kind); } catch (e) { if (e instanceof Reject && e.code === "UNTRUSTED_KEY") throw new Reject("UNAUTHORIZED_ISSUER", e.detail); throw e; } };
+  const cert = open(raw.certificate_envelope, "Certificate");
+  const ev = open(raw.evidence_envelope, "Evidence");
+  const certKid = raw.certificate_envelope.signatures[0].keyid, evKid = raw.evidence_envelope.signatures[0].keyid;
+  if (cert.f.get("issuer_key_id") !== certKid) throw new Reject("ISSUER_KEY_MISMATCH", "certificate names a different issuer than the key that signed it");
+  keyOk(issuers.get(certKid), cert.f.get("issued_at"), now);
+  keyOk(issuers.get(evKid), ev.f.get("finished_at"), now);
+  if (!policy.permitted_certificate_versions.includes(cert.ver)) throw new Reject("CERTIFICATE_VERSION_NOT_PERMITTED");
+  if (!policy.permitted_evidence_versions.includes(ev.ver)) throw new Reject("EVIDENCE_VERSION_NOT_PERMITTED");
+  const certTrust = crossChecks(cert, ev, raw.evidence_envelope, "TRUSTED_LOCAL");
+  if (ev.ver < 2) { if (!policy.allow_legacy_evidence) throw new Reject("LEGACY_EVIDENCE_NOT_PERMITTED"); }
+  else if (!evaluatorOk(ev.f.get("evaluator_id"), policy.authorized_evaluators)) throw new Reject("EVALUATOR_NOT_AUTHORIZED", ev.f.get("evaluator_id"));
+  if (RANK[certTrust] < RANK[policy.require_trust]) throw new Reject("TRUST_INSUFFICIENT");
+  for (const [f, code] of [["objective_id", "OBJECTIVE_MISMATCH"], ["policy_id", "POLICY_MISMATCH"], ["snapshot_id", "SNAPSHOT_MISMATCH"]])
+    if (f in policy.expect && policy.expect[f] !== cert.f.get(f)) throw new Reject(code);
+  return { valid: true, code: null, assurance: "AUTHORIZED", trust_policy_id: policyId(policyText), issuer_key_id: certKid, trust_level: certTrust, snapshot_id: cert.f.get("snapshot_id"), certificate_id: cert.id };
 }
 
 // ---------------------------------------------------------------- vector runner
@@ -293,13 +374,16 @@ function runVector(v) {
     return { canonical_hex: canonBytes(env).toString("hex"), id: objectId(type, ver, fields) };
   }
   if (v.op === "verify_bundle") { const r = verifyBundle(v.bundle_json); return { valid: r.valid, code: r.code }; }
+  if (v.op === "verify_authorized") { const r = verifyAuthorized(v.bundle_json, v.policy_json, v.now); return { valid: r.valid, code: r.code }; }
+  if (v.op === "trust_policy_id") return { id: policyId(v.policy_json) };
   throw new Error(`unknown op ${v.op}`);
 }
 
 if (import.meta.url === `file://${process.argv[1]}`) {
   const [cmd, file] = process.argv.slice(2);
   if (cmd === "bundle") { console.log(JSON.stringify(verifyBundle(readFileSync(file)))); process.exit(0); }
-  if (cmd !== "suite") { console.error("usage: verify.mjs suite <suite.json> | bundle <bundle.json>"); process.exit(2); }
+  if (cmd === "authorized") { const [, , , , policyFile, now] = process.argv; console.log(JSON.stringify(verifyAuthorized(readFileSync(file, "utf8"), readFileSync(policyFile, "utf8"), now))); process.exit(0); }
+  if (cmd !== "suite") { console.error("usage: verify.mjs suite <suite.json> | bundle <bundle.json> | authorized <bundle2.json> <trust-policy.json> <now>"); process.exit(2); }
   // The suite file is read twice: plain JSON for structure, and raw text spans so ints/objects keep exact bytes.
   const suite = JSON.parse(readFileSync(file, "utf8"));
   const rawSuite = parseStrict(readFileSync(file)); // Map form: exact integers, for object_id fields
@@ -310,6 +394,8 @@ if (import.meta.url === `file://${process.argv[1]}`) {
     const input = { ...v };
     if (v.op === "object_id") input.fields_json = canon(rv.get("fields"));
     if (v.op === "verify_bundle") input.bundle_json = canon(rv.get("bundle")); // exact, re-serialised canonically; envelope strings are unchanged by this
+    if (v.op === "verify_authorized") { input.bundle_json = canon(rv.get("bundle")); input.policy_json = canon(rv.get("trust_policy")); }
+    if (v.op === "trust_policy_id") input.policy_json = canon(rv.get("trust_policy"));
     const got = runVector(input);
     const ok = Object.entries(v.expect).every(([k, x]) => got[k] === x);
     if (!ok) { bad++; console.log(`DISAGREE ${v.id}: expected ${JSON.stringify(v.expect)} got ${JSON.stringify(got)} (${v.note})`); }

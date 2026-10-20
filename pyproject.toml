@@ -14,16 +14,21 @@ dependencies = ["cryptography>=41"]
 
 [project.optional-dependencies]
 pytest = ["pytest>=7"]
-dev = ["pytest>=7", "build", "twine", "setuptools>=68"]
+mcp = ["mcp>=2.3,<3"]
+a2a = ["a2a-sdk>=1.2,<2"]
+claude = ["claude-agent-sdk>=0.2,<1"]
+dev = ["pytest>=7", "build", "twine", "setuptools>=68", "mcp>=2.3,<3", "a2a-sdk>=1.2,<2", "claude-agent-sdk>=0.2,<1"]
 
 [project.scripts]
 vep = "vep.cli:main"
+vep-mcp = "vep.mcp_server:main"
+vep-a2a = "vep.a2a_server:main"
 
 [tool.setuptools.packages.find]
 where = ["src"]
 
 [tool.setuptools.package-data]
-vep = ["_runner.py"]
+vep = ["_runner.py", "assets/claude/*", "assets/claude/skill/*", "assets/claude/skill/*/*"]
 
 [tool.pytest.ini_options]
 testpaths = ["tests"]

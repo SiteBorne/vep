@@ -26,7 +26,10 @@ from .errors import AuthorizationError, ExecutionError
 from .snapshots import make_writable, materialize, validate_rel_path
 from .workspace import Workspace, utcnow
 
-BUILD_ACTION_VERSION = 1
+BUILD_ACTION_VERSION = 2      # 2: identity covers timeout, isolation and declared dependencies; entries record their reproducibility assurance
+SUPPORTED_ISOLATION = ("NONE_TRUSTED_LOCAL",)
+ASSURANCE_NOTE = ("TWO_RUN_MATCH means two executions on this host produced identical outputs and streams; it is not a proof of determinism "
+                  "across hosts, toolchain updates or time. SINGLE_RUN means the result was produced once and nothing was verified.")
 CACHE_POLICIES = ("deterministic", "none")
 SAFE_ENV_KEYS = {"PYTHONHASHSEED", "LANG", "PYTHONDONTWRITEBYTECODE", "SOURCE_DATE_EPOCH"}
 
@@ -39,11 +42,19 @@ class BuildAction:
     env: tuple[tuple[str, str], ...] = ()     # extra env, restricted to SAFE_ENV_KEYS
     timeout_s: int = 300
     cache_policy: str = "deterministic"
-    verify_determinism: bool = True
+    verify_determinism: bool = True           # requested assurance; NOT part of the identity (the stored entry records the assurance it actually has)
+    isolation: str = "NONE_TRUSTED_LOCAL"     # required execution environment; only trusted-local execution exists for build actions
+    declared_dependencies: tuple[str, ...] = ()   # caller-declared pins of anything the command reads outside the snapshot (for example lock-file digests)
 
     def validate(self) -> None:
         if self.cache_policy not in CACHE_POLICIES:
             raise ExecutionError(f"cache_policy must be one of {CACHE_POLICIES}")
+        if self.isolation not in SUPPORTED_ISOLATION:
+            raise ExecutionError(f"isolation {self.isolation!r} is not supported for build actions (supported: {SUPPORTED_ISOLATION}); refusing rather than ignoring it")
+        if not isinstance(self.timeout_s, int) or isinstance(self.timeout_s, bool) or self.timeout_s < 1:
+            raise ExecutionError("timeout_s must be a positive integer")
+        if any(not isinstance(d, str) or not d for d in self.declared_dependencies):
+            raise ExecutionError("declared_dependencies must be non-empty strings")
         if not self.argv or any(not isinstance(a, str) or "\0" in a for a in self.argv):
             raise ExecutionError("argv must be a non-empty list of NUL-free strings")
         exe = self.argv[0]
@@ -67,8 +78,9 @@ def action_id(action: BuildAction) -> str:
     action.validate()
     body = {"v": BUILD_ACTION_VERSION, "argv": list(action.argv), "input": action.input_snapshot_id,
             "toolchain": toolchain_identity(action), "env": sorted(action.env), "outputs": sorted(action.outputs),
-            "cache_policy": action.cache_policy}
-    return "bact-" + sha256_hex(b"vep.BuildAction.v1\0" + canonical_bytes(body))
+            "cache_policy": action.cache_policy, "timeout_s": action.timeout_s, "isolation": action.isolation,
+            "declared_dependencies": sorted(action.declared_dependencies)}
+    return "bact2-" + sha256_hex(b"vep.BuildAction.v2\0" + canonical_bytes(body))
 
 
 def _run_once(ws: Workspace, action: BuildAction, snap) -> dict:
@@ -124,15 +136,17 @@ def _log(ws: Workspace, aid: str, outcome: str, wall: float, cpu: float) -> None
                   (aid, outcome, wall, cpu, utcnow()))
 
 
-def lookup(ws: Workspace, aid: str) -> dict | None:
-    """Return a verified cached result, or None (absent, corrupt, mismatched or failed entries are misses)."""
+def lookup(ws: Workspace, aid: str, require_assurance: str | None = None) -> dict | None:
+    """Return a verified cached result, or None (absent, corrupt, mismatched, failed, old-format or insufficiently assured entries are misses)."""
     with ws.db.read() as c:
         row = c.execute("SELECT result_digest FROM build_cache WHERE action_id=?", (aid,)).fetchone()
     if row is None:
         return None
     try:
         res = strict_loads(ws.cas.get(row["result_digest"]))
-        if res.get("action_id") != aid or res["exit_code"] != 0:
+        if res.get("action_id") != aid or res["exit_code"] != 0 or res.get("v") != BUILD_ACTION_VERSION or res.get("assurance") not in ("SINGLE_RUN", "TWO_RUN_MATCH"):
+            return None
+        if require_assurance == "TWO_RUN_MATCH" and res["assurance"] != "TWO_RUN_MATCH":
             return None
         if not all(ws.cas.verify(d) for d in [*res["outputs"].values(), res["stdout"], res["stderr"]]):
             return None
@@ -146,15 +160,16 @@ def run(ws: Workspace, action: BuildAction, *, use_cache: bool = True) -> dict:
     aid = action_id(action)
     cacheable = action.cache_policy == "deterministic"
     if use_cache and cacheable:
-        hit = lookup(ws, aid)
+        hit = lookup(ws, aid, "TWO_RUN_MATCH" if action.verify_determinism else None)
         if hit:
             _log(ws, aid, "HIT", 0.0, 0.0)
+            verified = hit["assurance"] == "TWO_RUN_MATCH"
             return {**hit, "cache": "HIT", "failure": None, "executed_wall_s": 0.0, "saved_wall_s": hit["wall_us"] / 1e6,
-                    "determinism_verified": True}
+                    "determinism_verified": verified, "reproducibility_assurance": hit["assurance"], "assurance_note": ASSURANCE_NOTE}
     r = _run_once(ws, action, snap)
     reason = "TIMEOUT" if r["timed_out"] else "NONZERO_EXIT" if r["exit_code"] != 0 \
         else "MISSING_OUTPUTS" if r["missing_outputs"] else None
-    res = {"action_id": aid, **{k: r[k] for k in ("exit_code", "outputs", "stdout", "stderr", "wall_us", "cpu_us")}}
+    res = {"v": BUILD_ACTION_VERSION, "action_id": aid, **{k: r[k] for k in ("exit_code", "outputs", "stdout", "stderr", "wall_us", "cpu_us")}}
     cache = "UNCACHEABLE" if not cacheable else "MISS"
     executed, cpu = r["wall_us"] / 1e6, r["cpu_us"] / 1e6
     verified = False
@@ -166,14 +181,19 @@ def run(ws: Workspace, action: BuildAction, *, use_cache: bool = True) -> dict:
                 verified = True
             else:
                 reason, cache = "NONDETERMINISTIC", "NOT_CACHED"
+                with ws.db.tx() as c:  # an earlier single-run entry for this identity is now known to be unreliable
+                    c.execute("DELETE FROM build_cache WHERE action_id=?", (aid,))
         if reason is None:
+            res["assurance"] = "TWO_RUN_MATCH" if verified else "SINGLE_RUN"
+            res["runs"] = 2 if verified else 1
             digest = ws.cas.put(canonical_bytes(res))
             with ws.db.tx() as c:
                 c.execute("INSERT OR REPLACE INTO build_cache(action_id,result_digest,created_at) VALUES(?,?,?)",
                           (aid, digest, utcnow()))
     _log(ws, aid, reason or cache, executed, cpu)
+    assurance = res.get("assurance", "NONE")
     return {**res, "cache": cache, "failure": reason, "executed_wall_s": round(executed, 6), "saved_wall_s": 0.0,
-            "determinism_verified": verified}
+            "determinism_verified": verified, "reproducibility_assurance": assurance, "assurance_note": ASSURANCE_NOTE}
 
 
 def stats(ws: Workspace) -> dict:

@@ -129,7 +129,18 @@ def _verify(bundle: Any) -> dict:
         keys[k["key_id"]] = raw
     cert = _open(bundle["certificate_envelope"], keys, "Certificate")
     ev = _open(bundle["evidence_envelope"], keys, "Evidence")
-    if sha256_hex(canonical_bytes(bundle["evidence_envelope"])) != cert["evidence_envelope_digest"]:
+    cert_trust = cross_checks(cert, ev, bundle["evidence_envelope"], expect["require_trust"])
+    for field, code in (("objective_id", "OBJECTIVE_MISMATCH"), ("policy_id", "POLICY_MISMATCH"),
+                        ("snapshot_id", "SNAPSHOT_MISMATCH")):
+        if field in expect and expect[field] != cert[field]:
+            raise Reject(code)
+    return {"valid": True, "code": None, "trust_level": cert_trust, "certificate_id": cert.id,
+            "snapshot_id": cert["snapshot_id"], "assurance": "INTERNAL_CONSISTENCY_ONLY"}
+
+
+def cross_checks(cert: VEPObject, ev: VEPObject, ev_envelope: Any, require_trust: str) -> str:
+    """Bindings between a certificate and its evidence (shared by the v1 internal check and the authorized check). Returns the certificate trust level."""
+    if sha256_hex(canonical_bytes(ev_envelope)) != cert["evidence_envelope_digest"]:
         raise Reject("EVIDENCE_DIGEST_MISMATCH")
     if ev.id != cert["evidence_id"]:
         raise Reject("IDENTITY_MISMATCH")
@@ -143,18 +154,13 @@ def _verify(bundle: Any) -> dict:
         cert_trust = cert["trust_level"]
     else:
         cert_trust = ev_trust
-    if ev_trust == "UNVERIFIED" or not trust.satisfies(cert_trust, expect["require_trust"]):
+    if ev_trust == "UNVERIFIED" or not trust.satisfies(cert_trust, require_trust):
         raise Reject("TRUST_INSUFFICIENT")
     if ev["verdict"] != "PASS" or ev["tests_passed"] < 1 or ev["tests_skipped"] >= ev["tests_run"] or ev["tests_failed"]:
         raise Reject("EVIDENCE_NOT_PASSING")
     if ev["staged_tree_snapshot_id"] != cert["snapshot_id"]:
         raise Reject("EVIDENCE_SNAPSHOT_MISMATCH")
-    for field, code in (("objective_id", "OBJECTIVE_MISMATCH"), ("policy_id", "POLICY_MISMATCH"),
-                        ("snapshot_id", "SNAPSHOT_MISMATCH")):
-        if field in expect and expect[field] != cert[field]:
-            raise Reject(code)
-    return {"valid": True, "code": None, "trust_level": cert_trust, "certificate_id": cert.id,
-            "snapshot_id": cert["snapshot_id"]}
+    return cert_trust
 
 
 # ---------------------------------------------------------------- reference side of the other vector ops
@@ -178,6 +184,13 @@ def run_vector(v: dict) -> dict:
     if op == "verify_bundle":
         r = verify_bundle(v["bundle"])
         return {"valid": r["valid"], "code": r["code"]}
+    if op == "verify_authorized":
+        from . import trustpolicy
+        r = trustpolicy.verify_authorized(v["bundle"], v["trust_policy"], v["now"])
+        return {"valid": r["valid"], "code": r["code"]}
+    if op == "trust_policy_id":
+        from . import trustpolicy
+        return {"id": trustpolicy.policy_id(v["trust_policy"])}
     raise VepError(f"unknown vector op {op!r}")
 
 
@@ -190,8 +203,9 @@ def load_suite(path: str | Path) -> dict:
 
 
 # ---------------------------------------------------------------- export from a workspace
-def export_bundle(ws, certificate_id: str, require_trust: str = "TRUSTED_LOCAL") -> dict:
-    """Assemble a portable bundle for a certificate issued by this workspace (its signing key only)."""
+def export_bundle(ws, certificate_id: str, require_trust: str = "TRUSTED_LOCAL", version: int = 1) -> dict:
+    """Assemble a portable bundle for a certificate issued by this workspace. Version 1 carries its issuer key and expectations (internal
+    consistency only); version 2 carries only the two signed envelopes and must be verified against a relying-party trust policy."""
     from .errors import VerificationFailed
     with ws.db.read() as c:
         row = c.execute("SELECT envelope_digest FROM certificates WHERE id=?", (certificate_id,)).fetchone()
@@ -205,6 +219,8 @@ def export_bundle(ws, certificate_id: str, require_trust: str = "TRUSTED_LOCAL")
         key = c.execute("SELECT public_key_hex FROM trusted_keys WHERE key_id=?", (kid,)).fetchone()
     if key is None:
         raise VerificationFailed("signing key not in the workspace registry")
+    if version == 2:  # no embedded keys or expectations: only a relying party's trust policy can authorize it
+        return {"bundle_version": 2, "certificate_envelope": cert_env, "evidence_envelope": ev_env}
     return {"bundle_version": BUNDLE_VERSION, "trusted_keys": [{"key_id": kid, "public_key_hex": key["public_key_hex"]}],
             "certificate_envelope": cert_env, "evidence_envelope": ev_env,
             "expect": {"require_trust": require_trust, "objective_id": cert["objective_id"],

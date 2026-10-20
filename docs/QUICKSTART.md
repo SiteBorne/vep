@@ -126,12 +126,16 @@ python3 -c "import json; print(json.load(open('../run.json'))['run']['certificat
 vep jobs list --json | python3 -c "import json,sys; print(len(json.load(sys.stdin)), 'job(s) recorded')"
 ```
 
-## 10. Check the certificate without VEP's database (unreleased)
-A bundle contains the signed certificate, the signed evidence and the trusted public key. Verification needs only SHA-256, Ed25519 and a JSON parser; `conformance/node/verify.mjs` is a second implementation (see [CONFORMANCE.md](CONFORMANCE.md)).
+## 10. Check the certificate without VEP's database
+A format-2 bundle contains only the two signed envelopes. It can be **authorized** only against a trust policy that *you*, the relying party, control: which issuer keys you trust, which evaluator identities you accept, the trust level you need and the exact source snapshot you expect. A bundle that carries its own keys proves internal consistency only, never who issued it. Verification needs only SHA-256, Ed25519 and a JSON parser; `conformance/node/verify.mjs` is a second implementation (see [CONFORMANCE.md](CONFORMANCE.md)).
 ```bash quickstart
 cd demo
+CAND2=$(python3 -c "import json; print(json.load(open('../run.json'))['run']['candidate_id'])")
+SNAP=$(vep candidate show --id "$CAND2" --json | python3 -c "import json,sys; print(json.load(sys.stdin)['state']['snapshot_id'])")
 vep conformance export --certificate "$(cat ../cert2.txt)" --out ../bundle.json --json
-vep conformance verify --bundle ../bundle.json --json
+vep conformance trust-policy --snapshot "$SNAP" --require-trust TRUSTED_LOCAL --json > ../trust-policy.json
+vep conformance verify --bundle ../bundle.json --trust-policy ../trust-policy.json --now "$(date -u +%Y-%m-%dT%H:%M:%SZ)" --json
+if vep conformance verify --bundle ../bundle.json 2>/dev/null; then echo "UNEXPECTED: verified without a trust policy"; exit 1; else echo "refused without a trust policy, as expected"; fi
 ```
 
 ## Next
