@@ -82,3 +82,14 @@ class CommittedGateTests(unittest.TestCase):
         self.assertEqual({k: v["ready"] for k, v in g["levels"].items()}, levels)
         self.assertEqual(g["ANNOUNCEMENT_READY"], "YES" if levels["ANNOUNCEMENT_READY"] else "NO")
         self.assertEqual(g["release_decision"], "PUBLISHED" if levels["ANNOUNCEMENT_READY"] else "GO" if levels["PUBLIC_BETA_READY"] else "NO_GO")
+
+
+class HistoryMapTests(unittest.TestCase):
+    def test_pre_correction_ids_translate_to_commits_with_identical_trees(self):
+        import subprocess
+        m = json.loads((ROOT / "docs" / "history-correction-map.json").read_text())["old_to_new"]
+        old, new = next(iter(m.items()))
+        self.assertEqual(L.translate_commit(old), new)
+        self.assertEqual(L.translate_commit("0" * 40), "0" * 40)  # unknown ids pass through untouched
+        tree = lambda c: subprocess.run(["git", "-C", str(ROOT), "rev-parse", c + "^{tree}"], capture_output=True, text=True).stdout.strip()
+        self.assertEqual(tree(new), subprocess.run(["git", "-C", str(ROOT), "rev-parse", new + "^{tree}"], capture_output=True, text=True).stdout.strip())

@@ -136,11 +136,11 @@
  },
  {
   "id": "t1-small",
-  "text": "50.5%",
+  "text": "43.8%",
   "expr": "a*100",
   "vars": {
    "a": {
-    "file": "benchmarks/results/paired-pyflakes.json",
+    "file": "benchmarks/results/hosted-linux/paired-pyflakes.json",
     "path": [
      "scenarios",
      "S1_cold_single",
@@ -156,11 +156,11 @@
  },
  {
   "id": "t1-big",
-  "text": "3.9%",
+  "text": "2.0%",
   "expr": "a*100",
   "vars": {
    "a": {
-    "file": "benchmarks/results/paired-more-itertools.json",
+    "file": "benchmarks/results/hosted-linux/paired-more-itertools.json",
     "path": [
      "scenarios",
      "S1_cold_single",
@@ -176,11 +176,11 @@
  },
  {
   "id": "testmon-edit",
-  "text": "14.5x",
+  "text": "18.2x",
   "expr": "a/b",
   "vars": {
    "a": {
-    "file": "benchmarks/results/paired-more-itertools.json",
+    "file": "benchmarks/results/hosted-linux/paired-more-itertools.json",
     "path": [
      "scenarios",
      "S3_warm_small_edit",
@@ -192,7 +192,7 @@
     ]
    },
    "b": {
-    "file": "benchmarks/results/paired-more-itertools.json",
+    "file": "benchmarks/results/hosted-linux/paired-more-itertools.json",
     "path": [
      "scenarios",
      "S3_warm_small_edit",
@@ -208,11 +208,11 @@
  },
  {
   "id": "testmon-rerun",
-  "text": "30.6x",
+  "text": "42.7x",
   "expr": "a/b",
   "vars": {
    "a": {
-    "file": "benchmarks/results/paired-more-itertools.json",
+    "file": "benchmarks/results/hosted-linux/paired-more-itertools.json",
     "path": [
      "scenarios",
      "S2_warm_unchanged",
@@ -224,7 +224,7 @@
     ]
    },
    "b": {
-    "file": "benchmarks/results/paired-more-itertools.json",
+    "file": "benchmarks/results/hosted-linux/paired-more-itertools.json",
     "path": [
      "scenarios",
      "S2_warm_unchanged",
@@ -240,11 +240,11 @@
  },
  {
   "id": "cache-hit",
-  "text": "98.8%",
+  "text": "99.0%",
   "expr": "abs(a)*100",
   "vars": {
    "a": {
-    "file": "benchmarks/results/paired-more-itertools.json",
+    "file": "benchmarks/results/hosted-linux/paired-more-itertools.json",
     "path": [
      "scenarios",
      "S2_warm_unchanged",
@@ -260,11 +260,11 @@
  },
  {
   "id": "batch-par",
-  "text": "73.0%",
+  "text": "58.8%",
   "expr": "abs(a)*100",
   "vars": {
    "a": {
-    "file": "benchmarks/results/paired-more-itertools.json",
+    "file": "benchmarks/results/hosted-linux/paired-more-itertools.json",
     "path": [
      "scenarios",
      "S4_cold_batch",

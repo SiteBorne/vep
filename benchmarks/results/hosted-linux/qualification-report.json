@@ -1,0 +1,195 @@
+{
+ "criteria": {
+  "max_load_avg_1m_at_start": 2.0,
+  "min_valid_blocks_per_scenario": 10,
+  "unchanged_from": "docs/BENCHMARK_METHODOLOGY.md and scripts/launch_check.py"
+ },
+ "environment_json": {
+  "host": {
+   "cpu_model": "AMD EPYC 9V74 80-Core Processor",
+   "cpus": 4,
+   "kernel": "6.17.0-1022-azure",
+   "machine": "x86_64",
+   "mem_available_mb_at_probe": 14688.9,
+   "mem_total_mb": 15989.7,
+   "os_release": {
+    "NAME": "Ubuntu",
+    "PRETTY_NAME": "Ubuntu 24.04.5 LTS",
+    "VERSION": "24.04.5 LTS (Noble Numbat)",
+    "VERSION_ID": "24.04"
+   },
+   "platform": "Linux-6.17.0-1022-azure-x86_64-with-glibc2.39",
+   "power": [
+    "not applicable (virtual machine)"
+   ],
+   "python": "3.14.8",
+   "runner": {
+    "GITHUB_REF": "refs/heads/main",
+    "GITHUB_REPOSITORY": "SiteBorne/vep",
+    "GITHUB_RUN_ATTEMPT": "1",
+    "GITHUB_RUN_ID": "39457964415",
+    "GITHUB_SHA": "c1306008ffdc5cecb431a3822352390f5961d0bf",
+    "GITHUB_WORKFLOW": "Benchmark qualification (hosted Linux)",
+    "ImageOS": "ubuntu24",
+    "ImageVersion": "20261012.334.1",
+    "RUNNER_ARCH": "X64",
+    "RUNNER_NAME": "GitHub Actions 1000000289",
+    "RUNNER_OS": "Linux"
+   },
+   "swap": "total = 3071M free = 3071M",
+   "system": "Linux"
+  },
+  "probe": {
+   "cpu_idle_pct": 99.62,
+   "load_avg_1m": 0.62,
+   "mem_available_mb": 14737.2
+  }
+ },
+ "files": {
+  "environment-host.json": {
+   "bytes": 1097,
+   "sha256": "8aaf37e165b2c46960a697118a237307f6c334a432ef10f372f487546d7812d7"
+  },
+  "environment.json": {
+   "bytes": 1096,
+   "sha256": "409712ef49685ddb1c5cf89b6c2194ddf5d7db968f34ae848864ad457ebbc43a"
+  },
+  "files-changed-since-release.txt": {
+   "bytes": 334,
+   "sha256": "9b046599a63613ad362659258ec3ceb1b0daec0afb6160bfb280f4f121d05728"
+  },
+  "harness-commit.txt": {
+   "bytes": 41,
+   "sha256": "3c72b7a9cda17fa2596f50b7c3366be3c9247f9b4948a7f826626b472f6d1596"
+  },
+  "idle-more-itertools.json": {
+   "bytes": 372,
+   "sha256": "345119843f8aef830468dabebe959b0c4cbb0199ed1793b3382c7d2f31a72350"
+  },
+  "idle-pyflakes.json": {
+   "bytes": 366,
+   "sha256": "33c397127974065044a4afedd088d6b62d51ed30dfbd04bf3b63e7bcdf9c7566"
+  },
+  "log-paired-more-itertools.txt": {
+   "bytes": 256,
+   "sha256": "9f175a231bb5315887cd40a98495c5fdcf18ed7b1bc4b136235eae702fdcaffd"
+  },
+  "log-paired-pyflakes.txt": {
+   "bytes": 250,
+   "sha256": "0ba9050953f5963a3864723e471261bda462d6ec0aebfd2e4f8aa89451fd7b03"
+  },
+  "paired-more-itertools.json": {
+   "bytes": 54286,
+   "sha256": "cd3239a30e4e50d6febd169ae59eb021818ba9e4ee94f95911cf0cd7a10f8f55"
+  },
+  "paired-pyflakes.json": {
+   "bytes": 53827,
+   "sha256": "2f6dab928352c9786698b6fa34101eca6723662b273c8ad2a7c9d1ff2098cb02"
+  },
+  "pin-more-itertools.txt": {
+   "bytes": 41,
+   "sha256": "7916af2dc1d6051ac73ee6df7ddeb276bb61bccdcedd29a1918459db21660843"
+  },
+  "pin-pyflakes.txt": {
+   "bytes": 41,
+   "sha256": "e80fd3849a5b739e5f4d668777fdd67d8fc745c8dba790f05dba7ce1bb444b91"
+  },
+  "pip-freeze-evalenv.txt": {
+   "bytes": 49,
+   "sha256": "e8215fe3c8fa1e277b23642fe27ad9d448d6cf790890b555c94caad834eef644"
+  },
+  "pip-freeze-tmenv.txt": {
+   "bytes": 117,
+   "sha256": "7f2143f2ef0ddd89e39413f5a8ad3fdf978f573d7525704c47b3559e5a8165ad"
+  }
+ },
+ "kind": "hosted benchmark qualification",
+ "projects": {
+  "more-itertools": {
+   "idle_check": {
+    "achieved": true,
+    "criterion": "load_avg_1m < 2.0",
+    "first_ok_sample": {
+     "cpu_idle_pct": 95.25,
+     "load_avg_1m": 1.67,
+     "t_s": 0.0
+    },
+    "min_load_avg_1m": 1.67,
+    "samples": 1
+   },
+   "load_avg_1m_at_start": 1.53,
+   "paired_report": "paired-more-itertools.json",
+   "pin_matches": true,
+   "pinned_commit_actual": "4aeb4338ae1407d8da9723e86da99efeb446f719",
+   "pinned_commit_expected": "4aeb4338ae1407d8da9723e86da99efeb446f719",
+   "validity": {
+    "reasons": [],
+    "status": "VALID"
+   }
+  },
+  "pyflakes": {
+   "idle_check": {
+    "achieved": true,
+    "criterion": "load_avg_1m < 2.0",
+    "first_ok_sample": {
+     "cpu_idle_pct": 97.75,
+     "load_avg_1m": 0.68,
+     "t_s": 0.0
+    },
+    "min_load_avg_1m": 0.68,
+    "samples": 1
+   },
+   "load_avg_1m_at_start": 0.62,
+   "paired_report": "paired-pyflakes.json",
+   "pin_matches": true,
+   "pinned_commit_actual": "8526af8494a831803bbc1eae24b8f9d2a24aa2f7",
+   "pinned_commit_expected": "8526af8494a831803bbc1eae24b8f9d2a24aa2f7",
+   "validity": {
+    "reasons": [],
+    "status": "VALID"
+   }
+  }
+ },
+ "qualification": "VALID",
+ "report_version": 1,
+ "run": {
+  "GITHUB_REF": "refs/heads/main",
+  "GITHUB_REPOSITORY": "SiteBorne/vep",
+  "GITHUB_RUN_ATTEMPT": "1",
+  "GITHUB_RUN_ID": "39457964415",
+  "GITHUB_SERVER_URL": "https://github.com",
+  "GITHUB_SHA": "c1306008ffdc5cecb431a3822352390f5961d0bf",
+  "GITHUB_WORKFLOW": "Benchmark qualification (hosted Linux)",
+  "ImageOS": "ubuntu24",
+  "ImageVersion": "20261012.334.1",
+  "RUNNER_NAME": "GitHub Actions 1000000289"
+ },
+ "source": {
+  "evaluation_critical_files_changed_since_release": [],
+  "evaluation_critical_paths": [
+   "src",
+   "pyproject.toml"
+  ],
+  "files_changed_since_release_not_evaluation_critical": [
+   ".github/workflows/benchmark-qualification.yml",
+   "benchmarks/envinfo.py",
+   "benchmarks/paired.py",
+   "benchmarks/paired_report.py",
+   "benchmarks/qualification_report.py",
+   "benchmarks/wait_idle.py",
+   "docs/COMPATIBILITY.md",
+   "docs/RELEASE_NOTES.md",
+   "docs/history-correction-map.json",
+   "release-verification.json",
+   "scripts/launch_check.py",
+   "tests/test_hosted_benchmark.py"
+  ],
+  "harness_commit": "c1306008ffdc5cecb431a3822352390f5961d0bf",
+  "portability_note": "only benchmark harness/workflow/documentation files may differ from the release commit",
+  "release_commit_expected": "578850d1245e3a2e5e282f5e9734ea7dfc0f44e6",
+  "release_commit_resolved_from_tag": "578850d1245e3a2e5e282f5e9734ea7dfc0f44e6",
+  "release_tag": "v0.5.0b1",
+  "tag_matches_expected": true,
+  "vep_implementation_matches_release": true
+ }
+}

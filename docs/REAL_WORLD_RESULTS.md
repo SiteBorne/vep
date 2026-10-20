@@ -15,7 +15,24 @@ Defects in VEP found by doing this (all fixed, with tests): the anti-shadowing r
 not hermetic against an installed copy; a path where an **installed copy of the project could be tested instead of the
 candidate and certify (false green)**; id/digest/timestamp patterns accepting a trailing newline.
 
-## 2a. Controlled paired benchmark (current; full tables in [BENCHMARK_RESULTS_PAIRED](BENCHMARK_RESULTS_PAIRED.md))
+## 2c. Hosted-Linux qualification run (valid environment; full tables in [BENCHMARK_RESULTS_HOSTED_LINUX](BENCHMARK_RESULTS_HOSTED_LINUX.md))
+Run `39457964415` of the `benchmark-qualification` workflow: a fresh GitHub-hosted `ubuntu-24.04` VM (4 vCPU AMD EPYC 9V74, 16 GB, kernel 6.17 azure, image 20261012.334.1, Python 3.14.8), harness commit `c130600`, VEP implementation verified identical to the `v0.5.0b1` release commit (no file under `src/` or `pyproject.toml` differs), pinned pyflakes 4.0.3 and more-itertools v11.2.1. The bounded idle check passed at the first sample (start load average **0.62** and **1.53**, both under the declared 2.0), the correctness gate passed for all four configurations, every scenario has **10 valid blocks with none excluded**, and the direct baseline varied by under 1% (CV) in every scenario. Same preregistered design, thresholds and verdict rule as 2a; raw data and the machine-readable report are in `benchmarks/results/hosted-linux/` (hashes recorded and verified). Absolute times are for that VM and are not comparable with the Mac records.
+
+| Scenario | pyflakes (0.7 s suite on the VM) | more-itertools (11 s suite on the VM) |
+|---|---|---|
+| S1 cold single: VEP vs direct | VEP_SLOWER, +43.8% | NO_MEASURABLE_ADVANTAGE, +2.0% |
+| S2 warm unchanged: VEP vs direct | VEP_SLOWER, +54.0% | NO_MEASURABLE_ADVANTAGE, +2.8% |
+| S2 warm unchanged: VEP vs testmon | VEP_SLOWER, +303.6% | VEP_SLOWER, 42.7x |
+| S2 warm unchanged: build-cache hit vs direct (no certificate) | VEP_FASTER, -82.9% | VEP_FASTER, -99.0% (10 hits, 0 misses) |
+| S3 after small edit: VEP vs direct | VEP_SLOWER, +42.6% | NO_MEASURABLE_ADVANTAGE, +2.6% |
+| S3 after small edit: VEP vs testmon | VEP_SLOWER, +188.6% | VEP_SLOWER, 18.2x |
+| S4 batch of 4: VEP 4 workers vs direct parallel | VEP_SLOWER, +52.6% | NO_MEASURABLE_ADVANTAGE, +2.7% |
+| S4 batch of 4: VEP 4 workers vs direct sequential | VEP_FASTER, -38.7% | VEP_FASTER, -58.8% |
+| S4 batch of 4: VEP 1 worker vs direct sequential | VEP_SLOWER, +34.0% | NO_MEASURABLE_ADVANTAGE, +1.5% |
+
+**The conclusions of 2a/2b are reproduced on a different machine class: VEP has no speed advantage** (slower on the short suite, within +/-10% of a direct run on the longer one, far slower than change-based test selection on repeated runs; its parallelism matches plain parallel execution; the only large speedup is the certificate-less build-cache hit). Welch (headline) and paired-bootstrap verdicts agreed on every comparison. The launch gate's `BENCHMARK_REPRODUCIBILITY` now rests on this run. The Mac runs (2a, 2b) remain as separate, differently-conditioned records.
+
+## 2a. Controlled paired benchmark on the developer Mac (environment NOT valid; superseded for the gate by 2c; full tables in [BENCHMARK_RESULTS_PAIRED](BENCHMARK_RESULTS_PAIRED.md))
 Procedure ([BENCHMARK_METHODOLOGY](BENCHMARK_METHODOLOGY.md), "Controlled paired run"): 10 analysed blocks per scenario after 2 warmups, every configuration once per block in a seeded random order, identical trees, no block excluded; verdicts by the **preregistered** rule (Welch 95% interval, 10% relative and 50 ms absolute thresholds) with a paired-bootstrap interval alongside (the two agreed on every comparison). Raw data: `benchmarks/results/paired-*.json`.
 
 | Scenario (cold/warm) | pyflakes (0.46 s suite) | more-itertools (6.4 s suite) |

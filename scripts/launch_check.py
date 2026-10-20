@@ -122,7 +122,19 @@ def strip(c: dict) -> dict:
     return c
 
 
+def _history_map() -> dict:
+    p = ROOT / "docs" / "history-correction-map.json"
+    return json.loads(p.read_text())["old_to_new"] if p.exists() else {}
+
+
+def translate_commit(c: str) -> str:
+    """Evidence created before the author-correction rewrite cites old commit ids; the rewrite kept every git tree identical
+    (docs/history-correction-map.json), so such an id is translated to its corrected counterpart before any ancestry/diff check."""
+    return _history_map().get(c, c)
+
+
 def report_is_fresh(tool_commit: str) -> tuple[bool, str]:
+    tool_commit = translate_commit(tool_commit)
     if not tool_commit or subprocess.run(["git", "-C", str(ROOT), "cat-file", "-e", tool_commit], capture_output=True).returncode:
         return False, "producing commit unknown to this repository"
     d = subprocess.run(["git", "-C", str(ROOT), "diff", "--quiet", tool_commit, "HEAD", "--", *CRITICAL_SRC])
@@ -422,7 +434,7 @@ def main() -> int:
     rv = ROOT / "release-verification.json"
     rvd = json.loads(rv.read_text()) if rv.exists() else {}
     iso_run = json.loads((ROOT / "docs/isolation/ci-run-39347549501-run.json").read_text())
-    iso_in_rev = subprocess.run(["git", "-C", str(ROOT), "merge-base", "--is-ancestor", iso_run["headSha"], "HEAD"]).returncode == 0
+    iso_in_rev = subprocess.run(["git", "-C", str(ROOT), "merge-base", "--is-ancestor", translate_commit(iso_run["headSha"]), "HEAD"]).returncode == 0
     reval = (ROOT / "docs/isolation/REVALIDATION.md").exists()
     conds = {"version_is_target": gate["package_version"] == TARGET_VERSION, "working_tree_clean": clean, "head_pushed": pushed,
              "hosted_ci_green_for_head": ci_green,
