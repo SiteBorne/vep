@@ -1,4 +1,4 @@
-$ python scripts/release/cleanroom.py --venv <tmp>/tmpss2ng9zp/v
+$ python scripts/release/cleanroom.py --venv <tmp>/tmp5e26hzng/v
 # exit 0
 
 {
@@ -68,7 +68,7 @@ $ python scripts/release/cleanroom.py --venv <tmp>/tmpss2ng9zp/v
    "n": 11,
    "check": "tampered evidence is rejected",
    "status": "PASS",
-   "detail": "(4, 'vep: VerificationFailed: object c4d1047f716937fe33a1d0f05d125591158f95aa01bf7e6336b3a547234395e1 failed integrity check\\n')"
+   "detail": "(4, 'vep: VerificationFailed: object 0eb870feeaf8a70b553a9dcbe52a29d24b906aad4db96a22193c0e049eea331f failed integrity check\\n')"
   },
   {
    "n": 11.5,
@@ -110,7 +110,7 @@ $ python scripts/release/cleanroom.py --venv <tmp>/tmpss2ng9zp/v
    "n": 17,
    "check": "installed package uses no developer-local files",
    "status": "PASS",
-   "detail": "/private<tmp>/tmpss2ng9zp/v/lib/python3.14/site-packages/vep/__init__.py"
+   "detail": "/private<tmp>/tmp5e26hzng/v/lib/python3.14/site-packages/vep/__init__.py"
   }
  ]
 }

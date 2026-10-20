@@ -1,4 +1,4 @@
-$ python -m build --outdir <tmp>/tmpucgwyox8
+$ python -m build --outdir <tmp>/tmpr0uv9ski
 # exit 0
 
 running egg_info
@@ -29,6 +29,7 @@ creating vep_protocol-0.5.0b1/.github/workflows
 creating vep_protocol-0.5.0b1/benchmarks
 creating vep_protocol-0.5.0b1/benchmarks/external
 creating vep_protocol-0.5.0b1/benchmarks/results
+creating vep_protocol-0.5.0b1/benchmarks/results/hosted-linux
 creating vep_protocol-0.5.0b1/conformance/node
 creating vep_protocol-0.5.0b1/conformance/vectors
 creating vep_protocol-0.5.0b1/docs
@@ -60,6 +61,7 @@ copying SECURITY.md -> vep_protocol-0.5.0b1
 copying SUPPORT.md -> vep_protocol-0.5.0b1
 copying pyproject.toml -> vep_protocol-0.5.0b1
 copying .github/dependabot.yml -> vep_protocol-0.5.0b1/.github
+copying .github/workflows/benchmark-qualification.yml -> vep_protocol-0.5.0b1/.github/workflows
 copying .github/workflows/ci.yml -> vep_protocol-0.5.0b1/.github/workflows
 copying .github/workflows/codeql.yml -> vep_protocol-0.5.0b1/.github/workflows
 copying .github/workflows/isolation.yml -> vep_protocol-0.5.0b1/.github/workflows
@@ -67,22 +69,33 @@ copying .github/workflows/release.yml -> vep_protocol-0.5.0b1/.github/workflows
 copying benchmarks/compare.py -> vep_protocol-0.5.0b1/benchmarks
 copying benchmarks/compare_vep_driver.py -> vep_protocol-0.5.0b1/benchmarks
 copying benchmarks/controller_scaling.py -> vep_protocol-0.5.0b1/benchmarks
+copying benchmarks/envinfo.py -> vep_protocol-0.5.0b1/benchmarks
 copying benchmarks/paired.py -> vep_protocol-0.5.0b1/benchmarks
 copying benchmarks/paired_report.py -> vep_protocol-0.5.0b1/benchmarks
+copying benchmarks/qualification_report.py -> vep_protocol-0.5.0b1/benchmarks
 copying benchmarks/results.json -> vep_protocol-0.5.0b1/benchmarks
 copying benchmarks/run_simulation.py -> vep_protocol-0.5.0b1/benchmarks
+copying benchmarks/wait_idle.py -> vep_protocol-0.5.0b1/benchmarks
 copying benchmarks/external/projects.json -> vep_protocol-0.5.0b1/benchmarks/external
 copying benchmarks/results/compare-more-itertools.json -> vep_protocol-0.5.0b1/benchmarks/results
 copying benchmarks/results/compare-pyflakes.json -> vep_protocol-0.5.0b1/benchmarks/results
 copying benchmarks/results/controller_scaling.json -> vep_protocol-0.5.0b1/benchmarks/results
 copying benchmarks/results/paired-more-itertools.json -> vep_protocol-0.5.0b1/benchmarks/results
 copying benchmarks/results/paired-pyflakes.json -> vep_protocol-0.5.0b1/benchmarks/results
+copying benchmarks/results/hosted-linux/environment-host.json -> vep_protocol-0.5.0b1/benchmarks/results/hosted-linux
+copying benchmarks/results/hosted-linux/environment.json -> vep_protocol-0.5.0b1/benchmarks/results/hosted-linux
+copying benchmarks/results/hosted-linux/idle-more-itertools.json -> vep_protocol-0.5.0b1/benchmarks/results/hosted-linux
+copying benchmarks/results/hosted-linux/idle-pyflakes.json -> vep_protocol-0.5.0b1/benchmarks/results/hosted-linux
+copying benchmarks/results/hosted-linux/paired-more-itertools.json -> vep_protocol-0.5.0b1/benchmarks/results/hosted-linux
+copying benchmarks/results/hosted-linux/paired-pyflakes.json -> vep_protocol-0.5.0b1/benchmarks/results/hosted-linux
+copying benchmarks/results/hosted-linux/qualification-report.json -> vep_protocol-0.5.0b1/benchmarks/results/hosted-linux
 copying conformance/node/verify.mjs -> vep_protocol-0.5.0b1/conformance/node
 copying conformance/vectors/suite-1.0.json -> vep_protocol-0.5.0b1/conformance/vectors
 copying docs/ANNOUNCEMENT.md -> vep_protocol-0.5.0b1/docs
 copying docs/ARCHITECTURE.md -> vep_protocol-0.5.0b1/docs
 copying docs/BENCHMARKS.md -> vep_protocol-0.5.0b1/docs
 copying docs/BENCHMARK_METHODOLOGY.md -> vep_protocol-0.5.0b1/docs
+copying docs/BENCHMARK_RESULTS_HOSTED_LINUX.md -> vep_protocol-0.5.0b1/docs
 copying docs/BENCHMARK_RESULTS_PAIRED.md -> vep_protocol-0.5.0b1/docs
 copying docs/BETA_SCOPE.md -> vep_protocol-0.5.0b1/docs
 copying docs/COMPARISON.md -> vep_protocol-0.5.0b1/docs
@@ -113,6 +126,7 @@ copying docs/THREAT_MODEL.md -> vep_protocol-0.5.0b1/docs
 copying docs/VARIABLES.md -> vep_protocol-0.5.0b1/docs
 copying docs/WHY_VEP.md -> vep_protocol-0.5.0b1/docs
 copying docs/claims.json -> vep_protocol-0.5.0b1/docs
+copying docs/history-correction-map.json -> vep_protocol-0.5.0b1/docs
 copying docs/live_agent_run.json -> vep_protocol-0.5.0b1/docs
 copying docs/dogfood/README.md -> vep_protocol-0.5.0b1/docs/dogfood
 copying docs/dogfood/vep-on-vep-run-0-policy-blocked.json -> vep_protocol-0.5.0b1/docs/dogfood
@@ -222,6 +236,7 @@ copying tests/test_docs.py -> vep_protocol-0.5.0b1/tests
 copying tests/test_execution.py -> vep_protocol-0.5.0b1/tests
 copying tests/test_git.py -> vep_protocol-0.5.0b1/tests
 copying tests/test_hardening.py -> vep_protocol-0.5.0b1/tests
+copying tests/test_hosted_benchmark.py -> vep_protocol-0.5.0b1/tests
 copying tests/test_integration.py -> vep_protocol-0.5.0b1/tests
 copying tests/test_isolation.py -> vep_protocol-0.5.0b1/tests
 copying tests/test_isolation_matrix.py -> vep_protocol-0.5.0b1/tests
@@ -350,7 +365,7 @@ running install_egg_info
 Copying src/vep_protocol.egg-info to build/bdist.macosx-15.0-arm64/wheel/./vep_protocol-0.5.0b1-py3.14.egg-info
 running install_scripts
 creating build/bdist.macosx-15.0-arm64/wheel/vep_protocol-0.5.0b1.dist-info/WHEEL
-creating '<tmp>/tmpucgwyox8/.tmp-cw5w5sgt/vep_protocol-0.5.0b1-py3-none-any.whl' and adding 'build/bdist.macosx-15.0-arm64/wheel' to it
+creating '<tmp>/tmpr0uv9ski/.tmp-r8zgn12z/vep_protocol-0.5.0b1-py3-none-any.whl' and adding 'build/bdist.macosx-15.0-arm64/wheel' to it
 adding 'vep/__init__.py'
 adding 'vep/__main__.py'
 adding 'vep/_isolation_probe.py'

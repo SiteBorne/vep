@@ -1,6 +1,6 @@
 # Announcement package (drafts for approval — NOTHING HAS BEEN POSTED)
 
-**Status: not ready to announce.** The readiness decision lives in `docs/LAUNCH_READINESS_REPORT.md` (written in Phase L); until it says `ANNOUNCEMENT_READY = YES`, treat everything below as drafts. The public release is still `v0.4.0a1`; the features described here are unreleased development work. Every figure carries a claim tag (`[C:` plus a name) resolved by `scripts/check_claims.py` against a report in this repository; if you edit a number, run that script.
+**Status: the launch gate reports `ANNOUNCEMENT_READY = YES` for the published prerelease `v0.5.0b1`; NOTHING HAS BEEN POSTED.** The decision and its evidence are in `launch-gate.json` and `docs/LAUNCH_READINESS_REPORT.md` (gate run on commit `1e1c5b1` with hosted CI and CodeQL green, published assets re-verified, valid hosted benchmark evidence). Everything below is a draft for your approval and edit. Every figure carries a claim tag (`[C:` plus a name) resolved by `scripts/check_claims.py` against a report in this repository; if you edit a number, run that script. YES means the declared rules are met, not that VEP is production-ready or that untrusted code is safe to run (see [SECURITY_LIMITATIONS.md](SECURITY_LIMITATIONS.md)).
 
 Positioning: **VEP makes software changes evidence-carrying, resource-aware, and independently checkable.** Not faster, not safer than the tools it sits beside; see [COMPARISON.md](COMPARISON.md).
 
@@ -53,4 +53,6 @@ What I learned by testing it on itself and on two open-source projects: it adds 
 2/ Honest bits: not faster (+2.0% [C:t1-big] to +43.8% [C:t1-small] vs plain runs; testmon ~18.2x [C:testmon-edit] faster on edits), gVisor path passed 12 of 12 [C:matrix] on one CI run, not for hostile code. Failure records in the repo.
 
 ## 9. Before any of this is posted
-Blocking items are tracked in `docs/LAUNCH_READINESS_REPORT.md`. At minimum: the current work is unpushed and unreleased, the version is still `0.4.0a1`, the benchmark needs a quiet-machine re-run, and the launch gate must report `ANNOUNCEMENT_READY = YES`.
+* Review and edit the drafts; check each target community's current rules (the Reddit and Hacker News drafts are starting points, not approved text).
+* Keep the limits in the first comment: no speed advantage, trusted-local by default, isolation verified on one hosted run and not escape-tested, no external audit, one local-model run.
+* The gate is a snapshot of commit `1e1c5b1`; re-run `python scripts/launch_check.py` on the commit you announce from.

@@ -1,16 +1,19 @@
 $ python -m unittest discover -s tests -t .
 # exit 0
 
-............................/opt/homebrew/Cellar/python@3.14/3.14.7/Frameworks/Python.framework/Versions/3.14/lib/python3.14/unittest/case.py:704: ResourceWarning: unclosed <socket.socket fd=4, family=2, type=1, proto=0, laddr=('127.0.0.1', 53130)>
+{"criterion": "load_avg_1m < 2.0", "achieved": true, "first_ok_sample": {"t_s": 0.0, "load_avg_1m": 0.5, "cpu_idle_pct": 99.0}, "samples": 1, "min_load_avg_1m": 0.5}
+{"criterion": "load_avg_1m < 2.0", "achieved": false, "first_ok_sample": null, "samples": 1, "min_load_avg_1m": 4.0}
+wrote <tmp>/tmp65oo5okv/o.md
+............................/opt/homebrew/Cellar/python@3.14/3.14.7/Frameworks/Python.framework/Versions/3.14/lib/python3.14/unittest/case.py:704: ResourceWarning: unclosed <socket.socket fd=4, family=2, type=1, proto=0, laddr=('127.0.0.1', 53494)>
   function, args, kwargs = self._cleanups.pop()
 ResourceWarning: Enable tracemalloc to get the object allocation traceback
-/opt/homebrew/Cellar/python@3.14/3.14.7/Frameworks/Python.framework/Versions/3.14/lib/python3.14/unittest/case.py:704: ResourceWarning: unclosed <socket.socket fd=3, family=2, type=1, proto=0, laddr=('127.0.0.1', 53128)>
+/opt/homebrew/Cellar/python@3.14/3.14.7/Frameworks/Python.framework/Versions/3.14/lib/python3.14/unittest/case.py:704: ResourceWarning: unclosed <socket.socket fd=3, family=2, type=1, proto=0, laddr=('127.0.0.1', 53492)>
   function, args, kwargs = self._cleanups.pop()
 ResourceWarning: Enable tracemalloc to get the object allocation traceback
-./opt/homebrew/Cellar/python@3.14/3.14.7/Frameworks/Python.framework/Versions/3.14/lib/python3.14/unittest/case.py:704: ResourceWarning: unclosed <socket.socket fd=3, family=2, type=1, proto=0, laddr=('127.0.0.1', 53132)>
+./opt/homebrew/Cellar/python@3.14/3.14.7/Frameworks/Python.framework/Versions/3.14/lib/python3.14/unittest/case.py:704: ResourceWarning: unclosed <socket.socket fd=3, family=2, type=1, proto=0, laddr=('127.0.0.1', 53497)>
   function, args, kwargs = self._cleanups.pop()
 ResourceWarning: Enable tracemalloc to get the object allocation traceback
-.../opt/homebrew/Cellar/python@3.14/3.14.7/Frameworks/Python.framework/Versions/3.14/lib/python3.14/unittest/case.py:704: ResourceWarning: unclosed <socket.socket fd=3, family=2, type=1, proto=0, laddr=('127.0.0.1', 53135)>
+.../opt/homebrew/Cellar/python@3.14/3.14.7/Frameworks/Python.framework/Versions/3.14/lib/python3.14/unittest/case.py:704: ResourceWarning: unclosed <socket.socket fd=3, family=2, type=1, proto=0, laddr=('127.0.0.1', 53500)>
   function, args, kwargs = self._cleanups.pop()
 ResourceWarning: Enable tracemalloc to get the object allocation traceback
 ...................................................................................................................................................................................................<repo>/tests/test_hardening.py:201: ResourceWarning: unclosed file <_io.TextIOWrapper name='<repo>/tests/../src/vep/__init__.py' mode='r' encoding='utf-8'>
@@ -223,8 +226,9 @@ ResourceWarning: Enable tracemalloc to get the object allocation traceback
 <repo>/tests/test_hardening.py:192: ResourceWarning: unclosed file <_io.TextIOWrapper name='<repo>/tests/../src/vep/workspace.py' mode='r' encoding='utf-8'>
   for n, line in enumerate(open(path, encoding="utf-8"), 1):
 ResourceWarning: Enable tracemalloc to get the object allocation traceback
-....................................................................................................................................................................
+.refusing: the declared criterion is load < 2.0; it cannot be raised
+..................................................................................................................................................................................
 ----------------------------------------------------------------------
-Ran 392 tests in 47.114s
+Ran 407 tests in 52.602s
 
 OK

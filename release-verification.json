@@ -65,5 +65,22 @@
   "announcement posts",
   "quiet-machine benchmark re-run",
   "external security review"
+ ],
+ "updates": [
+  {
+   "date": "2026-10-20",
+   "summary": "Hosted-Linux benchmark qualification (workflow run 39457964415, harness commit c130600) satisfied the declared benchmark criteria; the gate was re-run on commit 1e1c5b15e3381dc46975156bf903c156b254d601 with hosted CI and CodeQL green on that commit.",
+   "supersedes_in_gate_record": [
+    "BENCHMARK_REPRODUCIBILITY: UNVERIFIED",
+    "PUBLIC_BETA_READY: NO",
+    "ANNOUNCEMENT_READY: NO"
+   ],
+   "gate_now_reports": {
+    "BENCHMARK_REPRODUCIBILITY": "PASS (hosted evidence set)",
+    "PUBLIC_BETA_READY": "YES",
+    "ANNOUNCEMENT_READY": "YES (nothing has been posted)"
+   },
+   "tag_unchanged": "v0.5.0b1 still points at 578850d1245e3a2e5e282f5e9734ea7dfc0f44e6; no release was created or rebuilt"
+  }
  ]
 }

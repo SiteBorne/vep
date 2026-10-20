@@ -1,15 +1,15 @@
 {
- "ANNOUNCEMENT_READY": "NO",
+ "ANNOUNCEMENT_READY": "YES",
  "artifacts": [
   {
    "bytes": 100802,
    "name": "vep_protocol-0.5.0b1-py3-none-any.whl",
-   "sha256": "a2e16eb1e8d731e2853c46420bdbfd265241758c62396ca07879d87b46325ad8"
+   "sha256": "e40d1e38215116b07d1d70dff9c4b29814b4a827e6b0eff0429e19c163a40064"
   },
   {
-   "bytes": 401132,
+   "bytes": 436966,
    "name": "vep_protocol-0.5.0b1.tar.gz",
-   "sha256": "8344076d06082717d51b9eb4943657921c7fab83a15934f97df32874d539c26f"
+   "sha256": "cefb54a02f5bac9604d5b2326982cd4d2f214fdb2a1780cf8c1c3d80fa9662eb"
   }
  ],
  "branch": "main",
@@ -23,16 +23,16 @@
        "-m",
        "pytest",
        "-q",
-       "--junitxml=/var/folders/g7/s4llc2490d17ndcmkp40yk0h0000gn/T/tmp8mp9cw8v/junit.xml",
+       "--junitxml=/var/folders/g7/s4llc2490d17ndcmkp40yk0h0000gn/T/tmp11csdz7j/junit.xml",
        "-p",
        "no:cacheprovider"
       ],
       "exit_code": 0,
-      "output_sha256": "257a86d8a5d45244c949a523be165c3e6c93c09a785e9e1347d1ec641b6d9436",
+      "output_sha256": "839a0cdb6723ebab59ecea08a7fbeae0a382c50b41444134e4bcc3f5c83c4c31",
       "tail": [
-       "........................................................................ [ 91%]",
-       "................................                                         [100%]",
-       "392 passed in 47.76s"
+       "........................................................................ [ 88%]",
+       "...............................................                          [100%]",
+       "407 passed in 52.19s"
       ]
      }
     ],
@@ -80,11 +80,11 @@
     "files": [
      {
       "path": "docs/claims.json",
-      "sha256": "54f158ae9a4ff779a0ede1f625bafd38e6aaad5835ddca88b8ca47e26580d448"
+      "sha256": "dd1835e55fad661f93a8b1520f41ef3fef034deee5edc6483a70916234b89d07"
      },
      {
       "path": "docs/ANNOUNCEMENT.md",
-      "sha256": "a701b15722e89d3fc1d71e776dfbd6888a756c21faa9c58503307e07e753a526"
+      "sha256": "058e119db94544e682bc3400a242e016c8d74bf54bcff58dfcf2fa176a4b0926"
      }
     ]
    },
@@ -92,6 +92,203 @@
   },
   "BENCHMARK_REPRODUCIBILITY": {
    "evidence": {
+    "criteria": "per set: load_avg_1m_at_start < 2.0, no correctness-gate failure, >= 10 valid blocks per scenario (unchanged); hosted set additionally verified against its GitHub run",
+    "evidence_sets": [
+     {
+      "label": "macOS developer machine (not idle)",
+      "ok": false,
+      "reports": {
+       "benchmarks/results/paired-more-itertools.json": {
+        "gate_failures": [],
+        "load_avg_1m_at_start": 5.57,
+        "machine": "macOS-15.6-arm64-arm-64bit-Mach-O",
+        "scenarios": {
+         "S1_cold_single": {
+          "cpu_idle_pct_min": 64.71,
+          "direct_baseline_cv": 0.0109,
+          "excluded": 0,
+          "load_avg_1m_max": 6.87,
+          "load_avg_1m_min": 3.1,
+          "valid_blocks": 10
+         },
+         "S2_warm_unchanged": {
+          "cpu_idle_pct_min": 65.5,
+          "direct_baseline_cv": 0.0064,
+          "excluded": 0,
+          "load_avg_1m_max": 3.94,
+          "load_avg_1m_min": 1.95,
+          "valid_blocks": 10
+         },
+         "S3_warm_small_edit": {
+          "cpu_idle_pct_min": 78.44,
+          "direct_baseline_cv": 0.0031,
+          "excluded": 0,
+          "load_avg_1m_max": 3.83,
+          "load_avg_1m_min": 2.86,
+          "valid_blocks": 10
+         },
+         "S4_cold_batch": {
+          "cpu_idle_pct_min": 69.91,
+          "direct_baseline_cv": 0.0045,
+          "excluded": 0,
+          "load_avg_1m_max": 6.17,
+          "load_avg_1m_min": 2.48,
+          "valid_blocks": 10
+         }
+        },
+        "sha256": "92ef506493b6476bb844ccda400fcd34bee2e140572818bc380cfbc5eb109ba2",
+        "vep_commit": "77984c8bf1f4fb594300cb45e582cf7890e52e4a"
+       },
+       "benchmarks/results/paired-pyflakes.json": {
+        "gate_failures": [],
+        "load_avg_1m_at_start": 5.01,
+        "machine": "macOS-15.6-arm64-arm-64bit-Mach-O",
+        "scenarios": {
+         "S1_cold_single": {
+          "cpu_idle_pct_min": 62.8,
+          "direct_baseline_cv": 0.0198,
+          "excluded": 0,
+          "load_avg_1m_max": 5.26,
+          "load_avg_1m_min": 4.76,
+          "valid_blocks": 10
+         },
+         "S2_warm_unchanged": {
+          "cpu_idle_pct_min": 60.24,
+          "direct_baseline_cv": 0.0252,
+          "excluded": 0,
+          "load_avg_1m_max": 5.39,
+          "load_avg_1m_min": 4.86,
+          "valid_blocks": 10
+         },
+         "S3_warm_small_edit": {
+          "cpu_idle_pct_min": 60.75,
+          "direct_baseline_cv": 0.0274,
+          "excluded": 0,
+          "load_avg_1m_max": 4.98,
+          "load_avg_1m_min": 4.57,
+          "valid_blocks": 10
+         },
+         "S4_cold_batch": {
+          "cpu_idle_pct_min": 39.87,
+          "direct_baseline_cv": 0.1305,
+          "excluded": 0,
+          "load_avg_1m_max": 5.86,
+          "load_avg_1m_min": 4.72,
+          "valid_blocks": 10
+         }
+        },
+        "sha256": "87d78e9b09a4660df442501c64d638b17090877badbab5212d5a1369fd10bfd4",
+        "vep_commit": "77984c8bf1f4fb594300cb45e582cf7890e52e4a"
+       }
+      },
+      "why": [
+       "benchmarks/results/paired-pyflakes.json: load_avg_1m_at_start 5.01 >= 2.0 (declared criterion)",
+       "benchmarks/results/paired-more-itertools.json: load_avg_1m_at_start 5.57 >= 2.0 (declared criterion)"
+      ]
+     },
+     {
+      "label": "GitHub-hosted ubuntu-24.04",
+      "ok": true,
+      "pins_match": true,
+      "qualification": "VALID",
+      "recorded_file_hashes_match": true,
+      "report_sha256": "6bcab731fba5f112a10fc32530a2a94b92ee325ca60b8d2fcf3cf35da65dc23b",
+      "reports": {
+       "benchmarks/results/hosted-linux/paired-more-itertools.json": {
+        "gate_failures": [],
+        "load_avg_1m_at_start": 1.53,
+        "machine": "Linux-6.17.0-1022-azure-x86_64-with-glibc2.39",
+        "scenarios": {
+         "S1_cold_single": {
+          "cpu_idle_pct_min": 99.63,
+          "direct_baseline_cv": 0.009,
+          "excluded": 0,
+          "load_avg_1m_max": 0.97,
+          "load_avg_1m_min": 0.89,
+          "valid_blocks": 10
+         },
+         "S2_warm_unchanged": {
+          "cpu_idle_pct_min": 99.75,
+          "direct_baseline_cv": 0.009,
+          "excluded": 0,
+          "load_avg_1m_max": 0.98,
+          "load_avg_1m_min": 0.84,
+          "valid_blocks": 10
+         },
+         "S3_warm_small_edit": {
+          "cpu_idle_pct_min": 99.75,
+          "direct_baseline_cv": 0.0053,
+          "excluded": 0,
+          "load_avg_1m_max": 0.98,
+          "load_avg_1m_min": 0.83,
+          "valid_blocks": 10
+         },
+         "S4_cold_batch": {
+          "cpu_idle_pct_min": 99.62,
+          "direct_baseline_cv": 0.0037,
+          "excluded": 0,
+          "load_avg_1m_max": 2.89,
+          "load_avg_1m_min": 1.47,
+          "valid_blocks": 10
+         }
+        },
+        "sha256": "cd3239a30e4e50d6febd169ae59eb021818ba9e4ee94f95911cf0cd7a10f8f55",
+        "vep_commit": "c1306008ffdc5cecb431a3822352390f5961d0bf"
+       },
+       "benchmarks/results/hosted-linux/paired-pyflakes.json": {
+        "gate_failures": [],
+        "load_avg_1m_at_start": 0.62,
+        "machine": "Linux-6.17.0-1022-azure-x86_64-with-glibc2.39",
+        "scenarios": {
+         "S1_cold_single": {
+          "cpu_idle_pct_min": 99.62,
+          "direct_baseline_cv": 0.0048,
+          "excluded": 0,
+          "load_avg_1m_max": 0.92,
+          "load_avg_1m_min": 0.78,
+          "valid_blocks": 10
+         },
+         "S2_warm_unchanged": {
+          "cpu_idle_pct_min": 99.75,
+          "direct_baseline_cv": 0.009,
+          "excluded": 0,
+          "load_avg_1m_max": 0.88,
+          "load_avg_1m_min": 0.72,
+          "valid_blocks": 10
+         },
+         "S3_warm_small_edit": {
+          "cpu_idle_pct_min": 98.38,
+          "direct_baseline_cv": 0.0048,
+          "excluded": 0,
+          "load_avg_1m_max": 0.94,
+          "load_avg_1m_min": 0.79,
+          "valid_blocks": 10
+         },
+         "S4_cold_batch": {
+          "cpu_idle_pct_min": 99.62,
+          "direct_baseline_cv": 0.0025,
+          "excluded": 0,
+          "load_avg_1m_max": 2.07,
+          "load_avg_1m_min": 1.53,
+          "valid_blocks": 10
+         }
+        },
+        "sha256": "2f6dab928352c9786698b6fa34101eca6723662b273c8ad2a7c9d1ff2098cb02",
+        "vep_commit": "c1306008ffdc5cecb431a3822352390f5961d0bf"
+       }
+      },
+      "run": {
+       "conclusion": "success",
+       "headSha": "c1306008ffdc5cecb431a3822352390f5961d0bf",
+       "status": "completed",
+       "url": "https://github.com/SiteBorne/vep/actions/runs/39457964415",
+       "workflowName": "Benchmark qualification (hosted Linux)"
+      },
+      "run_id": "39457964415",
+      "vep_implementation_matches_release": true,
+      "why": []
+     }
+    ],
     "first_run_records_preserved": [
      {
       "path": "benchmarks/results/compare-pyflakes.json",
@@ -105,94 +302,12 @@
     "methodology": [
      {
       "path": "docs/BENCHMARK_METHODOLOGY.md",
-      "sha256": "61e79412846d5daf9102a6d418b472f9aae6007821fcd149093ab3d5895f0ec5"
+      "sha256": "401e497cb9cfe52d95bfdb5e4331d5a9dd7c4c8d4c6e7f1d98845ebbeaa1e71a"
      }
-    ],
-    "reports": {
-     "benchmarks/results/paired-more-itertools.json": {
-      "gate_failures": [],
-      "load_avg_1m_at_start": 5.57,
-      "scenarios": {
-       "S1_cold_single": {
-        "cpu_idle_pct_min": 64.71,
-        "direct_baseline_cv": 0.0109,
-        "excluded": 0,
-        "load_avg_1m_max": 6.87,
-        "load_avg_1m_min": 3.1,
-        "valid_blocks": 10
-       },
-       "S2_warm_unchanged": {
-        "cpu_idle_pct_min": 65.5,
-        "direct_baseline_cv": 0.0064,
-        "excluded": 0,
-        "load_avg_1m_max": 3.94,
-        "load_avg_1m_min": 1.95,
-        "valid_blocks": 10
-       },
-       "S3_warm_small_edit": {
-        "cpu_idle_pct_min": 78.44,
-        "direct_baseline_cv": 0.0031,
-        "excluded": 0,
-        "load_avg_1m_max": 3.83,
-        "load_avg_1m_min": 2.86,
-        "valid_blocks": 10
-       },
-       "S4_cold_batch": {
-        "cpu_idle_pct_min": 69.91,
-        "direct_baseline_cv": 0.0045,
-        "excluded": 0,
-        "load_avg_1m_max": 6.17,
-        "load_avg_1m_min": 2.48,
-        "valid_blocks": 10
-       }
-      },
-      "sha256": "92ef506493b6476bb844ccda400fcd34bee2e140572818bc380cfbc5eb109ba2",
-      "vep_commit": "77984c8bf1f4fb594300cb45e582cf7890e52e4a"
-     },
-     "benchmarks/results/paired-pyflakes.json": {
-      "gate_failures": [],
-      "load_avg_1m_at_start": 5.01,
-      "scenarios": {
-       "S1_cold_single": {
-        "cpu_idle_pct_min": 62.8,
-        "direct_baseline_cv": 0.0198,
-        "excluded": 0,
-        "load_avg_1m_max": 5.26,
-        "load_avg_1m_min": 4.76,
-        "valid_blocks": 10
-       },
-       "S2_warm_unchanged": {
-        "cpu_idle_pct_min": 60.24,
-        "direct_baseline_cv": 0.0252,
-        "excluded": 0,
-        "load_avg_1m_max": 5.39,
-        "load_avg_1m_min": 4.86,
-        "valid_blocks": 10
-       },
-       "S3_warm_small_edit": {
-        "cpu_idle_pct_min": 60.75,
-        "direct_baseline_cv": 0.0274,
-        "excluded": 0,
-        "load_avg_1m_max": 4.98,
-        "load_avg_1m_min": 4.57,
-        "valid_blocks": 10
-       },
-       "S4_cold_batch": {
-        "cpu_idle_pct_min": 39.87,
-        "direct_baseline_cv": 0.1305,
-        "excluded": 0,
-        "load_avg_1m_max": 5.86,
-        "load_avg_1m_min": 4.72,
-        "valid_blocks": 10
-       }
-      },
-      "sha256": "87d78e9b09a4660df442501c64d638b17090877badbab5212d5a1369fd10bfd4",
-      "vep_commit": "77984c8bf1f4fb594300cb45e582cf7890e52e4a"
-     }
-    }
+    ]
    },
-   "reason": "benchmarks/results/paired-pyflakes.json: load_avg_1m_at_start 5.01 >= 2.0 (declared criterion); benchmarks/results/paired-more-itertools.json: load_avg_1m_at_start 5.57 >= 2.0 (declared criterion) -- see docs/REAL_WORLD_RESULTS.md for the measured results and their stated limits",
-   "status": "UNVERIFIED"
+   "reason": null,
+   "status": "PASS"
   },
   "BUILD_INTEGRATION": {
    "evidence": {
@@ -203,16 +318,16 @@
        "-m",
        "pytest",
        "-q",
-       "--junitxml=/var/folders/g7/s4llc2490d17ndcmkp40yk0h0000gn/T/tmp8mp9cw8v/junit.xml",
+       "--junitxml=/var/folders/g7/s4llc2490d17ndcmkp40yk0h0000gn/T/tmp11csdz7j/junit.xml",
        "-p",
        "no:cacheprovider"
       ],
       "exit_code": 0,
-      "output_sha256": "257a86d8a5d45244c949a523be165c3e6c93c09a785e9e1347d1ec641b6d9436",
+      "output_sha256": "839a0cdb6723ebab59ecea08a7fbeae0a382c50b41444134e4bcc3f5c83c4c31",
       "tail": [
-       "........................................................................ [ 91%]",
-       "................................                                         [100%]",
-       "392 passed in 47.76s"
+       "........................................................................ [ 88%]",
+       "...............................................                          [100%]",
+       "407 passed in 52.19s"
       ]
      }
     ],
@@ -233,16 +348,16 @@
        "-m",
        "pytest",
        "-q",
-       "--junitxml=/var/folders/g7/s4llc2490d17ndcmkp40yk0h0000gn/T/tmp8mp9cw8v/junit.xml",
+       "--junitxml=/var/folders/g7/s4llc2490d17ndcmkp40yk0h0000gn/T/tmp11csdz7j/junit.xml",
        "-p",
        "no:cacheprovider"
       ],
       "exit_code": 0,
-      "output_sha256": "257a86d8a5d45244c949a523be165c3e6c93c09a785e9e1347d1ec641b6d9436",
+      "output_sha256": "839a0cdb6723ebab59ecea08a7fbeae0a382c50b41444134e4bcc3f5c83c4c31",
       "tail": [
-       "........................................................................ [ 91%]",
-       "................................                                         [100%]",
-       "392 passed in 47.76s"
+       "........................................................................ [ 88%]",
+       "...............................................                          [100%]",
+       "407 passed in 52.19s"
       ]
      }
     ],
@@ -264,16 +379,16 @@
        "-m",
        "pytest",
        "-q",
-       "--junitxml=/var/folders/g7/s4llc2490d17ndcmkp40yk0h0000gn/T/tmp8mp9cw8v/junit.xml",
+       "--junitxml=/var/folders/g7/s4llc2490d17ndcmkp40yk0h0000gn/T/tmp11csdz7j/junit.xml",
        "-p",
        "no:cacheprovider"
       ],
       "exit_code": 0,
-      "output_sha256": "257a86d8a5d45244c949a523be165c3e6c93c09a785e9e1347d1ec641b6d9436",
+      "output_sha256": "839a0cdb6723ebab59ecea08a7fbeae0a382c50b41444134e4bcc3f5c83c4c31",
       "tail": [
-       "........................................................................ [ 91%]",
-       "................................                                         [100%]",
-       "392 passed in 47.76s"
+       "........................................................................ [ 88%]",
+       "...............................................                          [100%]",
+       "407 passed in 52.19s"
       ]
      }
     ],
@@ -294,16 +409,16 @@
        "-m",
        "pytest",
        "-q",
-       "--junitxml=/var/folders/g7/s4llc2490d17ndcmkp40yk0h0000gn/T/tmp8mp9cw8v/junit.xml",
+       "--junitxml=/var/folders/g7/s4llc2490d17ndcmkp40yk0h0000gn/T/tmp11csdz7j/junit.xml",
        "-p",
        "no:cacheprovider"
       ],
       "exit_code": 0,
-      "output_sha256": "257a86d8a5d45244c949a523be165c3e6c93c09a785e9e1347d1ec641b6d9436",
+      "output_sha256": "839a0cdb6723ebab59ecea08a7fbeae0a382c50b41444134e4bcc3f5c83c4c31",
       "tail": [
-       "........................................................................ [ 91%]",
-       "................................                                         [100%]",
-       "392 passed in 47.76s"
+       "........................................................................ [ 88%]",
+       "...............................................                          [100%]",
+       "407 passed in 52.19s"
       ]
      }
     ],
@@ -323,16 +438,16 @@
        "-m",
        "pytest",
        "-q",
-       "--junitxml=/var/folders/g7/s4llc2490d17ndcmkp40yk0h0000gn/T/tmp8mp9cw8v/junit.xml",
+       "--junitxml=/var/folders/g7/s4llc2490d17ndcmkp40yk0h0000gn/T/tmp11csdz7j/junit.xml",
        "-p",
        "no:cacheprovider"
       ],
       "exit_code": 0,
-      "output_sha256": "257a86d8a5d45244c949a523be165c3e6c93c09a785e9e1347d1ec641b6d9436",
+      "output_sha256": "839a0cdb6723ebab59ecea08a7fbeae0a382c50b41444134e4bcc3f5c83c4c31",
       "tail": [
-       "........................................................................ [ 91%]",
-       "................................                                         [100%]",
-       "392 passed in 47.76s"
+       "........................................................................ [ 88%]",
+       "...............................................                          [100%]",
+       "407 passed in 52.19s"
       ]
      }
     ],
@@ -363,16 +478,16 @@
        "-m",
        "pytest",
        "-q",
-       "--junitxml=/var/folders/g7/s4llc2490d17ndcmkp40yk0h0000gn/T/tmp8mp9cw8v/junit.xml",
+       "--junitxml=/var/folders/g7/s4llc2490d17ndcmkp40yk0h0000gn/T/tmp11csdz7j/junit.xml",
        "-p",
        "no:cacheprovider"
       ],
       "exit_code": 0,
-      "output_sha256": "257a86d8a5d45244c949a523be165c3e6c93c09a785e9e1347d1ec641b6d9436",
+      "output_sha256": "839a0cdb6723ebab59ecea08a7fbeae0a382c50b41444134e4bcc3f5c83c4c31",
       "tail": [
-       "........................................................................ [ 91%]",
-       "................................                                         [100%]",
-       "392 passed in 47.76s"
+       "........................................................................ [ 88%]",
+       "...............................................                          [100%]",
+       "407 passed in 52.19s"
       ]
      },
      {
@@ -387,9 +502,9 @@
        "."
       ],
       "exit_code": 0,
-      "output_sha256": "2aac50007cafd94c85eff9a402a466d0b301a17f65dbb98763c59aceb7b438c6",
+      "output_sha256": "1a5ec1401589f8176d5d0108911654d6460b0661328e9a647064329f068f5804",
       "tail": [
-       "Ran 392 tests in 47.114s",
+       "Ran 407 tests in 52.602s",
        "",
        "OK"
       ]
@@ -451,16 +566,16 @@
        "-m",
        "pytest",
        "-q",
-       "--junitxml=/var/folders/g7/s4llc2490d17ndcmkp40yk0h0000gn/T/tmp8mp9cw8v/junit.xml",
+       "--junitxml=/var/folders/g7/s4llc2490d17ndcmkp40yk0h0000gn/T/tmp11csdz7j/junit.xml",
        "-p",
        "no:cacheprovider"
       ],
       "exit_code": 0,
-      "output_sha256": "257a86d8a5d45244c949a523be165c3e6c93c09a785e9e1347d1ec641b6d9436",
+      "output_sha256": "839a0cdb6723ebab59ecea08a7fbeae0a382c50b41444134e4bcc3f5c83c4c31",
       "tail": [
-       "........................................................................ [ 91%]",
-       "................................                                         [100%]",
-       "392 passed in 47.76s"
+       "........................................................................ [ 88%]",
+       "...............................................                          [100%]",
+       "407 passed in 52.19s"
       ]
      }
     ],
@@ -482,16 +597,16 @@
        "-m",
        "pytest",
        "-q",
-       "--junitxml=/var/folders/g7/s4llc2490d17ndcmkp40yk0h0000gn/T/tmp8mp9cw8v/junit.xml",
+       "--junitxml=/var/folders/g7/s4llc2490d17ndcmkp40yk0h0000gn/T/tmp11csdz7j/junit.xml",
        "-p",
        "no:cacheprovider"
       ],
       "exit_code": 0,
-      "output_sha256": "257a86d8a5d45244c949a523be165c3e6c93c09a785e9e1347d1ec641b6d9436",
+      "output_sha256": "839a0cdb6723ebab59ecea08a7fbeae0a382c50b41444134e4bcc3f5c83c4c31",
       "tail": [
-       "........................................................................ [ 91%]",
-       "................................                                         [100%]",
-       "392 passed in 47.76s"
+       "........................................................................ [ 88%]",
+       "...............................................                          [100%]",
+       "407 passed in 52.19s"
       ]
      }
     ],
@@ -545,12 +660,12 @@
      {
       "bytes": 100802,
       "name": "vep_protocol-0.5.0b1-py3-none-any.whl",
-      "sha256": "a2e16eb1e8d731e2853c46420bdbfd265241758c62396ca07879d87b46325ad8"
+      "sha256": "e40d1e38215116b07d1d70dff9c4b29814b4a827e6b0eff0429e19c163a40064"
      },
      {
-      "bytes": 401132,
+      "bytes": 436966,
       "name": "vep_protocol-0.5.0b1.tar.gz",
-      "sha256": "8344076d06082717d51b9eb4943657921c7fab83a15934f97df32874d539c26f"
+      "sha256": "cefb54a02f5bac9604d5b2326982cd4d2f214fdb2a1780cf8c1c3d80fa9662eb"
      }
     ],
     "commands": [
@@ -560,10 +675,10 @@
        "-m",
        "build",
        "--outdir",
-       "/var/folders/g7/s4llc2490d17ndcmkp40yk0h0000gn/T/tmpucgwyox8"
+       "/var/folders/g7/s4llc2490d17ndcmkp40yk0h0000gn/T/tmpr0uv9ski"
       ],
       "exit_code": 0,
-      "output_sha256": "f32ef47c71fd7c798aa7749c8256c7d453e991461f7ddc8af1f3154e1ae8f411",
+      "output_sha256": "b2d6ceaeecb450c7eeaa62fbd2d0984a499dbbea9b7ad2540bb97776eec9b0b8",
       "tail": [
        "warning: build_py: byte-compiling is disabled, skipping.",
        "",
@@ -577,14 +692,14 @@
        "twine",
        "check",
        "--strict",
-       "/var/folders/g7/s4llc2490d17ndcmkp40yk0h0000gn/T/tmpucgwyox8/vep_protocol-0.5.0b1-py3-none-any.whl",
-       "/var/folders/g7/s4llc2490d17ndcmkp40yk0h0000gn/T/tmpucgwyox8/vep_protocol-0.5.0b1.tar.gz"
+       "/var/folders/g7/s4llc2490d17ndcmkp40yk0h0000gn/T/tmpr0uv9ski/vep_protocol-0.5.0b1-py3-none-any.whl",
+       "/var/folders/g7/s4llc2490d17ndcmkp40yk0h0000gn/T/tmpr0uv9ski/vep_protocol-0.5.0b1.tar.gz"
       ],
       "exit_code": 0,
-      "output_sha256": "c19dd0a3e115d61a40ef11e68762207eb8b90cf60b03182b97e10a83e90915bb",
+      "output_sha256": "3fd3a4ec5469fbb11e688ac9aea584833b6ff4982b46431f326748bfc7877aa7",
       "tail": [
        "Checking ",
-       "/var/folders/g7/s4llc2490d17ndcmkp40yk0h0000gn/T/tmpucgwyox8/vep_protocol-0.5.0b",
+       "/var/folders/g7/s4llc2490d17ndcmkp40yk0h0000gn/T/tmpr0uv9ski/vep_protocol-0.5.0b",
        "1.tar.gz: \u001b[32mPASSED\u001b[0m"
       ]
      },
@@ -593,7 +708,7 @@
        "python",
        "scripts/release/ci_checks.py",
        "--dist",
-       "/var/folders/g7/s4llc2490d17ndcmkp40yk0h0000gn/T/tmpucgwyox8"
+       "/var/folders/g7/s4llc2490d17ndcmkp40yk0h0000gn/T/tmpr0uv9ski"
       ],
       "exit_code": 0,
       "output_sha256": "fd6355fa8b321e88f1c6ea2babaf0e638e853d714d6b25f9b353bb830f70a508",
@@ -645,7 +760,7 @@
        "python",
        "-m",
        "venv",
-       "/var/folders/g7/s4llc2490d17ndcmkp40yk0h0000gn/T/tmpss2ng9zp/v"
+       "/var/folders/g7/s4llc2490d17ndcmkp40yk0h0000gn/T/tmp5e26hzng/v"
       ],
       "exit_code": 0,
       "output_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
@@ -656,21 +771,24 @@
        "pip",
        "install",
        "-q",
-       "/var/folders/g7/s4llc2490d17ndcmkp40yk0h0000gn/T/tmpucgwyox8/vep_protocol-0.5.0b1-py3-none-any.whl"
+       "/var/folders/g7/s4llc2490d17ndcmkp40yk0h0000gn/T/tmpr0uv9ski/vep_protocol-0.5.0b1-py3-none-any.whl"
       ],
       "exit_code": 0,
-      "output_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
-      "tail": []
+      "output_sha256": "6f54a5ad256ec611f75c78b827cee95a004ad707fdd777a61d85a65cbf37c7b7",
+      "tail": [
+       "[notice] A new release of pip is available: 26.2.1 -> 26.2.2",
+       "[notice] To update, run: /private/var/folders/g7/s4llc2490d17ndcmkp40yk0h0000gn/T/tmp5e26hzng/v/bin/python3.14 -m pip install --upgrade pip"
+      ]
      },
      {
       "argv": [
        "python",
        "scripts/release/cleanroom.py",
        "--venv",
-       "/var/folders/g7/s4llc2490d17ndcmkp40yk0h0000gn/T/tmpss2ng9zp/v"
+       "/var/folders/g7/s4llc2490d17ndcmkp40yk0h0000gn/T/tmp5e26hzng/v"
       ],
       "exit_code": 0,
-      "output_sha256": "a3a000e54a3eb1d204e9ffab9068927b6937799a7b96e95d4b6f271afe182b11",
+      "output_sha256": "0f3e26bf88894593d207e8e5545d88fb42b53cf68db6944cba86549b480a9457",
       "tail": [
        "  }",
        " ]",
@@ -682,7 +800,7 @@
        "python",
        "scripts/release/quickstart_runner.py",
        "--bin-dir",
-       "/var/folders/g7/s4llc2490d17ndcmkp40yk0h0000gn/T/tmpss2ng9zp/v/bin"
+       "/var/folders/g7/s4llc2490d17ndcmkp40yk0h0000gn/T/tmp5e26hzng/v/bin"
       ],
       "exit_code": 0,
       "output_sha256": "f279fc1ee8d055dbf10d660953fe6086d00b4c38d23e14cfe6760d0ffb582aeb",
@@ -695,7 +813,7 @@
        "python",
        "-m",
        "venv",
-       "/var/folders/g7/s4llc2490d17ndcmkp40yk0h0000gn/T/tmpkotiwcop/s"
+       "/var/folders/g7/s4llc2490d17ndcmkp40yk0h0000gn/T/tmp_o8wgxdc/s"
       ],
       "exit_code": 0,
       "output_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
@@ -706,11 +824,14 @@
        "pip",
        "install",
        "-q",
-       "/var/folders/g7/s4llc2490d17ndcmkp40yk0h0000gn/T/tmpucgwyox8/vep_protocol-0.5.0b1.tar.gz"
+       "/var/folders/g7/s4llc2490d17ndcmkp40yk0h0000gn/T/tmpr0uv9ski/vep_protocol-0.5.0b1.tar.gz"
       ],
       "exit_code": 0,
-      "output_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
-      "tail": []
+      "output_sha256": "8d6276af99b4c344299f2cf0ed7a408ead40ea8d785652a9c46fc7bf3ab85e2a",
+      "tail": [
+       "[notice] A new release of pip is available: 26.2.1 -> 26.2.2",
+       "[notice] To update, run: /private/var/folders/g7/s4llc2490d17ndcmkp40yk0h0000gn/T/tmp_o8wgxdc/s/bin/python3.14 -m pip install --upgrade pip"
+      ]
      },
      {
       "argv": [
@@ -731,10 +852,10 @@
        "python",
        "scripts/release/cleanroom.py",
        "--venv",
-       "/var/folders/g7/s4llc2490d17ndcmkp40yk0h0000gn/T/tmpkotiwcop/s"
+       "/var/folders/g7/s4llc2490d17ndcmkp40yk0h0000gn/T/tmp_o8wgxdc/s"
       ],
       "exit_code": 0,
-      "output_sha256": "ba703c16ae4a8113dd7555851aa38b68845ceb80e4a7e6ebf758d4828ae292bd",
+      "output_sha256": "69d50c9a15df46b8cbf85ea126308486532e0f4e1b1f0034d3536ae82e617ad1",
       "tail": [
        "  }",
        " ]",
@@ -793,16 +914,16 @@
        "-m",
        "pytest",
        "-q",
-       "--junitxml=/var/folders/g7/s4llc2490d17ndcmkp40yk0h0000gn/T/tmp8mp9cw8v/junit.xml",
+       "--junitxml=/var/folders/g7/s4llc2490d17ndcmkp40yk0h0000gn/T/tmp11csdz7j/junit.xml",
        "-p",
        "no:cacheprovider"
       ],
       "exit_code": 0,
-      "output_sha256": "257a86d8a5d45244c949a523be165c3e6c93c09a785e9e1347d1ec641b6d9436",
+      "output_sha256": "839a0cdb6723ebab59ecea08a7fbeae0a382c50b41444134e4bcc3f5c83c4c31",
       "tail": [
-       "........................................................................ [ 91%]",
-       "................................                                         [100%]",
-       "392 passed in 47.76s"
+       "........................................................................ [ 88%]",
+       "...............................................                          [100%]",
+       "407 passed in 52.19s"
       ]
      }
     ],
@@ -826,16 +947,16 @@
        "-m",
        "pytest",
        "-q",
-       "--junitxml=/var/folders/g7/s4llc2490d17ndcmkp40yk0h0000gn/T/tmp8mp9cw8v/junit.xml",
+       "--junitxml=/var/folders/g7/s4llc2490d17ndcmkp40yk0h0000gn/T/tmp11csdz7j/junit.xml",
        "-p",
        "no:cacheprovider"
       ],
       "exit_code": 0,
-      "output_sha256": "257a86d8a5d45244c949a523be165c3e6c93c09a785e9e1347d1ec641b6d9436",
+      "output_sha256": "839a0cdb6723ebab59ecea08a7fbeae0a382c50b41444134e4bcc3f5c83c4c31",
       "tail": [
-       "........................................................................ [ 91%]",
-       "................................                                         [100%]",
-       "392 passed in 47.76s"
+       "........................................................................ [ 88%]",
+       "...............................................                          [100%]",
+       "407 passed in 52.19s"
       ]
      }
     ],
@@ -864,7 +985,7 @@
       ]
      }
     ],
-    "commit": "afa2d74adabb85cded5adf72907c91d8bb5030c5",
+    "commit": "1e1c5b15e3381dc46975156bf903c156b254d601",
     "note": "static checks: secrets in tree and history, workflows, claims, versions",
     "tracked_tree_clean": true
    },
@@ -895,6 +1016,7 @@
      "cryptography>=41"
     ],
     "workflows": [
+     "benchmark-qualification.yml",
      "ci.yml",
      "codeql.yml",
      "isolation.yml",
@@ -919,9 +1041,12 @@
    "met": false
   },
   "head_pushed": {
-   "detail": [],
+   "detail": [
+    "HEAD",
+    "refs/heads/main"
+   ],
    "evidence": "computed now",
-   "met": false
+   "met": true
   },
   "hosted_ci_green_for_head": {
    "detail": {
@@ -930,10 +1055,25 @@
      "CI",
      "CodeQL"
     ],
-    "runs": null
+    "runs": [
+     {
+      "conclusion": "success",
+      "event": "push",
+      "status": "completed",
+      "url": "https://github.com/SiteBorne/vep/actions/runs/39469148703",
+      "workflowName": "CodeQL"
+     },
+     {
+      "conclusion": "success",
+      "event": "push",
+      "status": "completed",
+      "url": "https://github.com/SiteBorne/vep/actions/runs/39469148713",
+      "workflowName": "CI"
+     }
+    ]
    },
    "evidence": "computed now",
-   "met": false
+   "met": true
   },
   "in_container_runtime_corroboration": {
    "evidence": "none recorded: NOT_RUN",
@@ -953,17 +1093,17 @@
    "met": false
   },
   "public_release_exists": {
-   "detail": null,
+   "detail": "https://github.com/SiteBorne/vep/releases/tag/v0.5.0b1",
    "evidence": "computed now",
-   "met": false
+   "met": true
   },
   "quickstart_from_released_artifacts": {
    "evidence": "computed now",
-   "met": false
+   "met": true
   },
   "release_artifacts_verified": {
    "evidence": "computed now",
-   "met": false
+   "met": true
   },
   "version_is_target": {
    "evidence": "computed now",
@@ -977,13 +1117,8 @@
  "gate_version": 1,
  "levels": {
   "ANNOUNCEMENT_READY": {
-   "blocking": [
-    "requires PUBLIC_BETA_READY",
-    "condition not met: public_release_exists",
-    "condition not met: release_artifacts_verified",
-    "condition not met: quickstart_from_released_artifacts"
-   ],
-   "ready": false
+   "blocking": [],
+   "ready": true
   },
   "ISOLATED_EXECUTION_VERIFIED": {
    "blocking": [],
@@ -1001,16 +1136,11 @@
    "ready": false
   },
   "PUBLIC_BETA_READY": {
-   "blocking": [
-    "BENCHMARK_REPRODUCIBILITY=UNVERIFIED",
-    "condition not met: head_pushed",
-    "condition not met: hosted_ci_green_for_head"
-   ],
-   "ready": false
+   "blocking": [],
+   "ready": true
   },
   "UNTRUSTED_EXECUTION_READY": {
    "blocking": [
-    "requires PUBLIC_BETA_READY",
     "condition not met: external_security_review",
     "condition not met: escape_testing",
     "condition not met: in_container_runtime_corroboration"
@@ -1020,9 +1150,22 @@
  },
  "package_version": "0.5.0b1",
  "protocol_version": "0.3",
- "release_decision": "NO_GO",
- "release_decision_note": "blocked by: BENCHMARK_REPRODUCIBILITY=UNVERIFIED; condition not met: head_pushed; condition not met: hosted_ci_green_for_head",
- "source_commit": "afa2d74adabb85cded5adf72907c91d8bb5030c5",
+ "published_release": {
+  "assets": {
+   "vep_protocol-0.5.0b1-py3-none-any.whl": "12aa0040eb7fef1014cefe32a5fec7497b547cfe916ebb65461319e439651b32",
+   "vep_protocol-0.5.0b1.tar.gz": "eb03b4e41d8ddf1c4e0fe15d2eaf65f033c36b8d97eac7633472eb08c0df405c"
+  },
+  "attestations_verified": {
+   "vep_protocol-0.5.0b1-py3-none-any.whl": true,
+   "vep_protocol-0.5.0b1.tar.gz": true
+  },
+  "checked": true,
+  "ok": true,
+  "sha256sums_match": true
+ },
+ "release_decision": "PUBLISHED",
+ "release_decision_note": "release exists and is verified",
+ "source_commit": "1e1c5b15e3381dc46975156bf903c156b254d601",
  "target_version": "0.5.0b1",
  "test_summary_by_file": {
   "test_adversarial": {
@@ -1125,6 +1268,11 @@
    "skipped": 0,
    "tests": 17
   },
+  "test_hosted_benchmark": {
+   "bad": 0,
+   "skipped": 0,
+   "tests": 14
+  },
   "test_integration": {
    "bad": 0,
    "skipped": 0,
@@ -1143,7 +1291,7 @@
   "test_launch_gate": {
    "bad": 0,
    "skipped": 0,
-   "tests": 8
+   "tests": 9
   },
   "test_math": {
    "bad": 0,
@@ -1196,11 +1344,11 @@
    "errors": 0,
    "failures": 0,
    "skipped": 0,
-   "tests": 392
+   "tests": 407
   },
   "pytest_exit": 0,
   "unittest_exit": 0,
-  "unittest_ran": 392
+  "unittest_ran": 407
  },
  "tracked_changes": []
 }
