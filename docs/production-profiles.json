@@ -146,7 +146,7 @@
    "blocking": {
     "candidate_release_artifacts_verified": "FAIL: no candidate release exists; nothing has been built, tagged or published for it",
     "candidate_version_set": "FAIL: package version 0.5.0b1 equals the already-published release; the next version is decided but not set",
-    "hosted_ci_for_head": "UNVERIFIED: HEAD 221ef12 is not on any remote branch: hosted CI has not run on it"
+    "hosted_ci_for_head": "UNVERIFIED: HEAD aa29821 is not on any remote branch: hosted CI has not run on it"
    },
    "prerequisites": {
     "candidate_release_artifacts_verified": {
@@ -158,7 +158,7 @@
      "status": "FAIL"
     },
     "hosted_ci_for_head": {
-     "detail": "HEAD 221ef12 is not on any remote branch: hosted CI has not run on it",
+     "detail": "HEAD aa29821 is not on any remote branch: hosted CI has not run on it",
      "status": "UNVERIFIED"
     },
     "packaging_install_smoke": {
@@ -170,16 +170,15 @@
   },
   "REFERENCE_IMPLEMENTATION_READY": {
    "blocking": {
-    "full_suite": "FAIL: 1 failing of 482",
-    "hosted_ci_for_head": "UNVERIFIED: HEAD 221ef12 is not on any remote branch: hosted CI has not run on it"
+    "hosted_ci_for_head": "UNVERIFIED: HEAD aa29821 is not on any remote branch: hosted CI has not run on it"
    },
    "prerequisites": {
     "full_suite": {
-     "detail": "1 failing of 482",
-     "status": "FAIL"
+     "detail": "482 tests, 0 failing, 0 skipped",
+     "status": "PASS"
     },
     "hosted_ci_for_head": {
-     "detail": "HEAD 221ef12 is not on any remote branch: hosted CI has not run on it",
+     "detail": "HEAD aa29821 is not on any remote branch: hosted CI has not run on it",
      "status": "UNVERIFIED"
     },
     "packaging_install_smoke": {
@@ -215,6 +214,6 @@
    "ready": "NO"
   }
  },
- "source_commit": "221ef1270aa9efa6c6465ccc1c01aaacee15579d",
- "tree_dirty": true
+ "source_commit": "aa2982113d249013e5e652b1cfad8f13d4d36b88",
+ "tree_dirty": false
 }
