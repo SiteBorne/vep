@@ -418,7 +418,7 @@ def write_report(g: dict, path: Path) -> None:
          f"**ANNOUNCEMENT_READY = {g['ANNOUNCEMENT_READY']}**  (rule: PUBLIC_BETA_READY, a genuinely published release with verified artifacts, the claims check and a released-artifact quickstart)", "",
          "## Identity", f"* Source commit (exact tested revision): `{g['source_commit']}` on `{g['branch']}`; tracked changes at run time: {len(g['tracked_changes'])}",
          f"* Decision note: {g['release_decision_note']}",
-         f"* Package version: `{g['package_version']}` (target `{g['target_version']}`, not bumped); protocol `{g['protocol_version']}`",
+         f"* Package version: `{g['package_version']}` (target `{g['target_version']}`{'' if g['package_version'] == g['target_version'] else ', NOT bumped'}); protocol `{g['protocol_version']}`",
          f"* Tests: pytest {t['tests']} run, {t['failures']} failed, {t['errors']} errors, {t['skipped']} skipped; unittest ran {g['test_totals']['unittest_ran']} (exit {g['test_totals']['unittest_exit']}). The count is not the headline: see the real-world rows below.", "",
          "## Readiness levels", "| Level | Ready | Blocking |", "|---|---|---|"]
     for k, v in g["levels"].items():
