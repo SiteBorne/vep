@@ -26,7 +26,7 @@ Four things are kept apart and never collapsed into a single "verified" badge:
    ```bash
    gh attestation verify vep_protocol-0.5.0b1-py3-none-any.whl --repo SiteBorne/vep
    ```
-   `<OWNER>/<REPO>` is intentionally not filled in: it must be the repository you obtained the release from. If the command reports no attestation, the build was not produced by the hosted workflow and **you have only the checksum guarantee**.
+   The repository is `SiteBorne/vep`; if you obtained the release from a fork or mirror, use that repository name instead. If the command reports no attestation, the build was not produced by the hosted workflow and **you have only the checksum guarantee**.
 4. Install in a clean environment and run the shipped self-test:
    ```bash
    python3 -m venv /tmp/vep-check && /tmp/vep-check/bin/pip install vep_protocol-0.5.0b1-py3-none-any.whl

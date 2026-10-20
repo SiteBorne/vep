@@ -4,7 +4,7 @@ Thanks for helping. VEP's rule of thumb: **remove failure modes with code, schem
 
 ## Setup
 ```bash
-git clone <your fork> && cd <repo>
+git clone https://github.com/SiteBorne/vep && cd vep   # or your fork
 python3 -m venv .venv && . .venv/bin/activate
 pip install -e ".[dev]"
 ```
