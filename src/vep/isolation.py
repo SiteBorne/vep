@@ -102,6 +102,29 @@ def run_isolated(image: str, source_dir: str, command: list[str], timeout: int =
 
 
 # ------------------------------------------------------------------ capability detection
+def _norm_repo(ref: str) -> str:
+    repo = ref.split("@", 1)[0]
+    if ":" in repo.rsplit("/", 1)[-1]:  # drop a :tag (never a registry port, which precedes a slash)
+        repo = repo.rsplit(":", 1)[0]
+    for prefix in ("docker.io/library/", "docker.io/", "index.docker.io/library/", "library/"):
+        if repo.startswith(prefix):
+            return repo[len(prefix):]
+    return repo
+
+
+def pin_matches(image: str, repo_digests: list[str], image_id: str) -> bool:
+    """Does the local image carry exactly the pinned content digest?
+
+    Docker lists RepoDigests as `name@sha256:...` WITHOUT the tag, so a pin written as `name:tag@sha256:...`
+    must be compared on repository name and digest, never as a whole string. The tag is advisory; the digest decides.
+    """
+    want_digest = image.split("@sha256:", 1)[1]
+    if image_id == "sha256:" + want_digest:
+        return True
+    want_repo = _norm_repo(image)
+    return any(rd.partition("@sha256:")[2] == want_digest and _norm_repo(rd) == want_repo for rd in repo_digests)
+
+
 def detect_capabilities(image: str | None = None, docker: str | None = None) -> dict:
     """Report what the local environment can and cannot do. Observation only; never pulls or starts anything."""
     docker = docker or shutil.which("docker")
@@ -146,7 +169,7 @@ def detect_capabilities(image: str | None = None, docker: str | None = None) -> 
                 caps["image_present"] = True
                 iid, _, rd = ins.stdout.strip().partition("|")
                 caps["image_id"] = iid
-                caps["image_pinned_digest_ok"] = image in (json.loads(rd or "[]") or []) or iid == "sha256:" + image.split("@sha256:")[1]
+                caps["image_pinned_digest_ok"] = pin_matches(image, json.loads(rd or "[]") or [], iid)
             else:
                 caps["notes"].append("pinned image not present locally (VEP never pulls)")
     return caps
