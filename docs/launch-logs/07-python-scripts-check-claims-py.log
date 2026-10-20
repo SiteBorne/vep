@@ -1,0 +1,4 @@
+$ python scripts/check_claims.py
+# exit 0
+
+claims: all traced and consistent

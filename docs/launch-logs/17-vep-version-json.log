@@ -1,0 +1,68 @@
+$ vep version --json
+# exit 0
+
+{
+  "canonical_format": "VEP-C1",
+  "database_schema": 3,
+  "evidence_format": 2,
+  "object_schema_versions": {
+    "Action": 1,
+    "BudgetLease": 1,
+    "Candidate": 1,
+    "Certificate": 2,
+    "ContextManifest": 1,
+    "Evidence": 2,
+    "ExecutionPolicy": 1,
+    "Objective": 1,
+    "Observation": 1,
+    "OptimizationExperiment": 1,
+    "Snapshot": 1,
+    "TokenReceipt": 1,
+    "WorkClaim": 1
+  },
+  "package": "0.5.0b1",
+  "protocol": "0.3",
+  "supported_decoding": {
+    "Action": [
+      1
+    ],
+    "BudgetLease": [
+      1
+    ],
+    "Candidate": [
+      1
+    ],
+    "Certificate": [
+      1,
+      2
+    ],
+    "ContextManifest": [
+      1
+    ],
+    "Evidence": [
+      1,
+      2
+    ],
+    "ExecutionPolicy": [
+      1
+    ],
+    "Objective": [
+      1
+    ],
+    "Observation": [
+      1
+    ],
+    "OptimizationExperiment": [
+      1
+    ],
+    "Snapshot": [
+      1
+    ],
+    "TokenReceipt": [
+      1
+    ],
+    "WorkClaim": [
+      1
+    ]
+  }
+}

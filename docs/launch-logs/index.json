@@ -1,0 +1,221 @@
+{
+ "source_commit": "6a430f5c5909c10fdbfdc14d2852b782c968e55a",
+ "commands": [
+  {
+   "log": "00-python-m-pytest.log",
+   "argv": [
+    "python",
+    "-m",
+    "pytest",
+    "-q",
+    "--junitxml=/var/folders/g7/s4llc2490d17ndcmkp40yk0h0000gn/T/tmp3p_w693h/junit.xml",
+    "-p",
+    "no:cacheprovider"
+   ],
+   "exit_code": 0,
+   "sha256": "db377aa958abe1ab928d14a524252e19aac4f7842c015da47aa85e514950cad0"
+  },
+  {
+   "log": "01-python-m-unittest.log",
+   "argv": [
+    "python",
+    "-m",
+    "unittest",
+    "discover",
+    "-s",
+    "tests",
+    "-t",
+    "."
+   ],
+   "exit_code": 0,
+   "sha256": "0cd743cfc261b633bfff41ffd00fe9fe9ecc84428922e3665a4e410cbf5c6b37"
+  },
+  {
+   "log": "02-python-benchmarks-run-simulation-py-out-json.log",
+   "argv": [
+    "python",
+    "benchmarks/run_simulation.py",
+    "--out-json",
+    "/dev/null",
+    "--out-md",
+    "/dev/null"
+   ],
+   "exit_code": 0,
+   "sha256": "db339140c0e2c7e45c33d200a9f182aa4eb4316672bf057fca9fdb82ba1bc6e3"
+  },
+  {
+   "log": "03-python-scripts-release-ci-checks-py.log",
+   "argv": [
+    "python",
+    "scripts/release/ci_checks.py"
+   ],
+   "exit_code": 0,
+   "sha256": "20e9dab1677697f97a9b7f092d45299eb797a7b4522b9388fea4d2ef995738ef"
+  },
+  {
+   "log": "04-bash-scripts-conformance-check-sh.log",
+   "argv": [
+    "bash",
+    "scripts/conformance_check.sh"
+   ],
+   "exit_code": 0,
+   "sha256": "a1ddc20119ebb84d5163617d6d0481c13567e963702c562805fc881fbfef9831"
+  },
+  {
+   "log": "05-python-m-vep-cli.log",
+   "argv": [
+    "python",
+    "-m",
+    "vep.cli",
+    "isolation",
+    "probe",
+    "--json"
+   ],
+   "exit_code": 8,
+   "sha256": "80f2bbdda051776e5829ae71abda6c5821873eebe2728425d17aa05cf32c917d"
+  },
+  {
+   "log": "06-python-scripts-gen-variables-py-check.log",
+   "argv": [
+    "python",
+    "scripts/gen_variables.py",
+    "--check"
+   ],
+   "exit_code": 0,
+   "sha256": "ca54e1b2b5c68f2173cddafb2a9940b03c19e11aaa00c9f827d52b9a0180bf7f"
+  },
+  {
+   "log": "07-python-scripts-check-claims-py.log",
+   "argv": [
+    "python",
+    "scripts/check_claims.py"
+   ],
+   "exit_code": 0,
+   "sha256": "95f1487bf47bd67284394dad72f3ec3cdadea5149f77b2a8994b6c381b195fe8"
+  },
+  {
+   "log": "08-python-m-build.log",
+   "argv": [
+    "python",
+    "-m",
+    "build",
+    "--outdir",
+    "/var/folders/g7/s4llc2490d17ndcmkp40yk0h0000gn/T/tmp2vkugeih"
+   ],
+   "exit_code": 0,
+   "sha256": "39cf1c2990dc423a53bc03c2bca50bdba4bd7ae82cb314ec523bbf690f9f7fcd"
+  },
+  {
+   "log": "09-python-m-twine.log",
+   "argv": [
+    "python",
+    "-m",
+    "twine",
+    "check",
+    "--strict",
+    "/var/folders/g7/s4llc2490d17ndcmkp40yk0h0000gn/T/tmp2vkugeih/vep_protocol-0.5.0b1-py3-none-any.whl",
+    "/var/folders/g7/s4llc2490d17ndcmkp40yk0h0000gn/T/tmp2vkugeih/vep_protocol-0.5.0b1.tar.gz"
+   ],
+   "exit_code": 0,
+   "sha256": "04a7f0ac0f95dadce9f793dfd5d6793abb04af0a7e9b8850c5f7785c4148e47c"
+  },
+  {
+   "log": "10-python-scripts-release-ci-checks-py-dist.log",
+   "argv": [
+    "python",
+    "scripts/release/ci_checks.py",
+    "--dist",
+    "/var/folders/g7/s4llc2490d17ndcmkp40yk0h0000gn/T/tmp2vkugeih"
+   ],
+   "exit_code": 0,
+   "sha256": "0c7ef23fb4c19cb4bae077c8007227bcffdc7a527467e6c7d7442f618215f7ca"
+  },
+  {
+   "log": "11-python-m-venv.log",
+   "argv": [
+    "python",
+    "-m",
+    "venv",
+    "/var/folders/g7/s4llc2490d17ndcmkp40yk0h0000gn/T/tmpy77blfmk/v"
+   ],
+   "exit_code": 0,
+   "sha256": "aae2d80ee22ad90db7ce4d144f96c355619b6f835909d25ec7812698052b11c4"
+  },
+  {
+   "log": "12-pip-install-q.log",
+   "argv": [
+    "pip",
+    "install",
+    "-q",
+    "/var/folders/g7/s4llc2490d17ndcmkp40yk0h0000gn/T/tmp2vkugeih/vep_protocol-0.5.0b1-py3-none-any.whl"
+   ],
+   "exit_code": 0,
+   "sha256": "d64b5b67f332f3ba1b045d93e625ed79d867604474918b135e2ff7a0e9b3a9f4"
+  },
+  {
+   "log": "13-python-scripts-release-cleanroom-py-venv.log",
+   "argv": [
+    "python",
+    "scripts/release/cleanroom.py",
+    "--venv",
+    "/var/folders/g7/s4llc2490d17ndcmkp40yk0h0000gn/T/tmpy77blfmk/v"
+   ],
+   "exit_code": 0,
+   "sha256": "401c84b6ae82d60bee9662cc5f5b4f6eed1afa87aaac284907a50a0eff5e8f2b"
+  },
+  {
+   "log": "14-python-scripts-release-quickstart-runner-py-bin-di.log",
+   "argv": [
+    "python",
+    "scripts/release/quickstart_runner.py",
+    "--bin-dir",
+    "/var/folders/g7/s4llc2490d17ndcmkp40yk0h0000gn/T/tmpy77blfmk/v/bin"
+   ],
+   "exit_code": 0,
+   "sha256": "89aec01cb8dc88f250207202d5018b7581bb255666f322013e5f44477d5a4ea5"
+  },
+  {
+   "log": "15-python-m-venv.log",
+   "argv": [
+    "python",
+    "-m",
+    "venv",
+    "/var/folders/g7/s4llc2490d17ndcmkp40yk0h0000gn/T/tmpbktdwl05/s"
+   ],
+   "exit_code": 0,
+   "sha256": "7400a6a6096f0bfb6ad74840f331ac9d7a108cf320bd256f37434609c29f6a72"
+  },
+  {
+   "log": "16-pip-install-q.log",
+   "argv": [
+    "pip",
+    "install",
+    "-q",
+    "/var/folders/g7/s4llc2490d17ndcmkp40yk0h0000gn/T/tmp2vkugeih/vep_protocol-0.5.0b1.tar.gz"
+   ],
+   "exit_code": 0,
+   "sha256": "f8dc7f74c3c71110edfc514d111664123ae0d71845862d8d42da228bea6eca5f"
+  },
+  {
+   "log": "17-vep-version-json.log",
+   "argv": [
+    "vep",
+    "version",
+    "--json"
+   ],
+   "exit_code": 0,
+   "sha256": "d6e5eb3cfb2552d4dcb156defec3ea5e9f38b31dd99e5b980ee91d124e451123"
+  },
+  {
+   "log": "18-python-scripts-release-cleanroom-py-venv.log",
+   "argv": [
+    "python",
+    "scripts/release/cleanroom.py",
+    "--venv",
+    "/var/folders/g7/s4llc2490d17ndcmkp40yk0h0000gn/T/tmpbktdwl05/s"
+   ],
+   "exit_code": 0,
+   "sha256": "be7651a8ae3c1952476adc4fde13be7906815f8dfc2405650f7a9df1ad130e1e"
+  }
+ ]
+}
