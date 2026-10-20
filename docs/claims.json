@@ -1,0 +1,257 @@
+[
+ {
+  "id": "scale8",
+  "text": "4.4x",
+  "expr": "a/b",
+  "vars": {
+   "a": {
+    "file": "benchmarks/results/controller_scaling.json",
+    "path": [
+     "results",
+     "controller_8_workers",
+     "throughput_jobs_per_s",
+     "mean"
+    ]
+   },
+   "b": {
+    "file": "benchmarks/results/controller_scaling.json",
+    "path": [
+     "results",
+     "controller_1_workers",
+     "throughput_jobs_per_s",
+     "mean"
+    ]
+   }
+  },
+  "fmt": "{:.1f}x"
+ },
+ {
+  "id": "overhead",
+  "text": "7%",
+  "expr": "(a-b)/a*100",
+  "vars": {
+   "a": {
+    "file": "benchmarks/results/controller_scaling.json",
+    "path": [
+     "results",
+     "direct_sequential_no_controller",
+     "throughput_jobs_per_s",
+     "mean"
+    ]
+   },
+   "b": {
+    "file": "benchmarks/results/controller_scaling.json",
+    "path": [
+     "results",
+     "controller_1_workers",
+     "throughput_jobs_per_s",
+     "mean"
+    ]
+   }
+  },
+  "fmt": "{:.0f}%"
+ },
+ {
+  "id": "dogfood-tests",
+  "text": "365 tests",
+  "expr": "a",
+  "vars": {
+   "a": {
+    "file": "docs/dogfood/vep-on-vep-run-4-final-runner.json",
+    "path": [
+     "run",
+     "tests",
+     "tests_passed"
+    ]
+   }
+  },
+  "fmt": "{} tests"
+ },
+ {
+  "id": "matrix",
+  "text": "12 of 12",
+  "expr": "a",
+  "vars": {
+   "a": {
+    "file": "docs/isolation/ci-run-39347549501-attestation.json",
+    "path": [
+     "results"
+    ],
+    "count_where": {
+     "field": "status",
+     "equals": "PASS"
+    }
+   }
+  },
+  "fmt": "{} of 12"
+ },
+ {
+  "id": "vectors",
+  "text": "119 vectors",
+  "expr": "a",
+  "vars": {
+   "a": {
+    "file": "conformance/vectors/suite-1.0.json",
+    "path": [
+     "vectors"
+    ],
+    "len": true
+   }
+  },
+  "fmt": "{} vectors"
+ },
+ {
+  "id": "pyflakes-mutant",
+  "text": "259 tests",
+  "expr": "a",
+  "vars": {
+   "a": {
+    "file": "docs/external/pyflakes.json",
+    "path": [
+     "candidates",
+     "mutant",
+     "tests",
+     "tests_failed"
+    ]
+   }
+  },
+  "fmt": "{} tests"
+ },
+ {
+  "id": "mit-mutant",
+  "text": "43 tests",
+  "expr": "a",
+  "vars": {
+   "a": {
+    "file": "docs/external/more-itertools.json",
+    "path": [
+     "candidates",
+     "mutant",
+     "tests",
+     "tests_failed"
+    ]
+   }
+  },
+  "fmt": "{} tests"
+ },
+ {
+  "id": "t1-small",
+  "text": "54%",
+  "expr": "a*100",
+  "vars": {
+   "a": {
+    "file": "benchmarks/results/compare-pyflakes.json",
+    "path": [
+     "T1_cold_verify",
+     "verdicts",
+     "E_vs_A",
+     "rel_diff"
+    ]
+   }
+  },
+  "fmt": "{:.0f}%"
+ },
+ {
+  "id": "t1-big",
+  "text": "3%",
+  "expr": "a*100",
+  "vars": {
+   "a": {
+    "file": "benchmarks/results/compare-more-itertools.json",
+    "path": [
+     "T1_cold_verify",
+     "verdicts",
+     "E_vs_A",
+     "rel_diff"
+    ]
+   }
+  },
+  "fmt": "{:.0f}%"
+ },
+ {
+  "id": "testmon-edit",
+  "text": "14x",
+  "expr": "a/b",
+  "vars": {
+   "a": {
+    "file": "benchmarks/results/compare-more-itertools.json",
+    "path": [
+     "T3_small_edit",
+     "wall",
+     "E",
+     "mean"
+    ]
+   },
+   "b": {
+    "file": "benchmarks/results/compare-more-itertools.json",
+    "path": [
+     "T3_small_edit",
+     "wall",
+     "B",
+     "mean"
+    ]
+   }
+  },
+  "fmt": "{:.0f}x"
+ },
+ {
+  "id": "testmon-rerun",
+  "text": "30x",
+  "expr": "a/b",
+  "vars": {
+   "a": {
+    "file": "benchmarks/results/compare-more-itertools.json",
+    "path": [
+     "T2_unchanged_rerun",
+     "wall",
+     "E",
+     "mean"
+    ]
+   },
+   "b": {
+    "file": "benchmarks/results/compare-more-itertools.json",
+    "path": [
+     "T2_unchanged_rerun",
+     "wall",
+     "B",
+     "mean"
+    ]
+   }
+  },
+  "fmt": "{:.0f}x"
+ },
+ {
+  "id": "cache-hit",
+  "text": "99%",
+  "expr": "abs(a)*100",
+  "vars": {
+   "a": {
+    "file": "benchmarks/results/compare-more-itertools.json",
+    "path": [
+     "T2_unchanged_rerun",
+     "verdicts",
+     "F2_vs_A_no_certificate",
+     "rel_diff"
+    ]
+   }
+  },
+  "fmt": "{:.0f}%"
+ },
+ {
+  "id": "batch-par",
+  "text": "73%",
+  "expr": "abs(a)*100",
+  "vars": {
+   "a": {
+    "file": "benchmarks/results/compare-more-itertools.json",
+    "path": [
+     "T4_batch",
+     "verdicts",
+     "F_vs_C",
+     "rel_diff"
+    ]
+   }
+  },
+  "fmt": "{:.0f}%"
+ }
+]

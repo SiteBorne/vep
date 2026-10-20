@@ -1,6 +1,6 @@
 # Quickstart
 
-Ten minutes, no accounts, no network after installation. Every ```` ```bash quickstart ```` block below is executed by the release gate (`scripts/release/quickstart_runner.py`) against the *installed* wheel, so these commands are tested, not illustrative.
+Ten minutes, no accounts, no network after installation. Steps 1-8 work with the published `0.4.0a1` wheel; steps 9-10 use commands added after that release (`vep run`, `vep jobs`, `vep conformance`) and need a build of the current source (`pip install -e .` from a checkout). Every ```` ```bash quickstart ```` block below is executed by the release gate (`scripts/release/quickstart_runner.py`) against the *installed* wheel, so these commands are tested, not illustrative.
 
 > **Safety:** `vep evaluate` runs the project's code on your machine with your permissions and **no isolation**. Only evaluate code you already trust. See [SECURITY.md](../SECURITY.md).
 
@@ -108,6 +108,31 @@ vep simulate --tasks 500 --seed 7 --field result_sha256
 vep isolation probe --json || echo "isolation: UNVERIFIED on this machine (exit $?)"
 ```
 The model numbers above are **made-up inputs** you must replace with your own measurements; VEP never calls a model.
+
+## 9. Run through the durable controller (unreleased: needs a build of the current source)
+`vep run` enqueues the candidate as an idempotent job, evaluates it with a lease and fencing token, and certifies it on PASS. Repeating it never certifies twice.
+```bash quickstart
+cd demo
+OBJ=$(cat ../obj.txt)
+cat >> calc.py <<'PY'
+
+def mul(a, b):
+    return a * b
+PY
+CAND2=$(vep candidate create --objective "$OBJ" --author me --field candidate_id)
+vep run --candidate "$CAND2" --trusted-local-execution --json > ../run.json
+python3 -c "import json; r = json.load(open('../run.json')); print(r['job']['state'], r['run']['candidate_status'])"
+python3 -c "import json; print(json.load(open('../run.json'))['run']['certificate_id'])" > ../cert2.txt
+vep jobs list --json | python3 -c "import json,sys; print(len(json.load(sys.stdin)), 'job(s) recorded')"
+```
+
+## 10. Check the certificate without VEP's database (unreleased)
+A bundle contains the signed certificate, the signed evidence and the trusted public key. Verification needs only SHA-256, Ed25519 and a JSON parser; `conformance/node/verify.mjs` is a second implementation (see [CONFORMANCE.md](CONFORMANCE.md)).
+```bash quickstart
+cd demo
+vep conformance export --certificate "$(cat ../cert2.txt)" --out ../bundle.json --json
+vep conformance verify --bundle ../bundle.json --json
+```
 
 ## Next
 * Run the test-suite: `pip install "vep-protocol[dev]" && python -m unittest discover -s tests -t .` from a source checkout.

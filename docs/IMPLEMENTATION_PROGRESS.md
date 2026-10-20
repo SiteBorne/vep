@@ -54,3 +54,6 @@ Merged `dogfood/vep-build-cli` into main (c83bb9d; 367 tests pass on the merged 
 
 ## Phase I: isolation
 Workflow `.github/workflows/isolation.yml` and `scripts/release/isolated_e2e.py` on branch `isolation-ci` (pushed with the user's approval; main untouched). Run 39347349190 failed closed (found a real bug: pinned-image comparison vs RepoDigests, fixed in `isolation.pin_matches` with tests). Run 39347549501: T1-T12 PASS, ISOLATED_VERIFIED, end-to-end PASS, Node and Python bundle verification agree (`docs/isolation/`). Still: local Mac ISOLATION_UNVERIFIED; T12 corroboration is docker-inspect-only; no escape testing; UNTRUSTED_EXECUTION_READY = NO.
+
+## Phase K: public docs (drafts; nothing posted or pushed)
+`docs/WHY_VEP.md`, `COMPARISON.md`, `SECURITY_LIMITATIONS.md`, `ROADMAP.md`, `FAQ.md`, `ANNOUNCEMENT.md` (channel drafts), refreshed `QUICKSTART.md` (9 executed blocks; steps 9-10 need the unreleased build), `README.md` status notes, `REAL_WORLD_RESULTS.md`, `BENCHMARK_METHODOLOGY.md`. Numbers are traced mechanically: `docs/claims.json` + `scripts/check_claims.py` + `tests/test_claims.py` (13 claims, untagged figures fail). Still TODO: LAUNCH_READINESS_REPORT (Phase L), QUICKSTART/README version text after any version bump, quiet-machine benchmark re-run.
