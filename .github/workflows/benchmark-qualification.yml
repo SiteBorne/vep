@@ -1,0 +1,101 @@
+name: Benchmark qualification (hosted Linux)
+
+# Runs the preregistered paired benchmark (docs/BENCHMARK_METHODOLOGY.md) on a fresh GitHub-hosted VM so that the result does not depend
+# on a developer machine being idle. Manual only, read-only token, no secrets, no paid infrastructure. It never changes the acceptance
+# criteria: before each workload a bounded check waits for the declared start criterion (1-minute load average < 2.0); if the runner
+# cannot meet it the workload is NOT run and the attempt is reported as environmentally invalid.
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  benchmark:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 330
+    env:
+      RELEASE_TAG: v0.5.0b1
+      RELEASE_COMMIT: 578850d1245e3a2e5e282f5e9734ea7dfc0f44e6
+      IDLE_WAIT_SECONDS: "900"
+      RESULTS: ${{ github.workspace }}/hosted-results
+      TOOLS: ${{ github.workspace }}/hosted-tools
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+          fetch-depth: 0
+          fetch-tags: true
+      - uses: actions/setup-python@5fda3b95a4ea91299a34e894583c3862153e4b97 # v7.0.0
+        with:
+          python-version: "3.14"
+      - name: Verify the VEP implementation under test is the published release
+        run: |
+          set -euo pipefail
+          mkdir -p "$RESULTS" "$TOOLS"
+          test "$(git rev-parse "refs/tags/$RELEASE_TAG^{commit}")" = "$RELEASE_COMMIT"
+          git rev-parse HEAD > "$RESULTS/harness-commit.txt"
+          git diff --name-only "$RELEASE_COMMIT" HEAD > "$RESULTS/files-changed-since-release.txt"
+          echo "files changed since the release (must contain nothing under src/ or pyproject.toml):"
+          cat "$RESULTS/files-changed-since-release.txt"
+          if git diff --quiet "$RELEASE_COMMIT" HEAD -- src pyproject.toml; then echo "evaluation-critical code identical to $RELEASE_TAG"; else echo "::error::evaluation-critical code differs from the release"; exit 1; fi
+      - name: Record the environment
+        run: python benchmarks/envinfo.py > "$RESULTS/environment-host.json" && python -c "import json,os,sys; sys.path.insert(0,'benchmarks'); import envinfo; json.dump({'host': envinfo.host_info(), 'probe': envinfo.env_probe()}, open(os.environ['RESULTS']+'/environment.json','w'), indent=1)"
+      - name: Build the measurement environments (no VEP installed in either)
+        run: |
+          set -euo pipefail
+          python -m venv "$TOOLS/evalenv"
+          "$TOOLS/evalenv/bin/pip" install -q "cryptography==50.0.2"
+          python -m venv "$TOOLS/tmenv"
+          "$TOOLS/tmenv/bin/pip" install -q "pytest==9.1.1" "pytest-testmon==2.2.0"
+          "$TOOLS/evalenv/bin/pip" freeze > "$RESULTS/pip-freeze-evalenv.txt"
+          "$TOOLS/tmenv/bin/pip" freeze > "$RESULTS/pip-freeze-tmenv.txt"
+          if "$TOOLS/evalenv/bin/python" -I -c "import vep" 2>/dev/null; then echo "::error::vep is importable in the evaluation interpreter"; exit 1; fi
+          if "$TOOLS/tmenv/bin/python" -I -c "import vep" 2>/dev/null; then echo "::error::vep is importable in the testmon interpreter"; exit 1; fi
+      - name: Clone the pinned external projects (read-only) and verify their revisions
+        run: |
+          set -euo pipefail
+          python - <<'PY'
+          import json, os, subprocess, sys
+          specs = json.load(open("benchmarks/external/projects.json"))
+          tools, results = os.environ["TOOLS"], os.environ["RESULTS"]
+          for name, s in specs.items():
+              d = f"{tools}/src-{name}"
+              subprocess.run(["git", "clone", "-q", "--no-checkout", s["url"], d], check=True)
+              subprocess.run(["git", "-C", d, "checkout", "-q", s["commit"]], check=True)
+              head = subprocess.run(["git", "-C", d, "rev-parse", "HEAD"], check=True, capture_output=True, text=True).stdout.strip()
+              open(f"{results}/pin-{name}.txt", "w").write(head + "\n")
+              if head != s["commit"]:
+                  sys.exit(f"pin mismatch for {name}: {head} != {s['commit']}")
+              print(name, head)
+          PY
+      - name: Idle check, then benchmark - pyflakes 4.0.3
+        run: |
+          set -uo pipefail
+          if python benchmarks/wait_idle.py --timeout "$IDLE_WAIT_SECONDS" --label pyflakes --out "$RESULTS/idle-pyflakes.json"; then
+            python benchmarks/paired.py --project pyflakes --src "$TOOLS/src-pyflakes" --evalpy "$TOOLS/evalenv/bin/python" --testmon-py "$TOOLS/tmenv/bin/python" --out "$RESULTS/paired-pyflakes.json" 2>&1 | tee "$RESULTS/log-paired-pyflakes.txt"
+          else
+            echo "::warning::runner did not reach load < 2.0 within the bounded wait; pyflakes workload NOT run (environmentally invalid)"
+          fi
+      - name: Idle check, then benchmark - more-itertools v11.2.1
+        run: |
+          set -uo pipefail
+          if python benchmarks/wait_idle.py --timeout "$IDLE_WAIT_SECONDS" --label more-itertools --out "$RESULTS/idle-more-itertools.json"; then
+            python benchmarks/paired.py --project more-itertools --src "$TOOLS/src-more-itertools" --evalpy "$TOOLS/evalenv/bin/python" --testmon-py "$TOOLS/tmenv/bin/python" --out "$RESULTS/paired-more-itertools.json" 2>&1 | tee "$RESULTS/log-paired-more-itertools.txt"
+          else
+            echo "::warning::runner did not reach load < 2.0 within the bounded wait; more-itertools workload NOT run (environmentally invalid)"
+          fi
+      - name: Qualification report, rendered tables and job summary
+        if: always()
+        run: |
+          set -uo pipefail
+          python benchmarks/qualification_report.py --results "$RESULTS" --release-tag "$RELEASE_TAG" --release-commit "$RELEASE_COMMIT" --out "$RESULTS/qualification-report.json"
+          python benchmarks/paired_report.py --dir "$RESULTS" --out "$RESULTS/BENCHMARK_RESULTS_HOSTED_LINUX.md" --title "Paired benchmark results (GitHub-hosted ubuntu-24.04)" --note "Produced by the benchmark-qualification workflow; not comparable in absolute terms with the macOS records."
+          { echo "## Benchmark qualification"; python -c "import json,os; r=json.load(open(os.environ['RESULTS']+'/qualification-report.json')); print('Qualification:', r['qualification']); [print('-', k, v['validity']['status'], v['validity']['reasons']) for k,v in r['projects'].items()]"; } >> "$GITHUB_STEP_SUMMARY"
+          cat "$RESULTS/BENCHMARK_RESULTS_HOSTED_LINUX.md" >> "$GITHUB_STEP_SUMMARY" || true
+      - uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
+        if: always()
+        with:
+          name: benchmark-qualification
+          path: hosted-results/
+          if-no-files-found: error

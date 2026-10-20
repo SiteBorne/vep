@@ -245,25 +245,61 @@ def main() -> int:
     C["REAL_WORLD_DOGFOOD"] = cat("PASS" if rw_ok else "UNVERIFIED", evidence={"reports": rw_ev},
                                   limits=["trusted-local only", "VEP change authored interactively", "two small projects without third-party dependencies"])
 
-    # ---- benchmark reproducibility: judged on the controlled paired run; first-run records are kept as history
-    bm, ok_bm, why_bm = {}, True, []
-    for p in ("benchmarks/results/paired-pyflakes.json", "benchmarks/results/paired-more-itertools.json"):
-        if not (ROOT / p).exists():
-            ok_bm = False; why_bm.append(f"{p} missing"); continue
-        d = json.loads((ROOT / p).read_text())
-        scen = {k: {"valid_blocks": v["valid_blocks"], "excluded": len(v["excluded"]), **v["environment"]} for k, v in d["scenarios"].items()}
-        bm[p] = {"sha256": sha256_file(ROOT / p), "load_avg_1m_at_start": round(d["load_avg_1m_at_start"], 2), "gate_failures": d["gate_failures"], "scenarios": scen,
-                 "vep_commit": d["vep_commit"]}
-        if d["load_avg_1m_at_start"] >= 2.0:
-            ok_bm = False; why_bm.append(f"{p}: load_avg_1m_at_start {d['load_avg_1m_at_start']:.2f} >= 2.0 (declared criterion)")
-        if d["gate_failures"]:
-            ok_bm = False; why_bm.append(f"{p}: correctness gate failures {d['gate_failures']}")
-        for k, v in scen.items():
-            if v["valid_blocks"] < 10:
-                ok_bm = False; why_bm.append(f"{p}:{k}: only {v['valid_blocks']} valid blocks")
-    C["BENCHMARK_REPRODUCIBILITY"] = cat("PASS" if ok_bm else "UNVERIFIED", evidence={"reports": bm, "methodology": file_ev("docs/BENCHMARK_METHODOLOGY.md"),
-                                         "first_run_records_preserved": file_ev("benchmarks/results/compare-pyflakes.json", "benchmarks/results/compare-more-itertools.json")},
-                                         reason=None if ok_bm else "; ".join(why_bm) + " -- see docs/REAL_WORLD_RESULTS.md for the measured results and their stated limits")
+    # ---- benchmark reproducibility. The declared criteria are unchanged and are applied to EACH complete evidence set (one machine class);
+    # the category passes if at least one complete set satisfies them. Sets are never mixed and absolute numbers are never compared across them.
+    def gh_run_info(run_id):
+        r = subprocess.run(["gh", "run", "view", str(run_id), "-R", "SiteBorne/vep", "--json", "conclusion,workflowName,headSha,url,status"], capture_output=True, text=True)
+        return json.loads(r.stdout) if r.returncode == 0 and r.stdout.strip() else None
+
+    def evaluate_bench_set(label, rel_dir, hosted):
+        ok, why, reports = True, [], {}
+        for name in ("pyflakes", "more-itertools"):
+            rp = f"{rel_dir}/paired-{name}.json"
+            if not (ROOT / rp).exists():
+                ok = False; why.append(f"{rp} missing"); continue
+            d = json.loads((ROOT / rp).read_text())
+            scen = {k: {"valid_blocks": v["valid_blocks"], "excluded": len(v["excluded"]), **v["environment"]} for k, v in d["scenarios"].items()}
+            reports[rp] = {"sha256": sha256_file(ROOT / rp), "load_avg_1m_at_start": round(d["load_avg_1m_at_start"], 2), "gate_failures": d["gate_failures"],
+                           "scenarios": scen, "vep_commit": d["vep_commit"], "machine": d["host"].get("platform")}
+            if d["load_avg_1m_at_start"] >= 2.0:
+                ok = False; why.append(f"{rp}: load_avg_1m_at_start {d['load_avg_1m_at_start']:.2f} >= 2.0 (declared criterion)")
+            if d["gate_failures"]:
+                ok = False; why.append(f"{rp}: correctness gate failures {d['gate_failures']}")
+            for k, v in scen.items():
+                if v["valid_blocks"] < 10:
+                    ok = False; why.append(f"{rp}:{k}: only {v['valid_blocks']} valid blocks")
+        extra = {}
+        if hosted:  # a hosted set must also prove where and on what it ran
+            qp = ROOT / rel_dir / "qualification-report.json"
+            if not qp.exists():
+                ok = False; why.append("qualification-report.json missing")
+            else:
+                q = json.loads(qp.read_text())
+                run_id = q["run"].get("GITHUB_RUN_ID")
+                info = gh_run_info(run_id) if run_id else None
+                files_ok = all((ROOT / rel_dir / f).exists() and sha256_file(ROOT / rel_dir / f) == m["sha256"] for f, m in q["files"].items() if f.startswith("paired-"))
+                extra = {"qualification": q["qualification"], "run_id": run_id, "run": info, "vep_implementation_matches_release": q["source"]["vep_implementation_matches_release"],
+                         "pins_match": all(v["pin_matches"] for v in q["projects"].values()), "recorded_file_hashes_match": files_ok,
+                         "report_sha256": sha256_file(qp)}
+                if q["qualification"] != "VALID":
+                    ok = False; why.append(f"qualification report says {q['qualification']}")
+                if not q["source"]["vep_implementation_matches_release"]:
+                    ok = False; why.append("benchmarked VEP implementation differs from the release commit")
+                if not extra["pins_match"]:
+                    ok = False; why.append("external project pins do not match")
+                if not files_ok:
+                    ok = False; why.append("result files do not match the hashes recorded in the report")
+                if not info or info["conclusion"] != "success" or info["workflowName"] != "Benchmark qualification (hosted Linux)":
+                    ok = False; why.append("hosted run could not be confirmed as a successful benchmark-qualification run")
+        return {"label": label, "ok": ok, "why": why, "reports": reports, **extra}
+
+    bm_sets = [evaluate_bench_set("macOS developer machine (not idle)", "benchmarks/results", False),
+               evaluate_bench_set("GitHub-hosted ubuntu-24.04", "benchmarks/results/hosted-linux", True)]
+    ok_bm = any(x["ok"] for x in bm_sets)
+    C["BENCHMARK_REPRODUCIBILITY"] = cat("PASS" if ok_bm else "UNVERIFIED", evidence={"evidence_sets": bm_sets, "criteria": "per set: load_avg_1m_at_start < 2.0, no correctness-gate failure, >= 10 valid blocks per scenario (unchanged); hosted set additionally verified against its GitHub run",
+                                                                                      "methodology": file_ev("docs/BENCHMARK_METHODOLOGY.md"),
+                                                                                      "first_run_records_preserved": file_ev("benchmarks/results/compare-pyflakes.json", "benchmarks/results/compare-more-itertools.json")},
+                                         reason=None if ok_bm else "; ".join(f"[{x['label']}] " + "; ".join(x["why"]) for x in bm_sets) + " -- see docs/REAL_WORLD_RESULTS.md")
 
     # ---- isolation (hosted runner evidence only)
     att = json.loads((ROOT / "docs/isolation/ci-run-39347549501-attestation.json").read_text())
@@ -366,6 +402,23 @@ def main() -> int:
     ci_green = pushed and needed <= done and not failed
     rel = gh_json(["release", "view", f"v{TARGET_VERSION}", "-R", "SiteBorne/vep", "--json", "tagName,isPrerelease,assets,url"])
     rel_ok = bool(rel) and rel.get("isPrerelease") and {a["name"] for a in rel["assets"]} >= {f"vep_protocol-{TARGET_VERSION}-py3-none-any.whl", f"vep_protocol-{TARGET_VERSION}.tar.gz", "SHA256SUMS"}
+    def verify_published_release():
+        """Download the published assets into a fresh directory, recompute their hashes, compare with SHA256SUMS and verify attestations."""
+        out = {"checked": False}
+        d = Path(tempfile.mkdtemp(prefix="vep-published-"))
+        dl = subprocess.run(["gh", "release", "download", f"v{TARGET_VERSION}", "-R", "SiteBorne/vep", "-D", str(d)], capture_output=True, text=True)
+        if dl.returncode != 0 or not (d / "SHA256SUMS").exists():
+            return {**out, "reason": "release assets could not be downloaded"}
+        sums = {l.split()[1]: l.split()[0] for l in (d / "SHA256SUMS").read_text().splitlines() if l.strip()}
+        actual = {n: sha256_file(d / n) for n in sums if (d / n).exists()}
+        att = {}
+        for n in sums:
+            r = subprocess.run(["gh", "attestation", "verify", str(d / n), "--repo", "SiteBorne/vep"], capture_output=True, text=True)
+            att[n] = r.returncode == 0
+        return {"checked": True, "sha256sums_match": actual == sums and bool(sums), "attestations_verified": att, "assets": sums,
+                "ok": actual == sums and bool(sums) and all(att.values())}
+    published = verify_published_release()
+    gate["published_release"] = published
     rv = ROOT / "release-verification.json"
     rvd = json.loads(rv.read_text()) if rv.exists() else {}
     iso_run = json.loads((ROOT / "docs/isolation/ci-run-39347549501-run.json").read_text())
@@ -374,7 +427,7 @@ def main() -> int:
     conds = {"version_is_target": gate["package_version"] == TARGET_VERSION, "working_tree_clean": clean, "head_pushed": pushed,
              "hosted_ci_green_for_head": ci_green,
              "isolation_run_commit_in_release_revision": iso_in_rev, "isolation_evidence_revalidated": reval,
-             "public_release_exists": bool(rel_ok), "release_artifacts_verified": rvd.get("checksums_and_attestation_verified") is True,
+             "public_release_exists": bool(rel_ok), "release_artifacts_verified": published.get("ok") is True and rvd.get("checksums_and_attestation_verified") is True,
              "quickstart_from_released_artifacts": rvd.get("quickstart_from_released_wheel") is True,
              "external_security_review": False, "escape_testing": False, "in_container_runtime_corroboration": False,
              "production_criteria_defined_and_met": False}
@@ -439,7 +492,8 @@ def write_report(g: dict, path: Path) -> None:
     L += ["", "## Real-world scenarios executed", "* VEP-on-VEP (`docs/dogfood/`, final run `vep-on-vep-run-4-final-runner.json`), pyflakes and more-itertools at pinned commits (`docs/external/`), one live local-model run (`docs/live_agent_run.json`).",
           "* Report freshness is checked mechanically against the evaluation-critical source; see `REAL_WORLD_DOGFOOD` in `launch-gate.json`.", "",
           "## Benchmark, conformance, isolation",
-          "* Benchmarks: `benchmarks/results/compare-*.json`, `docs/REAL_WORLD_RESULTS.md`; **measured on a non-idle machine**, status above.",
+          "* Benchmarks (declared criteria applied unchanged to each complete evidence set; sets are never mixed): " + "; ".join(f"{x['label']}: {'VALID' if x['ok'] else 'NOT valid (' + '; '.join(x['why']) + ')'}" for x in C["BENCHMARK_REPRODUCIBILITY"]["evidence"]["evidence_sets"]) + ". Results: `docs/REAL_WORLD_RESULTS.md`, `docs/BENCHMARK_RESULTS_PAIRED.md`, `docs/BENCHMARK_RESULTS_HOSTED_LINUX.md`.",
+          f"* Published release artifacts re-verified now from GitHub: {g['published_release']}",
           "* Conformance: `conformance/vectors/suite-1.0.json` run by the Python reference and the independent Node verifier (`scripts/conformance_check.sh`).",
           "* Isolation: hosted-runner runs 39347349190 (failed closed, bug fixed) and 39347549501 (pass); this machine remains `ISOLATION_UNVERIFIED`.", "",
           "## Security trust classification",

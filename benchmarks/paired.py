@@ -32,6 +32,8 @@ from concurrent.futures import ThreadPoolExecutor
 from pathlib import Path
 
 REPO = Path(__file__).resolve().parents[1]
+sys.path.insert(0, str(Path(__file__).resolve().parent))
+import envinfo  # noqa: E402  (portable environment probes: macOS and Linux)
 SPECS = json.loads((REPO / "benchmarks" / "external" / "projects.json").read_text())
 DRIVER = REPO / "benchmarks" / "compare_vep_driver.py"
 REL, ABS = 0.10, 0.05  # preregistered
@@ -94,13 +96,7 @@ def summ(xs):
 
 
 def env_probe() -> dict:
-    load = os.getloadavg()[0]
-    idle = None
-    r = subprocess.run(["top", "-l", "2", "-n", "0", "-s", "2"], capture_output=True, text=True)
-    m = re.findall(r"CPU usage:.*?([\d.]+)% idle", r.stdout)
-    if m:
-        idle = float(m[-1])
-    return {"load_avg_1m": round(load, 2), "cpu_idle_pct": idle}
+    return envinfo.env_probe()
 
 
 def run_proc(argv, cwd, capture=False):
@@ -265,10 +261,8 @@ def main():
     report = {"methodology": "docs/BENCHMARK_METHODOLOGY.md (thresholds) + procedures in this file's docstring", "project": a.project, "seed": a.seed,
               "pinned_commit": subprocess.run(["git", "-C", a.src, "rev-parse", "HEAD"], capture_output=True, text=True).stdout.strip(),
               "vep_commit": subprocess.run(["git", "-C", str(REPO), "rev-parse", "HEAD"], capture_output=True, text=True).stdout.strip(),
-              "host": {"platform": platform.platform(), "machine": platform.machine(), "cpus": os.cpu_count(), "python": platform.python_version(),
-                       "power": subprocess.run(["pmset", "-g", "batt"], capture_output=True, text=True).stdout.splitlines()[:1],
-                       "swap": subprocess.run(["sysctl", "-n", "vm.swapusage"], capture_output=True, text=True).stdout.strip()},
-              "load_avg_1m_at_start": os.getloadavg()[0], "start_probe": env_probe(), "planned_valid_blocks": a.blocks, "warmups": a.warmups,
+              "host": envinfo.host_info(),
+              "load_avg_1m_at_start": os.getloadavg()[0], "start_probe": envinfo.env_probe(), "planned_valid_blocks": a.blocks, "warmups": a.warmups,
               "batch": {"n": a.batch_n, "workers": a.workers}, "scenarios": {}}
     try:
         report["correctness_gate"] = b.gate()
