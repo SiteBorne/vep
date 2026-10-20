@@ -1,0 +1,7 @@
+test_add (test_arithmetic.ArithmeticTests.test_add) ... ok
+test_mul (test_arithmetic.ArithmeticTests.test_mul) ... ok
+
+----------------------------------------------------------------------
+Ran 2 tests in 0.000s
+
+OK

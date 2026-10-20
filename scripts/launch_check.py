@@ -44,6 +44,10 @@ LEVELS = {
     "PUBLIC_BETA_READY": {"requires_level": "LOCAL_BETA_READY",
                           "categories": ["BENCHMARK_REPRODUCIBILITY", "SUPPLY_CHAIN", "ANNOUNCEMENT_CLAIMS"],
                           "conditions": ["version_is_target", "working_tree_clean", "head_pushed", "hosted_ci_green_for_head"]},
+    "ANNOUNCEMENT_READY": {"requires_level": "PUBLIC_BETA_READY", "categories": ["ANNOUNCEMENT_CLAIMS", "PUBLIC_QUICKSTART"],
+                           "conditions": ["public_release_exists", "release_artifacts_verified", "quickstart_from_released_artifacts"]},
+    "ISOLATED_EXECUTION_VERIFIED": {"categories": ["ISOLATION"],
+                                    "conditions": ["isolation_run_commit_in_release_revision", "isolation_evidence_revalidated"]},
     "UNTRUSTED_EXECUTION_READY": {"requires_level": "PUBLIC_BETA_READY", "categories": ["ISOLATION"],
                                   "conditions": ["external_security_review", "escape_testing", "in_container_runtime_corroboration"]},
     "PRODUCTION_READY": {"requires_level": "UNTRUSTED_EXECUTION_READY", "categories": [],
@@ -77,10 +81,21 @@ def sha256_file(p: Path) -> str:
     return hashlib.sha256(p.read_bytes()).hexdigest()
 
 
+LOGS: list[dict] = []
+
+
+def sanitize(text: str) -> str:
+    """Saved logs must not leak machine-specific paths."""
+    for needle, repl in ((str(ROOT), "<repo>"), (str(Path.home()), "<home>"), (tempfile.gettempdir(), "<tmp>"), ("/private/var/folders", "<tmp>")):
+        text = text.replace(needle, repl)
+    return text
+
+
 def run(argv, timeout=900, cwd=ROOT, env=None) -> dict:
     try:
         r = subprocess.run(argv, cwd=cwd, capture_output=True, text=True, timeout=timeout, env=env)
         out = r.stdout + r.stderr
+        LOGS.append({"argv": [os.path.basename(str(argv[0]))] + [str(a) for a in argv[1:]], "exit_code": r.returncode, "output": out})
         return {"argv": [os.path.basename(argv[0]) if i == 0 else a for i, a in enumerate(argv)], "exit_code": r.returncode,
                 "output_sha256": hashlib.sha256(out.encode()).hexdigest(), "tail": out.strip().splitlines()[-3:], "_out": out}
     except FileNotFoundError as exc:
@@ -135,6 +150,9 @@ def main() -> int:
     ap.add_argument("--skip-slow", action="store_true", help="skip build/clean-room (marks them NOT_RUN)")
     a = ap.parse_args()
     head = git("rev-parse", "HEAD")
+    old_gate = Path(a.out)
+    if old_gate.exists():
+        old_gate.unlink()  # a stale gate must not be able to fail (or pass) the suite that regenerates it
     gate: dict = {"gate_version": 1, "source_commit": head, "branch": git("rev-parse", "--abbrev-ref", "HEAD"),
                   "tracked_changes": git("status", "--porcelain", "--untracked-files=no").splitlines(), "categories": {}}
     from vep import versions
@@ -180,10 +198,16 @@ def main() -> int:
         return cat("PASS" if extra_ok else "UNVERIFIED", evidence=ev)
 
     C["CORE_PROTOCOL"] = from_tests("CORE_PROTOCOL")
-    if C["CORE_PROTOCOL"]["status"] == "PASS" and (unittest_run["exit_code"] != 0 or pytest_run["exit_code"] != 0):
+    skipped_files = {f: v["skipped"] for f, v in by_file.items() if v["skipped"]}
+    if C["CORE_PROTOCOL"]["status"] == "PASS" and (skipped_files or totals["skipped"]):
+        C["CORE_PROTOCOL"] = cat("FAIL", reason=f"unexplained skips: {skipped_files}", evidence={"commands": [strip(pytest_run)]})
+    elif C["CORE_PROTOCOL"]["status"] == "PASS" and (unittest_run["exit_code"] != 0 or pytest_run["exit_code"] != 0):
         C["CORE_PROTOCOL"] = cat("FAIL", reason="full suite not green", evidence={"commands": [strip(pytest_run), strip(unittest_run)]})
     elif C["CORE_PROTOCOL"]["status"] == "PASS":
-        C["CORE_PROTOCOL"]["evidence"]["commands"].append(strip(unittest_run))
+        sim = run([PY, "benchmarks/run_simulation.py", "--out-json", os.devnull, "--out-md", os.devnull])
+        C["CORE_PROTOCOL"]["evidence"]["commands"] += [strip(unittest_run), strip(sim)]
+        if sim["exit_code"] != 0:
+            C["CORE_PROTOCOL"] = cat("FAIL", reason="synthetic simulation not reproducible", evidence={"commands": [strip(sim)]})
     for name in ("CANDIDATE_LIFECYCLE", "EXECUTION_CONTROLLER", "RESOURCE_ACCOUNTING", "BUILD_INTEGRATION", "EVIDENCE_INTEGRITY",
                  "CERTIFICATE_VERIFICATION", "COMPOSITE_VERIFICATION", "SECURITY"):
         C[name] = from_tests(name)
@@ -209,7 +233,8 @@ def main() -> int:
 
     # ---- real-world reports (fresh only)
     rw_ev, rw_ok, notes = [], True, []
-    for path, tool_key in (("docs/dogfood/vep-on-vep-run-4-final-runner.json", ("tool", "tool_commit")),
+    dog = sorted((ROOT / "docs" / "dogfood").glob("vep-on-vep-run-[0-9]*.json"), key=lambda p: int(re.search(r"run-(\d+)", p.name).group(1)))[-1]
+    for path, tool_key in ((str(dog.relative_to(ROOT)), ("tool", "tool_commit")),
                            ("docs/external/pyflakes.json", ("tool", "vep_commit")), ("docs/external/more-itertools.json", ("tool", "vep_commit"))):
         d = json.loads((ROOT / path).read_text())
         commit = d[tool_key[0]][tool_key[1]]
@@ -220,15 +245,25 @@ def main() -> int:
     C["REAL_WORLD_DOGFOOD"] = cat("PASS" if rw_ok else "UNVERIFIED", evidence={"reports": rw_ev},
                                   limits=["trusted-local only", "VEP change authored interactively", "two small projects without third-party dependencies"])
 
-    # ---- benchmark reproducibility
-    bm = {}
-    for p in ("benchmarks/results/compare-pyflakes.json", "benchmarks/results/compare-more-itertools.json"):
+    # ---- benchmark reproducibility: judged on the controlled paired run; first-run records are kept as history
+    bm, ok_bm, why_bm = {}, True, []
+    for p in ("benchmarks/results/paired-pyflakes.json", "benchmarks/results/paired-more-itertools.json"):
+        if not (ROOT / p).exists():
+            ok_bm = False; why_bm.append(f"{p} missing"); continue
         d = json.loads((ROOT / p).read_text())
-        bm[p] = {"sha256": sha256_file(ROOT / p), "load_avg_1m_at_start": round(d["host"]["load_avg_1m_at_start"], 2),
-                 "gate_failures": d["gate_failures"]}
-    idle = all(v["load_avg_1m_at_start"] < 2.0 and not v["gate_failures"] for v in bm.values())
-    C["BENCHMARK_REPRODUCIBILITY"] = cat("PASS" if idle else "UNVERIFIED", evidence={"reports": bm, "methodology": file_ev("docs/BENCHMARK_METHODOLOGY.md")},
-                                         reason=None if idle else "benchmarks were measured on a machine that was not idle (declared deviation); re-run on a quiet machine required")
+        scen = {k: {"valid_blocks": v["valid_blocks"], "excluded": len(v["excluded"]), **v["environment"]} for k, v in d["scenarios"].items()}
+        bm[p] = {"sha256": sha256_file(ROOT / p), "load_avg_1m_at_start": round(d["load_avg_1m_at_start"], 2), "gate_failures": d["gate_failures"], "scenarios": scen,
+                 "vep_commit": d["vep_commit"]}
+        if d["load_avg_1m_at_start"] >= 2.0:
+            ok_bm = False; why_bm.append(f"{p}: load_avg_1m_at_start {d['load_avg_1m_at_start']:.2f} >= 2.0 (declared criterion)")
+        if d["gate_failures"]:
+            ok_bm = False; why_bm.append(f"{p}: correctness gate failures {d['gate_failures']}")
+        for k, v in scen.items():
+            if v["valid_blocks"] < 10:
+                ok_bm = False; why_bm.append(f"{p}:{k}: only {v['valid_blocks']} valid blocks")
+    C["BENCHMARK_REPRODUCIBILITY"] = cat("PASS" if ok_bm else "UNVERIFIED", evidence={"reports": bm, "methodology": file_ev("docs/BENCHMARK_METHODOLOGY.md"),
+                                         "first_run_records_preserved": file_ev("benchmarks/results/compare-pyflakes.json", "benchmarks/results/compare-more-itertools.json")},
+                                         reason=None if ok_bm else "; ".join(why_bm) + " -- see docs/REAL_WORLD_RESULTS.md for the measured results and their stated limits")
 
     # ---- isolation (hosted runner evidence only)
     att = json.loads((ROOT / "docs/isolation/ci-run-39347549501-attestation.json").read_text())
@@ -269,9 +304,11 @@ def main() -> int:
         arts = sorted(dist.glob("*"))
         tw = run([PY, "-m", "twine", "check", "--strict", *map(str, arts)]) if arts else {"exit_code": None}
         art_ev = [{"name": p.name, "sha256": sha256_file(p), "bytes": p.stat().st_size} for p in arts]
-        C["PACKAGING"] = cat("PASS" if build["exit_code"] == 0 and len(arts) == 2 and tw["exit_code"] == 0 else "FAIL",
-                             evidence={"artifacts": art_ev, "commands": [strip(build), strip(tw)],
-                                       "note": "built from this commit; version is still the pre-bump value, see conditions"})
+        audit = run([PY, "scripts/release/ci_checks.py", "--dist", str(dist)])  # secrets, keys, databases, host paths inside the artifacts
+        names_ok = all(gate["package_version"].replace("-", "_") in p.name for p in arts)
+        C["PACKAGING"] = cat("PASS" if build["exit_code"] == 0 and len(arts) == 2 and tw["exit_code"] == 0 and audit["exit_code"] == 0 and names_ok else "FAIL",
+                             evidence={"artifacts": art_ev, "commands": [strip(build), strip(tw), strip(audit)], "version_in_filenames": names_ok,
+                                       "note": "checksums are computed from these exact files"})
         wheels = [p for p in arts if p.suffix == ".whl"]
         if not wheels:
             C["PUBLIC_QUICKSTART"] = cat("NOT_RUN", reason="no wheel built")
@@ -284,8 +321,18 @@ def main() -> int:
             else:
                 cr = run([PY, "scripts/release/cleanroom.py", "--venv", str(venv)], timeout=600)
                 qs = run([PY, "scripts/release/quickstart_runner.py", "--bin-dir", str(venv / "bin")], timeout=600)
-                C["PUBLIC_QUICKSTART"] = cat("PASS" if cr["exit_code"] == 0 and qs["exit_code"] == 0 else "FAIL",
-                                             evidence={"commands": [strip(mk), strip(ins), strip(cr), strip(qs)], "installed_wheel": wheels[0].name})
+                sd = [p for p in arts if p.name.endswith(".tar.gz")]
+                sdv = Path(tempfile.mkdtemp()) / "s"
+                sd_cmds = []
+                if sd:
+                    sd_cmds = [run([sys.executable, "-m", "venv", str(sdv)]), run([str(sdv / "bin" / "pip"), "install", "-q", str(sd[0])], timeout=900)]
+                    if sd_cmds[-1]["exit_code"] == 0:
+                        sd_cmds += [run([str(sdv / "bin" / "vep"), "version", "--json"]), run([PY, "scripts/release/cleanroom.py", "--venv", str(sdv)], timeout=600)]
+                sd_ok = bool(sd_cmds) and all(c["exit_code"] == 0 for c in sd_cmds)
+                C["PUBLIC_QUICKSTART"] = cat("PASS" if cr["exit_code"] == 0 and qs["exit_code"] == 0 and sd_ok else "FAIL",
+                                             evidence={"commands": [strip(mk), strip(ins), strip(cr), strip(qs)] + [strip(c) for c in sd_cmds],
+                                                       "installed_wheel": wheels[0].name, "installed_sdist": sd[0].name if sd else None,
+                                                       "sdist_clean_install_and_cleanroom_ok": sd_ok})
     wf = sorted((ROOT / ".github" / "workflows").glob("*.yml"))
     C["SUPPLY_CHAIN"] = cat("PASS" if ci["exit_code"] == 0 and (ROOT / ".github/dependabot.yml").exists() and wf else "FAIL",
                             evidence={"commands": [strip(ci)], "workflows": [w.name for w in wf], "files": file_ev(".github/dependabot.yml"),
@@ -301,18 +348,60 @@ def main() -> int:
         if C[c]["status"] == "PASS" and not C[c].get("evidence"):
             C[c] = cat("FAIL", reason="PASS without evidence")
 
-    # ---- level conditions (manual-evidence items are NOT_RUN unless recorded)
-    remote = git("ls-remote", "origin", "HEAD") if shutil.which("git") else ""
-    pushed = bool(remote) and remote.split()[0] == head
+    # ---- level conditions: computed from the repository, GitHub and recorded evidence; manual items stay unmet until recorded
+    remote_refs = git("ls-remote", "origin").splitlines() if shutil.which("git") else []
+    pushed_refs = [r.split()[1] for r in remote_refs if r.split()[0] == head]
+    pushed = bool(pushed_refs)
+
+    def gh_json(args):
+        r = subprocess.run(["gh", *args], capture_output=True, text=True)
+        try:
+            return json.loads(r.stdout) if r.returncode == 0 and r.stdout.strip() else None
+        except ValueError:
+            return None
+    ci_runs = gh_json(["run", "list", "-R", "SiteBorne/vep", "--commit", head, "--json", "workflowName,conclusion,status,event,url", "-L", "30"]) if pushed else None
+    needed = {"CI", "CodeQL"}
+    done = {r["workflowName"] for r in (ci_runs or []) if r["status"] == "completed" and r["conclusion"] == "success"}
+    failed = [r for r in (ci_runs or []) if r["status"] == "completed" and r["conclusion"] not in ("success", "skipped", "neutral")]
+    ci_green = pushed and needed <= done and not failed
+    rel = gh_json(["release", "view", f"v{TARGET_VERSION}", "-R", "SiteBorne/vep", "--json", "tagName,isPrerelease,assets,url"])
+    rel_ok = bool(rel) and rel.get("isPrerelease") and {a["name"] for a in rel["assets"]} >= {f"vep_protocol-{TARGET_VERSION}-py3-none-any.whl", f"vep_protocol-{TARGET_VERSION}.tar.gz", "SHA256SUMS"}
+    rv = ROOT / "release-verification.json"
+    rvd = json.loads(rv.read_text()) if rv.exists() else {}
+    iso_run = json.loads((ROOT / "docs/isolation/ci-run-39347549501-run.json").read_text())
+    iso_in_rev = subprocess.run(["git", "-C", str(ROOT), "merge-base", "--is-ancestor", iso_run["headSha"], "HEAD"]).returncode == 0
+    reval = (ROOT / "docs/isolation/REVALIDATION.md").exists()
     conds = {"version_is_target": gate["package_version"] == TARGET_VERSION, "working_tree_clean": clean, "head_pushed": pushed,
-             "hosted_ci_green_for_head": False,  # requires a pushed commit with green CI; none exists for HEAD
+             "hosted_ci_green_for_head": ci_green,
+             "isolation_run_commit_in_release_revision": iso_in_rev, "isolation_evidence_revalidated": reval,
+             "public_release_exists": bool(rel_ok), "release_artifacts_verified": rvd.get("checksums_and_attestation_verified") is True,
+             "quickstart_from_released_artifacts": rvd.get("quickstart_from_released_wheel") is True,
              "external_security_review": False, "escape_testing": False, "in_container_runtime_corroboration": False,
              "production_criteria_defined_and_met": False}
-    gate["conditions"] = {k: {"met": v, "evidence": ("computed now" if k in ("version_is_target", "working_tree_clean", "head_pushed") else "none recorded: NOT_RUN")} for k, v in conds.items()}
+    computed = {"version_is_target", "working_tree_clean", "head_pushed", "hosted_ci_green_for_head", "isolation_run_commit_in_release_revision",
+                "isolation_evidence_revalidated", "public_release_exists", "release_artifacts_verified", "quickstart_from_released_artifacts"}
+    detail = {"head_pushed": pushed_refs, "hosted_ci_green_for_head": {"runs": ci_runs, "required": sorted(needed), "failed": failed},
+              "public_release_exists": (rel or {}).get("url"), "isolation_run_commit_in_release_revision": iso_run["headSha"]}
+    gate["conditions"] = {k: {"met": v, "evidence": ("computed now" if k in computed else "none recorded: NOT_RUN"), **({"detail": detail[k]} if k in detail else {})} for k, v in conds.items()}
     levels, reasons = compute_levels(C, conds)
     gate["levels"] = {k: {"ready": levels[k], "blocking": reasons[k]} for k in LEVELS}
-    gate["ANNOUNCEMENT_READY"] = "YES" if levels["PUBLIC_BETA_READY"] else "NO"
+    gate["ANNOUNCEMENT_READY"] = "YES" if levels["ANNOUNCEMENT_READY"] else "NO"
     gate["artifacts"] = C["PACKAGING"].get("evidence", {}).get("artifacts", [])
+    gate["release_decision"] = ("PUBLISHED" if levels["ANNOUNCEMENT_READY"] else "GO" if levels["PUBLIC_BETA_READY"] else "NO_GO")
+    gate["release_decision_note"] = {"PUBLISHED": "release exists and is verified", "GO": "all PUBLIC_BETA_READY requirements met; publication not yet verified",
+                                     "NO_GO": "blocked by: " + "; ".join(reasons["PUBLIC_BETA_READY"] or ["(see ANNOUNCEMENT_READY)"])}[gate["release_decision"]]
+    logdir = ROOT / "docs" / "launch-logs"
+    if logdir.exists():
+        shutil.rmtree(logdir)
+    logdir.mkdir()
+    index = []
+    for i, entry in enumerate(LOGS):
+        name = f"{i:02d}-" + re.sub(r"[^A-Za-z0-9]+", "-", " ".join(entry["argv"][:3]))[:50].strip("-") + ".log"
+        (logdir / name).write_text(sanitize(f"$ {' '.join(entry['argv'])}\n# exit {entry['exit_code']}\n\n{entry['output']}"))
+        index.append({"log": name, "argv": entry["argv"], "exit_code": entry["exit_code"], "sha256": sha256_file(logdir / name)})
+    (logdir / "index.json").write_text(json.dumps({"source_commit": head, "commands": index}, indent=1))
+    gate["command_logs"] = "docs/launch-logs/ (sanitized of machine paths; index.json lists exit codes and digests)"
+    gate["test_summary_by_file"] = {k: v for k, v in sorted(by_file.items())}
     Path(a.out).write_text(json.dumps(gate, indent=1, sort_keys=True, default=str) + "\n")
     write_report(gate, Path(a.report))
     print(json.dumps({"ANNOUNCEMENT_READY": gate["ANNOUNCEMENT_READY"], "levels": {k: v["ready"] for k, v in gate["levels"].items()},
@@ -325,8 +414,10 @@ def write_report(g: dict, path: Path) -> None:
     t = g["test_totals"]["pytest"]
     L = [f"# Launch readiness report", "",
          "Generated by `scripts/launch_check.py` from `launch-gate.json`; rules are in that script, not in prose.", "",
-         f"**ANNOUNCEMENT_READY = {g['ANNOUNCEMENT_READY']}**  (rule: YES only when PUBLIC_BETA_READY)", "",
-         "## Identity", f"* Source commit: `{g['source_commit']}` on `{g['branch']}`; tracked changes at run time: {len(g['tracked_changes'])}",
+         f"**RELEASE DECISION: {g['release_decision']}**", "",
+         f"**ANNOUNCEMENT_READY = {g['ANNOUNCEMENT_READY']}**  (rule: PUBLIC_BETA_READY, a genuinely published release with verified artifacts, the claims check and a released-artifact quickstart)", "",
+         "## Identity", f"* Source commit (exact tested revision): `{g['source_commit']}` on `{g['branch']}`; tracked changes at run time: {len(g['tracked_changes'])}",
+         f"* Decision note: {g['release_decision_note']}",
          f"* Package version: `{g['package_version']}` (target `{g['target_version']}`, not bumped); protocol `{g['protocol_version']}`",
          f"* Tests: pytest {t['tests']} run, {t['failures']} failed, {t['errors']} errors, {t['skipped']} skipped; unittest ran {g['test_totals']['unittest_ran']} (exit {g['test_totals']['unittest_exit']}). The count is not the headline: see the real-world rows below.", "",
          "## Readiness levels", "| Level | Ready | Blocking |", "|---|---|---|"]
@@ -360,7 +451,9 @@ def write_report(g: dict, path: Path) -> None:
     L += [f"* `{x['name']}` sha256 `{x['sha256']}` ({x['bytes']} bytes)" for x in g["artifacts"]] or ["* none built"]
     L += ["", "## CI run identifiers and publication status",
           "* Hosted: release run 39303007794 (v0.4.0a1 tag), isolation runs 39347349190 and 39347549501 on branch `isolation-ci`.",
-          "* No hosted CI/CodeQL run exists for this commit; the branch is not pushed to `main`. Published: prerelease `v0.4.0a1` only. Nothing in this report has been posted anywhere.", "",
+          f"* Hosted CI for this exact commit: {'green (' + ', '.join(sorted({r['workflowName'] for r in (g['conditions']['hosted_ci_green_for_head'].get('detail') or {}).get('runs') or []})) + ')' if g['conditions']['hosted_ci_green_for_head']['met'] else 'NOT MET (not pushed, or required workflows not green on this commit)'}.",
+          f"* Public release v{g['target_version']}: {'exists' if g['conditions']['public_release_exists']['met'] else 'does NOT exist'}. Published prerelease on GitHub before this work: `v0.4.0a1`. Nothing in this report has been posted anywhere.",
+          f"* Command logs: {g.get('command_logs')}.", "",
           "## Unverified or not implemented",
           "Live autonomous-agent runs; projects with third-party dependencies; Go or third verifier; remote execution (REAPI); cross-candidate evidence reuse; in-container runtime corroboration; escape testing; external audit; quiet-machine benchmark; key rotation.", ""]
     path.write_text("\n".join(L) + "\n")

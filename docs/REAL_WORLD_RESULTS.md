@@ -15,7 +15,35 @@ Defects in VEP found by doing this (all fixed, with tests): the anti-shadowing r
 not hermetic against an installed copy; a path where an **installed copy of the project could be tested instead of the
 candidate and certify (false green)**; id/digest/timestamp patterns accepting a trailing newline.
 
-## 2. Speed comparison (`docs/BENCHMARK_METHODOLOGY.md`; raw data `benchmarks/results/compare-*.json`)
+## 2a. Controlled paired benchmark (current; full tables in [BENCHMARK_RESULTS_PAIRED](BENCHMARK_RESULTS_PAIRED.md))
+Procedure ([BENCHMARK_METHODOLOGY](BENCHMARK_METHODOLOGY.md), "Controlled paired run"): 10 analysed blocks per scenario after 2 warmups, every configuration once per block in a seeded random order, identical trees, no block excluded; verdicts by the **preregistered** rule (Welch 95% interval, 10% relative and 50 ms absolute thresholds) with a paired-bootstrap interval alongside (the two agreed on every comparison). Raw data: `benchmarks/results/paired-*.json`.
+
+| Scenario (cold/warm) | pyflakes (0.46 s suite) | more-itertools (6.4 s suite) |
+|---|---|---|
+| S1 cold single: VEP vs direct | VEP_SLOWER, +50.5% | NO_MEASURABLE_ADVANTAGE, +3.9% |
+| S1 cold single: VEP vs testmon | VEP_FASTER (testmon pays for coverage on a cold run) | VEP_FASTER, -17.4% |
+| S2 warm unchanged: VEP vs direct | VEP_SLOWER, +53.9% | NO_MEASURABLE_ADVANTAGE, +3.8% |
+| S2 warm unchanged: VEP vs testmon | VEP_SLOWER, +224% | VEP_SLOWER, 30.6x |
+| S2 warm unchanged: **VEP build-cache hit** vs direct (no certificate) | VEP_FASTER, -82.7% (10 hits, 0 misses) | VEP_FASTER, -98.8% (10 hits, 0 misses) |
+| S3 warm after edit: VEP vs direct | VEP_SLOWER, +55.7% | NO_MEASURABLE_ADVANTAGE, +3.8% |
+| S3 warm after edit: VEP vs testmon | VEP_SLOWER, +158% | VEP_SLOWER, 14.5x |
+| S4 cold batch of 4: VEP 4 workers vs direct parallel | VEP_SLOWER, +78.5% | NO_MEASURABLE_ADVANTAGE, +6.0% |
+| S4 cold batch of 4: VEP 4 workers vs direct sequential | VEP_FASTER, -50.4% | VEP_FASTER, -73.0% |
+| S4 cold batch of 4: VEP 1 worker vs direct sequential | VEP_SLOWER, +40.6% | NO_MEASURABLE_ADVANTAGE, +2.9% |
+
+**Verdict on speed: no advantage.** VEP is slower than direct execution on the short suite, indistinguishable from it (within +/-10%) on the 6.4 s suite, and much slower than change-based test selection on repeated runs. Its parallelism matches plain parallel execution. The one large speedup is the exact-snapshot build-cache hit, which produces no certificate. CPU time follows wall time (VEP uses about 4% more CPU than a direct run on the longer suite; about 47% more on the short one).
+
+**Environment validity: the benchmark gate stays UNVERIFIED.** The 1-minute load average at start was 5.0 (pyflakes) and 5.6 (more-itertools) against the declared criterion of < 2.0: Notes.app held a full core and several UI applications another few, and I did not terminate them. The more-itertools run happened on **battery power** (the machine was unplugged between the two projects). By the reporting-only criteria, 2 of 8 scenario-project cells were environmentally valid (more-itertools S2 and S3); the pyflakes batch scenario had a 13% coefficient of variation in its direct baseline. The first-run records (below) and this controlled run agree on every qualitative conclusion, but neither satisfies the gate's declared environment criterion. To satisfy it, re-run on a quiet, plugged-in machine:
+
+```bash
+python benchmarks/paired.py --project pyflakes --src <pinned pyflakes clone> --evalpy <python without vep> --testmon-py <python with pytest-testmon> --out benchmarks/results/paired-pyflakes.json
+python benchmarks/paired.py --project more-itertools --src <pinned more-itertools clone> --evalpy <python without vep> --testmon-py <python with pytest-testmon> --out benchmarks/results/paired-more-itertools.json
+python benchmarks/paired_report.py && python scripts/launch_check.py
+```
+Prerequisites: AC power, no other heavy applications (1-minute load average < 2.0 at start), the pinned clones from `benchmarks/external/projects.json`, and a Python with `cryptography` but without `vep` installed. An earlier controlled-run attempt was aborted after about two minutes because the starting load was inflated by my own test runs; it retained no data.
+
+## 2b. First run (non-idle machine, unpaired; preserved as recorded)
+ (`docs/BENCHMARK_METHODOLOGY.md`; raw data `benchmarks/results/compare-*.json`)
 Verdicts use the pre-declared rule: 10% relative threshold, 50 ms absolute, Welch 95% interval. Times are mean seconds.
 "E" = VEP with one worker producing a signed certificate; the baselines produce only an exit code.
 

@@ -136,122 +136,146 @@
  },
  {
   "id": "t1-small",
-  "text": "54%",
+  "text": "50.5%",
   "expr": "a*100",
   "vars": {
    "a": {
-    "file": "benchmarks/results/compare-pyflakes.json",
+    "file": "benchmarks/results/paired-pyflakes.json",
     "path": [
-     "T1_cold_verify",
-     "verdicts",
-     "E_vs_A",
+     "scenarios",
+     "S1_cold_single",
+     "analysis",
+     "comparisons",
+     "VEP_PLAIN_vs_DIRECT",
+     "welch_preregistered",
      "rel_diff"
     ]
    }
   },
-  "fmt": "{:.0f}%"
+  "fmt": "{:.1f}%"
  },
  {
   "id": "t1-big",
-  "text": "3%",
+  "text": "3.9%",
   "expr": "a*100",
   "vars": {
    "a": {
-    "file": "benchmarks/results/compare-more-itertools.json",
+    "file": "benchmarks/results/paired-more-itertools.json",
     "path": [
-     "T1_cold_verify",
-     "verdicts",
-     "E_vs_A",
+     "scenarios",
+     "S1_cold_single",
+     "analysis",
+     "comparisons",
+     "VEP_PLAIN_vs_DIRECT",
+     "welch_preregistered",
      "rel_diff"
     ]
    }
   },
-  "fmt": "{:.0f}%"
+  "fmt": "{:.1f}%"
  },
  {
   "id": "testmon-edit",
-  "text": "14x",
+  "text": "14.5x",
   "expr": "a/b",
   "vars": {
    "a": {
-    "file": "benchmarks/results/compare-more-itertools.json",
+    "file": "benchmarks/results/paired-more-itertools.json",
     "path": [
-     "T3_small_edit",
-     "wall",
-     "E",
+     "scenarios",
+     "S3_warm_small_edit",
+     "analysis",
+     "configs",
+     "VEP_PLAIN",
+     "wall_s",
      "mean"
     ]
    },
    "b": {
-    "file": "benchmarks/results/compare-more-itertools.json",
+    "file": "benchmarks/results/paired-more-itertools.json",
     "path": [
-     "T3_small_edit",
-     "wall",
-     "B",
+     "scenarios",
+     "S3_warm_small_edit",
+     "analysis",
+     "configs",
+     "TESTMON",
+     "wall_s",
      "mean"
     ]
    }
   },
-  "fmt": "{:.0f}x"
+  "fmt": "{:.1f}x"
  },
  {
   "id": "testmon-rerun",
-  "text": "30x",
+  "text": "30.6x",
   "expr": "a/b",
   "vars": {
    "a": {
-    "file": "benchmarks/results/compare-more-itertools.json",
+    "file": "benchmarks/results/paired-more-itertools.json",
     "path": [
-     "T2_unchanged_rerun",
-     "wall",
-     "E",
+     "scenarios",
+     "S2_warm_unchanged",
+     "analysis",
+     "configs",
+     "VEP_PLAIN",
+     "wall_s",
      "mean"
     ]
    },
    "b": {
-    "file": "benchmarks/results/compare-more-itertools.json",
+    "file": "benchmarks/results/paired-more-itertools.json",
     "path": [
-     "T2_unchanged_rerun",
-     "wall",
-     "B",
+     "scenarios",
+     "S2_warm_unchanged",
+     "analysis",
+     "configs",
+     "TESTMON",
+     "wall_s",
      "mean"
     ]
    }
   },
-  "fmt": "{:.0f}x"
+  "fmt": "{:.1f}x"
  },
  {
   "id": "cache-hit",
-  "text": "99%",
+  "text": "98.8%",
   "expr": "abs(a)*100",
   "vars": {
    "a": {
-    "file": "benchmarks/results/compare-more-itertools.json",
+    "file": "benchmarks/results/paired-more-itertools.json",
     "path": [
-     "T2_unchanged_rerun",
-     "verdicts",
-     "F2_vs_A_no_certificate",
+     "scenarios",
+     "S2_warm_unchanged",
+     "analysis",
+     "comparisons",
+     "VEP_OPT_vs_DIRECT",
+     "welch_preregistered",
      "rel_diff"
     ]
    }
   },
-  "fmt": "{:.0f}%"
+  "fmt": "{:.1f}%"
  },
  {
   "id": "batch-par",
-  "text": "73%",
+  "text": "73.0%",
   "expr": "abs(a)*100",
   "vars": {
    "a": {
-    "file": "benchmarks/results/compare-more-itertools.json",
+    "file": "benchmarks/results/paired-more-itertools.json",
     "path": [
-     "T4_batch",
-     "verdicts",
-     "F_vs_C",
+     "scenarios",
+     "S4_cold_batch",
+     "analysis",
+     "comparisons",
+     "VEP_OPT_vs_DIRECT_SEQ",
+     "welch_preregistered",
      "rel_diff"
     ]
    }
   },
-  "fmt": "{:.0f}%"
+  "fmt": "{:.1f}%"
  }
 ]

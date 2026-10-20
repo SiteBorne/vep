@@ -91,8 +91,8 @@ jobs:
         run: |
           gh release create "${GITHUB_REF_NAME}" dist/*.whl dist/*.tar.gz dist/SHA256SUMS \
             --repo "${GITHUB_REPOSITORY}" --prerelease --verify-tag \
-            --title "VEP ${GITHUB_REF_NAME} (developer preview)" \
-            --notes "Developer preview. Trusted-local evaluation only; hostile-code isolation is UNVERIFIED. See docs/RELEASE_NOTES.md in the tagged source. Verify artifacts: docs/RELEASE_PROVENANCE.md."
+            --title "VEP ${GITHUB_REF_NAME} (beta, prerelease)" \
+            --notes "Public beta (prerelease). Default evaluation is trusted-local with no isolation; gVisor isolation passed its matrix on one hosted run and is not escape-tested, so no claim is made about untrusted code. See docs/RELEASE_NOTES.md and docs/BETA_SCOPE.md in the tagged source. Verify artifacts: docs/RELEASE_PROVENANCE.md."
 
   pypi:
     # Runs only when the maintainers have configured a PyPI trusted publisher AND set the repository variable
