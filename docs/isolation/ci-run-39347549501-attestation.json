@@ -1,0 +1,175 @@
+{
+ "attestation_version": 1,
+ "capabilities": {
+  "daemon": true,
+  "docker_cli": "/usr/bin/docker",
+  "image": "python:3.13-slim@sha256:70729b46c69b4f1e97c4822c1af3df53a1476cf5ddc6c087c0c10bc3a5678c2f",
+  "image_id": "sha256:ce3ff9524414289fc922d9d5dc1de87abc77a39ff2ff5007435839f2af1d7569",
+  "image_pinned_digest_ok": true,
+  "image_present": true,
+  "machine": "x86_64",
+  "notes": [],
+  "os": "Linux",
+  "os_release": "6.17.0-1022-azure",
+  "readonly_rootfs_supported": true,
+  "runsc_registered": true,
+  "runtimes": [
+   "io.containerd.runc.v2",
+   "runc",
+   "runsc"
+  ],
+  "security_options": [
+   "name=apparmor",
+   "name=seccomp,profile=builtin",
+   "name=cgroupns"
+  ],
+  "server_os": "Ubuntu 24.04.5 LTS / linux / x86_64"
+ },
+ "image": "python:3.13-slim@sha256:70729b46c69b4f1e97c4822c1af3df53a1476cf5ddc6c087c0c10bc3a5678c2f",
+ "limits": {
+  "cpus": "1",
+  "memory": "128m",
+  "pids": 64,
+  "timeout_s": 20,
+  "tmpfs": "16m"
+ },
+ "reasons": [],
+ "results": {
+  "T1": {
+   "name": "source readable",
+   "observation": {
+    "ok": true,
+    "value": 1
+   },
+   "status": "PASS"
+  },
+  "T10": {
+   "name": "runtime errors fail closed",
+   "observation": {
+    "rc": 125
+   },
+   "status": "PASS"
+  },
+  "T11": {
+   "name": "image substitution detected",
+   "observation": {
+    "pinned_ok": true,
+    "substituted_image_resolves": false
+   },
+   "status": "PASS"
+  },
+  "T12": {
+   "name": "runtime identity recorded",
+   "observation": {
+    "inspect": [
+     "runsc",
+     "none",
+     "true",
+     "false",
+     "134217728",
+     "64"
+    ],
+    "start_rc": 0
+   },
+   "status": "PASS"
+  },
+  "T2": {
+   "name": "source mount not writable",
+   "observation": {
+    "error": "PermissionError",
+    "ok": false
+   },
+   "status": "PASS"
+  },
+  "T3": {
+   "name": "root filesystem read-only",
+   "observation": {
+    "error": "PermissionError",
+    "ok": false
+   },
+   "status": "PASS"
+  },
+  "T4": {
+   "name": "signing key absent",
+   "observation": {
+    "ok": true,
+    "value": []
+   },
+   "status": "PASS"
+  },
+  "T5": {
+   "name": "VEP database absent",
+   "observation": {
+    "ok": true,
+    "value": []
+   },
+   "status": "PASS"
+  },
+  "T6": {
+   "name": "external networking denied",
+   "observation": {
+    "connect": {
+     "error": "OSError",
+     "ok": false
+    },
+    "interfaces": []
+   },
+   "status": "PASS"
+  },
+  "T7": {
+   "name": "privileged operations denied",
+   "observation": {
+    "T7_cap_eff": {
+     "ok": true,
+     "value": "0000000000000000"
+    },
+    "T7_docker_sock": {
+     "ok": true,
+     "value": false
+    },
+    "T7_no_new_privs": {
+     "ok": true,
+     "value": "1"
+    },
+    "T7_setuid_root": {
+     "error": "PermissionError",
+     "ok": false
+    },
+    "T7_uid": {
+     "ok": true,
+     "value": 65534
+    }
+   },
+   "status": "PASS"
+  },
+  "T8": {
+   "name": "resource limits enforced",
+   "observation": {
+    "limit": "128m",
+    "rc": 137,
+    "timed_out": false
+   },
+   "status": "PASS"
+  },
+  "T9": {
+   "name": "timeout terminates work",
+   "observation": {
+    "leftover": "",
+    "timed_out": true
+   },
+   "status": "PASS"
+  }
+ },
+ "runtime_identity": {
+  "corroboration": "docker-inspect-only",
+  "image_id": "sha256:ce3ff9524414289fc922d9d5dc1de87abc77a39ff2ff5007435839f2af1d7569",
+  "memory_bytes": 134217728,
+  "network_mode": "none",
+  "pids_limit": 64,
+  "privileged": false,
+  "readonly_rootfs": true,
+  "runtime": "runsc",
+  "server": "Ubuntu 24.04.5 LTS / linux / x86_64"
+ },
+ "status": "ISOLATED_VERIFIED"
+}

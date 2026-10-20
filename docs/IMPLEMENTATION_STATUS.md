@@ -36,6 +36,7 @@ Categories (RFC rule R10): **IMPLEMENTED** (code exists), **TESTED** (automated 
 | Conformance suite 1.0 (119 frozen vectors) + independent Node verifier + portable bundles (`vep conformance`) | IMPLEMENTED, TESTED; both verifiers agree 119/119 | Second implementation written by the same author, not externally reviewed. Go verifier **NOT_IMPLEMENTED** (Go not installed). Bundle proof limits in `docs/CONFORMANCE.md` section 5 |
 | VEP-on-VEP dogfood (`scripts/dogfood.py`, `docs/dogfood/`) | LOCALLY_VERIFIED (one change, one host); not REAL_WORLD_VALIDATED | Trusted-local; change authored interactively, not by an autonomous agent; two further external projects NOT_RUN |
 | External projects through VEP (pyflakes 4.0.3, more-itertools v11.2.1; `docs/external/`) | LOCALLY_VERIFIED (trusted-local, one run each) | Neither has dependencies; pytest evaluator lacks the `CODE_UNDER_TEST_SHADOWED` check; no isolation |
+| gVisor isolation on a hosted runner (`.github/workflows/isolation.yml`, `docs/isolation/`) | VERIFIED on one GitHub-hosted run (T1-T12 PASS, ISOLATED_VERIFIED) | Not escape-tested; T12 is docker-inspect-only; local Mac still ISOLATION_UNVERIFIED; hostile-code evaluation NOT claimed |
 | Distributed coordination, remote execution, merge queues | DESIGNED only | |
 | Live LLM / provider integration | OUT OF SCOPE | |
 | Production readiness | **NOT CLAIMED** | |
