@@ -12,3 +12,4 @@ exclude docs/RELEASE_GATE_REPORT.md
 recursive-include conformance *.json *.mjs
 recursive-include docs *.json
 recursive-include benchmarks *.json
+exclude launch-gate.json
