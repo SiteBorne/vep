@@ -1,0 +1,169 @@
+{
+ "baseline": {
+  "files_in_snapshot": 39,
+  "min_passing_tests": 500,
+  "policy_id": "pol-7ce899091d5b2fff578448e8cc8af7ed3701f5e73dda7feb8c23c8d3f53d7af6",
+  "required_exclude": [],
+  "required_test_files": 2,
+  "snapshot_id": "snap-810d0ec0dbf099789126759c096a4913b8a8cd51e0933b4b1bd385be83cc7ac4"
+ },
+ "candidates": {
+  "benign": {
+   "candidate_id": "cand-0d39596c7fb4dc66f8839376951a591a6c0d04d7406d28bf01a62450523b0c89",
+   "cost": {
+    "child_cpu_s": 5.588,
+    "wall_s": 6.66
+   },
+   "result": {
+    "candidate_id": "cand-0d39596c7fb4dc66f8839376951a591a6c0d04d7406d28bf01a62450523b0c89",
+    "candidate_status": "CERTIFIED",
+    "certificate_id": "cert-9ea9d5879f7e0fd806ad4b0520f09a408cf94ce65b41b2f970c2a59d0abbb115",
+    "evidence_id": "evd-067db5b9d86b9f8582bf224c73ab1f60908d581e3bbb01f2a5c9efb701c78af4",
+    "job": "job-ccf2cf81207cf7ebfec2979c4f18b208",
+    "outcome": "SUCCEEDED",
+    "reason": null,
+    "trust_level": "TRUSTED_LOCAL",
+    "verdict": "PASS"
+   },
+   "snapshot_id": "snap-2533462bf472ae4bfa2dac81e56ed6bfc7eb01d329ee6441cf856ab21ad1c40f",
+   "tests": {
+    "tests_discovered": 931,
+    "tests_failed": 0,
+    "tests_passed": 926,
+    "tests_run": 931,
+    "tests_skipped": 5
+   }
+  },
+  "mutant": {
+   "candidate_id": "cand-5b2f006775ce97241f629ff4325fb4cc571519cab3108fa962baa825ce5e5b77",
+   "cost": {
+    "child_cpu_s": 5.592,
+    "wall_s": 6.624
+   },
+   "result": {
+    "candidate_id": "cand-5b2f006775ce97241f629ff4325fb4cc571519cab3108fa962baa825ce5e5b77",
+    "candidate_status": "REJECTED",
+    "evidence_id": "evd-8ba9171bf5f25d46329c1d592f91511fe93bd4c07c27221ac53f9cc337d5c33a",
+    "job": "job-13f35b30761fefc816c28b0fc78794ef",
+    "outcome": "SUCCEEDED",
+    "reason": null,
+    "trust_level": "TRUSTED_LOCAL",
+    "verdict": "FAIL"
+   },
+   "snapshot_id": "snap-c2fc79f38256d587e083ae085956bfca02854ac816fc863fac8a8d521007aaef",
+   "tests": {
+    "tests_discovered": 930,
+    "tests_failed": 43,
+    "tests_passed": 882,
+    "tests_run": 930,
+    "tests_skipped": 5
+   }
+  },
+  "mutant_plus_new_test": {
+   "candidate_id": "cand-da90974e7c5ccfc397f17371b254b7bc448fdcf5c5c491b5e9022721003aa6e6",
+   "cost": {
+    "child_cpu_s": 5.593,
+    "wall_s": 6.666
+   },
+   "result": {
+    "candidate_id": "cand-da90974e7c5ccfc397f17371b254b7bc448fdcf5c5c491b5e9022721003aa6e6",
+    "candidate_status": "REJECTED",
+    "evidence_id": "evd-5a345848a0b717945757bbffd99af80a42413304c4cb11a230712dcc09036f41",
+    "job": "job-3b49dd78256a66205925ea29b92f3715",
+    "outcome": "SUCCEEDED",
+    "reason": null,
+    "trust_level": "TRUSTED_LOCAL",
+    "verdict": "FAIL"
+   },
+   "snapshot_id": "snap-6370aeacf7ce24799000efc3cd4d4fb5508e9ae5b881ce01e423f3f14bac482e",
+   "tests": {
+    "tests_discovered": 931,
+    "tests_failed": 44,
+    "tests_passed": 882,
+    "tests_run": 931,
+    "tests_skipped": 5
+   }
+  },
+  "upstream": {
+   "candidate_id": "cand-98d34515ec8b495ac653f3d10abd66bdd01542ec66eddd0189a55f89180df603",
+   "cost": {
+    "child_cpu_s": 5.582,
+    "wall_s": 6.651
+   },
+   "result": {
+    "candidate_id": "cand-98d34515ec8b495ac653f3d10abd66bdd01542ec66eddd0189a55f89180df603",
+    "candidate_status": "CERTIFIED",
+    "certificate_id": "cert-e38685024c71592aa543636fc501abfab134619558eabeccade9d93c9ba36cc4",
+    "evidence_id": "evd-2150cbb79a2580e19bed0627a4ac8795d052c88c56afbbaa332e02e749891837",
+    "job": "job-0bb29bc4e0da40f3816ecd7f4c719532",
+    "outcome": "SUCCEEDED",
+    "reason": null,
+    "trust_level": "TRUSTED_LOCAL",
+    "verdict": "PASS"
+   },
+   "snapshot_id": "snap-810d0ec0dbf099789126759c096a4913b8a8cd51e0933b4b1bd385be83cc7ac4",
+   "tests": {
+    "tests_discovered": 930,
+    "tests_failed": 0,
+    "tests_passed": 925,
+    "tests_run": 930,
+    "tests_skipped": 5
+   }
+  }
+ },
+ "classification": "LOCALLY_VERIFIED (trusted-local, one host)",
+ "direct_reference": {
+  "child_cpu_s": 5.485,
+  "command": "python -I -m unittest discover -s tests -p test_*.py -t .",
+  "returncode": 0,
+  "summary": [
+   "Ran 930 tests in 6.369s",
+   "OK (skipped=5)"
+  ],
+  "wall_s": 6.464
+ },
+ "kind": "external project through VEP",
+ "limits": [
+  "project tests ran as the invoking user with NO isolation (explicitly authorized for these vetted projects)",
+  "no changes were pushed to the project; candidates are local and disposable",
+  "one host, one run per candidate: no statistical claim"
+ ],
+ "outcome": {
+  "all_expected": true,
+  "benign_certified": true,
+  "edited_tree_rejected": true,
+  "mutant_rejected_by_projects_own_tests": true,
+  "mutant_rejected_once_a_covering_test_is_added": true,
+  "upstream_certified": true
+ },
+ "project": {
+  "commit": "4aeb4338ae1407d8da9723e86da99efeb446f719",
+  "kind": "library with a large unit-test suite",
+  "license": "MIT",
+  "license_file": "LICENSE",
+  "name": "more-itertools",
+  "tag": "v11.2.1",
+  "url": "https://github.com/more-itertools/more-itertools"
+ },
+ "report_version": 1,
+ "tool": {
+  "package": "0.4.0a1",
+  "platform": "macOS-15.6-arm64-arm-64bit-Mach-O",
+  "python": "3.14.7",
+  "vep_commit": "28284b8a17249ca476d0ec435a5896d8b592c9d4"
+ },
+ "verification": {
+  "bundle_node_independent": true,
+  "bundle_python_reference": true,
+  "edited_tree_reason": "SOURCE_CHANGED: current tree snap-fa5ef9ebff5ca230b617a214f0",
+  "edited_tree_rejected": true,
+  "live_tree_checks": [
+   "certificate signature",
+   "evidence signature",
+   "evidence binding",
+   "candidate/objective/policy binding",
+   "current source equals certified snapshot"
+  ],
+  "upstream_certified": true
+ }
+}
