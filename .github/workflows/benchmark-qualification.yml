@@ -40,7 +40,15 @@ jobs:
           cat "$RESULTS/files-changed-since-release.txt"
           if git diff --quiet "$RELEASE_COMMIT" HEAD -- src pyproject.toml; then echo "evaluation-critical code identical to $RELEASE_TAG"; else echo "::error::evaluation-critical code differs from the release"; exit 1; fi
       - name: Record the environment
-        run: python benchmarks/envinfo.py > "$RESULTS/environment-host.json" && python -c "import json,os,sys; sys.path.insert(0,'benchmarks'); import envinfo; json.dump({'host': envinfo.host_info(), 'probe': envinfo.env_probe()}, open(os.environ['RESULTS']+'/environment.json','w'), indent=1)"
+        run: |
+          set -euo pipefail
+          python benchmarks/envinfo.py > "$RESULTS/environment-host.json"
+          python - <<'PY'
+          import json, os, sys
+          sys.path.insert(0, "benchmarks")
+          import envinfo
+          json.dump({"host": envinfo.host_info(), "probe": envinfo.env_probe()}, open(os.environ["RESULTS"] + "/environment.json", "w"), indent=1)
+          PY
       - name: Build the measurement environments (no VEP installed in either)
         run: |
           set -euo pipefail

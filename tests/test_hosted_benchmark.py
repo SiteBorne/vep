@@ -113,6 +113,14 @@ class WorkflowGuardTests(unittest.TestCase):
         self.assertIn("runs-on: ubuntu-24.04", self.text)
         self.assertNotIn("continue-on-error", self.text)
 
+    def test_no_plain_run_scalar_contains_a_colon_space(self):
+        """A plain YAML scalar containing ': ' is a syntax error that makes GitHub register the file without its triggers (seen once)."""
+        for wf in (ROOT / ".github" / "workflows").glob("*.yml"):
+            for n, line in enumerate(wf.read_text().splitlines(), 1):
+                m = re.match(r"\s+run: (?![|>])(.*)", line)
+                if m:
+                    self.assertNotIn(": ", m.group(1), f"{wf.name}:{n}")
+
     def test_source_under_test_is_pinned_and_checked_against_the_release(self):
         self.assertIn("RELEASE_COMMIT: 578850d1245e3a2e5e282f5e9734ea7dfc0f44e6", self.text)
         self.assertIn('git diff --quiet "$RELEASE_COMMIT" HEAD -- src pyproject.toml', self.text)
