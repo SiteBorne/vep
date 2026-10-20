@@ -1,0 +1,69 @@
+{
+ "release_verification_version": 1,
+ "release": {
+  "tag": "v0.5.0b1",
+  "url": "https://github.com/SiteBorne/vep/releases/tag/v0.5.0b1",
+  "prerelease": true,
+  "draft": false,
+  "tag_object_type": "annotated",
+  "tagger": "SiteBorne",
+  "commit": "578850d1245e3a2e5e282f5e9734ea7dfc0f44e6",
+  "release_workflow_run": "https://github.com/SiteBorne/vep/actions/runs/39431919993",
+  "release_workflow_conclusion": "success",
+  "pypi_job": "skipped (no trusted publisher configured; nothing published to PyPI)"
+ },
+ "hosted_ci_on_tagged_commit": {
+  "CI": "https://github.com/SiteBorne/vep/actions/runs/39430717243 (success)",
+  "CodeQL": "https://github.com/SiteBorne/vep/actions/runs/39430717364 (success)"
+ },
+ "assets": [
+  {
+   "name": "vep_protocol-0.5.0b1-py3-none-any.whl",
+   "bytes": 100802,
+   "sha256": "12aa0040eb7fef1014cefe32a5fec7497b547cfe916ebb65461319e439651b32"
+  },
+  {
+   "name": "vep_protocol-0.5.0b1.tar.gz",
+   "bytes": 398135,
+   "sha256": "eb03b4e41d8ddf1c4e0fe15d2eaf65f033c36b8d97eac7633472eb08c0df405c"
+  },
+  {
+   "name": "SHA256SUMS",
+   "bytes": 198
+  }
+ ],
+ "checks": {
+  "sha256sums_match_downloaded_assets": true,
+  "build_provenance_attestation_verified": {
+   "tool": "gh attestation verify --repo SiteBorne/vep",
+   "wheel": true,
+   "sdist": true,
+   "signer_workflow": "SiteBorne/vep/.github/workflows/release.yml@refs/tags/v0.5.0b1",
+   "source_digest": "578850d1245e3a2e5e282f5e9734ea7dfc0f44e6",
+   "issuer": "https://token.actions.githubusercontent.com"
+  },
+  "fresh_venv_install_of_downloaded_wheel": true,
+  "installed_version": "0.5.0b1",
+  "cleanroom": {
+   "status": "PASS",
+   "checks": 18
+  },
+  "quickstart_from_released_wheel_status": "PASS",
+  "quickstart_blocks": 9
+ },
+ "checksums_and_attestation_verified": true,
+ "quickstart_from_released_wheel": true,
+ "gate_record": {
+  "launch_gate_rerun_after_release": false,
+  "reason": "history correction changed only author/committer identity and commit messages; file contents (git trees) are byte-identical for all 38 corrected commits; the user directed that nothing be requalified",
+  "BENCHMARK_REPRODUCIBILITY": "UNVERIFIED (controlled run was not environmentally valid; no quiet machine available)",
+  "PUBLIC_BETA_READY": "NO",
+  "ANNOUNCEMENT_READY": "NO"
+ },
+ "not_done": [
+  "PyPI publication",
+  "announcement posts",
+  "quiet-machine benchmark re-run",
+  "external security review"
+ ]
+}

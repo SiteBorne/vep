@@ -39,4 +39,4 @@ Five version axes move independently. A change on one axis never silently change
 | Unix-only `O_NOFOLLOW` reads | SR-04 | none on supported platforms (Linux, macOS) |
 
 ## Supported platforms
-Linux and macOS with Python ≥ 3.11 (tested locally on macOS with 3.11–3.14; CI matrix defined for Linux 3.11–3.14 and macOS 3.13 but **not yet executed on GitHub**). Windows is **not supported** (POSIX file modes, process groups, `O_NOFOLLOW`).
+Linux and macOS with Python ≥ 3.11 (tested locally on macOS with 3.11–3.14; the hosted CI matrix (Linux 3.11–3.14, macOS 3.13) passed on the `0.5.0b1` release commit). Windows is **not supported** (POSIX file modes, process groups, `O_NOFOLLOW`).

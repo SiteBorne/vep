@@ -22,3 +22,6 @@ See [README](../README.md) and [RELEASE_PROVENANCE](RELEASE_PROVENANCE.md). Rele
 
 ## Qualification
 The decision and per-category evidence for the revision that produced these artifacts are in [LAUNCH_READINESS_REPORT](LAUNCH_READINESS_REPORT.md) and `launch-gate.json`.
+
+## History note
+On 2026-10-20 the 38 commits after `551612a` were rewritten so that author and committer are the project account and the automatic co-author trailers were removed. File contents are identical (every git tree matches); only commit ids changed. The old-to-new mapping is `docs/history-correction-map.json`. Evidence records created before that date (`launch-gate.json`, `docs/dogfood/`, `docs/external/`, `benchmarks/results/`, `docs/isolation/`, `docs/launch-logs/`) cite the old commit ids. The published `v0.4.0a1` tag and the earlier commits were not changed.
