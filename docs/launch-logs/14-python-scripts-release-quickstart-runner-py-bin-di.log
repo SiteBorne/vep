@@ -1,4 +1,4 @@
-$ python scripts/release/quickstart_runner.py --bin-dir <tmp>/tmpy77blfmk/v/bin
+$ python scripts/release/quickstart_runner.py --bin-dir <tmp>/tmpss2ng9zp/v/bin
 # exit 0
 
 {"status": "PASS", "blocks": 9, "results": [{"block": 1, "returncode": 0}, {"block": 2, "returncode": 0}, {"block": 3, "returncode": 0}, {"block": 4, "returncode": 0}, {"block": 5, "returncode": 0}, {"block": 6, "returncode": 0}, {"block": 7, "returncode": 0}, {"block": 8, "returncode": 0}, {"block": 9, "returncode": 0}]}

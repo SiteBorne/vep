@@ -1,4 +1,4 @@
-$ python -m build --outdir <tmp>/tmp2vkugeih
+$ python -m build --outdir <tmp>/tmpucgwyox8
 # exit 0
 
 running egg_info
@@ -36,6 +36,7 @@ creating vep_protocol-0.5.0b1/docs/dogfood
 creating vep_protocol-0.5.0b1/docs/external
 creating vep_protocol-0.5.0b1/docs/external/earlier
 creating vep_protocol-0.5.0b1/docs/isolation
+creating vep_protocol-0.5.0b1/docs/launch-logs
 creating vep_protocol-0.5.0b1/examples
 creating vep_protocol-0.5.0b1/examples/tiny_project
 creating vep_protocol-0.5.0b1/examples/tiny_project/tests
@@ -134,6 +135,7 @@ copying docs/isolation/REVALIDATION.md -> vep_protocol-0.5.0b1/docs/isolation
 copying docs/isolation/ci-run-39347549501-attestation.json -> vep_protocol-0.5.0b1/docs/isolation
 copying docs/isolation/ci-run-39347549501-e2e-summary.json -> vep_protocol-0.5.0b1/docs/isolation
 copying docs/isolation/ci-run-39347549501-run.json -> vep_protocol-0.5.0b1/docs/isolation
+copying docs/launch-logs/index.json -> vep_protocol-0.5.0b1/docs/launch-logs
 copying examples/example_policy.json -> vep_protocol-0.5.0b1/examples
 copying examples/run_demo.py -> vep_protocol-0.5.0b1/examples
 copying examples/tiny_project/arithmetic.py -> vep_protocol-0.5.0b1/examples/tiny_project
@@ -348,7 +350,7 @@ running install_egg_info
 Copying src/vep_protocol.egg-info to build/bdist.macosx-15.0-arm64/wheel/./vep_protocol-0.5.0b1-py3.14.egg-info
 running install_scripts
 creating build/bdist.macosx-15.0-arm64/wheel/vep_protocol-0.5.0b1.dist-info/WHEEL
-creating '<tmp>/tmp2vkugeih/.tmp-4ahd3dmc/vep_protocol-0.5.0b1-py3-none-any.whl' and adding 'build/bdist.macosx-15.0-arm64/wheel' to it
+creating '<tmp>/tmpucgwyox8/.tmp-cw5w5sgt/vep_protocol-0.5.0b1-py3-none-any.whl' and adding 'build/bdist.macosx-15.0-arm64/wheel' to it
 adding 'vep/__init__.py'
 adding 'vep/__main__.py'
 adding 'vep/_isolation_probe.py'
