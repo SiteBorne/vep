@@ -9,3 +9,7 @@ prune tests/__pycache__
 global-exclude __pycache__ *.py[cod] *.pem *.key *.db .env
 exclude release-gate.json
 exclude docs/RELEASE_GATE_REPORT.md
+recursive-include conformance *.json *.mjs
+recursive-include docs *.json
+recursive-include benchmarks *.json
+exclude launch-gate.json

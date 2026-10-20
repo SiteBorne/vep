@@ -1,0 +1,28 @@
+{
+ "attestation_reasons": [],
+ "attestation_status": "ISOLATED_VERIFIED",
+ "checks": {
+  "bundle_node_independent": true,
+  "bundle_python_reference": true,
+  "certificate_isolated_verified": true,
+  "evaluated_isolated_verified": true,
+  "unauthorized_host_run_refused": true,
+  "wrong_image_refused": true
+ },
+ "demonstration_issuer_note": "ephemeral key generated in this job; not a trusted issuer",
+ "evaluation": {
+  "counts": {
+   "discovered": 2,
+   "failed": 0,
+   "passed": 2,
+   "run": 2,
+   "skipped": 0
+  },
+  "isolation": "DOCKER_GVISOR (attested)",
+  "status": "EVIDENCE_READY",
+  "trust_level": "ISOLATED_VERIFIED",
+  "verdict": "PASS"
+ },
+ "image": "python:3.13-slim@sha256:70729b46c69b4f1e97c4822c1af3df53a1476cf5ddc6c087c0c10bc3a5678c2f",
+ "result": "PASS"
+}

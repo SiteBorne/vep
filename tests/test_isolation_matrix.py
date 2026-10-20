@@ -180,3 +180,22 @@ class RealHostTests(unittest.TestCase):
 
 if __name__ == "__main__":
     unittest.main()
+
+
+class PinMatchingTests(unittest.TestCase):
+    """Regression from the first real-runtime CI run: Docker lists RepoDigests without the tag."""
+    D = "70729b46c69b4f1e97c4822c1af3df53a1476cf5ddc6c087c0c10bc3a5678c2f"
+
+    def test_tagged_pin_matches_untagged_repo_digest(self):
+        pm = isolation.pin_matches
+        self.assertTrue(pm(f"python:3.13-slim@sha256:{self.D}", [f"python@sha256:{self.D}"], "sha256:" + "0" * 64))
+        self.assertTrue(pm(f"docker.io/library/python:3.13@sha256:{self.D}", [f"python@sha256:{self.D}"], "sha256:x"))
+        self.assertTrue(pm(f"python@sha256:{self.D}", [f"python@sha256:{self.D}"], "sha256:x"))
+        self.assertTrue(pm(f"python:3.13-slim@sha256:{self.D}", [], "sha256:" + self.D))  # single-arch: image id equals digest
+
+    def test_wrong_digest_or_repository_never_matches(self):
+        pm = isolation.pin_matches
+        self.assertFalse(pm(f"python:3.13-slim@sha256:{self.D}", ["python@sha256:" + "b" * 64], "sha256:x"))
+        self.assertFalse(pm(f"python:3.13-slim@sha256:{self.D}", [f"evil/python@sha256:{self.D}"], "sha256:x"))
+        self.assertFalse(pm(f"python:3.13-slim@sha256:{self.D}", [f"pythonx@sha256:{self.D}"], "sha256:x"))
+        self.assertFalse(pm(f"python:3.13-slim@sha256:{self.D}", [], "sha256:x"))

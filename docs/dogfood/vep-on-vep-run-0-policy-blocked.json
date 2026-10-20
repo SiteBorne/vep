@@ -1,0 +1,145 @@
+{
+ "baseline": {
+  "base_snapshot_id": "snap-e6f14b0c5393cb0facfbe4dc3b89f045ba72142065b51d82d0032fb84723b2ec",
+  "min_passing_tests": 300,
+  "objective_id": "obj-c16b7b70db963ce1e78ff460dd5aea51385ed0deb6f3792cb005512467e842bf",
+  "policy_id": "pol-09272322817246f18b4be005e5e2b00fb29ef7817ef6508d711aca5bef0a50a4",
+  "protected_patterns": [
+   "conftest.py",
+   "*/conftest.py",
+   "pytest.ini",
+   "tox.ini",
+   "setup.cfg",
+   "pyproject.toml",
+   "unittest.cfg",
+   ".coveragerc",
+   "sitecustomize.py",
+   "usercustomize.py",
+   "*.pth",
+   ".vep/*",
+   "vep-policy*.json"
+  ],
+  "required_test_files": 29
+ },
+ "candidate": {
+  "candidate_id": "cand-474d2407e678843409f675055a77d523b406cde5a0b92c9529fe850802e13db3",
+  "diff": {
+   "added": [
+    "tests/test_cli_build.py"
+   ],
+   "mode_changed": [],
+   "modified": [
+    "src/vep/cli.py"
+   ],
+   "removed": []
+  },
+  "snapshot_id": "snap-bcabc597a5d87872b12d10bdf81944a7e0205d783a69907618859938bfdd28bd"
+ },
+ "classification": "LOCALLY_VERIFIED (trusted-local, one host)",
+ "impact_hint": {
+  "affected_by_static_analysis": [
+   "src/vep/__main__.py",
+   "src/vep/cli.py",
+   "tests/test_cli_build.py",
+   "tests/test_docs.py"
+  ],
+  "affected_tests": [
+   "tests/test_cli_build.py",
+   "tests/test_docs.py"
+  ],
+  "changed": [
+   "src/vep/cli.py",
+   "tests/test_cli_build.py"
+  ],
+  "note": "affected_tests is a prioritisation hint only",
+  "required_evaluation": "FULL",
+  "semantic_impact_established": false,
+  "unanalysable_changes": []
+ },
+ "kind": "vep-on-vep dogfood",
+ "limits": [
+  "trusted-local execution: no isolation; the evaluator ran this repository's own tests as the invoking user",
+  "tests that need tools absent from the scrubbed PATH (for example node) are skipped by the evaluator and counted as skipped",
+  "one change, one host, one run: no statistical claim"
+ ],
+ "negative_control": {
+  "as_expected": true,
+  "candidate_id": "cand-2526f1249466628e486e2863c8d6c4dbc7fd7f20f09c69a0147037e3708b8734",
+  "cost": {
+   "child_cpu_s": 16.891,
+   "peak_child_rss_mb": 72.5,
+   "wall_s": 40.281
+  },
+  "description": "candidate's new tests with the base implementation of src files",
+  "expected": "REJECTED",
+  "result": {
+   "candidate_id": "cand-2526f1249466628e486e2863c8d6c4dbc7fd7f20f09c69a0147037e3708b8734",
+   "candidate_status": "REJECTED",
+   "evidence_id": "evd-ba6489a6b32e0025e0190bcb9c82b8453f65cc957d1afebf34f56a98b71c977e",
+   "job": "job-f9242b0d2ed7e55844092bdb3ebdd7d3",
+   "outcome": "SUCCEEDED",
+   "reason": null,
+   "trust_level": "TRUSTED_LOCAL",
+   "verdict": "FAIL"
+  }
+ },
+ "outcome": "DOGFOOD_FAIL",
+ "report_version": 1,
+ "run": {
+  "budget": {
+   "account": "objective:obj-c16b7b70db963ce1e78ff460dd5aea51385ed0deb6f3792cb005512467e842bf",
+   "available": "0.999",
+   "kind": "objective",
+   "limit": "1",
+   "overrun": "0",
+   "overspent": false,
+   "reserved": "0",
+   "settled": "0.001",
+   "uncertain": "0"
+  },
+  "controller_result": {
+   "detail": "RUNNER_SHADOWING:src/vep/cli.py",
+   "failure_class": "PolicyViolation",
+   "job": "job-0fd43d809f23f92afb8600812042bc25",
+   "outcome": "FAILED"
+  },
+  "cost": {
+   "child_cpu_s": 0.0,
+   "peak_child_rss_mb": 72.5,
+   "wall_s": 0.023
+  },
+  "evidence_trust_level": null,
+  "job": {
+   "attempts": 1,
+   "failure_class": "PolicyViolation",
+   "fence": 1,
+   "id": "job-0fd43d809f23f92afb8600812042bc25",
+   "mode": "trusted-local",
+   "state": "FAILED"
+  },
+  "note": "no model tokens were used by the evaluation; CPU/wall are measured, not monetized",
+  "tests": null,
+  "token_usage": {}
+ },
+ "subject": {
+  "base_commit": "fa93c1ffbf7478f7ac11fb3445c0ea4d83f0942d",
+  "candidate_author_note": "change written by Claude Code in an interactive session; not an autonomous-agent run",
+  "candidate_commit": "e13d0e95ab358e8d6fb43c4301ad2d7667c0799d",
+  "candidate_subject": "Add 'vep build run|stats' CLI over build actions (dogfood candidate)",
+  "license": "Apache-2.0",
+  "repository": "VEP (this repository)"
+ },
+ "tool": {
+  "db_schema": 3,
+  "evaluator_python": "<scratchpad>/evalenv/bin/python",
+  "package": "0.4.0a1",
+  "platform": "macOS-15.6-arm64-arm-64bit-Mach-O",
+  "protocol": "0.3",
+  "python": "3.14.7",
+  "tool_commit": "9a480ba86302b49f8e41171de4090395667c77dd",
+  "tool_tree_dirty": false
+ },
+ "verification": {
+  "certified": false
+ }
+}

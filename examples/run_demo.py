@@ -16,6 +16,7 @@ from vep.errors import VepError
 from vep.evidence import KeyStore
 from vep.objectives import create_objective
 from vep.policies import make_policy
+from vep.snapshots import make_writable
 from vep.workspace import Workspace
 
 HERE = Path(__file__).resolve().parent
@@ -30,6 +31,7 @@ def main() -> int:
     try:
         proj = work / "project"
         shutil.copytree(HERE / "tiny_project", proj)
+        make_writable(proj)  # copytree preserves modes; a read-only source checkout must not make the demo fail
         policy_cfg = json.loads((HERE / "example_policy.json").read_text())
 
         step("init workspace + signing key")

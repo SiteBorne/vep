@@ -26,6 +26,56 @@ Columns: **Identifier | Description | Type | Units | Default | Allowed range | V
 | cas.digest | Address of an object | digest | hex | - | 64 lowercase hex | regex-checked before any path is built; content re-hashed on get | blocks traversal and filename spoofing | storage.CAS._path/get | implemented | n/a |
 | cas.write_mode | Atomic temp-file + fsync + rename; duplicate puts skip when content verifies | rule | - | atomic | fixed | tests in test_storage | torn writes; corruption repair on rewrite | storage.CAS.put | implemented | n/a |
 
+## Execution controller
+
+| Identifier | Description | Type | Units | Default | Allowed range | Validation rules | Security implications | Location | Status | Calibration |
+|---|---|---|---|---|---|---|---|---|---|---|
+| job.id | Deterministic job identity `job-<sha256(candidate,kind)[:32]>` | str | - | - | one job per (candidate, kind) | enqueue is INSERT OR IGNORE + UNIQUE(candidate_id, kind) | replayed enqueue cannot create duplicate work or settlement | controller.job_id_for | implemented | n/a |
+| job.fence | Per-job fencing token, incremented on every claim | int | - | 0 | >=0, monotonic | assert_fence inside every committing transaction (evidence, rejection, certificate) | a stale worker cannot commit or certify after losing its lease | controller.claim/assert_fence | implemented | n/a |
+| job.max_attempts | Bound on claims per job | int | attempts | 3 | 1..10 | enqueue; recover and fail() requeue only while attempts < max | bounds retry cost; unknown-outcome work is never retried | controller.enqueue | implemented | illustrative |
+| LEASE_MARGIN_S | Seconds added to the policy evaluator timeout to form the default lease | int | s | 60 | >=0 | claim | too short causes needless fencing; too long delays recovery | controller.LEASE_MARGIN_S | implemented | illustrative |
+| job.mode | Execution mode a job requires (`trusted-local` or `isolated`) | enum | - | trusted-local | trusted-local \| isolated | claim filters on worker.mode; no cross-mode fallback | isolated jobs are never run on the host | controller.enqueue/claim | implemented | n/a |
+| job.auto_certify | Whether the worker certifies after PASS evidence | bool | - | true | true/false | worker pipeline; certification guarded by fence and policy trust | certification remains bound to exact snapshot and evidence | controller._pipeline | implemented | n/a |
+
+## Agent adapters
+
+| Identifier | Description | Type | Units | Default | Allowed range | Validation rules | Security implications | Location | Status | Calibration |
+|---|---|---|---|---|---|---|---|---|---|---|
+| ADAPTER_INTERFACE_VERSION | Version of the AgentAdapter interface (capabilities, prepare_task, execute_task, collect_result, collect_usage, cancel) | int | - | 1 | 1 | carried in every result | interface drift between adapters and controller | agents.ADAPTER_INTERFACE_VERSION | implemented | n/a |
+| allowlist[tool].executable | Absolute path of a permitted executable | path | - | - | absolute, executable file | checked at adapter construction; unlisted tools return NOT_ALLOWED | no arbitrary command execution from task or model output | agents.StructuredSubprocessAdapter | implemented | n/a |
+| task.params (argv) | Caller values substituted into argv via {param:name} | str | - | - | <=4096 chars, no NUL, no leading '-' | agents._argv | blocks option and shell-metacharacter injection (no shell is used) | agents.py | implemented | n/a |
+| usage.source | Provenance of a usage figure | enum | - | - | provider_reported \| locally_measured \| caller_supplied \| estimated \| simulated \| none | usage_record rejects unknown values; tool-claimed usage is always caller_supplied | adapter claims are never promoted | agents.USAGE_SOURCES | implemented | n/a |
+| AgentTask.timeout_s | Wall-clock limit for one adapter execution | int | s | 120 | >0 | process group SIGKILL on expiry; error_class TIMEOUT | bounded resource use | agents.AgentTask | implemented | illustrative |
+
+## Build actions
+
+| Identifier | Description | Type | Units | Default | Allowed range | Validation rules | Security implications | Location | Status | Calibration |
+|---|---|---|---|---|---|---|---|---|---|---|
+| BuildAction.argv | Command; argv[0] is an absolute path or {python} | tuple[str] | - | - | NUL-free; no shell | BuildAction.validate | no shell parsing; trusted-local execution, not a sandbox | builds.BuildAction | implemented | n/a |
+| BuildAction.env | Extra environment, restricted to SAFE_ENV_KEYS | tuple[(str,str)] | - | () | PYTHONHASHSEED, LANG, PYTHONDONTWRITEBYTECODE, SOURCE_DATE_EPOCH | validate | blocks LD_PRELOAD-style injection; part of the action id | builds.SAFE_ENV_KEYS | implemented | n/a |
+| BuildAction.cache_policy | deterministic = cacheable after verification; none = never cached | enum | - | deterministic | deterministic \| none | validate | a wrong cache hit would reuse a stale result | builds.CACHE_POLICIES | implemented | n/a |
+| BuildAction.verify_determinism | Run twice on a miss; cache only if outputs, stdout, stderr and exit code are identical | bool | - | true | true/false | builds.run | turning it off trusts the caller's determinism claim; costs one extra run when on | builds.run | implemented | n/a |
+| BuildAction.timeout_s | Wall-clock limit per execution | int | s | 300 | >0 | process-group SIGKILL | bounded resource use | builds.BuildAction | implemented | illustrative |
+| build_cache entry | action id to stored result; reused only if result and every output blob re-hash | row | - | - | exit_code 0 only | builds.lookup | corrupt entries are misses, never reused | builds.lookup | implemented | n/a |
+
+## Dependency graph and evidence validity
+
+| Identifier | Description | Type | Units | Default | Allowed range | Validation rules | Security implications | Location | Status | Calibration |
+|---|---|---|---|---|---|---|---|---|---|---|
+| REUSE_MODE | Evidence reuse rule | enum | - | EXACT_ONLY | EXACT_ONLY | depgraph.evidence_validity compares snapshot, policy, verdict and optional trust level | static analysis cannot prove behavioural independence, so evidence is never reused across snapshots | depgraph.REUSE_MODE | implemented | n/a |
+| edge.basis | Why an edge exists | enum | - | - | STATIC_IMPORT \| DECLARED \| SIGNED_BINDING \| PATH_OVERLAP | build_graph; no edge without a basis | no invented dependencies | depgraph.py | implemented | n/a |
+| impact.required_evaluation | Evaluation required after any change | enum | - | FULL | FULL | depgraph.impact | impact only prioritises tests; mandatory tests are never skipped | depgraph.impact | implemented | n/a |
+| composite.requires_composite_evaluation | A clean three-way merge is a new, unevaluated candidate | bool | - | true | true | depgraph.compose_candidates | textual cleanliness is not behavioural compatibility | depgraph.compose_candidates | implemented | n/a |
+
+## Conformance
+
+| Identifier | Description | Type | Units | Default | Allowed range | Validation rules | Security implications | Location | Status | Calibration |
+|---|---|---|---|---|---|---|---|---|---|---|
+| suite_version | Frozen conformance suite version | str | - | 1.0 | 1.0 | gen_conformance_vectors.py --check fails on drift | a silent change to expected results would hide a protocol change | conformance/vectors/suite-1.0.json | implemented | n/a |
+| bundle_version | Portable certificate bundle format | int | - | 1 | 1 | verify_bundle rejects others with UNSUPPORTED_BUNDLE_VERSION | unknown formats must fail explicitly | conformance.BUNDLE_VERSION | implemented | n/a |
+| expect.require_trust | Minimum trust level the verifier demands | enum | - | TRUSTED_LOCAL | TRUSTED_LOCAL \| ISOLATED_VERIFIED | UNVERIFIED is never a valid requirement | TRUSTED_LOCAL evidence can never satisfy ISOLATED_VERIFIED | conformance._verify | implemented | n/a |
+| reason codes | Machine-readable verification failure codes | enum | - | - | see docs/CONFORMANCE.md section 4 | every code is exercised by a vector (tested) | deterministic failure reporting | conformance.CODES | implemented | n/a |
+
 ## Object serialization
 
 | Identifier | Description | Type | Units | Default | Allowed range | Validation rules | Security implications | Location | Status | Calibration |
@@ -96,6 +146,7 @@ Columns: **Identifier | Description | Type | Units | Default | Allowed range | V
 | evaluator.targets | pytest targets | list[str] | paths | [tests] | safe relative paths, non-empty | validate_evaluator | - | policies.py | implemented | n/a |
 | evaluator.import_roots | Directories added to the import path | list[str] | paths | [.] | safe relative paths | validate_evaluator | must also be shadow-checked | policies.py | implemented | n/a |
 | evaluator.min_tests | Minimum PASSED tests required | int | tests | 1 | >=1 | validate_evaluator; validate_report | zero-test results can never pass | execution.validate_report | implemented | illustrative |
+| evaluator.allow_module_names | Runner-dependency module names (subset of RUNNER_NAMES, e.g. vep) the subject project legitimately owns and may change | list[str] | - | [] | names in RUNNER_NAMES only; never standard-library names; unittest evaluator only | validate_evaluator; shadowing_paths | weakens RUNNER_SHADOWING for the listed names only; frozen in the policy, so a candidate cannot widen it; safe only because the unittest runner imports no third-party code | policies.shadowing_paths | implemented | n/a |
 | false-green rules | ZERO_TESTS, ALL_SKIPPED, REPORT_INCONSISTENT, EXIT_REPORT_MISMATCH, REQUIRED_SUITE_NOT_EXECUTED, REQUIRED_SUITE_ALL_SKIPPED, TOO_FEW_PASSING_TESTS, MALFORMED_REPORT | rule | - | on | fixed | execution.validate_report | exit code 0 alone never certifies | execution.py | implemented | n/a |
 
 ## Evidence validity
@@ -138,7 +189,7 @@ Columns: **Identifier | Description | Type | Units | Default | Allowed range | V
 | cache_write_tokens | Tokens written to cache | int | tokens | - | >=0 | make_receipt | - | tokens.py | implemented | n/a |
 | output_tokens | Billed output tokens (includes reasoning) | int | tokens | - | >=0 | make_receipt | - | tokens.py | implemented | n/a |
 | reasoning_tokens_in_output | Reasoning tokens already inside output_tokens; never added to cost | int | tokens | - | 0..output_tokens | make_receipt | prevents double counting | tokens.py | implemented | n/a |
-| usage_source | provider_reported \| simulated \| local_estimate (mandatory, no default) | enum | - | - | enum | make_receipt | usage is caller-supplied and unauthenticated in this MVP | tokens.py | implemented | n/a |
+| usage_source | provider_reported \| caller_supplied \| local_estimate \| simulated (mandatory, no default; caller_supplied added in 0.5 as a backward-compatible enum extension) | enum | - | - | enum | make_receipt | usage is caller-supplied and unauthenticated in this MVP | tokens.py | implemented | n/a |
 | idempotency_key | Uniquely identifies a receipt | str | - | - | non-empty, unique | token_receipts UNIQUE | duplicate usage cannot be recorded twice | tokens.record_receipt | implemented | n/a |
 | receipt.status | RECORDED \| SETTLED | enum | - | RECORDED | enum | - | - | objects.py | implemented | n/a |
 
@@ -307,7 +358,7 @@ Columns: **Identifier | Description | Type | Units | Default | Allowed range | V
 | ExecutionPolicy.required_trust | Minimum evidence trust the policy accepts | enum | - | absent (verifier states its own) | TRUSTED_LOCAL \| ISOLATED_VERIFIED | evaluate refuses trusted-local when ISOLATED_VERIFIED; certify enforces | no silent downgrade | execution.evaluate; certificates.certify | implemented | n/a |
 | verify --require-trust | Verifier's minimum acceptable trust (echoed in output) | enum | - | TRUSTED_LOCAL | TRUSTED_LOCAL \| ISOLATED_VERIFIED | trust.require | UNVERIFIED can never satisfy a requirement | cli.py; trust.py | implemented | n/a |
 | legacy trust mapping | Schema-v1 evidence: NONE_TRUSTED_LOCAL -> TRUSTED_LOCAL, anything else -> UNVERIFIED; v1 certificate rows -> LEGACY_V1 | rule | - | fixed | closed mapping | trust.legacy_trust_level; migrations | old objects are never upgraded to ISOLATED_VERIFIED | trust.py | implemented | n/a |
-| PACKAGE_VERSION | Distribution version (PEP 440) | str | - | 0.4.0a1 | must equal pyproject and vep.__version__ | release gate SOURCE_INTEGRITY; tests | - | versions.py | implemented | n/a |
+| PACKAGE_VERSION | Distribution version (PEP 440) | str | - | 0.5.0b1 | must equal pyproject and vep.__version__ | release gate SOURCE_INTEGRITY; tests | - | versions.py | implemented | n/a |
 | PROTOCOL_VERSION | Wire-level semantics version | str | - | 0.3 | - | reported by `vep version` | unchanged by package releases | versions.py | implemented | n/a |
 | DB_SCHEMA_VERSION | SQLite layout version stored in meta.schema_version | int | - | 2 | database newer than build is refused | migrations.migrate | future-version databases are rejected, not guessed | versions.py; migrations.py | implemented | n/a |
 | EVIDENCE_FORMAT_VERSION / objects.CURRENT_VERSION | Per-type object schema version (Evidence, Certificate = 2; others 1) | int | - | see left | SUPPORTED_VERSIONS per type | objects.spec_for | unknown versions raise UNSUPPORTED_SCHEMA_VERSION | objects.py | implemented | n/a |
@@ -467,7 +518,7 @@ All fields are validated by `VEPObject.create`; unknown fields are rejected; opt
 | TokenReceipt.reasoning_tokens_in_output | int | yes | min=0 | reasoning tokens in output |
 | TokenReceipt.other_provider_charges | decimal | yes | - | other provider charges |
 | TokenReceipt.prices_per_million | map:decimal | yes | - | prices per million |
-| TokenReceipt.usage_source | enum | yes | values=['provider_reported', 'simulated', 'local_estimate'] | usage source |
+| TokenReceipt.usage_source | enum | yes | values=['provider_reported', 'simulated', 'local_estimate', 'caller_supplied'] | usage source |
 | TokenReceipt.cost_usd | decimal | yes | - | cost usd |
 | TokenReceipt.context_id | id:ContextManifest | no | - | context id |
 | TokenReceipt.status | enum | yes | values=['RECORDED', 'SETTLED'] | status |
@@ -524,5 +575,5 @@ All fields are validated by `VEPObject.create`; unknown fields are rejected; opt
 
 ## Policy structure (generated)
 
-* Evaluator grammar: `{'unittest': ['import_roots', 'kind', 'min_tests', 'pattern', 'start_dir'], 'pytest': ['import_roots', 'kind', 'min_tests', 'targets']}`
+* Evaluator grammar: `{'unittest': ['allow_module_names', 'import_roots', 'kind', 'min_tests', 'pattern', 'start_dir'], 'pytest': ['import_roots', 'kind', 'min_tests', 'targets']}`
 * Default limits: `{'timeout_s': 120, 'max_output_bytes': 4000000, 'evaluation_cost_micro_usd': 1000}`

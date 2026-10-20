@@ -1,0 +1,4 @@
+$ python scripts/release/ci_checks.py --dist <tmp>/tmpucgwyox8
+# exit 0
+
+ci_checks: PASS

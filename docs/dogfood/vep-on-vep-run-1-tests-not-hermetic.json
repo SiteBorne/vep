@@ -1,0 +1,155 @@
+{
+ "baseline": {
+  "base_snapshot_id": "snap-e6f14b0c5393cb0facfbe4dc3b89f045ba72142065b51d82d0032fb84723b2ec",
+  "min_passing_tests": 300,
+  "objective_id": "obj-08f0ac0e777294a1ecdaf371fd95d931b9f7c4d403deb5db0f597d59c97f1317",
+  "policy_id": "pol-bdf1e7e63badada21ddc0df0e30d94ce0f6ca97afa07b89ba38728f894057f33",
+  "protected_patterns": [
+   "conftest.py",
+   "*/conftest.py",
+   "pytest.ini",
+   "tox.ini",
+   "setup.cfg",
+   "pyproject.toml",
+   "unittest.cfg",
+   ".coveragerc",
+   "sitecustomize.py",
+   "usercustomize.py",
+   "*.pth",
+   ".vep/*",
+   "vep-policy*.json"
+  ],
+  "required_test_files": 29
+ },
+ "candidate": {
+  "candidate_id": "cand-d26cd899dbda569e44d545b0f5bc5fa1c0ae276a9ced88fc1214c977f60c2f40",
+  "diff": {
+   "added": [
+    "tests/test_cli_build.py"
+   ],
+   "mode_changed": [],
+   "modified": [
+    "src/vep/cli.py"
+   ],
+   "removed": []
+  },
+  "snapshot_id": "snap-bcabc597a5d87872b12d10bdf81944a7e0205d783a69907618859938bfdd28bd"
+ },
+ "classification": "LOCALLY_VERIFIED (trusted-local, one host)",
+ "impact_hint": {
+  "affected_by_static_analysis": [
+   "src/vep/__main__.py",
+   "src/vep/cli.py",
+   "tests/test_cli_build.py",
+   "tests/test_docs.py"
+  ],
+  "affected_tests": [
+   "tests/test_cli_build.py",
+   "tests/test_docs.py"
+  ],
+  "changed": [
+   "src/vep/cli.py",
+   "tests/test_cli_build.py"
+  ],
+  "note": "affected_tests is a prioritisation hint only",
+  "required_evaluation": "FULL",
+  "semantic_impact_established": false,
+  "unanalysable_changes": []
+ },
+ "kind": "vep-on-vep dogfood",
+ "limits": [
+  "trusted-local execution: no isolation; the evaluator ran this repository's own tests as the invoking user",
+  "tests that need tools absent from the scrubbed PATH (for example node) are skipped by the evaluator and counted as skipped",
+  "one change, one host, one run: no statistical claim"
+ ],
+ "negative_control": {
+  "as_expected": true,
+  "candidate_id": "cand-92c11009dfefa42bb8f765e3fea47778b41134683f42460e40f06105797eb1cf",
+  "cost": {
+   "child_cpu_s": 15.28,
+   "peak_child_rss_mb": 65.4,
+   "wall_s": 38.15
+  },
+  "description": "candidate's new tests with the base implementation of src files",
+  "expected": "REJECTED",
+  "result": {
+   "candidate_id": "cand-92c11009dfefa42bb8f765e3fea47778b41134683f42460e40f06105797eb1cf",
+   "candidate_status": "REJECTED",
+   "evidence_id": "evd-e586d4d75f5a1424f2a513c365a26dc626bb35faec0611bf09e30b810de51286",
+   "job": "job-ed3a65a3de3818d81bc04f22667c553f",
+   "outcome": "SUCCEEDED",
+   "reason": null,
+   "trust_level": "TRUSTED_LOCAL",
+   "verdict": "FAIL"
+  }
+ },
+ "outcome": "DOGFOOD_FAIL",
+ "report_version": 1,
+ "run": {
+  "budget": {
+   "account": "objective:obj-08f0ac0e777294a1ecdaf371fd95d931b9f7c4d403deb5db0f597d59c97f1317",
+   "available": "0.998",
+   "kind": "objective",
+   "limit": "1",
+   "overrun": "0",
+   "overspent": false,
+   "reserved": "0",
+   "settled": "0.002",
+   "uncertain": "0"
+  },
+  "controller_result": {
+   "candidate_id": "cand-d26cd899dbda569e44d545b0f5bc5fa1c0ae276a9ced88fc1214c977f60c2f40",
+   "candidate_status": "REJECTED",
+   "evidence_id": "evd-9706aa617e752121dcb2d34ad863a5e5cbd5a2ae29e88650f79dd3909375abdc",
+   "job": "job-f18a14473aa9a382a83ebe8d5417b165",
+   "outcome": "SUCCEEDED",
+   "reason": null,
+   "trust_level": "TRUSTED_LOCAL",
+   "verdict": "FAIL"
+  },
+  "cost": {
+   "child_cpu_s": 16.576,
+   "peak_child_rss_mb": 66.5,
+   "wall_s": 39.658
+  },
+  "evidence_trust_level": "TRUSTED_LOCAL",
+  "job": {
+   "attempts": 1,
+   "failure_class": null,
+   "fence": 1,
+   "id": "job-f18a14473aa9a382a83ebe8d5417b165",
+   "mode": "trusted-local",
+   "state": "SUCCEEDED"
+  },
+  "note": "no model tokens were used by the evaluation; CPU/wall are measured, not monetized",
+  "tests": {
+   "tests_discovered": 365,
+   "tests_failed": 16,
+   "tests_passed": 347,
+   "tests_run": 365,
+   "tests_skipped": 2
+  },
+  "token_usage": {}
+ },
+ "subject": {
+  "base_commit": "fa93c1ffbf7478f7ac11fb3445c0ea4d83f0942d",
+  "candidate_author_note": "change written by Claude Code in an interactive session; not an autonomous-agent run",
+  "candidate_commit": "e13d0e95ab358e8d6fb43c4301ad2d7667c0799d",
+  "candidate_subject": "Add 'vep build run|stats' CLI over build actions (dogfood candidate)",
+  "license": "Apache-2.0",
+  "repository": "VEP (this repository)"
+ },
+ "tool": {
+  "db_schema": 3,
+  "evaluator_python": "<scratchpad>/evalenv/bin/python",
+  "package": "0.4.0a1",
+  "platform": "macOS-15.6-arm64-arm-64bit-Mach-O",
+  "protocol": "0.3",
+  "python": "3.14.7",
+  "tool_commit": "89a56f174b0624f3a96f2a11cf6885be61cd99cd",
+  "tool_tree_dirty": false
+ },
+ "verification": {
+  "certified": false
+ }
+}

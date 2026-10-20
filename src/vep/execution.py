@@ -23,7 +23,7 @@ from . import versions
 from . import budgets, candidates
 from .canonical import canonical_bytes, sha256_hex, strict_loads
 from .errors import (AuthorizationError, BudgetError, ExecutionError, FalseGreen, IsolationUnavailable,
-                     PolicyViolation, StateError, VepError)
+                     PolicyViolation, StaleLease, StateError, VepError)
 from .evidence import KeyStore, store_signed
 from .isolation import probe
 from .objects import VEPObject
@@ -113,6 +113,8 @@ def parse_unittest_report(path: Path) -> dict:
     if not isinstance(rep, dict) or rep.get("kind") != "unittest" or not all(isinstance(rep.get(k), list) for k in keys) \
             or not isinstance(rep.get("run"), int) or not isinstance(rep.get("discovered"), int):
         raise FalseGreen("MALFORMED_REPORT: missing fields")
+    if not isinstance(rep.get("shadowed_modules", []), list):
+        raise FalseGreen("MALFORMED_REPORT: shadowed_modules")
     return rep
 
 
@@ -150,6 +152,8 @@ def validate_report(rep: dict, policy: VEPObject, exit_code: int) -> tuple[str, 
         raise FalseGreen("REPORT_INCONSISTENT: outcome list does not match run count")
     if rep["run"] > rep["discovered"] and rep["kind"] == "unittest":
         raise FalseGreen("REPORT_INCONSISTENT: ran more tests than discovered")
+    if rep.get("shadowed_modules"):  # the tests exercised code that is not the staged candidate
+        raise FalseGreen("CODE_UNDER_TEST_SHADOWED:" + ",".join(map(str, rep["shadowed_modules"])))
     if rep["run"] == 0:
         raise FalseGreen("ZERO_TESTS: no tests were discovered and executed")
     if len(skipped) == rep["run"]:
@@ -242,7 +246,14 @@ def _run_isolated(image: str, policy: VEPObject, staged: Path, scratch: Path) ->
 
 def evaluate(ws: Workspace, candidate_id: str, *, trusted_local_authorization: str | None = None,
              mode: str = "trusted-local", actor: str = "vep-evaluator", image: str | None = None,
-             attestation: dict | None = None) -> dict:
+             attestation: dict | None = None, guard=None) -> dict:
+    """Evaluate a candidate. `guard(conn)`, if given, runs inside every state-changing transaction after
+    execution and must raise StaleLease when the caller no longer owns the work (controller fencing)."""
+    def guarded(fn):
+        with ws.db.tx() as gc:
+            if guard is not None:
+                guard(gc)
+            return fn(gc)
     # 0. authorization / isolation gates (before any state change or execution)
     if mode == "isolated":
         from . import isolation as iso
@@ -296,8 +307,11 @@ def evaluate(ws: Workspace, candidate_id: str, *, trusted_local_authorization: s
     cost_micro = policy["limits"]["evaluation_cost_micro_usd"]
     acct = _cand_account(ws, objective.id, candidate_id)
     rkey = f"eval:{candidate_id}"
-    budgets.reserve(ws, acct, Decimal(cost_micro) / Decimal(1_000_000), rkey)
-    v = candidates.transition(ws, candidate_id, "BUDGET_RESERVED", st["version"], actor, "budget reserved", proof_id=rkey)
+    def _reserve(gc):
+        budgets.reserve(ws, acct, Decimal(cost_micro) / Decimal(1_000_000), rkey, conn=gc)
+        return candidates.transition(ws, candidate_id, "BUDGET_RESERVED", st["version"], actor, "budget reserved",
+                                     proof_id=rkey, conn=gc)
+    v = guarded(_reserve)
     keystore = KeyStore(ws)
     key_before = keystore.file_digest()
     action = VEPObject.create("Action", {
@@ -305,7 +319,8 @@ def evaluate(ws: Workspace, candidate_id: str, *, trusted_local_authorization: s
         "policy_id": policy.id, "runner_digest": runner_digest(), "env": {},
         "isolation": "DOCKER_GVISOR" if mode == "isolated" else "NONE_TRUSTED_LOCAL"})
     ws.put_object(action)
-    v = candidates.transition(ws, candidate_id, "EVALUATING", v, actor, "staging", proof_id=action.id)
+    v = guarded(lambda gc: candidates.transition(ws, candidate_id, "EVALUATING", v, actor, "staging",
+                                                 proof_id=action.id, conn=gc))
     scratch = Path(tempfile.mkdtemp(prefix="vep-eval-"))
     staged = scratch / "src"
     try:
@@ -349,8 +364,10 @@ def evaluate(ws: Workspace, candidate_id: str, *, trusted_local_authorization: s
             except FalseGreen as exc:
                 reject_reason = f"FALSE_GREEN:{exc}"
         if reject_reason:
-            budgets.settle(ws, rkey, Decimal(cost_micro) / Decimal(1_000_000), f"eval-settle:{candidate_id}")
-            candidates.transition(ws, candidate_id, "REJECTED", v, actor, reject_reason)
+            def _reject(gc):
+                budgets.settle(ws, rkey, Decimal(cost_micro) / Decimal(1_000_000), f"eval-settle:{candidate_id}", conn=gc)
+                candidates.transition(ws, candidate_id, "REJECTED", v, actor, reject_reason, conn=gc)
+            guarded(_reject)
             return {"candidate_id": candidate_id, "status": "REJECTED", "reason": reject_reason}
         ids_digest = sha256_hex(canonical_bytes(sorted(
             rep["passed"] + rep["failed"] + rep["errors"] + rep["skipped"])))
@@ -377,6 +394,8 @@ def evaluate(ws: Workspace, candidate_id: str, *, trusted_local_authorization: s
             "started_at": started, "finished_at": finished, "budget_reservation": rkey, **att_field})
         env_digest = store_signed(ws, evidence, keystore)
         with ws.db.tx() as c:
+            if guard is not None:
+                guard(c)
             c.execute("INSERT INTO evidence(id,candidate_id,objective_id,snapshot_id,policy_id,action_id,verdict,envelope_digest,trust_level)"
                       " VALUES(?,?,?,?,?,?,?,?,?)", (evidence.id, candidate_id, objective.id, snap.id, policy.id,
                                                       action.id, verdict, env_digest, trust_level))
@@ -390,6 +409,8 @@ def evaluate(ws: Workspace, candidate_id: str, *, trusted_local_authorization: s
                 "verdict": verdict, "evidence_id": evidence.id, "counts": counts,
                 "trust_level": trust_level,
                 "isolation": "NONE_TRUSTED_LOCAL (no security isolation)" if trust_level == "TRUSTED_LOCAL" else "DOCKER_GVISOR (attested)"}
+    except StaleLease:
+        raise  # a stale owner must not touch candidate or budget state
     except BaseException as exc:
         # outcome unknown: keep funds held as UNCERTAIN, never leave the candidate stuck in EVALUATING
         cur = candidates.get_state(ws, candidate_id)

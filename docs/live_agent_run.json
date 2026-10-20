@@ -1,0 +1,36 @@
+{
+ "status": "COMPLETED",
+ "error_class": "NONE",
+ "changes": {
+  "added": [],
+  "removed": [],
+  "modified": [
+   "m.py"
+  ],
+  "mode_changed": []
+ },
+ "usage": {
+  "source": "locally_measured",
+  "wall_s": 4.0995,
+  "provider": {
+   "source": "provider_reported",
+   "input_tokens": 135,
+   "output_tokens": 106
+  }
+ },
+ "candidate_id": "cand-50e45773df0188b9daa84a62ad61a2fce0ec5775e619efb80565f8ab21fcbd62",
+ "detail": null,
+ "controller": {
+  "job": "job-16d5604081d484191d67cedaa2cf11c2",
+  "outcome": "SUCCEEDED",
+  "candidate_id": "cand-50e45773df0188b9daa84a62ad61a2fce0ec5775e619efb80565f8ab21fcbd62",
+  "verdict": "PASS",
+  "evidence_id": "evd-081a1321b003d09c489f42689aee89d3f06a383daebd6ef8bdaff46d5a5e733d",
+  "reason": null,
+  "trust_level": "TRUSTED_LOCAL",
+  "certificate_id": "cert-cab7c3e246e15113ed64073afa2d425d0c90d054e2952091295132c0f10f0c9d",
+  "candidate_status": "CERTIFIED"
+ },
+ "elapsed_s": 4.2,
+ "model": "qwen2.5-coder:7b"
+}

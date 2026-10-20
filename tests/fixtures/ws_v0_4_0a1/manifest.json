@@ -1,0 +1,14 @@
+{
+ "base_snapshot_id": "snap-f12dcc15e9167ed00938c354c7b31f561517c514f1e0ba7a12cf6ded716e4f79",
+ "candidate_id": "cand-560fb5d5010df534521f1662c8f1f963b9d62b2cdab6f024c69c45040224a9c4",
+ "certificate_id": "cert-0087a22fe065208d067c126de7dfc890e8bf18ea12232f215681ce3b17e6d7b4",
+ "db_schema": 2,
+ "evaluator_id": "vep-local-evaluator/0.4.0a1/TRUSTED_LOCAL",
+ "evidence_id": "evd-52f7bf0f78b50adcffdf6b6b20cb9b10442c3cbb1f59a4b3670cb95b577b528b",
+ "objective_id": "obj-6c827f1ef37493027c69b73798ad7114cfdea0adc986ffe17138cd4e6a31b798",
+ "package_version": "0.4.0a1",
+ "policy_id": "pol-addee129b21bf6dce05ba68f93c5af6c853e67563d40da12c13f2c942f53c7f8",
+ "snapshot_id": "snap-163c1fc09dd66c4d115f3584db3b952a779d2b2daa3c35827a2e5fe593612c19",
+ "trust_level": "TRUSTED_LOCAL",
+ "vep_sql_sha256": "867c841fa89da761ae3fbde1fc8b889d78215f266f2171d9fe211774b2fcea1d"
+}

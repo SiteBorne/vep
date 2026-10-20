@@ -1,0 +1,116 @@
+$ python scripts/release/cleanroom.py --venv <tmp>/tmpkotiwcop/s
+# exit 0
+
+{
+ "status": "PASS",
+ "checks": [
+  {
+   "n": 1,
+   "check": "vep --help works",
+   "status": "PASS",
+   "detail": ""
+  },
+  {
+   "n": 2,
+   "check": "vep init works",
+   "status": "PASS",
+   "detail": ""
+  },
+  {
+   "n": 3,
+   "check": "source snapshot can be created",
+   "status": "PASS",
+   "detail": ""
+  },
+  {
+   "n": 4,
+   "check": "objective can be registered",
+   "status": "PASS",
+   "detail": ""
+  },
+  {
+   "n": 5,
+   "check": "candidate can be created",
+   "status": "PASS",
+   "detail": ""
+  },
+  {
+   "n": 6,
+   "check": "trusted-local evaluation is denied without authorization",
+   "status": "PASS",
+   "detail": "(7, 'vep: AuthorizationError: non-isolated local execution requires explicit trusted-local authorization; this mode provides NO security isolation\\n')"
+  },
+  {
+   "n": 7,
+   "check": "authorized local evaluation of trusted fixture code works",
+   "status": "PASS",
+   "detail": ""
+  },
+  {
+   "n": 8,
+   "check": "evidence generated and labeled TRUSTED_LOCAL",
+   "status": "PASS",
+   "detail": ""
+  },
+  {
+   "n": 9,
+   "check": "certificate can be verified (exact current source)",
+   "status": "PASS",
+   "detail": ""
+  },
+  {
+   "n": 10,
+   "check": "changing the source invalidates current-state verification",
+   "status": "PASS",
+   "detail": "vep: VerificationFailed: SOURCE_CHANGED: current tree snap-a0beda168c9d3fcee7a3bb27aaedf3efca6eba2a9e30cc80268031d9c759d1b5 != certified snap-3326570bf0284606dd"
+  },
+  {
+   "n": 11,
+   "check": "tampered evidence is rejected",
+   "status": "PASS",
+   "detail": "(4, 'vep: VerificationFailed: object f89abb64dff35579570604d255dd0e515ff353bb11b91609fcfbe727b23fbd67 failed integrity check\\n')"
+  },
+  {
+   "n": 11.5,
+   "check": "restored evidence verifies again (the rejection was due to tampering)",
+   "status": "PASS",
+   "detail": ""
+  },
+  {
+   "n": 12,
+   "check": "budget and token operations work (conflicting settlement rejected)",
+   "status": "PASS",
+   "detail": "[0, 0, 0, 5, 0]"
+  },
+  {
+   "n": 13,
+   "check": "model routing works offline",
+   "status": "PASS",
+   "detail": ""
+  },
+  {
+   "n": 14,
+   "check": "cache economics works offline",
+   "status": "PASS",
+   "detail": ""
+  },
+  {
+   "n": 15,
+   "check": "simulations are reproducible",
+   "status": "PASS",
+   "detail": ""
+  },
+  {
+   "n": 16,
+   "check": "missing isolation cannot be represented as verified",
+   "status": "PASS",
+   "detail": "(8, 8, 4)"
+  },
+  {
+   "n": 17,
+   "check": "installed package uses no developer-local files",
+   "status": "PASS",
+   "detail": "/private<tmp>/tmpkotiwcop/s/lib/python3.14/site-packages/vep/__init__.py"
+  }
+ ]
+}

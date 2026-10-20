@@ -1,30 +1,24 @@
-# VEP 0.4.0a1 — Initial Public Developer Preview
+# VEP 0.5.0b1 — Public Beta (prerelease)
 
-**Prerelease. Not production-ready. Not a sandbox.** Package `vep-protocol` 0.4.0a1 · protocol 0.3 · Python ≥ 3.11 · Linux/macOS · Apache-2.0.
+**Prerelease. Not production-ready. Default execution is not isolated.** Package `vep-protocol` 0.5.0b1 · protocol 0.3 · conformance suite 1.0 · database schema 3 · object schemas Evidence/Certificate 2, others 1 · Python ≥ 3.11 · Linux/macOS · Apache-2.0. The previous prerelease, `0.4.0a1`, is unchanged; its notes are in [RELEASE_NOTES_0.4.0a1.md](RELEASE_NOTES_0.4.0a1.md).
 
-## What you can do with it today
-* Create exact-source **snapshots**, freeze an acceptance **policy** (digest-pinned required tests), register **candidates**, and push them through a SQLite-enforced state machine.
-* **Evaluate** operator-trusted code locally (`TRUSTED_LOCAL`, explicit `--trusted-local-execution`), with false-green detection (zero tests, all skipped, malformed/forged reports, missing required suites, tree mutation, key tampering).
-* Get **signed evidence and certificates** bound to snapshot, policy, objective, evaluator identity and trust level; verify them against the live source; see them fail when anything changes.
-* Use transactional **budgets**, provider-independent **token receipts**, lossless **context manifests**, offline **model-routing** and **prompt-cache** economics, a seeded **simulator**, read-only **Git** inspection.
+## What is new since 0.4.0a1
+* A **durable execution controller** (`vep run`, `vep jobs`): leased, fenced, idempotent jobs; crash recovery; budget admission.
+* **Agent adapters** and **build actions** with a verified result cache (`vep build`); **dependency graph and composition** (`vep graph`, `vep compose`).
+* **Portable certificate bundles** and a **frozen conformance suite** with an independent Node verifier (`vep conformance`, [CONFORMANCE](CONFORMANCE.md)).
+* A hosted-runner **gVisor isolation workflow** ([isolation](isolation/README.md), [revalidation](isolation/REVALIDATION.md)).
+* Real-world records: VEP verifying its own change, two pinned open-source projects, one local-model run, a pre-declared paired benchmark ([REAL_WORLD_RESULTS](REAL_WORLD_RESULTS.md)).
 
-## What is new since the internal 0.3.0
-Explicit **trust levels** in signed objects (no more unattested isolation strings), versioned object/database schemas with a validated migration, an isolation **capability detector and T1–T12 verification matrix**, five security fixes (SR-02…SR-05, SR-12), a tested quickstart, a one-command release gate, and public CI/release workflows. Details: [CHANGELOG](../CHANGELOG.md), [COMPATIBILITY](COMPATIBILITY.md), [MIGRATIONS](MIGRATIONS.md).
+## Security-relevant fixes in this release
+* A **false green**: an installed copy of a project could be tested and certified in place of the candidate. The runner now orders staged roots first and fails closed when a staged module was loaded from elsewhere.
+* Strict id/digest/timestamp validation (trailing newline and non-ASCII digits rejected).
+* The isolation pinned-image comparison could never match a tagged reference on a real runtime (it failed closed).
 
-## Trust model in one paragraph
-A signature proves who signed. `TRUSTED_LOCAL` evidence additionally says: the operator authorized running this code with their own permissions, with no isolation — so it is only as trustworthy as the code. `ISOLATED_VERIFIED` evidence would additionally carry an attestation that a Docker + gVisor boundary was *observed* to satisfy T1–T12; **no such evidence has been produced on the development host, and this release makes no claim about evaluating untrusted code.** See [SECURITY_ARCHITECTURE](SECURITY_ARCHITECTURE.md).
-
-## Known limitations
-1. Trusted-local code can read the signing key and influence its own test report (stderr cross-checks only catch careless forgery).
-2. Container evaluation is **UNVERIFIED**: implemented, decision-tested with a stub, never executed against a real runtime (needs a Linux Docker daemon with gVisor).
-3. Even inside a verified sandbox the test runner shares a process with the code under test; isolation protects the host and signer, not the truthfulness of in-sandbox outcomes.
-4. Token usage is caller-supplied; compute cost per evaluation is a declared flat number.
-5. Simulation results use illustrative parameters; they are not measurements of any real model or provider.
-6. Single host, single key (no rotation), no Windows support, empty directories are not part of snapshots.
-7. Hosted CI, CodeQL and build attestations are configured but **have not run** (the repository was not yet published when this was written). No PyPI release exists.
+## Read before relying on it
+[BETA_SCOPE](BETA_SCOPE.md) lists what is and is not claimed. In short: trusted-local execution runs code with your permissions and no isolation; isolation passed its matrix on one hosted run and is not escape-tested; VEP is not faster than running your tests directly; no external audit; one signing key per workspace; one local-model run is not a reliability measurement.
 
 ## Install and verify
-See [README](../README.md) and [RELEASE_PROVENANCE](RELEASE_PROVENANCE.md). The release assets are `vep_protocol-0.4.0a1-py3-none-any.whl`, `vep_protocol-0.4.0a1.tar.gz` and `SHA256SUMS`.
+See [README](../README.md) and [RELEASE_PROVENANCE](RELEASE_PROVENANCE.md). Release assets: `vep_protocol-0.5.0b1-py3-none-any.whl`, `vep_protocol-0.5.0b1.tar.gz`, `SHA256SUMS`, plus a build-provenance attestation.
 
 ## Qualification
-The decision and per-gate results of the build that produced these artifacts are in [RELEASE_GATE_REPORT](RELEASE_GATE_REPORT.md) (`release-gate.json`).
+The decision and per-category evidence for the revision that produced these artifacts are in [LAUNCH_READINESS_REPORT](LAUNCH_READINESS_REPORT.md) and `launch-gate.json`.

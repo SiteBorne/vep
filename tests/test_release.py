@@ -261,8 +261,21 @@ class SecurityFindingsTests(unittest.TestCase):
 
 
 class QuickstartTests(unittest.TestCase):
+    def bin_dir(self) -> str:
+        """Directory providing a `vep` command. If the interpreter has none installed, a shim runs the source tree
+        under test, so the documented commands are exercised against this code (never against an installed copy)."""
+        installed = Path(sys.executable).parent
+        if (installed / "vep").exists():
+            return str(installed)
+        shim = Path(tempfile.mkdtemp()); self.addCleanup(shutil.rmtree, shim, True)
+        import vep
+        src = Path(vep.__file__).resolve().parent.parent
+        (shim / "vep").write_text(f'#!/bin/sh\nPYTHONPATH="{src}" exec "{sys.executable}" -m vep "$@"\n')
+        (shim / "vep").chmod(0o755)
+        return str(shim)
+
     def test_R023_public_quickstart_commands_execute(self):
-        r = subprocess.run([sys.executable, str(ROOT / "scripts/release/quickstart_runner.py"), "--bin-dir", str(Path(sys.executable).parent)],
+        r = subprocess.run([sys.executable, str(ROOT / "scripts/release/quickstart_runner.py"), "--bin-dir", self.bin_dir()],
                            capture_output=True, text=True)
         self.assertEqual(r.returncode, 0, r.stdout + r.stderr)
         doc = json.loads(r.stdout)

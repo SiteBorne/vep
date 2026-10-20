@@ -9,7 +9,7 @@ from unittest import mock
 
 from vep import budgets, candidates, certificates, execution, isolation, snapshots, tokens
 from vep.errors import BudgetError, SchemaError, SnapshotError, VepError, VerificationFailed
-from tests.helpers import BASE_FILES, VepTestCase
+from tests.helpers import BASE_FILES, VepTestCase, src_env
 
 
 class StateDirectoryTests(VepTestCase):
@@ -74,7 +74,7 @@ class BudgetRangeTests(VepTestCase):
     def test_SR05_cli_never_prints_a_traceback_for_overflow(self):
         e = self.env(budget=None)
         r = subprocess.run([sys.executable, "-m", "vep", "budget", "create", "--account", "x", "--kind", "objective",
-                            "--limit", "99999999999999999999999", "--root", str(e.root)], capture_output=True, text=True)
+                            "--limit", "99999999999999999999999", "--root", str(e.root)], capture_output=True, text=True, env=src_env())
         self.assertEqual(r.returncode, 5)
         self.assertNotIn("Traceback", r.stderr)
 

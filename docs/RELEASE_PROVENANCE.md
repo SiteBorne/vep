@@ -4,7 +4,7 @@ Four things are kept apart and never collapsed into a single "verified" badge:
 
 | Concern | Question | Evidence in this project |
 |---|---|---|
-| **Source integrity** | Is this exactly the source that was reviewed/tagged? | git commit + tree hash recorded by the gate; tag `v0.4.0a1` must equal the gated commit |
+| **Source integrity** | Is this exactly the source that was reviewed/tagged? | git commit + tree hash recorded by the gate; tag `v0.5.0b1` must equal the gated commit |
 | **Build provenance** | Which workflow/builder produced these bytes? | `release-provenance.json` (local record) and, **only when the GitHub release workflow runs**, a GitHub build attestation |
 | **Test evidence** | What was run against them? | `release-gate.json` / `docs/RELEASE_GATE_REPORT.md`: per-gate PASS/FAIL/NOT_RUN/UNVERIFIED |
 | **Evaluator trust** (VEP's own subject) | How trustworthy are *VEP certificates*? | `trust_level` inside signed evidence — unrelated to package signing |
@@ -19,23 +19,23 @@ Four things are kept apart and never collapsed into a single "verified" badge:
    ```
 2. Metadata sanity:
    ```bash
-   python -m zipfile -l vep_protocol-0.4.0a1-py3-none-any.whl | grep -E "METADATA|entry_points|LICENSE"
-   unzip -p vep_protocol-0.4.0a1-py3-none-any.whl 'vep_protocol-*/METADATA' | head -12
+   python -m zipfile -l vep_protocol-0.5.0b1-py3-none-any.whl | grep -E "METADATA|entry_points|LICENSE"
+   unzip -p vep_protocol-0.5.0b1-py3-none-any.whl 'vep_protocol-*/METADATA' | head -12
    ```
 3. Build attestation (only if the release was produced by the GitHub workflow; requires the GitHub CLI and network):
    ```bash
-   gh attestation verify vep_protocol-0.4.0a1-py3-none-any.whl --repo <OWNER>/<REPO>
+   gh attestation verify vep_protocol-0.5.0b1-py3-none-any.whl --repo SiteBorne/vep
    ```
-   `<OWNER>/<REPO>` is intentionally not filled in: it must be the repository you obtained the release from. If the command reports no attestation, the build was not produced by the hosted workflow and **you have only the checksum guarantee**.
+   The repository is `SiteBorne/vep`; if you obtained the release from a fork or mirror, use that repository name instead. If the command reports no attestation, the build was not produced by the hosted workflow and **you have only the checksum guarantee**.
 4. Install in a clean environment and run the shipped self-test:
    ```bash
-   python3 -m venv /tmp/vep-check && /tmp/vep-check/bin/pip install vep_protocol-0.4.0a1-py3-none-any.whl
+   python3 -m venv /tmp/vep-check && /tmp/vep-check/bin/pip install vep_protocol-0.5.0b1-py3-none-any.whl
    /tmp/vep-check/bin/vep version --json
    ```
 
 ## Reproducing the gate
 ```bash
-git checkout v0.4.0a1 && python3 -m venv .venv && . .venv/bin/activate && pip install -e ".[dev]"
+git checkout v0.5.0b1 && python3 -m venv .venv && . .venv/bin/activate && pip install -e ".[dev]"
 scripts/release_check.sh          # writes release-gate.json and docs/RELEASE_GATE_REPORT.md
 ```
 `release-provenance.json` lists the artifact hashes, source commit/tree, Python/platform used and the gate statuses known at that point. Wheels are built with setuptools from the tagged commit; byte-for-byte reproducibility across machines is **not** claimed or tested.

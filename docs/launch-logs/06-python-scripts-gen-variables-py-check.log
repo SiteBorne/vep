@@ -1,0 +1,3 @@
+$ python scripts/gen_variables.py --check
+# exit 0
+

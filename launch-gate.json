@@ -1,0 +1,1206 @@
+{
+ "ANNOUNCEMENT_READY": "NO",
+ "artifacts": [
+  {
+   "bytes": 100802,
+   "name": "vep_protocol-0.5.0b1-py3-none-any.whl",
+   "sha256": "a2e16eb1e8d731e2853c46420bdbfd265241758c62396ca07879d87b46325ad8"
+  },
+  {
+   "bytes": 401132,
+   "name": "vep_protocol-0.5.0b1.tar.gz",
+   "sha256": "8344076d06082717d51b9eb4943657921c7fab83a15934f97df32874d539c26f"
+  }
+ ],
+ "branch": "main",
+ "categories": {
+  "AGENT_INTEGRATION": {
+   "evidence": {
+    "commands": [
+     {
+      "argv": [
+       "python",
+       "-m",
+       "pytest",
+       "-q",
+       "--junitxml=/var/folders/g7/s4llc2490d17ndcmkp40yk0h0000gn/T/tmp8mp9cw8v/junit.xml",
+       "-p",
+       "no:cacheprovider"
+      ],
+      "exit_code": 0,
+      "output_sha256": "257a86d8a5d45244c949a523be165c3e6c93c09a785e9e1347d1ec641b6d9436",
+      "tail": [
+       "........................................................................ [ 91%]",
+       "................................                                         [100%]",
+       "392 passed in 47.76s"
+      ]
+     }
+    ],
+    "files": [
+     {
+      "path": "docs/live_agent_run.json",
+      "sha256": "0db199a86dc131b0af126e0ed1759631d1974f327111ec706526defe32f142de"
+     }
+    ],
+    "limit": "adapter protocol tested; ONE live local-model run (qwen2.5-coder:7b), interactive authorship of the dogfood change, no autonomous-agent dogfood",
+    "test_files": {
+     "test_agents": 12
+    },
+    "tests_executed": 12
+   },
+   "status": "PASS"
+  },
+  "ANNOUNCEMENT_CLAIMS": {
+   "evidence": {
+    "announcement_marked_unposted": true,
+    "commands": [
+     {
+      "argv": [
+       "python",
+       "scripts/check_claims.py"
+      ],
+      "exit_code": 0,
+      "output_sha256": "883292bb3368d1594bd8ef4453e7e7f15f3cf66c0b730b03db9f674a72ba6f1a",
+      "tail": [
+       "claims: all traced and consistent"
+      ]
+     },
+     {
+      "argv": [
+       "python",
+       "scripts/release/ci_checks.py"
+      ],
+      "exit_code": 0,
+      "output_sha256": "fd6355fa8b321e88f1c6ea2babaf0e638e853d714d6b25f9b353bb830f70a508",
+      "tail": [
+       "ci_checks: PASS"
+      ]
+     }
+    ],
+    "files": [
+     {
+      "path": "docs/claims.json",
+      "sha256": "54f158ae9a4ff779a0ede1f625bafd38e6aaad5835ddca88b8ca47e26580d448"
+     },
+     {
+      "path": "docs/ANNOUNCEMENT.md",
+      "sha256": "a701b15722e89d3fc1d71e776dfbd6888a756c21faa9c58503307e07e753a526"
+     }
+    ]
+   },
+   "status": "PASS"
+  },
+  "BENCHMARK_REPRODUCIBILITY": {
+   "evidence": {
+    "first_run_records_preserved": [
+     {
+      "path": "benchmarks/results/compare-pyflakes.json",
+      "sha256": "b560491971a2a03c8d3caa308698beb93cfd7bb1b821e22dce9f577ec313cb01"
+     },
+     {
+      "path": "benchmarks/results/compare-more-itertools.json",
+      "sha256": "d06f1ae17d4d88594b8263e2c6425cbb32e7818557165ec1a38e581ed75946e7"
+     }
+    ],
+    "methodology": [
+     {
+      "path": "docs/BENCHMARK_METHODOLOGY.md",
+      "sha256": "61e79412846d5daf9102a6d418b472f9aae6007821fcd149093ab3d5895f0ec5"
+     }
+    ],
+    "reports": {
+     "benchmarks/results/paired-more-itertools.json": {
+      "gate_failures": [],
+      "load_avg_1m_at_start": 5.57,
+      "scenarios": {
+       "S1_cold_single": {
+        "cpu_idle_pct_min": 64.71,
+        "direct_baseline_cv": 0.0109,
+        "excluded": 0,
+        "load_avg_1m_max": 6.87,
+        "load_avg_1m_min": 3.1,
+        "valid_blocks": 10
+       },
+       "S2_warm_unchanged": {
+        "cpu_idle_pct_min": 65.5,
+        "direct_baseline_cv": 0.0064,
+        "excluded": 0,
+        "load_avg_1m_max": 3.94,
+        "load_avg_1m_min": 1.95,
+        "valid_blocks": 10
+       },
+       "S3_warm_small_edit": {
+        "cpu_idle_pct_min": 78.44,
+        "direct_baseline_cv": 0.0031,
+        "excluded": 0,
+        "load_avg_1m_max": 3.83,
+        "load_avg_1m_min": 2.86,
+        "valid_blocks": 10
+       },
+       "S4_cold_batch": {
+        "cpu_idle_pct_min": 69.91,
+        "direct_baseline_cv": 0.0045,
+        "excluded": 0,
+        "load_avg_1m_max": 6.17,
+        "load_avg_1m_min": 2.48,
+        "valid_blocks": 10
+       }
+      },
+      "sha256": "92ef506493b6476bb844ccda400fcd34bee2e140572818bc380cfbc5eb109ba2",
+      "vep_commit": "77984c8bf1f4fb594300cb45e582cf7890e52e4a"
+     },
+     "benchmarks/results/paired-pyflakes.json": {
+      "gate_failures": [],
+      "load_avg_1m_at_start": 5.01,
+      "scenarios": {
+       "S1_cold_single": {
+        "cpu_idle_pct_min": 62.8,
+        "direct_baseline_cv": 0.0198,
+        "excluded": 0,
+        "load_avg_1m_max": 5.26,
+        "load_avg_1m_min": 4.76,
+        "valid_blocks": 10
+       },
+       "S2_warm_unchanged": {
+        "cpu_idle_pct_min": 60.24,
+        "direct_baseline_cv": 0.0252,
+        "excluded": 0,
+        "load_avg_1m_max": 5.39,
+        "load_avg_1m_min": 4.86,
+        "valid_blocks": 10
+       },
+       "S3_warm_small_edit": {
+        "cpu_idle_pct_min": 60.75,
+        "direct_baseline_cv": 0.0274,
+        "excluded": 0,
+        "load_avg_1m_max": 4.98,
+        "load_avg_1m_min": 4.57,
+        "valid_blocks": 10
+       },
+       "S4_cold_batch": {
+        "cpu_idle_pct_min": 39.87,
+        "direct_baseline_cv": 0.1305,
+        "excluded": 0,
+        "load_avg_1m_max": 5.86,
+        "load_avg_1m_min": 4.72,
+        "valid_blocks": 10
+       }
+      },
+      "sha256": "87d78e9b09a4660df442501c64d638b17090877badbab5212d5a1369fd10bfd4",
+      "vep_commit": "77984c8bf1f4fb594300cb45e582cf7890e52e4a"
+     }
+    }
+   },
+   "reason": "benchmarks/results/paired-pyflakes.json: load_avg_1m_at_start 5.01 >= 2.0 (declared criterion); benchmarks/results/paired-more-itertools.json: load_avg_1m_at_start 5.57 >= 2.0 (declared criterion) -- see docs/REAL_WORLD_RESULTS.md for the measured results and their stated limits",
+   "status": "UNVERIFIED"
+  },
+  "BUILD_INTEGRATION": {
+   "evidence": {
+    "commands": [
+     {
+      "argv": [
+       "python",
+       "-m",
+       "pytest",
+       "-q",
+       "--junitxml=/var/folders/g7/s4llc2490d17ndcmkp40yk0h0000gn/T/tmp8mp9cw8v/junit.xml",
+       "-p",
+       "no:cacheprovider"
+      ],
+      "exit_code": 0,
+      "output_sha256": "257a86d8a5d45244c949a523be165c3e6c93c09a785e9e1347d1ec641b6d9436",
+      "tail": [
+       "........................................................................ [ 91%]",
+       "................................                                         [100%]",
+       "392 passed in 47.76s"
+      ]
+     }
+    ],
+    "test_files": {
+     "test_builds": 8,
+     "test_cli_build": 3
+    },
+    "tests_executed": 11
+   },
+   "status": "PASS"
+  },
+  "CANDIDATE_LIFECYCLE": {
+   "evidence": {
+    "commands": [
+     {
+      "argv": [
+       "python",
+       "-m",
+       "pytest",
+       "-q",
+       "--junitxml=/var/folders/g7/s4llc2490d17ndcmkp40yk0h0000gn/T/tmp8mp9cw8v/junit.xml",
+       "-p",
+       "no:cacheprovider"
+      ],
+      "exit_code": 0,
+      "output_sha256": "257a86d8a5d45244c949a523be165c3e6c93c09a785e9e1347d1ec641b6d9436",
+      "tail": [
+       "........................................................................ [ 91%]",
+       "................................                                         [100%]",
+       "392 passed in 47.76s"
+      ]
+     }
+    ],
+    "test_files": {
+     "test_candidates": 15,
+     "test_git": 6,
+     "test_integration": 10
+    },
+    "tests_executed": 31
+   },
+   "status": "PASS"
+  },
+  "CERTIFICATE_VERIFICATION": {
+   "evidence": {
+    "commands": [
+     {
+      "argv": [
+       "python",
+       "-m",
+       "pytest",
+       "-q",
+       "--junitxml=/var/folders/g7/s4llc2490d17ndcmkp40yk0h0000gn/T/tmp8mp9cw8v/junit.xml",
+       "-p",
+       "no:cacheprovider"
+      ],
+      "exit_code": 0,
+      "output_sha256": "257a86d8a5d45244c949a523be165c3e6c93c09a785e9e1347d1ec641b6d9436",
+      "tail": [
+       "........................................................................ [ 91%]",
+       "................................                                         [100%]",
+       "392 passed in 47.76s"
+      ]
+     }
+    ],
+    "test_files": {
+     "test_certificates": 14,
+     "test_trust": 17
+    },
+    "tests_executed": 31
+   },
+   "status": "PASS"
+  },
+  "COMPOSITE_VERIFICATION": {
+   "evidence": {
+    "commands": [
+     {
+      "argv": [
+       "python",
+       "-m",
+       "pytest",
+       "-q",
+       "--junitxml=/var/folders/g7/s4llc2490d17ndcmkp40yk0h0000gn/T/tmp8mp9cw8v/junit.xml",
+       "-p",
+       "no:cacheprovider"
+      ],
+      "exit_code": 0,
+      "output_sha256": "257a86d8a5d45244c949a523be165c3e6c93c09a785e9e1347d1ec641b6d9436",
+      "tail": [
+       "........................................................................ [ 91%]",
+       "................................                                         [100%]",
+       "392 passed in 47.76s"
+      ]
+     }
+    ],
+    "test_files": {
+     "test_depgraph": 10
+    },
+    "tests_executed": 10
+   },
+   "status": "PASS"
+  },
+  "CONCURRENCY": {
+   "evidence": {
+    "commands": [
+     {
+      "argv": [
+       "python",
+       "-m",
+       "pytest",
+       "-q",
+       "--junitxml=/var/folders/g7/s4llc2490d17ndcmkp40yk0h0000gn/T/tmp8mp9cw8v/junit.xml",
+       "-p",
+       "no:cacheprovider"
+      ],
+      "exit_code": 0,
+      "output_sha256": "257a86d8a5d45244c949a523be165c3e6c93c09a785e9e1347d1ec641b6d9436",
+      "tail": [
+       "........................................................................ [ 91%]",
+       "................................                                         [100%]",
+       "392 passed in 47.76s"
+      ]
+     }
+    ],
+    "files": [
+     {
+      "path": "benchmarks/results/controller_scaling.json",
+      "sha256": "dbd741f07281bc78d9a8af3e8a3ab7c469b8a7ab4b93927b14e34c6acde8dff2"
+     },
+     {
+      "path": "docs/CONTROLLER_SCALING.md",
+      "sha256": "0c85fd62ab25886df846d926a552f4d356d493856231fa346fa88067317fff51"
+     }
+    ],
+    "limit": "1-16 worker processes on one host; no distributed claim",
+    "test_files": {
+     "test_controller": 14
+    },
+    "tests_executed": 14
+   },
+   "status": "PASS"
+  },
+  "CORE_PROTOCOL": {
+   "evidence": {
+    "commands": [
+     {
+      "argv": [
+       "python",
+       "-m",
+       "pytest",
+       "-q",
+       "--junitxml=/var/folders/g7/s4llc2490d17ndcmkp40yk0h0000gn/T/tmp8mp9cw8v/junit.xml",
+       "-p",
+       "no:cacheprovider"
+      ],
+      "exit_code": 0,
+      "output_sha256": "257a86d8a5d45244c949a523be165c3e6c93c09a785e9e1347d1ec641b6d9436",
+      "tail": [
+       "........................................................................ [ 91%]",
+       "................................                                         [100%]",
+       "392 passed in 47.76s"
+      ]
+     },
+     {
+      "argv": [
+       "python",
+       "-m",
+       "unittest",
+       "discover",
+       "-s",
+       "tests",
+       "-t",
+       "."
+      ],
+      "exit_code": 0,
+      "output_sha256": "2aac50007cafd94c85eff9a402a466d0b301a17f65dbb98763c59aceb7b438c6",
+      "tail": [
+       "Ran 392 tests in 47.114s",
+       "",
+       "OK"
+      ]
+     },
+     {
+      "argv": [
+       "python",
+       "benchmarks/run_simulation.py",
+       "--out-json",
+       "/dev/null",
+       "--out-md",
+       "/dev/null"
+      ],
+      "exit_code": 0,
+      "output_sha256": "afd061aacf261e15719c5c146218033ae3d50ca928d20c9e6505708005642d89",
+      "tail": [
+       "reproducible: yes (sha256 e98e2a562d7a5df09f90cc03a532376b80ed8c36790add89f644167e902c3b2f)",
+       "wrote /dev/null and /dev/null"
+      ]
+     }
+    ],
+    "test_files": {
+     "test_canonical": 7,
+     "test_compat": 13,
+     "test_math": 13,
+     "test_policies": 10,
+     "test_snapshots": 11,
+     "test_storage": 9
+    },
+    "tests_executed": 63
+   },
+   "status": "PASS"
+  },
+  "DOCUMENTATION": {
+   "evidence": {
+    "broken_relative_links": [],
+    "commands": [
+     {
+      "argv": [
+       "python",
+       "scripts/gen_variables.py",
+       "--check"
+      ],
+      "exit_code": 0,
+      "output_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "tail": []
+     }
+    ],
+    "required_docs_missing": []
+   },
+   "status": "PASS"
+  },
+  "EVIDENCE_INTEGRITY": {
+   "evidence": {
+    "commands": [
+     {
+      "argv": [
+       "python",
+       "-m",
+       "pytest",
+       "-q",
+       "--junitxml=/var/folders/g7/s4llc2490d17ndcmkp40yk0h0000gn/T/tmp8mp9cw8v/junit.xml",
+       "-p",
+       "no:cacheprovider"
+      ],
+      "exit_code": 0,
+      "output_sha256": "257a86d8a5d45244c949a523be165c3e6c93c09a785e9e1347d1ec641b6d9436",
+      "tail": [
+       "........................................................................ [ 91%]",
+       "................................                                         [100%]",
+       "392 passed in 47.76s"
+      ]
+     }
+    ],
+    "test_files": {
+     "test_adversarial": 21,
+     "test_audits": 15,
+     "test_execution": 27
+    },
+    "tests_executed": 63
+   },
+   "status": "PASS"
+  },
+  "EXECUTION_CONTROLLER": {
+   "evidence": {
+    "commands": [
+     {
+      "argv": [
+       "python",
+       "-m",
+       "pytest",
+       "-q",
+       "--junitxml=/var/folders/g7/s4llc2490d17ndcmkp40yk0h0000gn/T/tmp8mp9cw8v/junit.xml",
+       "-p",
+       "no:cacheprovider"
+      ],
+      "exit_code": 0,
+      "output_sha256": "257a86d8a5d45244c949a523be165c3e6c93c09a785e9e1347d1ec641b6d9436",
+      "tail": [
+       "........................................................................ [ 91%]",
+       "................................                                         [100%]",
+       "392 passed in 47.76s"
+      ]
+     }
+    ],
+    "test_files": {
+     "test_controller": 14
+    },
+    "tests_executed": 14
+   },
+   "status": "PASS"
+  },
+  "ISOLATION": {
+   "evidence": {
+    "files": [
+     {
+      "path": "docs/isolation/ci-run-39347549501-attestation.json",
+      "sha256": "4630856d5e4d0dd5520117a06e7c11595f1bc2c1f6662259842c601d433cb924"
+     },
+     {
+      "path": "docs/isolation/ci-run-39347549501-e2e-summary.json",
+      "sha256": "7fd2f5eaea9294ed62a62cdeb7947db924f96755f3ddc0ea5783302e3ede7b22"
+     },
+     {
+      "path": ".github/workflows/isolation.yml",
+      "sha256": "22cbf39a4241df2ac2de245ac5555387b79311feab8c90b900b783293b75d77c"
+     }
+    ],
+    "hosted_runs": [
+     "github.com/SiteBorne/vep/actions/runs/39347549501 (pass)",
+     "39347349190 (failed closed; bug fixed)"
+    ],
+    "local_probe": {
+     "exit_code": 8,
+     "tail": [
+      "  ],",
+      "  \"status\": \"ISOLATION_UNVERIFIED\"",
+      "}"
+     ]
+    }
+   },
+   "limits": [
+    "one hosted-runner run",
+    "not escape-tested",
+    "T12 is docker-inspect-only",
+    "this machine: ISOLATION_UNVERIFIED"
+   ],
+   "status": "PASS"
+  },
+  "PACKAGING": {
+   "evidence": {
+    "artifacts": [
+     {
+      "bytes": 100802,
+      "name": "vep_protocol-0.5.0b1-py3-none-any.whl",
+      "sha256": "a2e16eb1e8d731e2853c46420bdbfd265241758c62396ca07879d87b46325ad8"
+     },
+     {
+      "bytes": 401132,
+      "name": "vep_protocol-0.5.0b1.tar.gz",
+      "sha256": "8344076d06082717d51b9eb4943657921c7fab83a15934f97df32874d539c26f"
+     }
+    ],
+    "commands": [
+     {
+      "argv": [
+       "python",
+       "-m",
+       "build",
+       "--outdir",
+       "/var/folders/g7/s4llc2490d17ndcmkp40yk0h0000gn/T/tmpucgwyox8"
+      ],
+      "exit_code": 0,
+      "output_sha256": "f32ef47c71fd7c798aa7749c8256c7d453e991461f7ddc8af1f3154e1ae8f411",
+      "tail": [
+       "warning: build_py: byte-compiling is disabled, skipping.",
+       "",
+       "warning: install_lib: byte-compiling is disabled, skipping."
+      ]
+     },
+     {
+      "argv": [
+       "python",
+       "-m",
+       "twine",
+       "check",
+       "--strict",
+       "/var/folders/g7/s4llc2490d17ndcmkp40yk0h0000gn/T/tmpucgwyox8/vep_protocol-0.5.0b1-py3-none-any.whl",
+       "/var/folders/g7/s4llc2490d17ndcmkp40yk0h0000gn/T/tmpucgwyox8/vep_protocol-0.5.0b1.tar.gz"
+      ],
+      "exit_code": 0,
+      "output_sha256": "c19dd0a3e115d61a40ef11e68762207eb8b90cf60b03182b97e10a83e90915bb",
+      "tail": [
+       "Checking ",
+       "/var/folders/g7/s4llc2490d17ndcmkp40yk0h0000gn/T/tmpucgwyox8/vep_protocol-0.5.0b",
+       "1.tar.gz: \u001b[32mPASSED\u001b[0m"
+      ]
+     },
+     {
+      "argv": [
+       "python",
+       "scripts/release/ci_checks.py",
+       "--dist",
+       "/var/folders/g7/s4llc2490d17ndcmkp40yk0h0000gn/T/tmpucgwyox8"
+      ],
+      "exit_code": 0,
+      "output_sha256": "fd6355fa8b321e88f1c6ea2babaf0e638e853d714d6b25f9b353bb830f70a508",
+      "tail": [
+       "ci_checks: PASS"
+      ]
+     }
+    ],
+    "note": "checksums are computed from these exact files",
+    "version_in_filenames": true
+   },
+   "status": "PASS"
+  },
+  "PROTOCOL_CONFORMANCE": {
+   "evidence": {
+    "commands": [
+     {
+      "argv": [
+       "bash",
+       "scripts/conformance_check.sh"
+      ],
+      "exit_code": 0,
+      "output_sha256": "df7f612cd7f8d7f948f9339ab35a83319b9637a652777bea39215c3381c6d6f2",
+      "tail": [
+       "  \"verifier\": \"reference (python)\"",
+       "}",
+       "119/119 vectors agree"
+      ]
+     }
+    ],
+    "files": [
+     {
+      "path": "conformance/vectors/suite-1.0.json",
+      "sha256": "3ad440e266320848ed147394ee353ce88397829b227a14014ee9a9ec47ec0f2a"
+     },
+     {
+      "path": "docs/CONFORMANCE.md",
+      "sha256": "feeff60100baf0d10a4a3969be6103a56d7a9bee7f9448d3c0f106cba731bbd0"
+     }
+    ]
+   },
+   "status": "PASS"
+  },
+  "PUBLIC_QUICKSTART": {
+   "evidence": {
+    "commands": [
+     {
+      "argv": [
+       "python",
+       "-m",
+       "venv",
+       "/var/folders/g7/s4llc2490d17ndcmkp40yk0h0000gn/T/tmpss2ng9zp/v"
+      ],
+      "exit_code": 0,
+      "output_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "tail": []
+     },
+     {
+      "argv": [
+       "pip",
+       "install",
+       "-q",
+       "/var/folders/g7/s4llc2490d17ndcmkp40yk0h0000gn/T/tmpucgwyox8/vep_protocol-0.5.0b1-py3-none-any.whl"
+      ],
+      "exit_code": 0,
+      "output_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "tail": []
+     },
+     {
+      "argv": [
+       "python",
+       "scripts/release/cleanroom.py",
+       "--venv",
+       "/var/folders/g7/s4llc2490d17ndcmkp40yk0h0000gn/T/tmpss2ng9zp/v"
+      ],
+      "exit_code": 0,
+      "output_sha256": "a3a000e54a3eb1d204e9ffab9068927b6937799a7b96e95d4b6f271afe182b11",
+      "tail": [
+       "  }",
+       " ]",
+       "}"
+      ]
+     },
+     {
+      "argv": [
+       "python",
+       "scripts/release/quickstart_runner.py",
+       "--bin-dir",
+       "/var/folders/g7/s4llc2490d17ndcmkp40yk0h0000gn/T/tmpss2ng9zp/v/bin"
+      ],
+      "exit_code": 0,
+      "output_sha256": "f279fc1ee8d055dbf10d660953fe6086d00b4c38d23e14cfe6760d0ffb582aeb",
+      "tail": [
+       "{\"status\": \"PASS\", \"blocks\": 9, \"results\": [{\"block\": 1, \"returncode\": 0}, {\"block\": 2, \"returncode\": 0}, {\"block\": 3, \"returncode\": 0}, {\"block\": 4, \"returncode\": 0}, {\"block\": 5, \"returncode\": 0}, {\"block\": 6, \"returncode\": 0}, {\"block\": 7, \"returncode\": 0}, {\"block\": 8, \"returncode\": 0}, {\"block\": 9, \"returncode\": 0}]}"
+      ]
+     },
+     {
+      "argv": [
+       "python",
+       "-m",
+       "venv",
+       "/var/folders/g7/s4llc2490d17ndcmkp40yk0h0000gn/T/tmpkotiwcop/s"
+      ],
+      "exit_code": 0,
+      "output_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "tail": []
+     },
+     {
+      "argv": [
+       "pip",
+       "install",
+       "-q",
+       "/var/folders/g7/s4llc2490d17ndcmkp40yk0h0000gn/T/tmpucgwyox8/vep_protocol-0.5.0b1.tar.gz"
+      ],
+      "exit_code": 0,
+      "output_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "tail": []
+     },
+     {
+      "argv": [
+       "vep",
+       "version",
+       "--json"
+      ],
+      "exit_code": 0,
+      "output_sha256": "ab1920cb35e04f3902ef4026e90bf7e27aa8a5ae6f9fda074241f4e0a5f2068c",
+      "tail": [
+       "    ]",
+       "  }",
+       "}"
+      ]
+     },
+     {
+      "argv": [
+       "python",
+       "scripts/release/cleanroom.py",
+       "--venv",
+       "/var/folders/g7/s4llc2490d17ndcmkp40yk0h0000gn/T/tmpkotiwcop/s"
+      ],
+      "exit_code": 0,
+      "output_sha256": "ba703c16ae4a8113dd7555851aa38b68845ceb80e4a7e6ebf758d4828ae292bd",
+      "tail": [
+       "  }",
+       " ]",
+       "}"
+      ]
+     }
+    ],
+    "installed_sdist": "vep_protocol-0.5.0b1.tar.gz",
+    "installed_wheel": "vep_protocol-0.5.0b1-py3-none-any.whl",
+    "sdist_clean_install_and_cleanroom_ok": true
+   },
+   "status": "PASS"
+  },
+  "REAL_WORLD_DOGFOOD": {
+   "evidence": {
+    "reports": [
+     {
+      "fresh": true,
+      "outcome_pass": true,
+      "path": "docs/dogfood/vep-on-vep-run-5-release-candidate.json",
+      "producing_commit": "4d0216a27f7f06517978a091e42f3bd49c759e18",
+      "sha256": "4d409052451403e6e10b4b9e237f1e6fc2cdc54357e91942aadf22da3b18fc45",
+      "why": "evaluation-critical source unchanged since the report"
+     },
+     {
+      "fresh": true,
+      "outcome_pass": true,
+      "path": "docs/external/pyflakes.json",
+      "producing_commit": "4d0216a27f7f06517978a091e42f3bd49c759e18",
+      "sha256": "250a70fd01a03bce8411d7333148049ff52264fa495c7fd4d4f8f833e8f6c64d",
+      "why": "evaluation-critical source unchanged since the report"
+     },
+     {
+      "fresh": true,
+      "outcome_pass": true,
+      "path": "docs/external/more-itertools.json",
+      "producing_commit": "4d0216a27f7f06517978a091e42f3bd49c759e18",
+      "sha256": "aeea8d7a065b4f79e44f034f71c18a3d42724197685bdcd5548631897eee1238",
+      "why": "evaluation-critical source unchanged since the report"
+     }
+    ]
+   },
+   "limits": [
+    "trusted-local only",
+    "VEP change authored interactively",
+    "two small projects without third-party dependencies"
+   ],
+   "status": "PASS"
+  },
+  "RESOURCE_ACCOUNTING": {
+   "evidence": {
+    "commands": [
+     {
+      "argv": [
+       "python",
+       "-m",
+       "pytest",
+       "-q",
+       "--junitxml=/var/folders/g7/s4llc2490d17ndcmkp40yk0h0000gn/T/tmp8mp9cw8v/junit.xml",
+       "-p",
+       "no:cacheprovider"
+      ],
+      "exit_code": 0,
+      "output_sha256": "257a86d8a5d45244c949a523be165c3e6c93c09a785e9e1347d1ec641b6d9436",
+      "tail": [
+       "........................................................................ [ 91%]",
+       "................................                                         [100%]",
+       "392 passed in 47.76s"
+      ]
+     }
+    ],
+    "test_files": {
+     "test_budgets": 15,
+     "test_cache": 11,
+     "test_context": 7,
+     "test_routing": 12,
+     "test_tokens": 9
+    },
+    "tests_executed": 54
+   },
+   "status": "PASS"
+  },
+  "SECURITY": {
+   "evidence": {
+    "commands": [
+     {
+      "argv": [
+       "python",
+       "-m",
+       "pytest",
+       "-q",
+       "--junitxml=/var/folders/g7/s4llc2490d17ndcmkp40yk0h0000gn/T/tmp8mp9cw8v/junit.xml",
+       "-p",
+       "no:cacheprovider"
+      ],
+      "exit_code": 0,
+      "output_sha256": "257a86d8a5d45244c949a523be165c3e6c93c09a785e9e1347d1ec641b6d9436",
+      "tail": [
+       "........................................................................ [ 91%]",
+       "................................                                         [100%]",
+       "392 passed in 47.76s"
+      ]
+     }
+    ],
+    "test_files": {
+     "test_adversarial": 21,
+     "test_hardening": 17,
+     "test_isolation": 10,
+     "test_isolation_matrix": 18
+    },
+    "tests_executed": 66
+   },
+   "status": "PASS"
+  },
+  "SOURCE_INTEGRITY": {
+   "evidence": {
+    "commands": [
+     {
+      "argv": [
+       "python",
+       "scripts/release/ci_checks.py"
+      ],
+      "exit_code": 0,
+      "output_sha256": "fd6355fa8b321e88f1c6ea2babaf0e638e853d714d6b25f9b353bb830f70a508",
+      "tail": [
+       "ci_checks: PASS"
+      ]
+     }
+    ],
+    "commit": "afa2d74adabb85cded5adf72907c91d8bb5030c5",
+    "note": "static checks: secrets in tree and history, workflows, claims, versions",
+    "tracked_tree_clean": true
+   },
+   "status": "PASS"
+  },
+  "SUPPLY_CHAIN": {
+   "evidence": {
+    "commands": [
+     {
+      "argv": [
+       "python",
+       "scripts/release/ci_checks.py"
+      ],
+      "exit_code": 0,
+      "output_sha256": "fd6355fa8b321e88f1c6ea2babaf0e638e853d714d6b25f9b353bb830f70a508",
+      "tail": [
+       "ci_checks: PASS"
+      ]
+     }
+    ],
+    "files": [
+     {
+      "path": ".github/dependabot.yml",
+      "sha256": "ba0b23ff4dab9838e2099e9690f66a14c4b75c37b652b1711ee3363305ea20c5"
+     }
+    ],
+    "runtime_dependencies": [
+     "cryptography>=41"
+    ],
+    "workflows": [
+     "ci.yml",
+     "codeql.yml",
+     "isolation.yml",
+     "release.yml"
+    ]
+   },
+   "limits": [
+    "static workflow lint only; hosted CI/CodeQL results for this commit are NOT_RUN (unpushed)",
+    "no SLSA level claimed"
+   ],
+   "status": "PASS"
+  }
+ },
+ "command_logs": "docs/launch-logs/ (sanitized of machine paths; index.json lists exit codes and digests)",
+ "conditions": {
+  "escape_testing": {
+   "evidence": "none recorded: NOT_RUN",
+   "met": false
+  },
+  "external_security_review": {
+   "evidence": "none recorded: NOT_RUN",
+   "met": false
+  },
+  "head_pushed": {
+   "detail": [],
+   "evidence": "computed now",
+   "met": false
+  },
+  "hosted_ci_green_for_head": {
+   "detail": {
+    "failed": [],
+    "required": [
+     "CI",
+     "CodeQL"
+    ],
+    "runs": null
+   },
+   "evidence": "computed now",
+   "met": false
+  },
+  "in_container_runtime_corroboration": {
+   "evidence": "none recorded: NOT_RUN",
+   "met": false
+  },
+  "isolation_evidence_revalidated": {
+   "evidence": "computed now",
+   "met": true
+  },
+  "isolation_run_commit_in_release_revision": {
+   "detail": "c8e1f00d57cfbbd013d71a26518b882d05786495",
+   "evidence": "computed now",
+   "met": true
+  },
+  "production_criteria_defined_and_met": {
+   "evidence": "none recorded: NOT_RUN",
+   "met": false
+  },
+  "public_release_exists": {
+   "detail": null,
+   "evidence": "computed now",
+   "met": false
+  },
+  "quickstart_from_released_artifacts": {
+   "evidence": "computed now",
+   "met": false
+  },
+  "release_artifacts_verified": {
+   "evidence": "computed now",
+   "met": false
+  },
+  "version_is_target": {
+   "evidence": "computed now",
+   "met": true
+  },
+  "working_tree_clean": {
+   "evidence": "computed now",
+   "met": true
+  }
+ },
+ "gate_version": 1,
+ "levels": {
+  "ANNOUNCEMENT_READY": {
+   "blocking": [
+    "requires PUBLIC_BETA_READY",
+    "condition not met: public_release_exists",
+    "condition not met: release_artifacts_verified",
+    "condition not met: quickstart_from_released_artifacts"
+   ],
+   "ready": false
+  },
+  "ISOLATED_EXECUTION_VERIFIED": {
+   "blocking": [],
+   "ready": true
+  },
+  "LOCAL_BETA_READY": {
+   "blocking": [],
+   "ready": true
+  },
+  "PRODUCTION_READY": {
+   "blocking": [
+    "requires UNTRUSTED_EXECUTION_READY",
+    "condition not met: production_criteria_defined_and_met"
+   ],
+   "ready": false
+  },
+  "PUBLIC_BETA_READY": {
+   "blocking": [
+    "BENCHMARK_REPRODUCIBILITY=UNVERIFIED",
+    "condition not met: head_pushed",
+    "condition not met: hosted_ci_green_for_head"
+   ],
+   "ready": false
+  },
+  "UNTRUSTED_EXECUTION_READY": {
+   "blocking": [
+    "requires PUBLIC_BETA_READY",
+    "condition not met: external_security_review",
+    "condition not met: escape_testing",
+    "condition not met: in_container_runtime_corroboration"
+   ],
+   "ready": false
+  }
+ },
+ "package_version": "0.5.0b1",
+ "protocol_version": "0.3",
+ "release_decision": "NO_GO",
+ "release_decision_note": "blocked by: BENCHMARK_REPRODUCIBILITY=UNVERIFIED; condition not met: head_pushed; condition not met: hosted_ci_green_for_head",
+ "source_commit": "afa2d74adabb85cded5adf72907c91d8bb5030c5",
+ "target_version": "0.5.0b1",
+ "test_summary_by_file": {
+  "test_adversarial": {
+   "bad": 0,
+   "skipped": 0,
+   "tests": 21
+  },
+  "test_agents": {
+   "bad": 0,
+   "skipped": 0,
+   "tests": 12
+  },
+  "test_audits": {
+   "bad": 0,
+   "skipped": 0,
+   "tests": 15
+  },
+  "test_budgets": {
+   "bad": 0,
+   "skipped": 0,
+   "tests": 15
+  },
+  "test_builds": {
+   "bad": 0,
+   "skipped": 0,
+   "tests": 8
+  },
+  "test_cache": {
+   "bad": 0,
+   "skipped": 0,
+   "tests": 11
+  },
+  "test_candidates": {
+   "bad": 0,
+   "skipped": 0,
+   "tests": 15
+  },
+  "test_canonical": {
+   "bad": 0,
+   "skipped": 0,
+   "tests": 7
+  },
+  "test_certificates": {
+   "bad": 0,
+   "skipped": 0,
+   "tests": 14
+  },
+  "test_claims": {
+   "bad": 0,
+   "skipped": 0,
+   "tests": 2
+  },
+  "test_cli_build": {
+   "bad": 0,
+   "skipped": 0,
+   "tests": 3
+  },
+  "test_compat": {
+   "bad": 0,
+   "skipped": 0,
+   "tests": 13
+  },
+  "test_conformance": {
+   "bad": 0,
+   "skipped": 0,
+   "tests": 6
+  },
+  "test_context": {
+   "bad": 0,
+   "skipped": 0,
+   "tests": 7
+  },
+  "test_controller": {
+   "bad": 0,
+   "skipped": 0,
+   "tests": 14
+  },
+  "test_depgraph": {
+   "bad": 0,
+   "skipped": 0,
+   "tests": 10
+  },
+  "test_docs": {
+   "bad": 0,
+   "skipped": 0,
+   "tests": 6
+  },
+  "test_execution": {
+   "bad": 0,
+   "skipped": 0,
+   "tests": 27
+  },
+  "test_git": {
+   "bad": 0,
+   "skipped": 0,
+   "tests": 6
+  },
+  "test_hardening": {
+   "bad": 0,
+   "skipped": 0,
+   "tests": 17
+  },
+  "test_integration": {
+   "bad": 0,
+   "skipped": 0,
+   "tests": 10
+  },
+  "test_isolation": {
+   "bad": 0,
+   "skipped": 0,
+   "tests": 10
+  },
+  "test_isolation_matrix": {
+   "bad": 0,
+   "skipped": 0,
+   "tests": 18
+  },
+  "test_launch_gate": {
+   "bad": 0,
+   "skipped": 0,
+   "tests": 8
+  },
+  "test_math": {
+   "bad": 0,
+   "skipped": 0,
+   "tests": 13
+  },
+  "test_migration_fixtures": {
+   "bad": 0,
+   "skipped": 0,
+   "tests": 8
+  },
+  "test_policies": {
+   "bad": 0,
+   "skipped": 0,
+   "tests": 10
+  },
+  "test_release": {
+   "bad": 0,
+   "skipped": 0,
+   "tests": 28
+  },
+  "test_routing": {
+   "bad": 0,
+   "skipped": 0,
+   "tests": 12
+  },
+  "test_snapshots": {
+   "bad": 0,
+   "skipped": 0,
+   "tests": 11
+  },
+  "test_storage": {
+   "bad": 0,
+   "skipped": 0,
+   "tests": 9
+  },
+  "test_tokens": {
+   "bad": 0,
+   "skipped": 0,
+   "tests": 9
+  },
+  "test_trust": {
+   "bad": 0,
+   "skipped": 0,
+   "tests": 17
+  }
+ },
+ "test_totals": {
+  "pytest": {
+   "errors": 0,
+   "failures": 0,
+   "skipped": 0,
+   "tests": 392
+  },
+  "pytest_exit": 0,
+  "unittest_exit": 0,
+  "unittest_ran": 392
+ },
+ "tracked_changes": []
+}

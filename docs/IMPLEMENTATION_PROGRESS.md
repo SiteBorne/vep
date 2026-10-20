@@ -1,0 +1,66 @@
+# Implementation Progress (v0.5.0b1 effort)
+
+Resumable ledger, **not evidence**. Evidence is test output and gate results.
+
+BASELINE_COMMIT: 551612a (v0.4.0a1)
+CURRENT_COMMIT: see `launch-gate.json` (source_commit); work is committed locally on main, 29+ commits ahead of origin/main, NOT pushed (only branch isolation-ci was pushed)
+COMPLETED_PHASES: A, B; C partial (adapters done; live run attempted and FAILED; TokenReceipt wiring not done)
+CURRENT_PHASE: D (build actions + cache done and tested; evidence-validity checks, dependency graph, CLI not done)
+
+## Phase B: what exists
+`src/vep/controller.py`: SQLite jobs with leases, per-job fencing token checked inside every committing transaction (reserve, EVALUATING, evidence, rejection, certificate), idempotent enqueue, bounded attempts, budget admission check, cooperative cancel, crash recovery (unknown-outcome work is failed and funds held UNCERTAIN, never re-run), `LocalToolWorker`, `IsolatedWorker` (fails closed). CLI: `vep run`, `vep jobs list|show|recover|cancel`.
+Hooks added: `execution.evaluate(..., guard=)`, `certificates.certify(..., guard=)`, `errors.StaleLease`, DB schema v3.
+
+VERIFIED_TESTS: `tests/test_controller.py` (14 tests incl. 4 real spawned processes certifying 8 candidates exactly once); full suite 326 passed; `gen_variables.py --check` clean; installed-CLI `vep run` end to end on a scratch project returned CERTIFIED.
+FAILED_GATES: none known. The release gate (`scripts/release_check.sh`) has NOT been re-run since the changes.
+
+## Not done (explicitly)
+Phases C-L: agent adapter + usage provenance, build actions/cache, dependency graph + composition semantics, 2/4/8/16-worker measurements, independent (non-Python) verifier (no Go on host), VEP-on-VEP dogfood, extra projects, benchmarks vs baselines, public docs/announcement, launch gate, real gVisor test. Only `LocalToolWorker` and `IsolatedWorker` exist; no command or agent worker yet.
+
+OPEN_DECISIONS: independent verifier language (Go not installed; Node/Rust availability unchecked); whether to run the live-agent test against the local `deepseek-r1:32b` model via Ollama (slow, 19 GB model).
+NEXT_ACTION: finish Phase C (one bounded live Ollama run, which a prior attempt did not complete; TokenReceipt wiring: its usage_source enum lacks locally_measured/caller_supplied, so a schema decision is needed), then Phase D.
+KNOWN_LIMITATIONS: cancellation does not kill running subprocesses; `check_policy` (PROPOSED to POLICY_CHECKED) is not fenced; single-host SQLite only; 4-process test is not a scalability result; announcement readiness: ANNOUNCEMENT_READY = NO.
+
+## Phase C so far
+`src/vep/agents.py`, `tests/test_agents.py` (10 tests). Full suite: 336 passed. Adapters never certify; output is registered as a PROPOSED candidate and must pass the controller/evaluator. A test confirms an agent that deletes the tests is not certified.
+
+## Live agent attempt (recorded, negative)
+`scripts/live_agent_check.py` against local Ollama `deepseek-r1:32b-qwen-distill-q4_K_M`, 900 s model timeout: **timed out with no output** (`docs/live_agent_run.json`, error_class RUNTIME_UNAVAILABLE, detail "timed out"). The test suite was also running on the same machine for part of that window, so this is not a clean measurement of the model. LIVE_AGENT_EXECUTION remains UNVERIFIED. (Superseded by attempt 2 below.)
+
+## Phase D so far
+`src/vep/builds.py`, `tests/test_builds.py` (8 tests). Full suite: 344 passed.
+
+## Live agent attempt 2 (positive, N=1)
+Model `qwen2.5-coder:7b` (pulled with user approval; the 32B model was then deleted at the user's request). `scripts/live_agent_check.py qwen2.5-coder:7b 600`: 4.1 s, runtime-reported 135 input / 106 output tokens, one file modified, candidate evaluated by the controller: PASS, CERTIFIED (TRUSTED_LOCAL). Output in `docs/live_agent_run.json`. Single run on a toy task; says nothing about reliability or the 32B model's slowness beyond the earlier timeout.
+
+## Phase D: dependency graph
+`src/vep/depgraph.py`, `tests/test_depgraph.py` (10 tests), `vep graph`, `vep compose`. Found while testing: policy already blocks edits to required tests (REQUIRED_TEST_MODIFIED), covered by a test. Remaining Phase D: build/cache CLI, CI integration of build cache.
+
+## Phases E and F
+E: TokenReceipt `usage_source` gained `caller_supplied` (backward-compatible enum extension); `agents.record_usage` never fabricates usage; `tokens.usage_report` separates provenance. F: `benchmarks/controller_scaling.py`, results and honest reading in `docs/CONTROLLER_SCALING.md` (about 4.4x at 8 workers, no gain at 16, about 7% controller overhead).
+Not done in E: build/verification/coordination cost categories beyond seconds, cache-hit receipts from providers (none exist locally), routing wired to real execution.
+
+## Phase G: conformance
+`conformance/vectors/suite-1.0.json` (119 vectors), `conformance/node/verify.mjs`, `src/vep/conformance.py`, `docs/CONFORMANCE.md`, `scripts/conformance_check.sh`, `tests/test_conformance.py`. Node 26 used (Go absent; nothing installed). Real finding: reference regexes used `$`/`\d`, accepting trailing-newline ids/digests and non-ASCII digits; fixed with `\Z` + ASCII and recorded in CHANGELOG as a compatibility note. Not done: golden v0.4.0a1 fixtures for the bundle format (the existing `tests/test_compat.py` covers v1/v2 decoding), a third implementation.
+
+## Phase H: dogfood (VEP on VEP)
+`scripts/dogfood.py`, `docs/dogfood/` (4 reports + README). Run 3 PASS: real full suite through the controller, certified TRUSTED_LOCAL, negative control rejected, tampered tree rejected, Node and Python bundle verification agree. Three real defects in VEP found and fixed on the way (shadowing rule vs own package name; tests not hermetic against installed vep; demo/quickstart environment assumptions). Branch `dogfood/vep-build-cli` holds the candidate change (not merged). Not done: second and third external projects (Phase H asks for two more), untrusted-code isolation for them.
+
+## Phase H (continued): external projects
+Merged `dogfood/vep-build-cli` into main (c83bb9d; 367 tests pass on the merged tree). Evaluated pyflakes 4.0.3 and more-itertools v11.2.1 (`docs/external/`). Found and fixed a real false-green path: installed copy of the project shadowing the staged tree (runner now orders roots before site-packages and fails closed on shadowing). Also added `make_policy(required_exclude=...)`. Full suite 372 passed. TODO: re-run the VEP-on-VEP dogfood and external runs with the final runner/commit as part of the launch gate; pytest evaluator lacks the shadow check; a project with real dependencies is still NOT_RUN.
+
+## Phase J: comparative benchmarks
+`benchmarks/compare.py`, `benchmarks/compare_vep_driver.py`, `docs/BENCHMARK_METHODOLOGY.md` (thresholds and predictions committed before measuring, deviations appended), `docs/REAL_WORLD_RESULTS.md`, `benchmarks/results/compare-*.json`. Outcome: no speed advantage for VEP in single or batch verification (VEP_SLOWER on the small suite, NO_MEASURABLE_ADVANTAGE on the 6.5 s one); testmon far faster on re-runs/edits; BuildAction cache hit fast but certificate-less. CAVEAT: machine was not idle (other apps, load about 10); needs a quiet-machine re-run. Gap found: `cached_evidence` is not wired into evaluation (cross-candidate evidence reuse NOT_IMPLEMENTED). Dogfood re-run with final runner: PASS (run 4). External runs were made with the final runner.
+
+## Phase I: isolation
+Workflow `.github/workflows/isolation.yml` and `scripts/release/isolated_e2e.py` on branch `isolation-ci` (pushed with the user's approval; main untouched). Run 39347349190 failed closed (found a real bug: pinned-image comparison vs RepoDigests, fixed in `isolation.pin_matches` with tests). Run 39347549501: T1-T12 PASS, ISOLATED_VERIFIED, end-to-end PASS, Node and Python bundle verification agree (`docs/isolation/`). Still: local Mac ISOLATION_UNVERIFIED; T12 corroboration is docker-inspect-only; no escape testing; UNTRUSTED_EXECUTION_READY = NO.
+
+## Phase K: public docs (drafts; nothing posted or pushed)
+`docs/WHY_VEP.md`, `COMPARISON.md`, `SECURITY_LIMITATIONS.md`, `ROADMAP.md`, `FAQ.md`, `ANNOUNCEMENT.md` (channel drafts), refreshed `QUICKSTART.md` (9 executed blocks; steps 9-10 need the unreleased build), `README.md` status notes, `REAL_WORLD_RESULTS.md`, `BENCHMARK_METHODOLOGY.md`. Numbers are traced mechanically: `docs/claims.json` + `scripts/check_claims.py` + `tests/test_claims.py` (13 claims, untagged figures fail). Still TODO: LAUNCH_READINESS_REPORT (Phase L), QUICKSTART/README version text after any version bump, quiet-machine benchmark re-run.
+
+## Phase L: launch gate
+`scripts/launch_check.py` -> `launch-gate.json` + `docs/LAUNCH_READINESS_REPORT.md`; rules tested in `tests/test_launch_gate.py`. Result on a clean tree: LOCAL_BETA_READY = YES; PUBLIC_BETA_READY = NO (BENCHMARK_REPRODUCIBILITY UNVERIFIED; version not bumped; HEAD not pushed; no hosted CI for HEAD); UNTRUSTED_EXECUTION_READY = NO; PRODUCTION_READY = NO. ANNOUNCEMENT_READY = NO.
+NEXT_ACTION (highest value): re-run `benchmarks/compare.py` on a quiet machine (user said they will), then, with approval, bump to 0.5.0b1, push, get hosted CI green, re-run `scripts/launch_check.py`.
+
+## Release qualification session (0.5.0b1)
+Verified baseline (HEAD de51c47, 382 tests, verify.sh green). Controlled paired benchmark run (`docs/BENCHMARK_RESULTS_PAIRED.md`): gate criterion (load < 2.0) NOT met -> BENCHMARK_REPRODUCIBILITY UNVERIFIED, no performance pass claimed. Isolation evidence revalidated (`docs/isolation/REVALIDATION.md`). Version bumped to 0.5.0b1; schema-2 -> 3 migration validated against a fixture generated by the real v0.4.0a1 code; gate extended (ANNOUNCEMENT_READY and ISOLATED_EXECUTION_VERIFIED levels, zero-skip rule, sdist install, artifact audit, sanitized logs, hosted-CI lookup for the exact commit). Dogfood run 5 and both external projects re-run at 4d0216a: all pass. Remaining: push authorization, hosted CI on the exact commit, tag/release, post-release verification, quiet-machine benchmark.

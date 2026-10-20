@@ -1,0 +1,3 @@
+{"ready": true, "mode": "staging", "backend": "real",
+ "credentials": {"present": true},
+ "components": {"api": {"ready": true}, "worker": {"ready": true}}}

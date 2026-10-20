@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "vep-protocol"
-version = "0.4.0a1"
+version = "0.5.0b1"
 description = "Verified Evolution Protocol: invariant-first, agent-native verification reference MVP"
 readme = "README.md"
 license = "Apache-2.0"
@@ -27,3 +27,4 @@ vep = ["_runner.py"]
 
 [tool.pytest.ini_options]
 testpaths = ["tests"]
+norecursedirs = ["fixtures"]  # frozen historical workspaces contain their own test files that must not be collected

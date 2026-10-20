@@ -1,0 +1,11 @@
+$ bash scripts/conformance_check.sh
+# exit 0
+
+suite frozen: regenerates identically
+{
+  "disagreements": [],
+  "valid": true,
+  "vectors": 119,
+  "verifier": "reference (python)"
+}
+119/119 vectors agree

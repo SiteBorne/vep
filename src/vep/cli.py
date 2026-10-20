@@ -8,10 +8,10 @@ import sys
 from decimal import Decimal
 from pathlib import Path
 
-from . import (audits, budgets, cache_planner, candidates, certificates, context, execution, git_adapter,
+from . import (audits, budgets, builds, cache_planner, candidates, certificates, conformance, context, controller, depgraph, execution, git_adapter,
                isolation, objectives, policies, routing, simulation, snapshots, tokens, versions)
 from .canonical import strict_loads
-from .errors import VepError
+from .errors import AuthorizationError, VepError
 from .evidence import KeyStore
 from .workspace import Workspace
 
@@ -119,6 +119,90 @@ def cmd_evaluate(a):
                            mode="isolated" if a.isolated else "trusted-local", image=a.image, attestation=att)
     _emit(a, r)
     return 0 if r["status"] == "EVIDENCE_READY" else 3
+
+
+def cmd_run(a):
+    ws = _ws(a)
+    job = controller.enqueue(ws, a.candidate, mode="isolated" if a.isolated else "trusted-local",
+                             auto_certify=not a.no_certify, max_attempts=a.max_attempts)
+    if a.isolated:
+        att = json.loads(Path(a.attestation_file).read_text()) if a.attestation_file else None
+        w = controller.IsolatedWorker("vep-cli-isolated", a.image, att)
+    else:
+        w = controller.LocalToolWorker("vep-cli-local", execution.TRUSTED_LOCAL_AUTH if a.trusted_local_execution else None)
+    r = controller.run_one(ws, w)
+    out = {"job": controller.get_job(ws, job["id"]), "run": r}
+    _emit(a, out)
+    return 0 if r and r.get("outcome") == "SUCCEEDED" and r.get("candidate_status") in ("CERTIFIED", "EVIDENCE_READY") else 3
+
+
+def cmd_build(a):
+    ws = _ws(a)
+    if a.action == "stats":
+        _emit(a, builds.stats(ws))
+        return 0
+    if not a.trusted_local_execution:
+        raise AuthorizationError("build actions run commands as the invoking user with no isolation; "
+                                 "pass --trusted-local-execution to authorize")
+    argv = json.loads(a.argv_json or "null")
+    if not isinstance(argv, list) or not argv or not all(isinstance(x, str) for x in argv):
+        raise ValueError("--argv-json must be a non-empty JSON array of strings")
+    action = builds.BuildAction(tuple(argv), a.snapshot, tuple(a.output), timeout_s=a.timeout,
+                                cache_policy="none" if a.no_cache else "deterministic",
+                                verify_determinism=not a.no_verify_determinism)
+    r = builds.run(ws, action, use_cache=not a.no_cache)
+    r["action_id"] = builds.action_id(action)
+    _emit(a, r)
+    return 0 if r["failure"] is None else 3
+
+
+def cmd_jobs(a):
+    ws = _ws(a)
+    if a.action == "list":
+        _emit(a, controller.list_jobs(ws))
+    elif a.action == "recover":
+        _emit(a, controller.recover(ws))
+    else:
+        if not a.job:
+            raise ValueError("--job is required")
+        if a.action == "show":
+            _emit(a, {"job": controller.get_job(ws, a.job), "events": controller.events(ws, a.job)})
+        else:
+            _emit(a, controller.cancel(ws, a.job))
+
+
+def cmd_graph(a):
+    ws = _ws(a)
+    g = depgraph.build_graph(ws, a.snapshot)
+    if a.old:
+        g = {"graph": g, "impact": depgraph.impact(ws, g, a.old, a.snapshot)}
+    _emit(a, g)
+
+
+def cmd_compose(a):
+    r = depgraph.compose_candidates(_ws(a), a.objective, a.candidate_a, a.candidate_b)
+    _emit(a, r)
+    return 0 if r["status"] == "TEXTUALLY_CLEAN" else 3
+
+
+def cmd_conformance(a):
+    ws = _ws(a) if a.action == "export" else None
+    if a.action == "export":
+        b = conformance.export_bundle(ws, a.certificate, a.require_trust)
+        if a.out:
+            Path(a.out).write_text(json.dumps(b, indent=1, sort_keys=True))
+            _emit(a, {"bundle": a.out, "certificate_id": a.certificate})
+        else:
+            _emit(a, b)
+        return 0
+    if a.action == "verify":
+        r = conformance.verify_bundle(json.loads(Path(a.bundle).read_text()))
+    else:
+        suite = conformance.load_suite(a.suite)
+        bad = [v["id"] for v in suite["vectors"] if not conformance.check_vector(v, conformance.run_vector(v))]
+        r = {"valid": not bad, "vectors": len(suite["vectors"]), "disagreements": bad, "verifier": "reference (python)"}
+    _emit(a, r)
+    return 0 if r["valid"] else 4
 
 
 def cmd_certify(a):
@@ -260,6 +344,25 @@ def build_parser() -> argparse.ArgumentParser:
     s = add("candidate", cmd_candidate, "register/check/show/list candidates")
     s.add_argument("action", choices=["create", "check", "show", "list"]); s.add_argument("--id")
     s.add_argument("--objective"); s.add_argument("--snapshot"); s.add_argument("--author", default="agent")
+    s = add("run", cmd_run, "enqueue a candidate and run it through the durable controller (evaluate, then certify)")
+    s.add_argument("--candidate", required=True); s.add_argument("--trusted-local-execution", action="store_true")
+    s.add_argument("--isolated", action="store_true"); s.add_argument("--image"); s.add_argument("--attestation-file")
+    s.add_argument("--no-certify", action="store_true"); s.add_argument("--max-attempts", type=int, default=3)
+    s = add("jobs", cmd_jobs, "inspect, recover or cancel controller jobs")
+    s.add_argument("action", choices=["list", "show", "recover", "cancel"]); s.add_argument("--job")
+    s = add("graph", cmd_graph, "dependency graph of a snapshot (static imports only); --old adds change impact (prioritisation only)")
+    s.add_argument("--snapshot", required=True); s.add_argument("--old")
+    s = add("compose", cmd_compose, "compose two candidates; a clean merge still needs full evaluation")
+    s.add_argument("--objective", required=True); s.add_argument("candidate_a"); s.add_argument("candidate_b")
+    s = add("conformance", cmd_conformance, "export a portable certificate bundle, verify one offline, or run the frozen vectors (reference verifier)")
+    s.add_argument("action", choices=["export", "verify", "vectors"]); s.add_argument("--certificate"); s.add_argument("--bundle")
+    s.add_argument("--out"); s.add_argument("--suite", default="conformance/vectors/suite-1.0.json")
+    s.add_argument("--require-trust", default="TRUSTED_LOCAL", choices=["TRUSTED_LOCAL", "ISOLATED_VERIFIED"])
+    s = add("build", cmd_build, "run a content-addressed build action over a snapshot, with verified result cache")
+    s.add_argument("action", choices=["run", "stats"]); s.add_argument("--snapshot"); s.add_argument("--output", action="append", default=[])
+    s.add_argument("--timeout", type=int, default=300); s.add_argument("--trusted-local-execution", action="store_true")
+    s.add_argument("--no-cache", action="store_true"); s.add_argument("--no-verify-determinism", action="store_true")
+    s.add_argument("--argv-json", help='command as a JSON array of strings; argv[0] is "{python}" or an absolute path (no shell)')
     s = add("evaluate", cmd_evaluate, "run the protected evaluator (requires explicit trusted-local authorization)")
     s.add_argument("--candidate", required=True)
     s.add_argument("--trusted-local-execution", action="store_true",

@@ -1,0 +1,230 @@
+$ python -m unittest discover -s tests -t .
+# exit 0
+
+............................/opt/homebrew/Cellar/python@3.14/3.14.7/Frameworks/Python.framework/Versions/3.14/lib/python3.14/unittest/case.py:704: ResourceWarning: unclosed <socket.socket fd=4, family=2, type=1, proto=0, laddr=('127.0.0.1', 53130)>
+  function, args, kwargs = self._cleanups.pop()
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+/opt/homebrew/Cellar/python@3.14/3.14.7/Frameworks/Python.framework/Versions/3.14/lib/python3.14/unittest/case.py:704: ResourceWarning: unclosed <socket.socket fd=3, family=2, type=1, proto=0, laddr=('127.0.0.1', 53128)>
+  function, args, kwargs = self._cleanups.pop()
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+./opt/homebrew/Cellar/python@3.14/3.14.7/Frameworks/Python.framework/Versions/3.14/lib/python3.14/unittest/case.py:704: ResourceWarning: unclosed <socket.socket fd=3, family=2, type=1, proto=0, laddr=('127.0.0.1', 53132)>
+  function, args, kwargs = self._cleanups.pop()
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+.../opt/homebrew/Cellar/python@3.14/3.14.7/Frameworks/Python.framework/Versions/3.14/lib/python3.14/unittest/case.py:704: ResourceWarning: unclosed <socket.socket fd=3, family=2, type=1, proto=0, laddr=('127.0.0.1', 53135)>
+  function, args, kwargs = self._cleanups.pop()
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+...................................................................................................................................................................................................<repo>/tests/test_hardening.py:201: ResourceWarning: unclosed file <_io.TextIOWrapper name='<repo>/tests/../src/vep/__init__.py' mode='r' encoding='utf-8'>
+  tree = ast.parse(open(path, encoding="utf-8").read())
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+<repo>/tests/test_hardening.py:201: ResourceWarning: unclosed file <_io.TextIOWrapper name='<repo>/tests/../src/vep/__main__.py' mode='r' encoding='utf-8'>
+  tree = ast.parse(open(path, encoding="utf-8").read())
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+<repo>/tests/test_hardening.py:201: ResourceWarning: unclosed file <_io.TextIOWrapper name='<repo>/tests/../src/vep/_isolation_probe.py' mode='r' encoding='utf-8'>
+  tree = ast.parse(open(path, encoding="utf-8").read())
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+<repo>/tests/test_hardening.py:201: ResourceWarning: unclosed file <_io.TextIOWrapper name='<repo>/tests/../src/vep/_runner.py' mode='r' encoding='utf-8'>
+  tree = ast.parse(open(path, encoding="utf-8").read())
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+<repo>/tests/test_hardening.py:201: ResourceWarning: unclosed file <_io.TextIOWrapper name='<repo>/tests/../src/vep/agents.py' mode='r' encoding='utf-8'>
+  tree = ast.parse(open(path, encoding="utf-8").read())
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+<repo>/tests/test_hardening.py:201: ResourceWarning: unclosed file <_io.TextIOWrapper name='<repo>/tests/../src/vep/audits.py' mode='r' encoding='utf-8'>
+  tree = ast.parse(open(path, encoding="utf-8").read())
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+<repo>/tests/test_hardening.py:201: ResourceWarning: unclosed file <_io.TextIOWrapper name='<repo>/tests/../src/vep/budgets.py' mode='r' encoding='utf-8'>
+  tree = ast.parse(open(path, encoding="utf-8").read())
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+<repo>/tests/test_hardening.py:201: ResourceWarning: unclosed file <_io.TextIOWrapper name='<repo>/tests/../src/vep/builds.py' mode='r' encoding='utf-8'>
+  tree = ast.parse(open(path, encoding="utf-8").read())
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+<repo>/tests/test_hardening.py:201: ResourceWarning: unclosed file <_io.TextIOWrapper name='<repo>/tests/../src/vep/cache_planner.py' mode='r' encoding='utf-8'>
+  tree = ast.parse(open(path, encoding="utf-8").read())
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+<repo>/tests/test_hardening.py:201: ResourceWarning: unclosed file <_io.TextIOWrapper name='<repo>/tests/../src/vep/candidates.py' mode='r' encoding='utf-8'>
+  tree = ast.parse(open(path, encoding="utf-8").read())
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+<repo>/tests/test_hardening.py:201: ResourceWarning: unclosed file <_io.TextIOWrapper name='<repo>/tests/../src/vep/canonical.py' mode='r' encoding='utf-8'>
+  tree = ast.parse(open(path, encoding="utf-8").read())
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+<repo>/tests/test_hardening.py:201: ResourceWarning: unclosed file <_io.TextIOWrapper name='<repo>/tests/../src/vep/certificates.py' mode='r' encoding='utf-8'>
+  tree = ast.parse(open(path, encoding="utf-8").read())
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+<repo>/tests/test_hardening.py:201: ResourceWarning: unclosed file <_io.TextIOWrapper name='<repo>/tests/../src/vep/cli.py' mode='r' encoding='utf-8'>
+  tree = ast.parse(open(path, encoding="utf-8").read())
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+<repo>/tests/test_hardening.py:201: ResourceWarning: unclosed file <_io.TextIOWrapper name='<repo>/tests/../src/vep/conformance.py' mode='r' encoding='utf-8'>
+  tree = ast.parse(open(path, encoding="utf-8").read())
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+<repo>/tests/test_hardening.py:201: ResourceWarning: unclosed file <_io.TextIOWrapper name='<repo>/tests/../src/vep/context.py' mode='r' encoding='utf-8'>
+  tree = ast.parse(open(path, encoding="utf-8").read())
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+<repo>/tests/test_hardening.py:201: ResourceWarning: unclosed file <_io.TextIOWrapper name='<repo>/tests/../src/vep/controller.py' mode='r' encoding='utf-8'>
+  tree = ast.parse(open(path, encoding="utf-8").read())
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+<repo>/tests/test_hardening.py:201: ResourceWarning: unclosed file <_io.TextIOWrapper name='<repo>/tests/../src/vep/database.py' mode='r' encoding='utf-8'>
+  tree = ast.parse(open(path, encoding="utf-8").read())
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+<repo>/tests/test_hardening.py:201: ResourceWarning: unclosed file <_io.TextIOWrapper name='<repo>/tests/../src/vep/depgraph.py' mode='r' encoding='utf-8'>
+  tree = ast.parse(open(path, encoding="utf-8").read())
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+<repo>/tests/test_hardening.py:201: ResourceWarning: unclosed file <_io.TextIOWrapper name='<repo>/tests/../src/vep/errors.py' mode='r' encoding='utf-8'>
+  tree = ast.parse(open(path, encoding="utf-8").read())
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+<repo>/tests/test_hardening.py:201: ResourceWarning: unclosed file <_io.TextIOWrapper name='<repo>/tests/../src/vep/evidence.py' mode='r' encoding='utf-8'>
+  tree = ast.parse(open(path, encoding="utf-8").read())
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+<repo>/tests/test_hardening.py:201: ResourceWarning: unclosed file <_io.TextIOWrapper name='<repo>/tests/../src/vep/execution.py' mode='r' encoding='utf-8'>
+  tree = ast.parse(open(path, encoding="utf-8").read())
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+<repo>/tests/test_hardening.py:201: ResourceWarning: unclosed file <_io.TextIOWrapper name='<repo>/tests/../src/vep/git_adapter.py' mode='r' encoding='utf-8'>
+  tree = ast.parse(open(path, encoding="utf-8").read())
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+<repo>/tests/test_hardening.py:201: ResourceWarning: unclosed file <_io.TextIOWrapper name='<repo>/tests/../src/vep/isolation.py' mode='r' encoding='utf-8'>
+  tree = ast.parse(open(path, encoding="utf-8").read())
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+<repo>/tests/test_hardening.py:201: ResourceWarning: unclosed file <_io.TextIOWrapper name='<repo>/tests/../src/vep/migrations.py' mode='r' encoding='utf-8'>
+  tree = ast.parse(open(path, encoding="utf-8").read())
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+<repo>/tests/test_hardening.py:201: ResourceWarning: unclosed file <_io.TextIOWrapper name='<repo>/tests/../src/vep/objectives.py' mode='r' encoding='utf-8'>
+  tree = ast.parse(open(path, encoding="utf-8").read())
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+<repo>/tests/test_hardening.py:201: ResourceWarning: unclosed file <_io.TextIOWrapper name='<repo>/tests/../src/vep/objects.py' mode='r' encoding='utf-8'>
+  tree = ast.parse(open(path, encoding="utf-8").read())
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+<repo>/tests/test_hardening.py:201: ResourceWarning: unclosed file <_io.TextIOWrapper name='<repo>/tests/../src/vep/policies.py' mode='r' encoding='utf-8'>
+  tree = ast.parse(open(path, encoding="utf-8").read())
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+<repo>/tests/test_hardening.py:201: ResourceWarning: unclosed file <_io.TextIOWrapper name='<repo>/tests/../src/vep/routing.py' mode='r' encoding='utf-8'>
+  tree = ast.parse(open(path, encoding="utf-8").read())
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+<repo>/tests/test_hardening.py:201: ResourceWarning: unclosed file <_io.TextIOWrapper name='<repo>/tests/../src/vep/simulation.py' mode='r' encoding='utf-8'>
+  tree = ast.parse(open(path, encoding="utf-8").read())
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+<repo>/tests/test_hardening.py:201: ResourceWarning: unclosed file <_io.TextIOWrapper name='<repo>/tests/../src/vep/snapshots.py' mode='r' encoding='utf-8'>
+  tree = ast.parse(open(path, encoding="utf-8").read())
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+<repo>/tests/test_hardening.py:201: ResourceWarning: unclosed file <_io.TextIOWrapper name='<repo>/tests/../src/vep/storage.py' mode='r' encoding='utf-8'>
+  tree = ast.parse(open(path, encoding="utf-8").read())
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+<repo>/tests/test_hardening.py:201: ResourceWarning: unclosed file <_io.TextIOWrapper name='<repo>/tests/../src/vep/tokens.py' mode='r' encoding='utf-8'>
+  tree = ast.parse(open(path, encoding="utf-8").read())
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+<repo>/tests/test_hardening.py:201: ResourceWarning: unclosed file <_io.TextIOWrapper name='<repo>/tests/../src/vep/trust.py' mode='r' encoding='utf-8'>
+  tree = ast.parse(open(path, encoding="utf-8").read())
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+<repo>/tests/test_hardening.py:201: ResourceWarning: unclosed file <_io.TextIOWrapper name='<repo>/tests/../src/vep/versions.py' mode='r' encoding='utf-8'>
+  tree = ast.parse(open(path, encoding="utf-8").read())
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+<repo>/tests/test_hardening.py:201: ResourceWarning: unclosed file <_io.TextIOWrapper name='<repo>/tests/../src/vep/workspace.py' mode='r' encoding='utf-8'>
+  tree = ast.parse(open(path, encoding="utf-8").read())
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+.<repo>/tests/test_hardening.py:192: ResourceWarning: unclosed file <_io.TextIOWrapper name='<repo>/tests/../src/vep/__init__.py' mode='r' encoding='utf-8'>
+  for n, line in enumerate(open(path, encoding="utf-8"), 1):
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+<repo>/tests/test_hardening.py:192: ResourceWarning: unclosed file <_io.TextIOWrapper name='<repo>/tests/../src/vep/__main__.py' mode='r' encoding='utf-8'>
+  for n, line in enumerate(open(path, encoding="utf-8"), 1):
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+<repo>/tests/test_hardening.py:192: ResourceWarning: unclosed file <_io.TextIOWrapper name='<repo>/tests/../src/vep/_isolation_probe.py' mode='r' encoding='utf-8'>
+  for n, line in enumerate(open(path, encoding="utf-8"), 1):
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+<repo>/tests/test_hardening.py:192: ResourceWarning: unclosed file <_io.TextIOWrapper name='<repo>/tests/../src/vep/_runner.py' mode='r' encoding='utf-8'>
+  for n, line in enumerate(open(path, encoding="utf-8"), 1):
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+<repo>/tests/test_hardening.py:192: ResourceWarning: unclosed file <_io.TextIOWrapper name='<repo>/tests/../src/vep/agents.py' mode='r' encoding='utf-8'>
+  for n, line in enumerate(open(path, encoding="utf-8"), 1):
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+<repo>/tests/test_hardening.py:192: ResourceWarning: unclosed file <_io.TextIOWrapper name='<repo>/tests/../src/vep/audits.py' mode='r' encoding='utf-8'>
+  for n, line in enumerate(open(path, encoding="utf-8"), 1):
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+<repo>/tests/test_hardening.py:192: ResourceWarning: unclosed file <_io.TextIOWrapper name='<repo>/tests/../src/vep/budgets.py' mode='r' encoding='utf-8'>
+  for n, line in enumerate(open(path, encoding="utf-8"), 1):
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+<repo>/tests/test_hardening.py:192: ResourceWarning: unclosed file <_io.TextIOWrapper name='<repo>/tests/../src/vep/builds.py' mode='r' encoding='utf-8'>
+  for n, line in enumerate(open(path, encoding="utf-8"), 1):
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+<repo>/tests/test_hardening.py:192: ResourceWarning: unclosed file <_io.TextIOWrapper name='<repo>/tests/../src/vep/cache_planner.py' mode='r' encoding='utf-8'>
+  for n, line in enumerate(open(path, encoding="utf-8"), 1):
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+<repo>/tests/test_hardening.py:192: ResourceWarning: unclosed file <_io.TextIOWrapper name='<repo>/tests/../src/vep/candidates.py' mode='r' encoding='utf-8'>
+  for n, line in enumerate(open(path, encoding="utf-8"), 1):
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+<repo>/tests/test_hardening.py:192: ResourceWarning: unclosed file <_io.TextIOWrapper name='<repo>/tests/../src/vep/canonical.py' mode='r' encoding='utf-8'>
+  for n, line in enumerate(open(path, encoding="utf-8"), 1):
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+<repo>/tests/test_hardening.py:192: ResourceWarning: unclosed file <_io.TextIOWrapper name='<repo>/tests/../src/vep/certificates.py' mode='r' encoding='utf-8'>
+  for n, line in enumerate(open(path, encoding="utf-8"), 1):
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+<repo>/tests/test_hardening.py:192: ResourceWarning: unclosed file <_io.TextIOWrapper name='<repo>/tests/../src/vep/cli.py' mode='r' encoding='utf-8'>
+  for n, line in enumerate(open(path, encoding="utf-8"), 1):
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+<repo>/tests/test_hardening.py:192: ResourceWarning: unclosed file <_io.TextIOWrapper name='<repo>/tests/../src/vep/conformance.py' mode='r' encoding='utf-8'>
+  for n, line in enumerate(open(path, encoding="utf-8"), 1):
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+<repo>/tests/test_hardening.py:192: ResourceWarning: unclosed file <_io.TextIOWrapper name='<repo>/tests/../src/vep/context.py' mode='r' encoding='utf-8'>
+  for n, line in enumerate(open(path, encoding="utf-8"), 1):
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+<repo>/tests/test_hardening.py:192: ResourceWarning: unclosed file <_io.TextIOWrapper name='<repo>/tests/../src/vep/controller.py' mode='r' encoding='utf-8'>
+  for n, line in enumerate(open(path, encoding="utf-8"), 1):
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+<repo>/tests/test_hardening.py:192: ResourceWarning: unclosed file <_io.TextIOWrapper name='<repo>/tests/../src/vep/database.py' mode='r' encoding='utf-8'>
+  for n, line in enumerate(open(path, encoding="utf-8"), 1):
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+<repo>/tests/test_hardening.py:192: ResourceWarning: unclosed file <_io.TextIOWrapper name='<repo>/tests/../src/vep/depgraph.py' mode='r' encoding='utf-8'>
+  for n, line in enumerate(open(path, encoding="utf-8"), 1):
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+<repo>/tests/test_hardening.py:192: ResourceWarning: unclosed file <_io.TextIOWrapper name='<repo>/tests/../src/vep/errors.py' mode='r' encoding='utf-8'>
+  for n, line in enumerate(open(path, encoding="utf-8"), 1):
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+<repo>/tests/test_hardening.py:192: ResourceWarning: unclosed file <_io.TextIOWrapper name='<repo>/tests/../src/vep/evidence.py' mode='r' encoding='utf-8'>
+  for n, line in enumerate(open(path, encoding="utf-8"), 1):
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+<repo>/tests/test_hardening.py:192: ResourceWarning: unclosed file <_io.TextIOWrapper name='<repo>/tests/../src/vep/execution.py' mode='r' encoding='utf-8'>
+  for n, line in enumerate(open(path, encoding="utf-8"), 1):
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+<repo>/tests/test_hardening.py:192: ResourceWarning: unclosed file <_io.TextIOWrapper name='<repo>/tests/../src/vep/git_adapter.py' mode='r' encoding='utf-8'>
+  for n, line in enumerate(open(path, encoding="utf-8"), 1):
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+<repo>/tests/test_hardening.py:192: ResourceWarning: unclosed file <_io.TextIOWrapper name='<repo>/tests/../src/vep/isolation.py' mode='r' encoding='utf-8'>
+  for n, line in enumerate(open(path, encoding="utf-8"), 1):
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+<repo>/tests/test_hardening.py:192: ResourceWarning: unclosed file <_io.TextIOWrapper name='<repo>/tests/../src/vep/migrations.py' mode='r' encoding='utf-8'>
+  for n, line in enumerate(open(path, encoding="utf-8"), 1):
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+<repo>/tests/test_hardening.py:192: ResourceWarning: unclosed file <_io.TextIOWrapper name='<repo>/tests/../src/vep/objectives.py' mode='r' encoding='utf-8'>
+  for n, line in enumerate(open(path, encoding="utf-8"), 1):
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+<repo>/tests/test_hardening.py:192: ResourceWarning: unclosed file <_io.TextIOWrapper name='<repo>/tests/../src/vep/objects.py' mode='r' encoding='utf-8'>
+  for n, line in enumerate(open(path, encoding="utf-8"), 1):
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+<repo>/tests/test_hardening.py:192: ResourceWarning: unclosed file <_io.TextIOWrapper name='<repo>/tests/../src/vep/policies.py' mode='r' encoding='utf-8'>
+  for n, line in enumerate(open(path, encoding="utf-8"), 1):
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+<repo>/tests/test_hardening.py:192: ResourceWarning: unclosed file <_io.TextIOWrapper name='<repo>/tests/../src/vep/routing.py' mode='r' encoding='utf-8'>
+  for n, line in enumerate(open(path, encoding="utf-8"), 1):
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+<repo>/tests/test_hardening.py:192: ResourceWarning: unclosed file <_io.TextIOWrapper name='<repo>/tests/../src/vep/simulation.py' mode='r' encoding='utf-8'>
+  for n, line in enumerate(open(path, encoding="utf-8"), 1):
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+<repo>/tests/test_hardening.py:192: ResourceWarning: unclosed file <_io.TextIOWrapper name='<repo>/tests/../src/vep/snapshots.py' mode='r' encoding='utf-8'>
+  for n, line in enumerate(open(path, encoding="utf-8"), 1):
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+<repo>/tests/test_hardening.py:192: ResourceWarning: unclosed file <_io.TextIOWrapper name='<repo>/tests/../src/vep/storage.py' mode='r' encoding='utf-8'>
+  for n, line in enumerate(open(path, encoding="utf-8"), 1):
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+<repo>/tests/test_hardening.py:192: ResourceWarning: unclosed file <_io.TextIOWrapper name='<repo>/tests/../src/vep/tokens.py' mode='r' encoding='utf-8'>
+  for n, line in enumerate(open(path, encoding="utf-8"), 1):
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+<repo>/tests/test_hardening.py:192: ResourceWarning: unclosed file <_io.TextIOWrapper name='<repo>/tests/../src/vep/trust.py' mode='r' encoding='utf-8'>
+  for n, line in enumerate(open(path, encoding="utf-8"), 1):
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+<repo>/tests/test_hardening.py:192: ResourceWarning: unclosed file <_io.TextIOWrapper name='<repo>/tests/../src/vep/versions.py' mode='r' encoding='utf-8'>
+  for n, line in enumerate(open(path, encoding="utf-8"), 1):
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+<repo>/tests/test_hardening.py:192: ResourceWarning: unclosed file <_io.TextIOWrapper name='<repo>/tests/../src/vep/workspace.py' mode='r' encoding='utf-8'>
+  for n, line in enumerate(open(path, encoding="utf-8"), 1):
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+....................................................................................................................................................................
+----------------------------------------------------------------------
+Ran 392 tests in 47.114s
+
+OK

@@ -64,3 +64,40 @@ class PolicyTests(VepTestCase):
 
 if __name__ == "__main__":
     unittest.main()
+
+
+class AllowModuleNamesTests(unittest.TestCase):
+    """A project whose own package is named like a runner dependency (VEP's `vep`) can opt in explicitly."""
+
+    def test_allowlist_exempts_only_listed_runner_names(self):
+        ev = {"kind": "unittest", "start_dir": "tests", "import_roots": ["src", "."], "allow_module_names": ["vep"]}
+        self.assertEqual(policies.shadowing_paths(ev, ["src/vep/cli.py"]), [])
+        self.assertEqual(policies.shadowing_paths(ev, ["src/pytest/x.py"]), ["src/pytest/x.py"])
+        self.assertEqual(policies.shadowing_paths(ev, ["src/os/x.py"]), ["src/os/x.py"])
+        self.assertEqual(policies.shadowing_paths({**ev, "allow_module_names": []}, ["src/vep/cli.py"]), ["src/vep/cli.py"])
+
+    def test_stdlib_names_and_other_evaluators_cannot_use_the_allowlist(self):
+        base = {"kind": "unittest", "import_roots": ["."]}
+        for bad in (["os"], ["json"], "vep", [1]):
+            with self.assertRaises(SchemaError):
+                policies.validate_evaluator({**base, "allow_module_names": bad})
+        with self.assertRaises(SchemaError):
+            policies.validate_evaluator({"kind": "pytest", "targets": ["tests"], "allow_module_names": ["vep"]})
+
+
+class RequiredExcludeTests(VepTestCase):
+    SECOND = "import unittest\n\n\nclass T(unittest.TestCase):\n    def test_x(self):\n        self.assertTrue(True)\n"
+
+    def test_exclusion_is_explicit_and_validated(self):
+        from tests.helpers import BASE_FILES
+        from vep.policies import make_policy
+        e = self.env(files={**BASE_FILES, "tests/test_second.py": self.SECOND})
+        full = make_policy(e.ws, e.base, name="full")
+        self.assertEqual(set(full["required_tests"]), {"tests/test_arithmetic.py", "tests/test_second.py"})
+        ex = make_policy(e.ws, e.base, name="ex", required_exclude=["tests/test_second.py"])
+        self.assertEqual(set(ex["required_tests"]), {"tests/test_arithmetic.py"})
+        self.assertNotEqual(ex.id, full.id)  # the exclusion is part of the policy identity
+        with self.assertRaises(SchemaError):
+            make_policy(e.ws, e.base, name="bad", required_exclude=["tests/nope.py"])
+        with self.assertRaises(SchemaError):  # cannot exclude everything
+            make_policy(e.ws, e.base, name="none", required_exclude=list(full["required_tests"]))

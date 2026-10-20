@@ -23,7 +23,7 @@ DENIED_MODULES = frozenset(sys.stdlib_module_names) | RUNNER_NAMES
 PATTERN_RE = re.compile(r"^[A-Za-z0-9_*?.\-]{1,64}$")
 
 EVALUATOR_GRAMMAR = {
-    "unittest": {"kind", "start_dir", "pattern", "import_roots", "min_tests"},
+    "unittest": {"kind", "start_dir", "pattern", "import_roots", "min_tests", "allow_module_names"},
     "pytest": {"kind", "targets", "import_roots", "min_tests"},
 }
 DEFAULT_LIMITS = {"timeout_s": 120, "max_output_bytes": 4_000_000, "evaluation_cost_micro_usd": 1000}
@@ -52,6 +52,10 @@ def validate_evaluator(ev: Any) -> dict:
     for r in roots:
         if r != ".":
             _rel(r)
+    allow = ev.get("allow_module_names", [])
+    if not isinstance(allow, list) or any(not isinstance(n, str) or n not in RUNNER_NAMES for n in allow):
+        raise SchemaError("evaluator.allow_module_names may only list names from RUNNER_NAMES "
+                          "(standard-library names can never be allowed); it applies to the unittest evaluator only")
     if ev["kind"] == "unittest":
         _rel(ev.get("start_dir", "tests"))
         if not PATTERN_RE.match(ev.get("pattern", "test*.py")):
@@ -85,8 +89,14 @@ def validate_policy(policy: VEPObject) -> None:
 
 def make_policy(ws: Workspace, base: VEPObject, name: str = "default",
                 evaluator: dict | None = None, protected: list[str] | None = None,
-                audits: list | None = None, limits: dict | None = None) -> VEPObject:
-    """Build a policy from the *trusted base snapshot*; required tests are frozen by digest."""
+                audits: list | None = None, limits: dict | None = None,
+                required_exclude: list[str] | None = None) -> VEPObject:
+    """Build a policy from the *trusted base snapshot*; required tests are frozen by digest.
+
+    `required_exclude` is an operator decision made here, at policy creation, never by a candidate: the listed
+    test files are left out of the required set (for example a suite that is entirely skipped on this platform
+    and would otherwise be rejected as ALL_SKIPPED). They still run, but are no longer protected by digest.
+    Callers should record the exclusion and its reason; unknown paths are an error."""
     ev = validate_evaluator(evaluator or {"kind": "unittest", "start_dir": "tests",
                                           "pattern": "test*.py", "import_roots": ["."], "min_tests": 1})
     required = {}
@@ -100,6 +110,11 @@ def make_policy(ws: Workspace, base: VEPObject, name: str = "default",
         for p, e in entries_of(base).items():
             if any(p == t or p.startswith(t.rstrip("/") + "/") for t in ev["targets"]) and p.endswith(".py"):
                 required[p] = e["digest"]
+    unknown = set(required_exclude or []) - set(required)
+    if unknown:
+        raise SchemaError(f"required_exclude names files that are not required tests: {sorted(unknown)}")
+    for p in required_exclude or []:
+        del required[p]
     pol = VEPObject.create("ExecutionPolicy", {
         "name": name, "policy_version": 1, "evaluator": ev,
         "protected_patterns": list(DEFAULT_PROTECTED if protected is None else protected),
@@ -141,7 +156,7 @@ def shadowing_paths(ev: dict, paths: list[str]) -> list[str]:
             if rel is None:
                 continue
             first = rel.split("/")[0].split(".")[0]
-            if first in DENIED_MODULES:
+            if first in DENIED_MODULES - set(ev.get("allow_module_names", [])):
                 bad.append(p)
                 break
     return bad

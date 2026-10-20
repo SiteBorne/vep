@@ -1,0 +1,9 @@
+$ python -m twine check --strict <tmp>/tmpucgwyox8/vep_protocol-0.5.0b1-py3-none-any.whl <tmp>/tmpucgwyox8/vep_protocol-0.5.0b1.tar.gz
+# exit 0
+
+Checking 
+<tmp>/tmpucgwyox8/vep_protocol-0.5.0b
+1-py3-none-any.whl: [32mPASSED[0m
+Checking 
+<tmp>/tmpucgwyox8/vep_protocol-0.5.0b
+1.tar.gz: [32mPASSED[0m
