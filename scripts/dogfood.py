@@ -89,7 +89,7 @@ def main() -> int:
                              "license": "Apache-2.0"}
         report["tool"] = {"package": versions.PACKAGE_VERSION, "protocol": versions.PROTOCOL_VERSION,
                           "db_schema": versions.DB_SCHEMA_VERSION, "python": platform.python_version(),
-                          "platform": platform.platform(), "evaluator_python": sys.executable,
+                          "platform": platform.platform(), "evaluator_python": "<evaluator venv>/bin/" + Path(sys.executable).name,
                           "tool_commit": git(REPO_SRC.parent, "rev-parse", "HEAD"),
                           "tool_tree_dirty": bool(git(REPO_SRC.parent, "status", "--porcelain", "--untracked-files=no"))}
         ws_root = work / "vep-workspace"

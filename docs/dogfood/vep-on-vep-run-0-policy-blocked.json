@@ -131,7 +131,7 @@
  },
  "tool": {
   "db_schema": 3,
-  "evaluator_python": "/private/tmp/claude-501/-Users-meta4ickal-VEP/570a6066-b34d-4f71-83ea-ff68a69aede1/scratchpad/evalenv/bin/python",
+  "evaluator_python": "<scratchpad>/evalenv/bin/python",
   "package": "0.4.0a1",
   "platform": "macOS-15.6-arm64-arm-64bit-Mach-O",
   "protocol": "0.3",

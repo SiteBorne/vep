@@ -23,3 +23,11 @@ Run 3 checks, all from the report:
 Limits: trusted-local execution (no isolation); the base commit was advanced three times during the exercise to fix
 the environment-dependence above, which is a finding about VEP's test suite, not evidence of a slower or faster
 workflow; the change is small; token cost is zero because no model was involved in evaluation.
+
+## Later runs
+| Run | Outcome | Notes |
+|---|---|---|
+| `run-4-final-runner` | **DOGFOOD_PASS** | Re-run with the runner that fails closed on shadowed modules (365 passed, negative control rejected, edit invalidates). |
+| `run-5-release-candidate` | **DOGFOOD_PASS** | Run at commit `4d0216a` (the release-candidate source, version `0.5.0b1`), same base `11391fe` and candidate `9d79210`. The report's `tool_tree_dirty: true` reflects only pending renames of earlier external reports into `docs/external/earlier/` at that moment; no source file was modified. |
+
+Host-specific absolute paths (the scratch interpreter location and home directory) were replaced by placeholders in these records in a separate commit; no measurement or outcome value was changed.

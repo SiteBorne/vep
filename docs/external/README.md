@@ -21,3 +21,6 @@ single run each, so this is an observation, not an overhead claim.
 
 Not covered: the pytest evaluator does not perform the shadow check (no runner report); isolated mode; any project with
 dependencies; more than one run.
+
+## Final re-run at the release-candidate source (commit `4d0216a`, version `0.5.0b1`)
+Both projects: upstream CERTIFIED, benign change CERTIFIED, mutant REJECTED by the project's own tests, mutant plus covering test REJECTED, post-certification edit rejected, bundle verified by the Python and Node verifiers. Reports: `pyflakes.json`, `more-itertools.json`; the previous runs are kept in `earlier/` (`*-run-3-before-0.5.0b1.json`).

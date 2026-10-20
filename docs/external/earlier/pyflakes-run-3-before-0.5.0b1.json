@@ -1,0 +1,174 @@
+{
+ "baseline": {
+  "files_in_snapshot": 35,
+  "min_passing_tests": 500,
+  "policy_id": "pol-af26a7f01420b51231f646b3c0745038ef513ad2aa390de880f97ea8fb7363cc",
+  "required_exclude": [
+   {
+    "path": "pyflakes/test/test_lazy_imports.py",
+    "reason": "every test in this file is skipped on this interpreter (Python 3.14); VEP rejects a required file that cannot run (REQUIRED_SUITE_ALL_SKIPPED), so the operator excludes it from the required set explicitly"
+   }
+  ],
+  "required_test_files": 12,
+  "snapshot_id": "snap-019cbc4c1072470cf0620d011dac93837c0de663cd3b9210d2ad46b379a9b4fa"
+ },
+ "candidates": {
+  "benign": {
+   "candidate_id": "cand-603fb0100b834c831aa912803327d1b1d5a3ab5adcfd3dfb6c5be382732ab5ae",
+   "cost": {
+    "child_cpu_s": 0.526,
+    "wall_s": 0.596
+   },
+   "result": {
+    "candidate_id": "cand-603fb0100b834c831aa912803327d1b1d5a3ab5adcfd3dfb6c5be382732ab5ae",
+    "candidate_status": "CERTIFIED",
+    "certificate_id": "cert-58d37a6dbb502376b740aa7e009fe2db1586b422d13bb5e216c84bfaf5d0ee70",
+    "evidence_id": "evd-bc46db5e3cedc1195c3c2452629dcd66610f8b013dc5fe5d9473b060227e36c6",
+    "job": "job-856ac5666370a53081ad25ff09d210d2",
+    "outcome": "SUCCEEDED",
+    "reason": null,
+    "trust_level": "TRUSTED_LOCAL",
+    "verdict": "PASS"
+   },
+   "snapshot_id": "snap-512dbe2d5d32644b1d34cef0c26e27505f2b805796f3f6bb41791ec54c31a251",
+   "tests": {
+    "tests_discovered": 796,
+    "tests_failed": 0,
+    "tests_passed": 768,
+    "tests_run": 796,
+    "tests_skipped": 28
+   }
+  },
+  "mutant": {
+   "candidate_id": "cand-1d2231f6cdd1e846362c599f6ef4e2c789850befb58bae9e24cb1b67724ef7ab",
+   "cost": {
+    "child_cpu_s": 0.562,
+    "wall_s": 0.647
+   },
+   "result": {
+    "candidate_id": "cand-1d2231f6cdd1e846362c599f6ef4e2c789850befb58bae9e24cb1b67724ef7ab",
+    "candidate_status": "REJECTED",
+    "evidence_id": "evd-774a0ea2b8b594f7a1248f08118e4f96e2cf69b71233092c67209f40c6931983",
+    "job": "job-8e1ac3c3b18f5d0c1b2d3ba745ad7cfd",
+    "outcome": "SUCCEEDED",
+    "reason": null,
+    "trust_level": "TRUSTED_LOCAL",
+    "verdict": "FAIL"
+   },
+   "snapshot_id": "snap-3459d2c55223e3b0e459589551f5d0b84707b98ec6b4d8347e7984565e928491",
+   "tests": {
+    "tests_discovered": 795,
+    "tests_failed": 259,
+    "tests_passed": 508,
+    "tests_run": 795,
+    "tests_skipped": 28
+   }
+  },
+  "mutant_plus_new_test": {
+   "candidate_id": "cand-a774a6cc68ab7433c8e527d52a75e349df1e7af399f178c64536cc09c47624a2",
+   "cost": {
+    "child_cpu_s": 0.564,
+    "wall_s": 0.651
+   },
+   "result": {
+    "candidate_id": "cand-a774a6cc68ab7433c8e527d52a75e349df1e7af399f178c64536cc09c47624a2",
+    "candidate_status": "REJECTED",
+    "evidence_id": "evd-34ef95f0703ff562d75f01fc393336cd5804bd2aa49e4362acef0b6dd9570a78",
+    "job": "job-bde9e7b655812ec554efd740852ecd74",
+    "outcome": "SUCCEEDED",
+    "reason": null,
+    "trust_level": "TRUSTED_LOCAL",
+    "verdict": "FAIL"
+   },
+   "snapshot_id": "snap-a9fa9ed20e028baaa51e4d0724b83555191393b8a111e36ae4729072be1b8764",
+   "tests": {
+    "tests_discovered": 796,
+    "tests_failed": 260,
+    "tests_passed": 508,
+    "tests_run": 796,
+    "tests_skipped": 28
+   }
+  },
+  "upstream": {
+   "candidate_id": "cand-48aa065a23741ac6d843917682c8296a97a95ba3122b8daab18d2343b906f5b0",
+   "cost": {
+    "child_cpu_s": 0.523,
+    "wall_s": 0.598
+   },
+   "result": {
+    "candidate_id": "cand-48aa065a23741ac6d843917682c8296a97a95ba3122b8daab18d2343b906f5b0",
+    "candidate_status": "CERTIFIED",
+    "certificate_id": "cert-da552433219b943877378d4b7c694239e86a4e8c1323ffcd7dc94440e967863e",
+    "evidence_id": "evd-e107f87268bff664ee08966b2540b009db7a2dc6f7c314051c4d80fecfee1aa1",
+    "job": "job-7ba0a0b7d7a0dd3095cc43ac331d1622",
+    "outcome": "SUCCEEDED",
+    "reason": null,
+    "trust_level": "TRUSTED_LOCAL",
+    "verdict": "PASS"
+   },
+   "snapshot_id": "snap-019cbc4c1072470cf0620d011dac93837c0de663cd3b9210d2ad46b379a9b4fa",
+   "tests": {
+    "tests_discovered": 795,
+    "tests_failed": 0,
+    "tests_passed": 767,
+    "tests_run": 795,
+    "tests_skipped": 28
+   }
+  }
+ },
+ "classification": "LOCALLY_VERIFIED (trusted-local, one host)",
+ "direct_reference": {
+  "child_cpu_s": 0.453,
+  "command": "python -I -m unittest discover -s pyflakes/test -p test_*.py -t .",
+  "returncode": 0,
+  "summary": [
+   "Ran 795 tests in 0.390s",
+   "OK (skipped=28)"
+  ],
+  "wall_s": 0.473
+ },
+ "kind": "external project through VEP",
+ "limits": [
+  "project tests ran as the invoking user with NO isolation (explicitly authorized for these vetted projects)",
+  "no changes were pushed to the project; candidates are local and disposable",
+  "one host, one run per candidate: no statistical claim"
+ ],
+ "outcome": {
+  "all_expected": true,
+  "benign_certified": true,
+  "edited_tree_rejected": true,
+  "mutant_rejected_by_projects_own_tests": true,
+  "mutant_rejected_once_a_covering_test_is_added": true,
+  "upstream_certified": true
+ },
+ "project": {
+  "commit": "8526af8494a831803bbc1eae24b8f9d2a24aa2f7",
+  "kind": "small real Python application (static checker)",
+  "license": "MIT",
+  "license_file": "LICENSE",
+  "name": "pyflakes",
+  "tag": "4.0.3",
+  "url": "https://github.com/PyCQA/pyflakes"
+ },
+ "report_version": 1,
+ "tool": {
+  "package": "0.4.0a1",
+  "platform": "macOS-15.6-arm64-arm-64bit-Mach-O",
+  "python": "3.14.7",
+  "vep_commit": "28284b8a17249ca476d0ec435a5896d8b592c9d4"
+ },
+ "verification": {
+  "bundle_node_independent": true,
+  "bundle_python_reference": true,
+  "edited_tree_reason": "SOURCE_CHANGED: current tree snap-127e76e5f34a91704ff8cec5e4",
+  "edited_tree_rejected": true,
+  "live_tree_checks": [
+   "certificate signature",
+   "evidence signature",
+   "evidence binding",
+   "candidate/objective/policy binding",
+   "current source equals certified snapshot"
+  ],
+  "upstream_certified": true
+ }
+}
