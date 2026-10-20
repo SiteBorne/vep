@@ -69,6 +69,14 @@ vep: VerificationFailed: SOURCE_CHANGED: current tree snap-7d9c… != certified 
 ```
 `--historical` checks the certificate without requiring the live tree to match; `--require-trust ISOLATED_VERIFIED` makes a trusted-local certificate fail (exit 4).
 
+## Agents: MCP, Claude Code, A2A
+```bash
+pip install "vep-protocol[mcp]"        # also: [a2a], [claude]
+vep claude install --root .            # .mcp.json + Skill + guard hook for Claude Code (authority read,register by default)
+vep-mcp --root . --authority read,register          # the MCP server on its own (stdio)
+```
+The operator, not the agent, fixes what a server may do; no tool accepts a verdict, and evaluation (which runs code unisolated on your machine) needs `--trusted-local-execution`. A third party verifies an exported bundle with **their own** trust policy (`vep conformance trust-policy`, `vep conformance verify --trust-policy`). Details and what is and is not verified: [MCP](docs/MCP.md), [A2A](docs/A2A.md), [CLAUDE_INTEGRATION](docs/CLAUDE_INTEGRATION.md), [PROFILES](docs/PROFILES.md).
+
 ## Test
 ```bash
 pip install -e ".[dev]"
@@ -84,7 +92,7 @@ scripts/release_check.sh                       # full release qualification (bui
 * Optional isolation: `vep isolation detect`, `vep isolation verify --image <name@sha256:…> --out att.json`, `vep evaluate --isolated --image … --attestation-file att.json`. Needs a Linux Docker daemon with gVisor (`runsc`) registered and a local digest-pinned Python image. On a machine without them every command reports `ISOLATION_UNVERIFIED` (exit 8) and nothing runs.
 
 ## Documentation map
-[QUICKSTART](docs/QUICKSTART.md) · [ARCHITECTURE](docs/ARCHITECTURE.md) · [RFC-0001](docs/RFC-0001.md) · [COMPATIBILITY](docs/COMPATIBILITY.md) · [MIGRATIONS](docs/MIGRATIONS.md) · [SECURITY_ARCHITECTURE](docs/SECURITY_ARCHITECTURE.md) · [THREAT_MODEL](docs/THREAT_MODEL.md) · [SECURITY_REVIEW](docs/SECURITY_REVIEW.md) · [INVARIANTS](docs/INVARIANTS.md) · [VARIABLES](docs/VARIABLES.md) · [EVIDENCE](docs/EVIDENCE.md) · [BENCHMARKS](docs/BENCHMARKS.md) · [IMPLEMENTATION_STATUS](docs/IMPLEMENTATION_STATUS.md) · [RELEASE_NOTES](docs/RELEASE_NOTES.md) · [BETA_SCOPE](docs/BETA_SCOPE.md) · [CONFORMANCE](docs/CONFORMANCE.md) · [RELEASE_PROVENANCE](docs/RELEASE_PROVENANCE.md)
+[QUICKSTART](docs/QUICKSTART.md) · [ARCHITECTURE](docs/ARCHITECTURE.md) · [RFC-0001](docs/RFC-0001.md) · [COMPATIBILITY](docs/COMPATIBILITY.md) · [MIGRATIONS](docs/MIGRATIONS.md) · [SECURITY_ARCHITECTURE](docs/SECURITY_ARCHITECTURE.md) · [THREAT_MODEL](docs/THREAT_MODEL.md) · [SECURITY_REVIEW](docs/SECURITY_REVIEW.md) · [INVARIANTS](docs/INVARIANTS.md) · [VARIABLES](docs/VARIABLES.md) · [EVIDENCE](docs/EVIDENCE.md) · [BENCHMARKS](docs/BENCHMARKS.md) · [IMPLEMENTATION_STATUS](docs/IMPLEMENTATION_STATUS.md) · [RELEASE_NOTES](docs/RELEASE_NOTES.md) · [BETA_SCOPE](docs/BETA_SCOPE.md) · [CONFORMANCE](docs/CONFORMANCE.md) · [CORE_PROTOCOL_SPEC](docs/CORE_PROTOCOL_SPEC.md) · [PROFILES](docs/PROFILES.md) · [MCP](docs/MCP.md) · [A2A](docs/A2A.md) · [CLAUDE_INTEGRATION](docs/CLAUDE_INTEGRATION.md) · [EVIDENCE_REUSE](docs/EVIDENCE_REUSE.md) · [PERFORMANCE_REPORT](docs/PERFORMANCE_REPORT.md) · [FAULT_INJECTION](docs/FAULT_INJECTION.md) · [COMPATIBILITY_MATRIX](docs/COMPATIBILITY_MATRIX.md) · [RELEASE_PROVENANCE](docs/RELEASE_PROVENANCE.md)
 
 ## Contribute
 See [CONTRIBUTING.md](CONTRIBUTING.md): fork, `pip install -e ".[dev]"`, add a focused test for every behavior change, run the suite and `scripts/release_check.sh --skip-matrix`, open a pull request. Be kind: [CODE_OF_CONDUCT.md](CODE_OF_CONDUCT.md).

@@ -16,7 +16,10 @@ from importlib import resources
 from pathlib import Path
 from typing import Any
 
-from claude_agent_sdk import ClaudeAgentOptions, HookMatcher
+try:
+    from claude_agent_sdk import ClaudeAgentOptions, HookMatcher
+except ImportError as _exc:
+    raise ImportError("vep.agent_sdk needs the optional 'claude' extra (pip install 'vep-protocol[claude]'): " + str(_exc)) from _exc
 
 from .services import AUTHORITIES
 
@@ -26,7 +29,7 @@ TOOL_AUTHORITY = {
     "vep_status": "read", "vep_job_status": "read", "vep_candidate_state": "read", "vep_verify_certificate": "read", "vep_budget_status": "read",
     "vep_explain_failure": "read", "vep_read_artifact": "read",
     "vep_objective_create": "register", "vep_candidate_register": "register",
-    "vep_evaluate": "evaluate", "vep_export_evidence": "export",
+    "vep_evaluate": "evaluate", "vep_reuse_evidence": "evaluate", "vep_export_evidence": "export",
 }
 GUARD_MATCHER = "Edit|Write|MultiEdit|NotebookEdit|Bash"
 

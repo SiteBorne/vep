@@ -15,9 +15,9 @@ dependencies = ["cryptography>=41"]
 [project.optional-dependencies]
 pytest = ["pytest>=7"]
 mcp = ["mcp>=2.3,<3"]
-a2a = ["a2a-sdk>=1.2,<2"]
+a2a = ["a2a-sdk[http-server]>=1.2,<2", "uvicorn>=0.30"]
 claude = ["claude-agent-sdk>=0.2,<1"]
-dev = ["pytest>=7", "build", "twine", "setuptools>=68", "mcp>=2.3,<3", "a2a-sdk>=1.2,<2", "claude-agent-sdk>=0.2,<1"]
+dev = ["pytest>=7", "build", "twine", "setuptools>=68", "mcp>=2.3,<3", "a2a-sdk[http-server]>=1.2,<2", "uvicorn>=0.30", "claude-agent-sdk>=0.2,<1"]
 
 [project.scripts]
 vep = "vep.cli:main"

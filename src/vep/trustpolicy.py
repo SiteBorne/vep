@@ -170,3 +170,52 @@ def _authorized(bundle: Any, policy: Any, now: str) -> dict:
             raise Reject(code)
     return {"valid": True, "code": None, "assurance": "AUTHORIZED", "trust_policy_id": policy_id(policy), "issuer_key_id": cert_kid,
             "trust_level": cert_trust, "snapshot_id": cert["snapshot_id"], "certificate_id": cert.id}
+
+
+# ---------------------------------------------------------------- derived (exact-input reuse) attestations, bundle format 3
+def verify_derived_authorized(bundle: Any, policy: Any, now: str) -> dict:
+    try:
+        return _derived(bundle, policy, now)
+    except Reject as r:
+        return {"valid": False, "code": r.code, "detail": r.detail}
+
+
+def _derived(bundle: Any, policy: Any, now: str) -> dict:
+    from .reuse import check_chain
+    if not isinstance(now, str) or not TS.match(now):
+        raise Reject("MALFORMED_TRUST_POLICY", "now must be a UTC timestamp supplied by the relying party")
+    issuers = validate_policy(policy)
+    if not isinstance(bundle, dict) or "bundle_version" not in bundle or isinstance(bundle["bundle_version"], bool) or not isinstance(bundle["bundle_version"], int):
+        raise Reject("MALFORMED_BUNDLE")
+    if bundle["bundle_version"] != 3:
+        raise Reject("UNSUPPORTED_BUNDLE_VERSION", "derived verification needs bundle format 3")
+    if set(bundle) != {"bundle_version", "attestation_envelope", "evidence_envelope"}:
+        raise Reject("MALFORMED_BUNDLE")
+    keys = {kid: e["raw"] for kid, e in issuers.items()}
+
+    def open_env(env, kind):
+        try:
+            return _open(env, keys, kind)
+        except Reject as r:
+            raise Reject("UNAUTHORIZED_ISSUER", r.detail) if r.code == "UNTRUSTED_KEY" else r
+    att = open_env(bundle["attestation_envelope"], "DerivedAttestation")
+    ev = open_env(bundle["evidence_envelope"], "Evidence")
+    att_kid = bundle["attestation_envelope"]["signatures"][0]["keyid"]
+    ev_kid = bundle["evidence_envelope"]["signatures"][0]["keyid"]
+    if att["issuer_key_id"] != att_kid:
+        raise Reject("ISSUER_KEY_MISMATCH", "attestation names a different issuer than the key that signed it")
+    _key_ok(issuers[att_kid], att["issued_at"], now)
+    _key_ok(issuers[ev_kid], ev["finished_at"], now)
+    if ev.schema_version not in policy["permitted_evidence_versions"]:
+        raise Reject("EVIDENCE_VERSION_NOT_PERMITTED")
+    trust_level = check_chain(att, ev, bundle["evidence_envelope"])
+    if not _evaluator_ok(ev["evaluator_id"], policy["authorized_evaluators"]):
+        raise Reject("EVALUATOR_NOT_AUTHORIZED", ev["evaluator_id"])
+    if not trust.satisfies(trust_level, policy["require_trust"]):
+        raise Reject("TRUST_INSUFFICIENT")
+    for field, code in (("objective_id", "OBJECTIVE_MISMATCH"), ("policy_id", "POLICY_MISMATCH"), ("snapshot_id", "SNAPSHOT_MISMATCH")):
+        if field in policy["expect"] and policy["expect"][field] != att[field]:
+            raise Reject(code)
+    return {"valid": True, "code": None, "assurance": "AUTHORIZED_DERIVED", "trust_policy_id": policy_id(policy), "issuer_key_id": att_kid,
+            "trust_level": trust_level, "snapshot_id": att["snapshot_id"], "attestation_id": att.id,
+            "derivation_chain": [att.id, ev.id, ev["candidate_id"]]}

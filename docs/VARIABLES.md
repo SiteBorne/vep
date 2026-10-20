@@ -57,11 +57,16 @@ Columns: **Identifier | Description | Type | Units | Default | Allowed range | V
 | BuildAction.verify_determinism | Run twice on a miss; cache only if outputs, stdout, stderr and exit code are identical | bool | - | true | true/false | builds.run | turning it off trusts the caller's determinism claim; costs one extra run when on | builds.run | implemented | n/a |
 | BuildAction.timeout_s | Wall-clock limit per execution | int | s | 300 | >0 | process-group SIGKILL | bounded resource use | builds.BuildAction | implemented | illustrative |
 | build_cache entry | action id to stored result; reused only if result and every output blob re-hash | row | - | - | exit_code 0 only | builds.lookup | corrupt entries are misses, never reused | builds.lookup | implemented | n/a |
+| BuildAction.isolation | Isolation the action declares and the executor honours; part of the identity | enum | - | NONE_TRUSTED_LOCAL | builds.SUPPORTED_ISOLATION | unsupported values are rejected, not ignored | a cached result produced unisolated must not be served as isolated | builds.BuildAction | implemented | n/a |
+| BuildAction.declared_dependencies | Paths the action declares it depends on beyond its argv; part of the identity | tuple[str] | - | () | relative paths | validate | undeclared inputs would make a hit unsound | builds.BuildAction | implemented | n/a |
+| BUILD_ACTION_VERSION | Build-action identity version (`bact2-` prefix); timeout, isolation and dependencies are in the identity | int | - | 2 | 2 | entries written by version 1 are misses | a changed identity can never reach an old entry | builds.BUILD_ACTION_VERSION | implemented | n/a |
+| build result.assurance | SINGLE_RUN or TWO_RUN_MATCH; never a proof of determinism or of correctness | enum | - | - | SINGLE_RUN \| TWO_RUN_MATCH | builds.lookup(require_assurance) | a hit is not a certificate | builds.ASSURANCE_NOTE | implemented | n/a |
 
 ## Dependency graph and evidence validity
 
 | Identifier | Description | Type | Units | Default | Allowed range | Validation rules | Security implications | Location | Status | Calibration |
 |---|---|---|---|---|---|---|---|---|---|---|
+| DerivedAttestation.reuse_mode | Only EXACT_INPUT exists: identical snapshot, policy, runner, evaluator, environment and trust level | enum | - | EXACT_INPUT | EXACT_INPUT | reuse.find_original at issuance; reuse.check_chain in both verifiers | a derived attestation is not a certificate and never transplants evidence | reuse.py | implemented | n/a |
 | REUSE_MODE | Evidence reuse rule | enum | - | EXACT_ONLY | EXACT_ONLY | depgraph.evidence_validity compares snapshot, policy, verdict and optional trust level | static analysis cannot prove behavioural independence, so evidence is never reused across snapshots | depgraph.REUSE_MODE | implemented | n/a |
 | edge.basis | Why an edge exists | enum | - | - | STATIC_IMPORT \| DECLARED \| SIGNED_BINDING \| PATH_OVERLAP | build_graph; no edge without a basis | no invented dependencies | depgraph.py | implemented | n/a |
 | impact.required_evaluation | Evaluation required after any change | enum | - | FULL | FULL | depgraph.impact | impact only prioritises tests; mandatory tests are never skipped | depgraph.impact | implemented | n/a |
@@ -71,8 +76,10 @@ Columns: **Identifier | Description | Type | Units | Default | Allowed range | V
 
 | Identifier | Description | Type | Units | Default | Allowed range | Validation rules | Security implications | Location | Status | Calibration |
 |---|---|---|---|---|---|---|---|---|---|---|
-| suite_version | Frozen conformance suite version | str | - | 1.0 | 1.0 | gen_conformance_vectors.py --check fails on drift | a silent change to expected results would hide a protocol change | conformance/vectors/suite-1.0.json | implemented | n/a |
-| bundle_version | Portable certificate bundle format | int | - | 1 | 1 | verify_bundle rejects others with UNSUPPORTED_BUNDLE_VERSION | unknown formats must fail explicitly | conformance.BUNDLE_VERSION | implemented | n/a |
+| suite_version | Frozen conformance suite versions; each carries its predecessor verbatim | str | - | 1.2 | 1.0 \| 1.1 \| 1.2 | gen_conformance_vectors*.py --check fails on drift | a silent change to expected results would hide a protocol change | conformance/vectors/suite-1.*.json | implemented | n/a |
+| bundle_version | Portable bundle format: 1 self-contained (internal consistency only), 2 envelopes for authorized verification, 3 derived attestation + original evidence | int | - | 2 (export) | 1 \| 2 \| 3 | each verifier rejects other formats with UNSUPPORTED_BUNDLE_VERSION | unknown formats must fail explicitly; v1 can never report AUTHORIZED | conformance.BUNDLE_VERSION; trustpolicy | implemented | n/a |
+| trust policy (VEP-TP1) | Relying-party issuers, evaluators, required trust, permitted versions and expected snapshot; identity `tp-` + domain hash | json | - | - | see CORE_PROTOCOL_SPEC section 8 | trustpolicy.validate_policy (Python) and validatePolicy (Node) | the bundle never supplies keys or expectations; a policy without an expected snapshot is refused | trustpolicy.py; conformance/node/verify.mjs | implemented | n/a |
+| issuer.status | active \| retired \| compromised, evaluated at the object's claimed time | enum | - | active | 3 values | trustpolicy._key_ok | compromised keys are rejected for every date; retired keys for objects dated at or after retirement | trustpolicy.py | implemented | n/a |
 | expect.require_trust | Minimum trust level the verifier demands | enum | - | TRUSTED_LOCAL | TRUSTED_LOCAL \| ISOLATED_VERIFIED | UNVERIFIED is never a valid requirement | TRUSTED_LOCAL evidence can never satisfy ISOLATED_VERIFIED | conformance._verify | implemented | n/a |
 | reason codes | Machine-readable verification failure codes | enum | - | - | see docs/CONFORMANCE.md section 4 | every code is exercised by a vector (tested) | deterministic failure reporting | conformance.CODES | implemented | n/a |
 
@@ -382,6 +389,19 @@ Columns: **Identifier | Description | Type | Units | Default | Allowed range | V
 | release_policy.secret_patterns | Secret formats scanned in tree, history and artifacts | list | - | 8 rules | - | gates.scan_text_for_secrets | findings never echo the secret | scripts/release/release_policy.json | implemented | n/a |
 | release_policy.workflow_rules | Pinned SHA regex, forbidden triggers, required permissions block | map | - | - | - | gates.lint_workflow | least-privilege CI | scripts/release/release_policy.json | implemented | n/a |
 
+## Integrations (MCP, A2A, Claude)
+
+| Identifier | Description | Type | Units | Default | Allowed range | Validation rules | Security implications | Location | Status | Calibration |
+|---|---|---|---|---|---|---|---|---|---|---|
+| --authority | Operator-fixed capability set of an adapter process: read, register, evaluate, export | set | - | read | subset of AUTHORITIES | services.Context.need before every operation | callers can never raise it; no tool takes an authority argument | services.py; mcp_server.py; a2a_server.py | implemented | n/a |
+| --trusted-local-execution | Operator's acknowledgement that evaluation runs candidate code unisolated on this host | flag | - | off | on/off | services.evaluate refuses with VEP_E_EVALUATION_DISABLED | without it no adapter can start an evaluation | services.py | implemented | n/a |
+| VEP_E_* codes | Stable adapter error codes | enum | - | - | services.ERROR_CODES | ServiceError asserts membership | internal errors never leak detail | services.py | implemented | n/a |
+| idempotency_key | Caller key making a writing call repeatable; stored in `meta` | str | - | none | [A-Za-z0-9._:-]{1,128} | services._idem | a retry cannot double-register or double-spend | services.py | implemented | n/a |
+| MAX_PAGE / MAX_ARTIFACT_PAGE | Largest list page and log page returned in one call | int | items / bytes | 200 / 4000 | fixed | services._page; read_artifact | bounds response size; storage stays lossless | services.py | implemented | n/a |
+| VEP_A2A_TOKEN | Bearer token for the A2A endpoint (environment, not a flag) | str | - | required | >=16 chars | a2a_server.BearerAuth (constant-time compare) | the server refuses to start without it | a2a_server.py | implemented | n/a |
+| --token-expires / --task-timeout | A2A token expiry time; per-task deadline after which the VEP job is cancelled | ISO time / s | - | none / 600 | - | a2a_server | bounded exposure and bounded work | a2a_server.py | implemented | n/a |
+| vep claude install | Writes .mcp.json, the Skill, CLAUDE.md block and guard hook with hashes, backups and conflict detection | command | - | read,register | see CLAUDE_INTEGRATION.md | claude_code.install | never overwrites user files silently; the guard hook is defense in depth only | claude_code.py | implemented | n/a |
+
 ## CLI and process
 
 | Identifier | Description | Type | Units | Default | Allowed range | Validation rules | Security implications | Location | Status | Calibration |
@@ -490,6 +510,26 @@ All fields are validated by `VEPObject.create`; unknown fields are rejected; opt
 | Certificate.issued_at | ts | yes | - | issued at |
 | Certificate.trust_level | enum | yes | values=['TRUSTED_LOCAL', 'ISOLATED_VERIFIED', 'UNVERIFIED'] | trust level |
 | Certificate.evaluator_id | str | yes | max_len=256 | evaluator id |
+
+### DerivedAttestation (id prefix `datt-`)
+
+| Field | Kind | Required | Options | Description |
+|---|---|---|---|---|
+| DerivedAttestation.candidate_id | id:Candidate | yes | - | Candidate this record concerns |
+| DerivedAttestation.objective_id | id:Objective | yes | - | Objective this record concerns |
+| DerivedAttestation.snapshot_id | id:Snapshot | yes | - | Snapshot (source identity) |
+| DerivedAttestation.policy_id | id:ExecutionPolicy | yes | - | Frozen ExecutionPolicy |
+| DerivedAttestation.original_evidence_id | id:Evidence | yes | - | original evidence id |
+| DerivedAttestation.original_evidence_envelope_digest | digest | yes | - | original evidence envelope digest |
+| DerivedAttestation.original_candidate_id | id:Candidate | yes | - | original candidate id |
+| DerivedAttestation.original_objective_id | id:Objective | yes | - | original objective id |
+| DerivedAttestation.reuse_mode | enum | yes | values=['EXACT_INPUT'] | reuse mode |
+| DerivedAttestation.trust_level | enum | yes | values=['TRUSTED_LOCAL', 'ISOLATED_VERIFIED'] | trust level |
+| DerivedAttestation.evaluator_id | str | yes | max_len=256 | evaluator id |
+| DerivedAttestation.runner_digest | digest | yes | - | Digest of the protected runner |
+| DerivedAttestation.environment_digest | digest | yes | - | environment digest |
+| DerivedAttestation.issuer_key_id | digest | yes | - | issuer key id |
+| DerivedAttestation.issued_at | ts | yes | - | issued at |
 
 ### Observation (id prefix `obs-`)
 

@@ -1,0 +1,18 @@
+# Protocol and surface compatibility matrix
+
+Version axes are in [COMPATIBILITY](COMPATIBILITY.md). This matrix states, per surface, what was required to call it qualified and what was actually shown. `Qualified` means the listed evidence exists
+and passes in this repository for the stated scope; it is recomputed by `scripts/profile_check.py` ([PROFILES](PROFILES.md)). Nothing here is an external certification.
+
+| Surface | Version / spec used | Required qualification | Shown | Not shown / limits |
+|---|---|---|---|---|
+| VEP core | protocol `0.3`, VEP-C1, Evidence/Certificate v2, DerivedAttestation v1, bundle formats 1-3, trust policy `VEP-TP1`, suites 1.0-1.2 | independent trust, normative spec, conformance, adversarial cases | [spec](CORE_PROTOCOL_SPEC.md); Python and Node agree on 194/194 vectors; trust-anchor defect reproduced and fixed; [fault/adversarial map](FAULT_INJECTION.md) | both verifiers by one author; no external review |
+| MCP stdio | official `mcp` SDK 2.3.0, revision `2026-07-28` as negotiated in tests | official spec compatibility, real client, unauthorized-action rejection | [MCP](MCP.md): official client over real stdio, 12 tools with input and output schemas, authority/idempotency/hostile-argument tests, drift test against the Agent SDK table | the npm MCP conformance tool targets HTTP servers and was not run (NOT_APPLICABLE to stdio) |
+| MCP HTTP | - | authentication, Origin, transport, protocol conformance | **not offered**; `--transport http` exits 2 | no claim |
+| A2A | `a2a-sdk` 1.2.3, protocol 1.0, JSON-RPC binding | Agent Card, task lifecycle, independent client, authorization | [A2A](A2A.md): official client (streaming and non-streaming) and a raw JSON-RPC client against a real process; malformed, wrong version, unauthorized, expired, duplicate, cancel, lost response | no official inspector run; loopback only; push notifications not offered; no persistence of A2A task state across restarts |
+| Claude Code | Claude Code 2.1.220 on the development host | client discovery, actual tools and Skill behaviour | installer/uninstaller tested; `claude plugin validate` passes; `claude mcp get vep` finds the server (pending approval) | **no live tool call or Skill trigger observed**; `${CLAUDE_PROJECT_DIR:-.}` expansion unverified |
+| Claude Agent SDK | `claude-agent-sdk` 0.2.168 | contract tests; live run only if authorized | offline contract and drift tests ([CLAUDE_INTEGRATION](CLAUDE_INTEGRATION.md)) | **live run NOT_RUN** (no authorization to spend API budget) |
+| Evidence reuse | `reuse_mode = EXACT_INPUT` | independent derivation verification | [EVIDENCE_REUSE](EVIDENCE_REUSE.md): Python and Node verify the chain; 34 vectors; refusal on any input change | trusted-local evidence only; not a certificate |
+| Reference implementation | package `0.5.0b1` source + unreleased changes | recovery, migration, packaging, failure testing | full suite ([report](PRODUCTION_QUALIFICATION_REPORT.md)); real SIGKILL recovery; migration fixtures; wheel installed in a fresh venv; quickstart executed against the installed wheel | **hosted CI has not run on the new commit**; Python ≥ 3.11 on Linux/macOS only |
+| Hostile-code isolation | Docker + gVisor path | separate security assessment and tested boundary | hosted-runner matrix T1-T12 passed once on a prior revision, evidence still current | no escape testing, no external review: not qualified for hostile code |
+
+Dependency ranges (from `pyproject.toml`): `mcp>=2.3,<3`, `a2a-sdk[http-server]>=1.2,<2`, `uvicorn>=0.30`, `claude-agent-sdk>=0.2,<1`. These are the versions the tests ran against; a newer minor of an SDK is not covered until tested.

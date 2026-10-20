@@ -13,7 +13,7 @@ from . import (audits, budgets, builds, cache_planner, candidates, certificates,
 from .canonical import strict_loads
 from .errors import AuthorizationError, VepError
 from .evidence import KeyStore
-from .workspace import Workspace
+from .workspace import Workspace, utcnow
 
 EXIT_UNEXPECTED = 70
 
@@ -350,6 +350,28 @@ def cmd_claude(a):
     return 3 if r["status"] == "CONFLICT" else 0
 
 
+def cmd_reuse(a):
+    from . import trustpolicy
+    from . import reuse
+    ws = _ws(a)
+    if a.action == "derive":
+        att, digest = reuse.derive(ws, a.candidate)
+        _emit(a, {"attestation_id": att.id, "original_evidence_id": att["original_evidence_id"], "original_candidate_id": att["original_candidate_id"],
+                  "trust_level": att["trust_level"], "reuse_mode": att["reuse_mode"], "envelope_digest": digest,
+                  "note": "a derived attestation is not a certificate; candidate status is unchanged"}); return 0
+    if a.action == "export":
+        out = json.dumps(reuse.export_bundle(ws, a.candidate), indent=1, sort_keys=True)
+        if a.out:
+            Path(a.out).write_text(out + "\n"); _emit(a, {"bundle": a.out, "bundle_version": 3})
+        else:
+            print(out)
+        return 0
+    pol = _load_json(a.trust_policy)
+    r = trustpolicy.verify_derived_authorized(_load_json(a.bundle), pol, a.now or utcnow())
+    _emit(a, r)
+    return 0 if r["valid"] else 3
+
+
 def _common(sp):
     sp.add_argument("--json", action="store_true", help="machine-readable JSON output")
     sp.add_argument("--root", default=".", help="workspace root (default: cwd)")
@@ -394,12 +416,15 @@ def build_parser() -> argparse.ArgumentParser:
     s.add_argument("--objective", required=True); s.add_argument("candidate_a"); s.add_argument("candidate_b")
     s = add("conformance", cmd_conformance, "export a portable certificate bundle, verify one (authorized by a trust policy, or internal-only), or run the frozen vectors")
     s.add_argument("action", choices=["export", "verify", "vectors", "trust-policy"]); s.add_argument("--certificate"); s.add_argument("--bundle")
-    s.add_argument("--out"); s.add_argument("--suite", default="conformance/vectors/suite-1.1.json")
+    s.add_argument("--out"); s.add_argument("--suite", default="conformance/vectors/suite-1.2.json")
     s.add_argument("--bundle-version", type=int, choices=[1, 2], default=2, help="2 (default): no embedded keys, needs a trust policy; 1: legacy self-contained bundle")
     s.add_argument("--trust-policy"); s.add_argument("--now"); s.add_argument("--internal-only", action="store_true")
     s.add_argument("--name", default="local-workspace"); s.add_argument("--evaluator", default="vep-local-evaluator/*"); s.add_argument("--snapshot")
     s.add_argument("--objective"); s.add_argument("--policy")
     s.add_argument("--require-trust", default="TRUSTED_LOCAL", choices=["TRUSTED_LOCAL", "ISOLATED_VERIFIED"])
+    s = add("reuse", cmd_reuse, "exact-input evidence reuse: derive/export a DerivedAttestation, or verify one against a relying-party trust policy")
+    s.add_argument("action", choices=["derive", "export", "verify"]); s.add_argument("--candidate"); s.add_argument("--out")
+    s.add_argument("--bundle"); s.add_argument("--trust-policy"); s.add_argument("--now")
     s = add("build", cmd_build, "run a content-addressed build action over a snapshot, with verified result cache")
     s.add_argument("action", choices=["run", "stats"]); s.add_argument("--snapshot"); s.add_argument("--output", action="append", default=[])
     s.add_argument("--timeout", type=int, default=300); s.add_argument("--trusted-local-execution", action="store_true")

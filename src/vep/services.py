@@ -353,6 +353,26 @@ def job_status(ctx: Context, job_id: str | None = None, candidate_id: str | None
 
 
 @_guard
+def reuse_evidence(ctx: Context, candidate_id: str) -> dict:
+    """Exact-input evidence reuse: if signed PASS evidence from another candidate matches this candidate's snapshot, policy, runner, evaluator
+    and environment exactly, issue a DerivedAttestation that names it. Executes nothing; not a certificate; never changes candidate status."""
+    ctx.need("evaluate")
+    ws = ctx.ws()
+    ident(candidate_id, "cand", "candidate_id")
+    from . import reuse
+    try:
+        att, digest = reuse.derive(ws, candidate_id)
+    except StateError as exc:
+        if str(exc).startswith("NO_REUSABLE_EVIDENCE"):
+            return {"ok": True, "reused": False, "reason": str(exc)[:600], "next_action": "vep_evaluate"}
+        raise
+    return {"ok": True, "reused": True, "attestation_id": att.id, "original_evidence_id": att["original_evidence_id"],
+            "original_candidate_id": att["original_candidate_id"], "trust_level": att["trust_level"], "reuse_mode": att["reuse_mode"],
+            "assurance": "DERIVED_EXACT_INPUT (not a certificate; candidate status unchanged)",
+            "next_action": "export with `vep reuse export` and verify with a relying-party trust policy"}
+
+
+@_guard
 def cancel_job(ctx: Context, job_id: str) -> dict:
     """Cancel a non-terminal job (idempotent on terminal jobs). A running worker's later commits are refused by the lease fence."""
     ctx.need("evaluate")

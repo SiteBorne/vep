@@ -21,7 +21,7 @@ from vep.workspace import Workspace
 ROOT = Path(__file__).resolve().parents[1]
 NODE = shutil.which("node")
 TOOLS = {"vep_status", "vep_objective_create", "vep_candidate_register", "vep_evaluate", "vep_job_status", "vep_candidate_state", "vep_verify_certificate",
-         "vep_export_evidence", "vep_budget_status", "vep_explain_failure", "vep_read_artifact"}
+         "vep_export_evidence", "vep_reuse_evidence", "vep_budget_status", "vep_explain_failure", "vep_read_artifact"}
 
 
 def project() -> Path:
@@ -104,7 +104,6 @@ class McpTests(unittest.IsolatedAsyncioTestCase):
                 (await c.call_tool("vep_status", {})).content[0].text)["versions"]["package"])
             h = json.loads((await c.read_resource(f"vep://history/{r1['candidate_id']}")).contents[0].text)
             self.assertEqual(h["entries"][0]["to"], "PROPOSED")
-            bad = await c.read_resource("vep://candidate/not-an-id") if False else None  # malformed ids are covered through the tools above
 
     async def test_full_flow_with_independent_verification(self):
         async with Client(params(self.root, "read,register,evaluate,export", trusted=True)) as c:
@@ -147,6 +146,16 @@ class McpTests(unittest.IsolatedAsyncioTestCase):
                 self.assertEqual((out["valid"], out["assurance"]), (True, "AUTHORIZED"))
             b = sc(await c.call_tool("vep_budget_status", {"objective_id": o["objective_id"]}))
             self.assertEqual(b["settled"], "0.001")
+
+    async def test_reuse_evidence_needs_authority_and_reports_no_match_honestly(self):
+        async with Client(params(self.root, "read,register")) as c:
+            o = sc(await c.call_tool("vep_objective_create", {"title": "t"}))
+            cand = sc(await c.call_tool("vep_candidate_register", {"objective_id": o["objective_id"]}))
+            r = await c.call_tool("vep_reuse_evidence", {"candidate_id": cand["candidate_id"]})
+            self.assertEqual(sc(r)["error"]["code"], "VEP_E_NOT_AUTHORIZED")
+        async with Client(params(self.root, "read,evaluate")) as c:  # executes nothing, so the trusted-local switch is not needed
+            r = sc(await c.call_tool("vep_reuse_evidence", {"candidate_id": cand["candidate_id"]}))
+            self.assertEqual((r["ok"], r["reused"], r["next_action"]), (True, False, "vep_evaluate"))
 
     async def test_failure_is_explained_with_invariant_remedy_and_handles(self):
         async with Client(params(self.root, "read,register,evaluate", trusted=True)) as c:

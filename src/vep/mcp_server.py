@@ -15,9 +15,13 @@ import sys
 from pathlib import Path
 from typing import Any
 
-from mcp.server.mcpserver import MCPServer
-from mcp.server.mcpserver.exceptions import ResourceError
-from mcp.types import CallToolResult, TextContent, ToolAnnotations
+try:
+    from mcp.server.mcpserver import MCPServer
+    from mcp.server.mcpserver.exceptions import ResourceError
+    from mcp.types import CallToolResult, TextContent, ToolAnnotations
+    _MISSING = None
+except ImportError as _exc:  # optional extra: fail clearly at start-up, never with a bare traceback
+    _MISSING = str(_exc)
 
 from . import services, versions
 from .services import AUTHORITIES, Context, ServiceError
@@ -69,6 +73,11 @@ def build_server(ctx: Context) -> MCPServer:
     def vep_evaluate(candidate_id: str) -> dict[str, Any]:
         """Queue the protected evaluation (idempotent per candidate). Runs candidate code unisolated on this host; needs the 'evaluate' authority AND the operator's --trusted-local-execution."""
         return run(services.evaluate, candidate_id)
+
+    @srv.tool(annotations=wr_idem)
+    def vep_reuse_evidence(candidate_id: str) -> dict[str, Any]:
+        """Before evaluating: attest that signed PASS evidence from another candidate covers this EXACT source, policy, runner and environment. Executes nothing; not a certificate. Needs 'evaluate'."""
+        return run(services.reuse_evidence, candidate_id)
 
     @srv.tool(annotations=ro)
     def vep_job_status(job_id: str | None = None, candidate_id: str | None = None) -> dict[str, Any]:
@@ -143,6 +152,9 @@ def build_server(ctx: Context) -> MCPServer:
 
 
 def main(argv: list[str] | None = None) -> int:
+    if _MISSING:
+        print("vep-mcp needs the optional 'mcp' extra (pip install 'vep-protocol[mcp]'): " + _MISSING, file=sys.stderr)
+        return 2
     ap = argparse.ArgumentParser(prog="vep-mcp", description=__doc__.split("\n")[0])
     ap.add_argument("--root", default=".", help="VEP workspace (project) directory")
     ap.add_argument("--authority", default="read", help=f"comma-separated subset of {','.join(AUTHORITIES)} (default: read)")

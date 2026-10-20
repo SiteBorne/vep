@@ -132,7 +132,7 @@ function domainHash(domain, data) {
 
 const PREFIX = { Objective: "obj", Snapshot: "snap", WorkClaim: "claim", Candidate: "cand", Action: "act", Evidence: "evd",
   Certificate: "cert", Observation: "obs", TokenReceipt: "rcpt", BudgetLease: "lease", ContextManifest: "ctx",
-  ExecutionPolicy: "pol", OptimizationExperiment: "exp" };
+  ExecutionPolicy: "pol", OptimizationExperiment: "exp", DerivedAttestation: "datt" };
 const TYPE_OF_PREFIX = Object.fromEntries(Object.entries(PREFIX).map(([t, p]) => [p, t]));
 const objectId = (type, ver, fieldsMap) => `${PREFIX[type]}-${domainHash(`vep.${type}.v${ver}`, canonBytes(fieldsMap))}`;
 
@@ -152,7 +152,14 @@ const CERT_V1 = {
   candidate_id: req("id:Candidate"), objective_id: req("id:Objective"), snapshot_id: req("id:Snapshot"),
   policy_id: req("id:ExecutionPolicy"), evidence_id: req("id:Evidence"), evidence_envelope_digest: req("digest"),
   issuer_key_id: req("digest"), issued_at: req("ts") };
+const DERIVED_V1 = {
+  candidate_id: req("id:Candidate"), objective_id: req("id:Objective"), snapshot_id: req("id:Snapshot"), policy_id: req("id:ExecutionPolicy"),
+  original_evidence_id: req("id:Evidence"), original_evidence_envelope_digest: req("digest"), original_candidate_id: req("id:Candidate"),
+  original_objective_id: req("id:Objective"), reuse_mode: req("enum", { values: ["EXACT_INPUT"] }),
+  trust_level: req("enum", { values: ["TRUSTED_LOCAL", "ISOLATED_VERIFIED"] }), evaluator_id: req("str", { max: 256 }),
+  runner_digest: req("digest"), environment_digest: req("digest"), issuer_key_id: req("digest"), issued_at: req("ts") };
 const SCHEMAS = {
+  DerivedAttestation: { 1: DERIVED_V1 },
   Evidence: { 1: EVIDENCE_V1, 2: { ...EVIDENCE_V1, trust_level: req("enum", { values: TRUST }),
     evaluator_id: req("str", { max: 256 }), execution_environment: req("json"), isolation_attestation_digest: opt("digest") } },
   Certificate: { 1: CERT_V1, 2: { ...CERT_V1, trust_level: req("enum", { values: TRUST }), evaluator_id: req("str", { max: 256 }) } },
@@ -360,6 +367,51 @@ function authorizedInner(bundleText, policyText, now) {
   return { valid: true, code: null, assurance: "AUTHORIZED", trust_policy_id: policyId(policyText), issuer_key_id: certKid, trust_level: certTrust, snapshot_id: cert.f.get("snapshot_id"), certificate_id: cert.id };
 }
 
+// ---------------------------------------------------------------- derived (exact-input reuse) attestations, bundle format 3
+export function verifyDerived(bundleText, policyText, now) {
+  try { return derivedInner(bundleText, policyText, now); } catch (e) { if (e instanceof Reject) return { valid: false, code: e.code, detail: e.detail }; throw e; }
+}
+function derivedInner(bundleText, policyText, now) {
+  if (typeof now !== "string" || !TS.test(now)) throw bad("now must be a UTC timestamp supplied by the relying party");
+  let policy;
+  try { policy = JSON.parse(policyText); } catch { throw bad("not JSON"); }
+  const issuers = validatePolicy(policy);
+  let raw;
+  try { raw = JSON.parse(bundleText); } catch { throw new Reject("MALFORMED_BUNDLE"); }
+  if (!isPlain(raw) || !("bundle_version" in raw) || typeof raw.bundle_version !== "number" || !Number.isInteger(raw.bundle_version)) throw new Reject("MALFORMED_BUNDLE");
+  if (raw.bundle_version !== 3) throw new Reject("UNSUPPORTED_BUNDLE_VERSION", "derived verification needs bundle format 3");
+  if (!keysEq(raw, ["bundle_version", "attestation_envelope", "evidence_envelope"])) throw new Reject("MALFORMED_BUNDLE");
+  const keys = new Map([...issuers].map(([k, e]) => [k, e.raw]));
+  const open = (env, kind) => { try { return openEnvelope(env, keys, kind); } catch (e) { if (e instanceof Reject && e.code === "UNTRUSTED_KEY") throw new Reject("UNAUTHORIZED_ISSUER", e.detail); throw e; } };
+  const att = open(raw.attestation_envelope, "DerivedAttestation");
+  const ev = open(raw.evidence_envelope, "Evidence");
+  const attKid = raw.attestation_envelope.signatures[0].keyid, evKid = raw.evidence_envelope.signatures[0].keyid;
+  if (att.f.get("issuer_key_id") !== attKid) throw new Reject("ISSUER_KEY_MISMATCH", "attestation names a different issuer than the key that signed it");
+  keyOk(issuers.get(attKid), att.f.get("issued_at"), now);
+  keyOk(issuers.get(evKid), ev.f.get("finished_at"), now);
+  if (!policy.permitted_evidence_versions.includes(ev.ver)) throw new Reject("EVIDENCE_VERSION_NOT_PERMITTED");
+  const a = (k) => att.f.get(k), e = (k) => ev.f.get(k);
+  const evCanon = canonBytes(parseStrict(Buffer.from(JSON.stringify(raw.evidence_envelope), "utf8")));
+  if (sha256(evCanon) !== a("original_evidence_envelope_digest")) throw new Reject("EVIDENCE_DIGEST_MISMATCH");
+  if (ev.id !== a("original_evidence_id")) throw new Reject("IDENTITY_MISMATCH");
+  if (ev.ver < 2) throw new Reject("LEGACY_EVIDENCE_NOT_REUSABLE");
+  if (e("candidate_id") !== a("original_candidate_id") || e("objective_id") !== a("original_objective_id")) throw new Reject("DERIVATION_ORIGIN_MISMATCH");
+  if (a("candidate_id") === e("candidate_id")) throw new Reject("NOT_DERIVED", "the attestation names the evidence's own candidate; verify the certificate instead");
+  for (const k of ["snapshot_id", "policy_id"]) if (e(k) !== a(k)) throw new Reject("BINDING_MISMATCH", k);
+  if (e("staged_tree_snapshot_id") !== a("snapshot_id")) throw new Reject("EVIDENCE_SNAPSHOT_MISMATCH");
+  const tl = e("trust_level");
+  if (tl === "UNVERIFIED" || a("trust_level") !== tl || a("evaluator_id") !== e("evaluator_id")) throw new Reject("TRUST_BINDING_MISMATCH");
+  if (a("runner_digest") !== e("runner_digest")) throw new Reject("RUNNER_BINDING_MISMATCH");
+  if (a("environment_digest") !== sha256(canonBytes(e("execution_environment")))) throw new Reject("ENVIRONMENT_BINDING_MISMATCH");
+  if (e("verdict") !== "PASS" || e("tests_passed") < 1n || e("tests_skipped") >= e("tests_run") || e("tests_failed") !== 0n) throw new Reject("EVIDENCE_NOT_PASSING");
+  if (!evaluatorOk(e("evaluator_id"), policy.authorized_evaluators)) throw new Reject("EVALUATOR_NOT_AUTHORIZED", e("evaluator_id"));
+  if (RANK[tl] < RANK[policy.require_trust]) throw new Reject("TRUST_INSUFFICIENT");
+  for (const [f, code] of [["objective_id", "OBJECTIVE_MISMATCH"], ["policy_id", "POLICY_MISMATCH"], ["snapshot_id", "SNAPSHOT_MISMATCH"]])
+    if (f in policy.expect && policy.expect[f] !== a(f)) throw new Reject(code);
+  return { valid: true, code: null, assurance: "AUTHORIZED_DERIVED", trust_policy_id: policyId(policyText), issuer_key_id: attKid, trust_level: tl, snapshot_id: a("snapshot_id"), attestation_id: att.id,
+    derivation_chain: [att.id, ev.id, e("candidate_id")] };
+}
+
 // ---------------------------------------------------------------- vector runner
 function runVector(v) {
   if (v.op === "canonicalize") {
@@ -375,6 +427,7 @@ function runVector(v) {
   }
   if (v.op === "verify_bundle") { const r = verifyBundle(v.bundle_json); return { valid: r.valid, code: r.code }; }
   if (v.op === "verify_authorized") { const r = verifyAuthorized(v.bundle_json, v.policy_json, v.now); return { valid: r.valid, code: r.code }; }
+  if (v.op === "verify_derived") { const r = verifyDerived(v.bundle_json, v.policy_json, v.now); return { valid: r.valid, code: r.code }; }
   if (v.op === "trust_policy_id") return { id: policyId(v.policy_json) };
   throw new Error(`unknown op ${v.op}`);
 }
@@ -383,7 +436,8 @@ if (import.meta.url === `file://${process.argv[1]}`) {
   const [cmd, file] = process.argv.slice(2);
   if (cmd === "bundle") { console.log(JSON.stringify(verifyBundle(readFileSync(file)))); process.exit(0); }
   if (cmd === "authorized") { const [, , , , policyFile, now] = process.argv; console.log(JSON.stringify(verifyAuthorized(readFileSync(file, "utf8"), readFileSync(policyFile, "utf8"), now))); process.exit(0); }
-  if (cmd !== "suite") { console.error("usage: verify.mjs suite <suite.json> | bundle <bundle.json> | authorized <bundle2.json> <trust-policy.json> <now>"); process.exit(2); }
+  if (cmd === "derived") { const [, , , , policyFile, now] = process.argv; console.log(JSON.stringify(verifyDerived(readFileSync(file, "utf8"), readFileSync(policyFile, "utf8"), now))); process.exit(0); }
+  if (cmd !== "suite") { console.error("usage: verify.mjs suite <suite.json> | bundle <bundle.json> | authorized <bundle2.json> <trust-policy.json> <now> | derived <bundle3.json> <trust-policy.json> <now>"); process.exit(2); }
   // The suite file is read twice: plain JSON for structure, and raw text spans so ints/objects keep exact bytes.
   const suite = JSON.parse(readFileSync(file, "utf8"));
   const rawSuite = parseStrict(readFileSync(file)); // Map form: exact integers, for object_id fields
@@ -394,7 +448,7 @@ if (import.meta.url === `file://${process.argv[1]}`) {
     const input = { ...v };
     if (v.op === "object_id") input.fields_json = canon(rv.get("fields"));
     if (v.op === "verify_bundle") input.bundle_json = canon(rv.get("bundle")); // exact, re-serialised canonically; envelope strings are unchanged by this
-    if (v.op === "verify_authorized") { input.bundle_json = canon(rv.get("bundle")); input.policy_json = canon(rv.get("trust_policy")); }
+    if (v.op === "verify_authorized" || v.op === "verify_derived") { input.bundle_json = canon(rv.get("bundle")); input.policy_json = canon(rv.get("trust_policy")); }
     if (v.op === "trust_policy_id") input.policy_json = canon(rv.get("trust_policy"));
     const got = runVector(input);
     const ok = Object.entries(v.expect).every(([k, x]) => got[k] === x);

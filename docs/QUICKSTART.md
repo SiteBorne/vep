@@ -1,6 +1,6 @@
 # Quickstart
 
-Ten minutes, no accounts, no network after installation. Steps 9-10 use commands introduced in `0.5.0b1` (`vep run`, `vep jobs`, `vep conformance`); the published `0.4.0a1` prerelease supports steps 1-8 only. Every ```` ```bash quickstart ```` block below is executed by the release gate (`scripts/release/quickstart_runner.py`) against the *installed* wheel, so these commands are tested, not illustrative.
+Ten minutes, no accounts, no network after installation. Steps 9-12 need a build of the current source: step 9 uses commands introduced in `0.5.0b1` (`vep run`, `vep jobs`), step 10 the authorized-verification flow and steps 11-12 the Claude Code installer and exact-input reuse, which are not in the published `0.5.0b1` wheel; the published `0.4.0a1` prerelease supports steps 1-8 only. Every ```` ```bash quickstart ```` block below is executed by the release gate (`scripts/release/quickstart_runner.py`) against the *installed* wheel, so these commands are tested, not illustrative.
 
 > **Safety:** `vep evaluate` runs the project's code on your machine with your permissions and **no isolation**. Only evaluate code you already trust. See [SECURITY.md](../SECURITY.md).
 
@@ -137,6 +137,33 @@ vep conformance trust-policy --snapshot "$SNAP" --require-trust TRUSTED_LOCAL --
 vep conformance verify --bundle ../bundle.json --trust-policy ../trust-policy.json --now "$(date -u +%Y-%m-%dT%H:%M:%SZ)" --json
 if vep conformance verify --bundle ../bundle.json 2>/dev/null; then echo "UNEXPECTED: verified without a trust policy"; exit 1; else echo "refused without a trust policy, as expected"; fi
 ```
+
+## 11. Exact-input evidence reuse
+If another candidate has *exactly* the same source, policy, runner, evaluator and environment as one that already has signed PASS evidence, VEP can issue a derived attestation that names the original proof instead of running the tests again. It is **not** a certificate and the candidate's status does not change ([EVIDENCE_REUSE.md](EVIDENCE_REUSE.md)). Any difference makes it refuse.
+```bash quickstart
+cd demo
+OBJ=$(cat ../obj.txt)
+CAND3=$(vep candidate create --objective "$OBJ" --author second-agent --field candidate_id)
+vep reuse derive --candidate "$CAND3" --json
+vep reuse export --candidate "$CAND3" --out ../bundle3.json --json
+vep reuse verify --bundle ../bundle3.json --trust-policy ../trust-policy.json --now "$(date -u +%Y-%m-%dT%H:%M:%SZ)" --json
+echo "# a different tree" >> calc.py
+CAND4=$(vep candidate create --objective "$OBJ" --author third-agent --field candidate_id)
+if vep reuse derive --candidate "$CAND4"; then echo "UNEXPECTED: reused evidence for a changed tree"; exit 1; else echo "refused for a changed tree, as expected"; fi
+```
+
+## 12. Use VEP from Claude Code (MCP server, Skill, guard hook)
+`vep claude install` writes a project `.mcp.json`, the `vep` Skill, a short `CLAUDE.md` block and a guard hook, with backups and conflict detection. Authority is chosen by you here, not by the agent. See [CLAUDE_INTEGRATION.md](CLAUDE_INTEGRATION.md) and [MCP.md](MCP.md); the server needs `pip install "vep-protocol[mcp]"`.
+```bash quickstart
+mkdir ccdemo
+vep claude install --root ccdemo --dry-run --json > /dev/null
+vep claude install --root ccdemo --json > /dev/null
+vep claude status --root ccdemo --field installed
+test -f ccdemo/.mcp.json && test -f ccdemo/.claude/skills/vep/SKILL.md
+vep claude uninstall --root ccdemo --json > /dev/null
+test ! -e ccdemo/.mcp.json
+```
+Then, in a project where it is installed, start `claude`, approve the project-scoped `vep` server when asked, and ask it to verify a change with VEP. To let an agent evaluate (running candidate code **unisolated on your machine**) use `vep claude install --allow-evaluate`. For A2A see [A2A.md](A2A.md).
 
 ## Next
 * Run the test-suite: `pip install "vep-protocol[dev]" && python -m unittest discover -s tests -t .` from a source checkout.

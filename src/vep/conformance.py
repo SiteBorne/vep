@@ -188,6 +188,10 @@ def run_vector(v: dict) -> dict:
         from . import trustpolicy
         r = trustpolicy.verify_authorized(v["bundle"], v["trust_policy"], v["now"])
         return {"valid": r["valid"], "code": r["code"]}
+    if op == "verify_derived":
+        from . import trustpolicy
+        r = trustpolicy.verify_derived_authorized(v["bundle"], v["trust_policy"], v["now"])
+        return {"valid": r["valid"], "code": r["code"]}
     if op == "trust_policy_id":
         from . import trustpolicy
         return {"id": trustpolicy.policy_id(v["trust_policy"])}

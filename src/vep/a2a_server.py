@@ -25,16 +25,21 @@ from datetime import datetime, timezone
 from pathlib import Path
 from typing import Any
 
-from a2a.helpers.proto_helpers import get_data_parts, new_data_artifact, new_data_message, new_text_message
-from a2a.server.agent_execution import AgentExecutor, RequestContext
-from a2a.server.events.event_queue_v2 import EventQueue
-from a2a.server.request_handlers import DefaultRequestHandler
-from a2a.server.routes.agent_card_routes import create_agent_card_routes
-from a2a.server.routes.jsonrpc_routes import create_jsonrpc_routes
-from a2a.server.tasks import InMemoryTaskStore, TaskUpdater
-from a2a.types import a2a_pb2 as pb
-from starlette.applications import Starlette
-from starlette.responses import JSONResponse
+try:
+    from a2a.helpers.proto_helpers import get_data_parts, new_data_artifact, new_data_message, new_text_message
+    from a2a.server.agent_execution import AgentExecutor, RequestContext
+    from a2a.server.events.event_queue_v2 import EventQueue
+    from a2a.server.request_handlers import DefaultRequestHandler
+    from a2a.server.routes.agent_card_routes import create_agent_card_routes
+    from a2a.server.routes.jsonrpc_routes import create_jsonrpc_routes
+    from a2a.server.tasks import InMemoryTaskStore, TaskUpdater
+    from a2a.types import a2a_pb2 as pb
+    from starlette.applications import Starlette
+    from starlette.responses import JSONResponse
+    _MISSING = None
+except ImportError as _exc:  # optional extra: fail clearly at start-up, never with a bare traceback
+    _MISSING = str(_exc)
+    AgentExecutor = object
 
 from . import services, versions
 from .services import AUTHORITIES, Context, ServiceError
@@ -212,8 +217,15 @@ def build_app(ctx: Context, token: str, *, base_url: str = "http://127.0.0.1:842
 
 
 def main(argv: list[str] | None = None) -> int:
+    if _MISSING:
+        print("vep-a2a needs the optional 'a2a' extra (pip install 'vep-protocol[a2a]'): " + _MISSING, file=sys.stderr)
+        return 2
     import os
-    import uvicorn
+    try:
+        import uvicorn
+    except ImportError as exc:
+        print("vep-a2a needs uvicorn (pip install 'vep-protocol[a2a]'): " + str(exc), file=sys.stderr)
+        return 2
     ap = argparse.ArgumentParser(prog="vep-a2a", description=__doc__.split("\n")[0])
     ap.add_argument("--root", default="."); ap.add_argument("--authority", default="read")
     ap.add_argument("--trusted-local-execution", action="store_true")

@@ -21,6 +21,16 @@ Five version axes move independently. A change on one axis never silently change
 * **CLI.** Commands and flags from 0.3.0 keep working. Additions in 0.4.0a1: `vep version`, `vep isolation detect|verify`, `--field`, `--budget` (objective), `--require-trust`, `--image`/`--attestation-file` (evaluate). Exit codes are stable (`docs/VARIABLES.md`, "CLI and process"). `--json` output is a JSON object/array; field *addition* is not considered breaking, removal/renaming is.
 * **Python API.** Modules named in the README quickstart and `docs/ARCHITECTURE.md` are the supported surface; names starting with `_` are private. In alpha, minor releases may change module-level APIs with a CHANGELOG entry.
 
+## Intentional behavior changes after 0.5.0b1 (unreleased; the next package version is proposed as `0.6.0b1`, protocol version stays `0.3`)
+| Change | Why | Compatibility effect |
+|---|---|---|
+| `vep conformance export` writes **bundle format 2** by default; `--bundle-version 1` keeps the old self-contained format; `vep conformance verify` requires a trust policy (or `--internal-only`) | a bundle that carries its own keys and expectations cannot authorize itself (reproduced in `tests/test_trust_anchor_risk.py`) | scripts that exported and verified v1 bundles keep working with `--bundle-version 1 --internal-only`; the result is now labelled `INTERNAL_CONSISTENCY_ONLY`. Protocol semantics are unchanged |
+| New object type `DerivedAttestation` (v1, prefix `datt`), bundle format 3, `vep reuse` | exact-input evidence reuse with a verifiable derivation chain | additive; Evidence and Certificate schemas are unchanged |
+| Build actions are `bact2-` identities: timeout, isolation and declared dependencies are part of the identity; results carry `assurance` (`SINGLE_RUN` or `TWO_RUN_MATCH`) | the old identity omitted inputs that change the executed contract, and a hit was described as determinism-verified | cache entries written by 0.5.0b1 are not reusable (a miss, never a wrong hit) |
+| Conformance suites 1.1 and 1.2; CLI default suite is 1.2 | new vectors | suite 1.0 is untouched and still passes |
+| Optional extras `mcp`, `a2a`, `claude`; console scripts `vep-mcp`, `vep-a2a`; `vep claude`, `vep reuse` | MCP/A2A/Claude integration | additive; the core install has no new required dependency |
+| Database schema stays 3 (idempotency keys, A2A task maps and derived-attestation indexes use the existing `meta` table) | - | none |
+
 ## Intentional behavior changes in 0.5.0b1
 | Change | Why | Compatibility effect |
 |---|---|---|
