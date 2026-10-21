@@ -53,6 +53,24 @@ def timed(fn):
                  "peak_child_rss_mb": round(r1.ru_maxrss / (1e6 if sys.platform == "darwin" else 1024), 1)}
 
 
+def authorized_check(ws, cid, snapshot_id, work, node, repo):
+    """Verify the exported v2 bundle against a trust policy built by the relying party (here: the workspace's own key), in Python and Node."""
+    import time
+    from vep import conformance, trustpolicy
+    with ws.db.read() as c:
+        raw = bytes.fromhex(c.execute("SELECT public_key_hex FROM trusted_keys").fetchone()["public_key_hex"])
+    pol = trustpolicy.make_policy("relying-party", [trustpolicy.issuer(raw)], ["vep-local-evaluator/*"], "TRUSTED_LOCAL", snapshot_id=snapshot_id)
+    b2 = conformance.export_bundle(ws, cid, version=2)
+    now = time.strftime("%Y-%m-%dT%H:%M:%SZ", time.gmtime())
+    py = trustpolicy.verify_authorized(b2, pol, now)
+    out = {"python_assurance": py.get("assurance"), "python_valid": py["valid"], "node": "NOT_RUN (node missing)"}
+    if node:
+        (work / "bundle2.json").write_text(json.dumps(b2)); (work / "policy.json").write_text(json.dumps(pol))
+        r = subprocess.run([node, str(repo / "conformance" / "node" / "verify.mjs"), "authorized", str(work / "bundle2.json"), str(work / "policy.json"), now], capture_output=True, text=True)
+        out["node"] = json.loads(r.stdout).get("assurance") if r.returncode == 0 else "FAILED"
+    return out
+
+
 def main() -> int:
     ap = argparse.ArgumentParser()
     ap.add_argument("--repo", required=True)
@@ -163,6 +181,7 @@ def main() -> int:
                 "bundle_python_reference": conformance.verify_bundle(bundle),
                 "bundle_node_independent": node_res if node else "NOT_RUN (node missing)",
                 "certificate_id": cert_id, "certified_snapshot_id": cand_snap.id})
+            report["verification"]["authorized_verification"] = authorized_check(ws, cert_id, cand_snap.id, work, node, REPO_SRC.parent)
             # ---- invalidation: change a source file after certification
             changed_dir = work / "changed"
             shutil.copytree(cand_dir, changed_dir, ignore=shutil.ignore_patterns(".git"))
@@ -182,7 +201,7 @@ def main() -> int:
                 "static_impact": depgraph.impact(ws, graph, cand_snap.id, changed_snap.id)["affected_by_static_analysis"][:12],
                 "required_evaluation_after_change": "FULL"}
         ok = (certified and report["negative_control"]["as_expected"] and report["invalidation"]["certificate_rejected_for_changed_tree"]
-              and report["verification"]["bundle_python_reference"]["valid"])
+              and report["verification"]["bundle_python_reference"]["valid"] and report["verification"]["authorized_verification"]["python_valid"])
         report["outcome"] = "DOGFOOD_PASS" if ok else "DOGFOOD_FAIL"
         report["limits"] = ["trusted-local execution: no isolation; the evaluator ran this repository's own tests as the invoking user",
                             "tests that need tools absent from the scrubbed PATH (for example node) are skipped by the evaluator and counted as skipped",
