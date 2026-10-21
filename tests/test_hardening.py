@@ -1,5 +1,6 @@
 """Regression tests for defects found in the 0.4.0a1 security review (see docs/SECURITY_REVIEW.md)."""
 import os
+from pathlib import Path
 import socket
 import stat
 import subprocess
@@ -189,7 +190,7 @@ class StaticGuardTests(unittest.TestCase):
     def test_src_uses_no_dangerous_primitives(self):
         offenders = []
         for path in self.source_files():
-            for n, line in enumerate(open(path, encoding="utf-8"), 1):
+            for n, line in enumerate(Path(path).read_text(encoding="utf-8").splitlines(), 1):
                 code = line.split("#", 1)[0]
                 if any(tok in code for tok in self.FORBIDDEN):
                     offenders.append(f"{os.path.basename(path)}:{n}: {line.strip()}")
@@ -198,7 +199,7 @@ class StaticGuardTests(unittest.TestCase):
     def test_every_subprocess_call_uses_an_argument_list(self):
         import ast
         for path in self.source_files():
-            tree = ast.parse(open(path, encoding="utf-8").read())
+            tree = ast.parse(Path(path).read_text(encoding="utf-8"))
             for node in ast.walk(tree):
                 if isinstance(node, ast.Call) and isinstance(node.func, ast.Attribute) and node.func.attr in ("run", "Popen", "check_output", "call") \
                         and getattr(node.func.value, "id", "") == "subprocess":

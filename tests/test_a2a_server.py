@@ -50,7 +50,7 @@ class A2ABase(unittest.IsolatedAsyncioTestCase):
         self.admin = services.Context(root=self.root, authority=frozenset(services.AUTHORITIES), trusted_local_execution=True)
         self.addCleanup(shutil.rmtree, d, True)
         self.procs = []
-        self.addCleanup(lambda: [(p.kill(), p.wait()) for p in self.procs])
+        self.addCleanup(lambda: [(p.kill(), p.wait(), p.stderr.close()) for p in self.procs])
 
     def objective(self) -> str:
         return services.objective_create(self.admin, "t", "", "1.00")["objective_id"]
@@ -84,7 +84,9 @@ class A2ABase(unittest.IsolatedAsyncioTestCase):
     async def client(self, url, token=TOKEN, streaming=True):
         http = httpx.AsyncClient(headers={"Authorization": f"Bearer {token}", "A2A-Version": "1.0"}, timeout=60)
         self.addAsyncCleanup(http.aclose)
-        return await create_client(url, ClientConfig(httpx_client=http, streaming=streaming))
+        client = await create_client(url, ClientConfig(httpx_client=http, streaming=streaming))
+        self.addAsyncCleanup(client.close)
+        return client
 
     async def run_skill(self, client, payload, message_id=None, message=None):
         """Send, follow the stream to the last event, and return (task_id, final_state, artifacts)."""

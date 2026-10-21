@@ -106,6 +106,7 @@ class OllamaAdapterTests(VepTestCase):
         _Handler.reply = reply
         srv = http.server.HTTPServer(("127.0.0.1", 0), _Handler)
         threading.Thread(target=srv.serve_forever, daemon=True).start()
+        self.addCleanup(srv.server_close)
         self.addCleanup(srv.shutdown)
         return f"http://127.0.0.1:{srv.server_port}"
 
@@ -145,6 +146,7 @@ class UsageRecordingTests(VepTestCase):
                           "prompt_eval_count": 40, "eval_count": 10}
         srv = http.server.HTTPServer(("127.0.0.1", 0), _Handler)
         threading.Thread(target=srv.serve_forever, daemon=True).start()
+        self.addCleanup(srv.server_close)
         self.addCleanup(srv.shutdown)
         t = agents.AgentTask(e.objective.id, e.base.id, e.policy.id, "x", {}, timeout_s=10)
         r = agents.run_agent_task(e.ws, agents.OllamaAdapter("stub", f"http://127.0.0.1:{srv.server_port}"), t, "llm")

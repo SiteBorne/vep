@@ -13,7 +13,9 @@ import hashlib
 import json
 import os
 import shutil
+import stat
 import sys
+import tempfile
 import time
 from importlib import resources
 from pathlib import Path
@@ -44,13 +46,69 @@ def _sha(b: bytes) -> str:
     return hashlib.sha256(b).hexdigest()
 
 
+PRIVATE_FILE, PRIVATE_DIR, EXEC_PRIVATE, PUBLIC_FILE = 0o600, 0o700, 0o700, 0o644
+
+
+def _check_target(root: Path, path: Path) -> str | None:
+    """None if `path` may be written: an absent path, or a regular file (never a symlink or special file) whose directory resolves inside `root`."""
+    try:
+        st = os.lstat(path)
+    except FileNotFoundError:
+        st = None
+    except OSError as exc:
+        return f"{path.name}: {exc.__class__.__name__}"
+    if st is not None and not stat.S_ISREG(st.st_mode):
+        return f"{path.relative_to(root).as_posix()} is a symlink or not a regular file; refusing to write through it"
+    parent = os.path.realpath(path.parent)
+    if parent != str(root) and not parent.startswith(str(root) + os.sep):
+        return f"{path.relative_to(root).as_posix()} resolves outside the project; refusing"
+    return None
+
+
 def _atomic_write(path: Path, data: bytes, mode: int | None = None) -> None:
+    """Write `data` to `path` atomically. The temporary file is created exclusively with an unpredictable name and mode 0600 (so it is never
+    readable by others, whatever the umask), written completely, synced, given its final mode, then renamed over the destination. The final mode is
+    `mode` if given, else the destination's existing permission bits (never widened), else 0600. Failure leaves the old destination untouched and no temp file."""
     path.parent.mkdir(parents=True, exist_ok=True)
-    tmp = path.with_name(path.name + f".vep-tmp-{os.getpid()}")
-    tmp.write_bytes(data)
-    if mode is not None:
-        tmp.chmod(mode)
-    os.replace(tmp, path)
+    try:
+        existing = stat.S_IMODE(os.lstat(path).st_mode)
+        if not stat.S_ISREG(os.lstat(path).st_mode):
+            raise IntegrationConflict(f"{path.name} is not a regular file; refusing to write through it")
+    except FileNotFoundError:
+        existing = None
+    final = mode if mode is not None else (existing if existing is not None else PRIVATE_FILE)
+    fd, tmp = tempfile.mkstemp(dir=path.parent, prefix=f".{path.name}.vep-tmp-")  # O_EXCL, 0600
+    try:
+        with os.fdopen(fd, "wb") as fh:
+            view = memoryview(data)
+            while view:
+                n = os.write(fh.fileno(), view)
+                if n <= 0:
+                    raise OSError("short write")
+                view = view[n:]
+            fh.flush()
+            os.fsync(fh.fileno())
+            os.fchmod(fh.fileno(), final)
+        os.replace(tmp, path)
+    except BaseException:
+        try:
+            os.unlink(tmp)
+        except OSError:
+            pass
+        raise
+    try:  # make the rename durable; best effort (not supported everywhere)
+        dfd = os.open(path.parent, os.O_RDONLY)
+        try:
+            os.fsync(dfd)
+        finally:
+            os.close(dfd)
+    except OSError:
+        pass
+
+
+def _private_dir(path: Path) -> None:
+    path.mkdir(parents=True, exist_ok=True)
+    os.chmod(path, PRIVATE_DIR)
 
 
 def server_entry(authority: tuple[str, ...] = AUTHORITY_DEFAULT, trusted_local: bool = False, command: list[str] | None = None) -> dict:
@@ -95,12 +153,23 @@ def _load_manifest(root: Path) -> dict:
 
 
 def _backup(root: Path, stamp: str, rel: Path, actions: list) -> None:
+    """Copy the original (possibly confidential) file into a private backup tree: directories 0700, files 0600, symlinks never followed."""
     src = root / rel
-    if src.exists():
-        dst = root / ".claude" / "vep-backups" / stamp / rel
-        dst.parent.mkdir(parents=True, exist_ok=True)
-        shutil.copy2(src, dst)
-        actions.append({"backup": str(rel), "to": str(dst.relative_to(root))})
+    if not os.path.lexists(src):
+        return
+    if (why := _check_target(root, src)):
+        raise IntegrationConflict(why)
+    (root / ".claude").mkdir(exist_ok=True)
+    base = root / ".claude" / "vep-backups"
+    dst_dir = (base / stamp / rel).parent
+    cur = base
+    _private_dir(cur)
+    for part in dst_dir.relative_to(base).parts:
+        cur = cur / part
+        _private_dir(cur)
+    dst = dst_dir / rel.name
+    _atomic_write(dst, src.read_bytes(), PRIVATE_FILE)
+    actions.append({"backup": str(rel), "to": str(dst.relative_to(root))})
 
 
 def install(project: str | Path, *, authority: tuple[str, ...] = AUTHORITY_DEFAULT, trusted_local: bool = False, hooks: bool = True,
@@ -112,7 +181,7 @@ def install(project: str | Path, *, authority: tuple[str, ...] = AUTHORITY_DEFAU
         raise IntegrationConflict("--trusted-local-execution only makes sense together with the 'evaluate' authority")
     prev = _load_manifest(root)
     prev_files = prev.get("files", {})
-    stamp = time.strftime("%Y%m%dT%H%M%S")
+    stamp = time.strftime("%Y%m%dT%H%M%S") + f"-{os.getpid()}-{time.time_ns() % 10**6:06d}"
     plan: list[dict] = []
     conflicts: list[str] = []
     writes: list[tuple[Path, bytes, int | None]] = []
@@ -122,6 +191,8 @@ def install(project: str | Path, *, authority: tuple[str, ...] = AUTHORITY_DEFAU
         target = root / rel
         key = rel.as_posix()
         files_meta[key] = _sha(data)
+        if (why := _check_target(root, target)):
+            conflicts.append(why); return
         if not target.exists():
             plan.append({"file": key, "action": "create"}); writes.append((target, data, mode)); return
         cur = _sha(target.read_bytes())
@@ -134,12 +205,15 @@ def install(project: str | Path, *, authority: tuple[str, ...] = AUTHORITY_DEFAU
         conflicts.append(f"{key} exists and was not installed by VEP (use --force to replace it; a backup is kept)")
 
     for f in SKILL_FILES:
-        want_file(SKILL_REL / f, _asset("skill/" + f))
+        want_file(SKILL_REL / f, _asset("skill/" + f), PUBLIC_FILE)
     if hooks:
-        want_file(GUARD_REL, _asset("vep_guard.py"), 0o755)
+        want_file(GUARD_REL, _asset("vep_guard.py"), EXEC_PRIVATE)
 
     # .mcp.json
     mcp_path = root / ".mcp.json"
+    for tp in (mcp_path, root / "CLAUDE.md", root / ".claude" / "settings.json", root / MANIFEST):
+        if (why := _check_target(root, tp)):
+            raise IntegrationConflict(why)
     mcp = _read_json(mcp_path)
     entry = server_entry(authority, trusted_local, command)
     servers = mcp.setdefault("mcpServers", {})
@@ -203,18 +277,18 @@ def install(project: str | Path, *, authority: tuple[str, ...] = AUTHORITY_DEFAU
     if mcp_action not in (None, "unchanged"):
         if mcp_path.exists():
             _backup(root, stamp, Path(".mcp.json"), backups)
-        _atomic_write(mcp_path, _dump(mcp))
+        _atomic_write(mcp_path, _dump(mcp), PRIVATE_FILE)
     if claude_md and md_new != md_old:
         if md_path.exists():
             _backup(root, stamp, Path("CLAUDE.md"), backups)
-        _atomic_write(md_path, md_new.encode())
+        _atomic_write(md_path, md_new.encode(), None if md_path.exists() else PUBLIC_FILE)
     if settings_new is not None:
         if set_path.exists():
             _backup(root, stamp, Path(".claude/settings.json"), backups)
-        _atomic_write(set_path, settings_new)
+        _atomic_write(set_path, settings_new, PRIVATE_FILE)
     _atomic_write(root / MANIFEST, _dump({
         "installed_by": "vep claude install", "files": files_meta, "mcp_entry_sha": _sha(json.dumps(entry, sort_keys=True).encode()),
-        "claude_md": bool(claude_md), "hooks": bool(hooks), "authority": list(authority), "trusted_local_execution": trusted_local}))
+        "claude_md": bool(claude_md), "hooks": bool(hooks), "authority": list(authority), "trusted_local_execution": trusted_local}), PRIVATE_FILE)
     report.update(status="INSTALLED", backups=backups)
     return report
 
@@ -231,7 +305,8 @@ def status(project: str | Path) -> dict:
         servers = _read_json(root / ".mcp.json").get("mcpServers", {})
         e = servers.get(SERVER)
         comp[".mcp.json"] = "absent" if e is None else ("ok" if m and _sha(json.dumps(e, sort_keys=True).encode()) == m.get("mcp_entry_sha") else "differs-from-installed")
-        out["server_entry"] = e
+        if e is not None:  # never echo an entry VEP did not write: it may carry the user's tokens
+            out["server_entry"] = e if comp[".mcp.json"] == "ok" else {"redacted": True, "keys": sorted(e) if isinstance(e, dict) else []}
     except IntegrationConflict as exc:
         comp[".mcp.json"] = f"unreadable: {exc}"
     md = root / "CLAUDE.md"
@@ -344,6 +419,6 @@ def write_plugin(out: str | Path, *, version: str) -> dict:
     entry = server_entry(AUTHORITY_DEFAULT, False)
     files[".mcp.json"] = _dump({"mcpServers": {SERVER: entry}})
     for rel, data in files.items():
-        _atomic_write(out / rel, data, 0o755 if rel.endswith("vep_guard.py") else None)
+        _atomic_write(out / rel, data, EXEC_PRIVATE if rel.endswith("vep_guard.py") else PRIVATE_FILE if rel in (".mcp.json", "hooks/hooks.json") else PUBLIC_FILE)
     return {"plugin_dir": str(out), "files": sorted(files), "authority": list(AUTHORITY_DEFAULT),
             "note": "load with `claude --plugin-dir <dir>`; the server needs `vep-mcp` (pip install 'vep[mcp]') on PATH"}
