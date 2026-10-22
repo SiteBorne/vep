@@ -15,9 +15,17 @@ permissions:
   contents: read
 
 jobs:
-  flags-on-tests:
+  flag-correctness:
+    # every flag set gets its own full-suite run AND its own invariant run; a skipped or missing invariant run fails the gate (qualify_hosted.py)
     runs-on: ubuntu-24.04
     timeout-minutes: 60
+    strategy:
+      fail-fast: false
+      matrix:
+        flags: ["none", "staging_fast", "staging_clone", "verified_handoff", "staging_fast,staging_clone,verified_handoff"]
+    env:
+      VEP_PERF: ${{ matrix.flags }}
+      OUT: ${{ github.workspace }}/correctness-out
     steps:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
@@ -26,15 +34,27 @@ jobs:
         with:
           python-version: "3.14"
       - name: Install
-        run: python -m pip install -e ".[dev]"
-      - name: Whole suite with every performance flag ON
-        env:
-          VEP_PERF: staging_fast,staging_clone,verified_handoff
-        run: python -m pytest -q -p no:cacheprovider
-      - name: Invariant suite with every performance flag ON
-        env:
-          VEP_PERF: staging_fast,staging_clone,verified_handoff
-        run: python benchmarks/invariants/check_invariants.py --run
+        run: |
+          mkdir -p "$OUT"
+          python -m pip install -e ".[dev]"
+      - name: Whole suite under this flag set
+        id: suite
+        continue-on-error: true
+        run: python -m pytest -q -p no:cacheprovider --junitxml="$OUT/junit.xml"
+      - name: Invariant suite under this flag set
+        id: inv
+        if: always()
+        continue-on-error: true
+        run: python benchmarks/invariants/check_invariants.py --run --report "$OUT/invariants.json"
+      - name: Hosted correctness gate
+        if: always()
+        run: python benchmarks/invariants/qualify_hosted.py --junit "$OUT/junit.xml" --invariants "$OUT/invariants.json" --flags "$VEP_PERF" --out "$OUT/qualification.json"
+      - uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
+        if: always()
+        with:
+          name: correctness-${{ strategy.job-index }}
+          path: correctness-out/
+          if-no-files-found: error
 
   benchmark:
     runs-on: ubuntu-24.04
