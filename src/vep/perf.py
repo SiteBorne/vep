@@ -8,6 +8,7 @@ verified_handoff  Experiment B: one verifying read of every blob per evaluation;
 from __future__ import annotations
 
 import os
+from collections import defaultdict
 
 DEFAULTS = {"staging_fast": False, "staging_clone": False, "verified_handoff": False}
 HANDOFF_CAP_BYTES = 128 * 1024 * 1024
@@ -18,3 +19,11 @@ def enabled(name: str) -> bool:
     if env is not None:
         return name in {x.strip() for x in env.split(",")}
     return DEFAULTS[name]
+
+
+# Activation counters: did the mechanism actually run, or did the code fall back / bypass it? Process-local; benchmarks read them after a run.
+STATS: dict[str, int] = defaultdict(int)
+
+
+def count(name: str, n: int = 1) -> None:
+    STATS[name] += n

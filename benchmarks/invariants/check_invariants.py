@@ -42,15 +42,20 @@ def main() -> int:
         print("missing tests:", bad); return 1
     if "--run" not in sys.argv:
         print(f"{len(doc['invariants'])} invariants, {sum(len(i['tests']) for i in doc['invariants'])} tests named, all exist"); return 0
-    status = {}
+    status, report = {}, {"flags": __import__("os").environ.get("VEP_PERF"), "invariants": []}
     ids = node_ids()
     for inv in doc["invariants"]:
         nodes = [n for t in inv["tests"] for n in ids.get(split(t), [])]
         if len(nodes) < len(inv["tests"]):
-            print("FAIL " + inv["id"] + " test reference did not resolve to a collected test"); status[inv["id"]] = False; continue
+            print("FAIL " + inv["id"] + " test reference did not resolve to a collected test"); status[inv["id"]] = False
+            report["invariants"].append({"id": inv["id"], "name": inv["name"], "passed": False, "tests": len(nodes), "summary": "unresolved test reference"}); continue
         r = subprocess.run([sys.executable, "-m", "pytest", "-q", "-p", "no:cacheprovider", *nodes], cwd=ROOT, capture_output=True, text=True)
         status[inv["id"]] = r.returncode == 0
+        report["invariants"].append({"id": inv["id"], "name": inv["name"], "passed": r.returncode == 0, "tests": len(nodes), "summary": (r.stdout.strip().splitlines() or [""])[-1]})
         print(("PASS " if r.returncode == 0 else "FAIL ") + inv["id"] + " " + inv["name"])
+    report["all_passed"] = all(status.values()); report["executed"] = len(status)
+    if "--report" in sys.argv:
+        Path(sys.argv[sys.argv.index("--report") + 1]).write_text(json.dumps(report, indent=1) + "\n")
     return 0 if all(status.values()) else 1
 
 

@@ -44,9 +44,18 @@ def sha(p: Path) -> str:
     return hashlib.sha256(p.read_bytes()).hexdigest()
 
 
-def git_commit(rel: str) -> str:
+def is_shallow() -> bool:
+    return subprocess.run(["git", "-C", str(ROOT), "rev-parse", "--is-shallow-repository"], capture_output=True, text=True).stdout.strip() == "true"
+
+
+def git_last_commit(rel: str) -> str | None:
     r = subprocess.run(["git", "-C", str(ROOT), "log", "-1", "--format=%H", "--", rel], capture_output=True, text=True)
-    return r.stdout.strip() or "untracked"
+    return r.stdout.strip() or None
+
+
+def blob_sha_at(commit: str, rel: str) -> str | None:
+    r = subprocess.run(["git", "-C", str(ROOT), "show", f"{commit}:{rel}"], capture_output=True)
+    return hashlib.sha256(r.stdout).hexdigest() if r.returncode == 0 else None
 
 
 def cohort_of(host: dict | None) -> str:
@@ -90,7 +99,7 @@ class Builder:
 
     def source(self, rel: str, kind: str, classification: str, *, cohort="none", project=None, project_commit=None, vep_commit=None, note="", host=None) -> dict:
         p = ROOT / rel
-        s = {"path": rel, "sha256": sha(p), "bytes": p.stat().st_size, "git_commit": git_commit(rel), "kind": kind, "classification": classification,
+        s = {"path": rel, "sha256": sha(p), "bytes": p.stat().st_size, "kind": kind, "classification": classification,
              "cohort": cohort, "project": project, "project_commit": project_commit, "vep_commit": vep_commit, "host": host_view(host), "note": note, "observations": 0}
         assert classification in CLASSES, classification
         self.sources.append(s)
@@ -374,19 +383,60 @@ def render(b: Builder) -> tuple[str, str]:
     import io
     buf = io.StringIO()
     w = csv.writer(buf, lineterminator="\n")
-    w.writerow(["path", "sha256", "bytes", "git_commit", "kind", "classification", "cohort", "project", "project_commit", "vep_commit", "observations", "note"])
+    w.writerow(["path", "sha256", "bytes", "kind", "classification", "cohort", "project", "project_commit", "vep_commit", "observations", "note"])
     for s in ds["sources"]:
-        w.writerow([s["path"], s["sha256"], s["bytes"], s["git_commit"], s["kind"], s["classification"], s["cohort"], s["project"] or "", s["project_commit"] or "", s["vep_commit"] or "", s["observations"], s["note"]])
+        w.writerow([s["path"], s["sha256"], s["bytes"], s["kind"], s["classification"], s["cohort"], s["project"] or "", s["project_commit"] or "", s["vep_commit"] or "", s["observations"], s["note"]])
     return text, buf.getvalue()
 
 
+HISTORY = OUT_DIR / "source-history.json"
+
+
+def history_entries(sources: list[dict]) -> list[dict]:
+    """Commit lineage of each source file. This is provenance about the repository HISTORY, which a shallow checkout does not contain, so it is kept apart from the
+    content dataset (whose bytes must reproduce anywhere) and is verified wherever history exists: the recorded commit must contain a blob with the recorded SHA-256."""
+    prev = {}
+    if HISTORY.exists():
+        for e in json.loads(HISTORY.read_text())["entries"]:
+            prev[(e["path"], e["sha256"])] = e["last_commit"]
+    out = []
+    for s in sorted(sources, key=lambda x: x["path"]):
+        commit = prev.get((s["path"], s["sha256"]))
+        if commit is None and not is_shallow():
+            commit = git_last_commit(s["path"])
+            if commit and blob_sha_at(commit, s["path"]) != s["sha256"]:
+                commit = None  # modified or untracked since: no commit contains exactly this content yet
+        out.append({"path": s["path"], "sha256": s["sha256"], "last_commit": commit})
+    return out
+
+
+def check_history(sources: list[dict]) -> list[str]:
+    """Coverage always; blob-at-commit verification when the history is available. A null commit means the content is not in any commit yet (pending)."""
+    problems = []
+    doc = json.loads(HISTORY.read_text()) if HISTORY.exists() else {"entries": []}
+    by = {(e["path"], e["sha256"]): e for e in doc["entries"]}
+    for s in sources:
+        e = by.get((s["path"], s["sha256"]))
+        if e is None:
+            problems.append(f"{s['path']}: no history entry for sha256 {s['sha256'][:12]} (regenerate in a full clone)")
+        elif e["last_commit"] and not is_shallow() and blob_sha_at(e["last_commit"], s["path"]) != s["sha256"]:
+            problems.append(f"{s['path']}: commit {e['last_commit'][:12]} does not contain content {s['sha256'][:12]}")
+    return problems
+
+
 def main() -> int:
-    text, csv_text = render(build())
+    b = build()
+    text, csv_text = render(b)
     a, c = OUT_DIR / "master-dataset.json", OUT_DIR / "benchmark-inventory.csv"
     if "--check" in sys.argv:
-        return 0 if a.exists() and c.exists() and a.read_text() == text and c.read_text() == csv_text else 1
+        ok = a.exists() and c.exists() and a.read_text() == text and c.read_text() == csv_text
+        probs = check_history(b.sources)
+        for p in probs:
+            print("history:", p)
+        return 0 if ok and not probs else 1
     a.write_text(text); c.write_text(csv_text)
-    print(f"wrote {a.name} ({len(text)} bytes) and {c.name}")
+    HISTORY.write_text(json.dumps({"note": "commit lineage of each inventoried file; verified by extract.py --check wherever repository history exists", "entries": history_entries(b.sources)}, indent=1, sort_keys=True) + "\n")
+    print(f"wrote {a.name}, {c.name} and {HISTORY.name}")
     return 0
 
 

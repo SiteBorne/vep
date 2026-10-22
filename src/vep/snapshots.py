@@ -178,7 +178,9 @@ def verify_snapshot(ws: Workspace, snap: VEPObject, scope: BlobScope | None = No
                 raise SnapshotError(f"blob for {e['path']} missing or corrupt")
         return
     if snap.id in scope.snapshots:  # already fully verified inside this evaluation; the bytes were kept (or will be re-read and re-verified when staged)
+        perf.count("handoff_verify_passes_skipped")
         return
+    perf.count("handoff_verify_passes_run")
     for e in snap["entries"]:
         validate_rel_path(e["path"])
         try:
@@ -186,6 +188,7 @@ def verify_snapshot(ws: Workspace, snap: VEPObject, scope: BlobScope | None = No
         except (ObjectNotFound, CorruptObject):
             raise SnapshotError(f"blob for {e['path']} missing or corrupt") from None
         scope.keep(e["digest"], data)
+        perf.count("handoff_blobs_verified")
     scope.snapshots.add(snap.id)
 
 
@@ -193,7 +196,9 @@ def _blob(ws: Workspace, digest: str, scope: BlobScope | None) -> bytes:
     if scope is not None:
         data = scope.blobs.get(digest)
         if data is not None:
+            perf.count("blobs_staged_from_verified_bytes")
             return data
+    perf.count("blobs_staged_by_cas_read")
     return ws.cas.get(digest)
 
 
@@ -281,8 +286,11 @@ def _materialize_fast(ws: Workspace, snap: VEPObject, dest: Path, readonly: bool
         if clone is not None:
             src = os.fsencode(str(ws.cas._path(e["digest"])))
             if clone(src, os.fsencode(full), 0) == 0:
+                perf.count("clone_succeeded")
                 os.chmod(full, final, follow_symlinks=False)
                 continue
+            perf.count("clone_fallback_to_write")
+        perf.count("fast_files_written")
         fd = os.open(full, flags, 0o600)
         try:
             view = memoryview(_blob(ws, e["digest"], use))

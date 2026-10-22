@@ -20,10 +20,45 @@ def run(*a):
 class AnalysisTests(unittest.TestCase):
     def test_dataset_validates_and_regenerates_byte_identically(self):
         self.assertEqual(V.validate(), [])
-        if subprocess.run(["git", "-C", str(ROOT), "rev-parse", "--is-shallow-repository"], capture_output=True, text=True).stdout.strip() == "true":
-            self.skipTest("shallow clone: per-file last-commit ids cannot be reproduced (every file reports the single fetched commit)")
         self.assertEqual(run(str(A / "extract.py"), "--check").returncode, 0)
         self.assertEqual(run(str(A / "render_baseline.py"), "--check").returncode, 0)
+
+    def test_extraction_is_identical_in_a_shallow_clean_checkout(self):
+        """Regression for the hosted failure: commit-derived provenance used to make `--check` fail in GitHub's shallow checkout. The content dataset must reproduce
+        byte-for-byte from the committed files alone, and history coverage must still be verified."""
+        with tempfile.TemporaryDirectory() as t:
+            r = subprocess.run(["git", "clone", "-q", "--depth", "1", f"file://{ROOT}", t], capture_output=True, text=True)
+            self.assertEqual(r.returncode, 0, r.stderr)
+            self.assertEqual(subprocess.run(["git", "-C", t, "rev-parse", "--is-shallow-repository"], capture_output=True, text=True).stdout.strip(), "true")
+            for cmd in ("extract.py", "validate.py", "render_baseline.py"):
+                args = [sys.executable, str(Path(t) / "benchmarks/analysis" / cmd)] + (["--check"] if cmd != "validate.py" else [])
+                p = subprocess.run(args, capture_output=True, text=True, cwd=t)
+                self.assertEqual(p.returncode, 0, f"{cmd}: {p.stdout}{p.stderr}")
+
+    def test_extraction_is_independent_of_cwd_environment_and_repeats_without_touching_tracked_files(self):
+        before = subprocess.run(["git", "-C", str(ROOT), "status", "--porcelain"], capture_output=True, text=True).stdout
+        for cwd, env in ((ROOT, {}), (Path(tempfile.gettempdir()), {"TZ": "Pacific/Auckland", "LC_ALL": "C", "PYTHONHASHSEED": "7"})):
+            p = subprocess.run([sys.executable, str(A / "extract.py"), "--check"], capture_output=True, text=True, cwd=cwd, env={**__import__("os").environ, **env})
+            self.assertEqual(p.returncode, 0, p.stdout + p.stderr)
+        self.assertEqual(subprocess.run(["git", "-C", str(ROOT), "status", "--porcelain"], capture_output=True, text=True).stdout, before)
+
+    def test_history_ledger_is_verified_against_git_when_history_exists(self):
+        if subprocess.run(["git", "-C", str(ROOT), "rev-parse", "--is-shallow-repository"], capture_output=True, text=True).stdout.strip() == "true":
+            self.skipTest("history is not available in a shallow clone; the shallow test above covers coverage")
+        import extract as E
+        doc = json.loads((A / "source-history.json").read_text())
+        self.assertTrue(all(e["last_commit"] for e in doc["entries"]))
+        good = E.check_history(json.loads((A / "master-dataset.json").read_text())["sources"])
+        self.assertEqual(good, [])
+        forged = copy.deepcopy(doc)
+        forged["entries"][0]["last_commit"] = "0" * 40
+        orig = E.HISTORY
+        with tempfile.TemporaryDirectory() as t:
+            E.HISTORY = Path(t) / "h.json"; E.HISTORY.write_text(json.dumps(forged))
+            try:
+                self.assertTrue(E.check_history(json.loads((A / "master-dataset.json").read_text())["sources"]))
+            finally:
+                E.HISTORY = orig
 
     def test_every_tracked_benchmark_artifact_is_inventoried(self):
         self.assertEqual(V.tracked_benchmark_files() - {s["path"] for s in json.loads((A / "master-dataset.json").read_text())["sources"]}, set())

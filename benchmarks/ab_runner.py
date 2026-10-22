@@ -88,7 +88,9 @@ def main() -> int:
             comps[f"{arm}_vs_{base}"]["materialize_s_mean_paired_diff"] = round(statistics.mean(ms), 4)
     head = subprocess.run(["git", "-C", str(HERE.parent), "rev-parse", "HEAD"], capture_output=True, text=True).stdout.strip()
     dirty = bool(subprocess.run(["git", "-C", str(HERE.parent), "status", "--porcelain", "--untracked-files=no"], capture_output=True, text=True).stdout.strip())
-    doc = {"kind": "paired A/B of VEP_PERF flag sets", "vep_commit": head, "tree_dirty": dirty, "n_files": a.n, "arms": a.arms, "baseline": base, "change": a.change, "seed": a.seed, "valid_blocks": len(good), "warmup_blocks": len(warm),
+    activation = {arm: ({k: statistics.median([b["runs"][arm].get("activation", {}).get(k, 0) for b in good]) for k in sorted({k for b in good for k in (b["runs"][arm].get("activation") or {})})}
+                         if any(b["runs"][arm].get("activation") for b in good) else None) for arm in a.arms}
+    doc = {"kind": "paired A/B of VEP_PERF flag sets", "activation_median_per_run": activation, "vep_commit": head, "tree_dirty": dirty, "n_files": a.n, "arms": a.arms, "baseline": base, "change": a.change, "seed": a.seed, "valid_blocks": len(good), "warmup_blocks": len(warm),
            "excluded": excluded, "host": {"platform": platform.platform(), "cpus": os.cpu_count(), "python": platform.python_version(), "load_avg_1m_at_start": os.getloadavg()[0]},
            "summary": summary, "comparisons": comps, "blocks": blocks, "warmups": warm,
            "rule": {"relative": P.REL, "absolute_s": P.ABS, "note": "applied to wall and to CPU seconds; adoption also needs zero correctness exclusions and no cold-path regression"}}

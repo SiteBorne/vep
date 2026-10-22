@@ -71,7 +71,12 @@ def main() -> int:
     if not r["valid"] or r["assurance"] != "AUTHORIZED":
         print(json.dumps({"error": "bundle not authorized", "r": r})); return 3
     cpu = (c1.user - c0.user) + (c1.system - c0.system) + (c1.children_user - c0.children_user) + (c1.children_system - c0.children_system)
-    print(json.dumps({"wall_s": wall, "cpu_s": cpu, "materialize_s": T["materialize"], "evaluate_s": T["evaluate"], "certificate_id": out["certificate_id"], "snapshot_id": snap.id}))
+    try:
+        from vep import perf as _perf
+        stats = dict(_perf.STATS)
+    except ImportError:  # the pristine control tree has no perf module
+        stats = None
+    print(json.dumps({"activation": stats, "wall_s": wall, "cpu_s": cpu, "materialize_s": T["materialize"], "evaluate_s": T["evaluate"], "certificate_id": out["certificate_id"], "snapshot_id": snap.id}))
     return 0
 
 

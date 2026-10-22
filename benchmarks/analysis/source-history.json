@@ -1,0 +1,180 @@
+{
+ "entries": [
+  {
+   "last_commit": "5506e1c8b87dc21241d6bdbb7d427d5fdf9a9e81",
+   "path": "benchmarks/analysis/PLANNED_EXPERIMENTS.json",
+   "sha256": "3f81324a66a9affe130ed69cc7f7a523641a98499229cafc07e9e03bd41af598"
+  },
+  {
+   "last_commit": "aba193de65e4d255bf4d1f87a24377819cb47f70",
+   "path": "benchmarks/results.json",
+   "sha256": "c65422b3e770c718758f26c36dfe65199b08c04f2a6adce707eb5b87814f2769"
+  },
+  {
+   "last_commit": "b004370493cd913ca0296142ab78dcf1d164c94f",
+   "path": "benchmarks/results/ab-local-macos-n1000-factorial.json",
+   "sha256": "1bb9e257f74c578a7c2b9cd3b3a6622e150e7f6b5ea930f85bf91574119144e1"
+  },
+  {
+   "last_commit": "b004370493cd913ca0296142ab78dcf1d164c94f",
+   "path": "benchmarks/results/ab-local-macos-n200-factorial.json",
+   "sha256": "509fad3ee9fae748599f4a1efca798b1e286304869f88baf7ea61f6c080bef7a"
+  },
+  {
+   "last_commit": "5f4c12079ee0e0bc47197985058ddb64b1f9459b",
+   "path": "benchmarks/results/compare-more-itertools.json",
+   "sha256": "d06f1ae17d4d88594b8263e2c6425cbb32e7818557165ec1a38e581ed75946e7"
+  },
+  {
+   "last_commit": "5f4c12079ee0e0bc47197985058ddb64b1f9459b",
+   "path": "benchmarks/results/compare-pyflakes.json",
+   "sha256": "b560491971a2a03c8d3caa308698beb93cfd7bb1b821e22dce9f577ec313cb01"
+  },
+  {
+   "last_commit": "d175f909b7b206c47be18200cf19e78c3073036a",
+   "path": "benchmarks/results/controller_scaling.json",
+   "sha256": "dbd741f07281bc78d9a8af3e8a3ab7c469b8a7ab4b93927b14e34c6acde8dff2"
+  },
+  {
+   "last_commit": "521dec555b9d913c3411060f5a3ab9fdb4f46c2f",
+   "path": "benchmarks/results/hosted-linux/BENCHMARK_RESULTS_HOSTED_LINUX.md",
+   "sha256": "0cd7a80a8f180c479ca896e3851ef01f9639b3a8a3b0b7b32727c8186f0f4bf6"
+  },
+  {
+   "last_commit": "521dec555b9d913c3411060f5a3ab9fdb4f46c2f",
+   "path": "benchmarks/results/hosted-linux/environment-host.json",
+   "sha256": "8aaf37e165b2c46960a697118a237307f6c334a432ef10f372f487546d7812d7"
+  },
+  {
+   "last_commit": "521dec555b9d913c3411060f5a3ab9fdb4f46c2f",
+   "path": "benchmarks/results/hosted-linux/environment.json",
+   "sha256": "409712ef49685ddb1c5cf89b6c2194ddf5d7db968f34ae848864ad457ebbc43a"
+  },
+  {
+   "last_commit": "521dec555b9d913c3411060f5a3ab9fdb4f46c2f",
+   "path": "benchmarks/results/hosted-linux/files-changed-since-release.txt",
+   "sha256": "9b046599a63613ad362659258ec3ceb1b0daec0afb6160bfb280f4f121d05728"
+  },
+  {
+   "last_commit": "521dec555b9d913c3411060f5a3ab9fdb4f46c2f",
+   "path": "benchmarks/results/hosted-linux/harness-commit.txt",
+   "sha256": "3c72b7a9cda17fa2596f50b7c3366be3c9247f9b4948a7f826626b472f6d1596"
+  },
+  {
+   "last_commit": "521dec555b9d913c3411060f5a3ab9fdb4f46c2f",
+   "path": "benchmarks/results/hosted-linux/idle-more-itertools.json",
+   "sha256": "345119843f8aef830468dabebe959b0c4cbb0199ed1793b3382c7d2f31a72350"
+  },
+  {
+   "last_commit": "521dec555b9d913c3411060f5a3ab9fdb4f46c2f",
+   "path": "benchmarks/results/hosted-linux/idle-pyflakes.json",
+   "sha256": "33c397127974065044a4afedd088d6b62d51ed30dfbd04bf3b63e7bcdf9c7566"
+  },
+  {
+   "last_commit": "521dec555b9d913c3411060f5a3ab9fdb4f46c2f",
+   "path": "benchmarks/results/hosted-linux/log-paired-more-itertools.txt",
+   "sha256": "9f175a231bb5315887cd40a98495c5fdcf18ed7b1bc4b136235eae702fdcaffd"
+  },
+  {
+   "last_commit": "521dec555b9d913c3411060f5a3ab9fdb4f46c2f",
+   "path": "benchmarks/results/hosted-linux/log-paired-pyflakes.txt",
+   "sha256": "0ba9050953f5963a3864723e471261bda462d6ec0aebfd2e4f8aa89451fd7b03"
+  },
+  {
+   "last_commit": "521dec555b9d913c3411060f5a3ab9fdb4f46c2f",
+   "path": "benchmarks/results/hosted-linux/paired-more-itertools.json",
+   "sha256": "cd3239a30e4e50d6febd169ae59eb021818ba9e4ee94f95911cf0cd7a10f8f55"
+  },
+  {
+   "last_commit": "521dec555b9d913c3411060f5a3ab9fdb4f46c2f",
+   "path": "benchmarks/results/hosted-linux/paired-pyflakes.json",
+   "sha256": "2f6dab928352c9786698b6fa34101eca6723662b273c8ad2a7c9d1ff2098cb02"
+  },
+  {
+   "last_commit": "521dec555b9d913c3411060f5a3ab9fdb4f46c2f",
+   "path": "benchmarks/results/hosted-linux/pin-more-itertools.txt",
+   "sha256": "7916af2dc1d6051ac73ee6df7ddeb276bb61bccdcedd29a1918459db21660843"
+  },
+  {
+   "last_commit": "521dec555b9d913c3411060f5a3ab9fdb4f46c2f",
+   "path": "benchmarks/results/hosted-linux/pin-pyflakes.txt",
+   "sha256": "e80fd3849a5b739e5f4d668777fdd67d8fc745c8dba790f05dba7ce1bb444b91"
+  },
+  {
+   "last_commit": "521dec555b9d913c3411060f5a3ab9fdb4f46c2f",
+   "path": "benchmarks/results/hosted-linux/pip-freeze-evalenv.txt",
+   "sha256": "e8215fe3c8fa1e277b23642fe27ad9d448d6cf790890b555c94caad834eef644"
+  },
+  {
+   "last_commit": "521dec555b9d913c3411060f5a3ab9fdb4f46c2f",
+   "path": "benchmarks/results/hosted-linux/pip-freeze-tmenv.txt",
+   "sha256": "7f2143f2ef0ddd89e39413f5a8ad3fdf978f573d7525704c47b3559e5a8165ad"
+  },
+  {
+   "last_commit": "521dec555b9d913c3411060f5a3ab9fdb4f46c2f",
+   "path": "benchmarks/results/hosted-linux/qualification-report.json",
+   "sha256": "6bcab731fba5f112a10fc32530a2a94b92ee325ca60b8d2fcf3cf35da65dc23b"
+  },
+  {
+   "last_commit": "aa2982113d249013e5e652b1cfad8f13d4d36b88",
+   "path": "benchmarks/results/mcp-context-profile.json",
+   "sha256": "6e187c9a51897992d48e44e15a0c561c7d77c7ca006c54d137080b689badb877"
+  },
+  {
+   "last_commit": "6a58b1cbf8a7c6e36a057668ae1fafd5abdda90e",
+   "path": "benchmarks/results/paired-more-itertools.json",
+   "sha256": "92ef506493b6476bb844ccda400fcd34bee2e140572818bc380cfbc5eb109ba2"
+  },
+  {
+   "last_commit": "aa2982113d249013e5e652b1cfad8f13d4d36b88",
+   "path": "benchmarks/results/paired-object-parse-cache.json",
+   "sha256": "ed7d1c092de8715d42f26621b0bc93333d4a7beea87a4af75288aa42e0c63d75"
+  },
+  {
+   "last_commit": "6a58b1cbf8a7c6e36a057668ae1fafd5abdda90e",
+   "path": "benchmarks/results/paired-pyflakes.json",
+   "sha256": "87d78e9b09a4660df442501c64d638b17090877badbab5212d5a1369fd10bfd4"
+  },
+  {
+   "last_commit": "aa2982113d249013e5e652b1cfad8f13d4d36b88",
+   "path": "benchmarks/results/stage-profile-1000.json",
+   "sha256": "c808f8c8c2a96e0240aa489dda1445c5014074a3c9c8ea51e727ac7972669865"
+  },
+  {
+   "last_commit": "aa2982113d249013e5e652b1cfad8f13d4d36b88",
+   "path": "benchmarks/results/stage-profile-200.json",
+   "sha256": "e44ac9bd27ec3604f11c47e585d4e6f7ace7eedf4d0d785da54290b6be1c99d6"
+  },
+  {
+   "last_commit": "e6c0aa73262e313dece5ddae48f1cc226565af56",
+   "path": "docs/BENCHMARKS.md",
+   "sha256": "0ca45e5dee4f091d517790171632bb2d4ba54734f2c1908840b47707f036706f"
+  },
+  {
+   "last_commit": "521dec555b9d913c3411060f5a3ab9fdb4f46c2f",
+   "path": "docs/BENCHMARK_METHODOLOGY.md",
+   "sha256": "401e497cb9cfe52d95bfdb5e4331d5a9dd7c4c8d4c6e7f1d98845ebbeaa1e71a"
+  },
+  {
+   "last_commit": "521dec555b9d913c3411060f5a3ab9fdb4f46c2f",
+   "path": "docs/BENCHMARK_RESULTS_HOSTED_LINUX.md",
+   "sha256": "0cd7a80a8f180c479ca896e3851ef01f9639b3a8a3b0b7b32727c8186f0f4bf6"
+  },
+  {
+   "last_commit": "6a58b1cbf8a7c6e36a057668ae1fafd5abdda90e",
+   "path": "docs/BENCHMARK_RESULTS_PAIRED.md",
+   "sha256": "0a2a4efa7152e5b365285f5ec84d827f440be979d13fde0784a2bb78996fec25"
+  },
+  {
+   "last_commit": "d175f909b7b206c47be18200cf19e78c3073036a",
+   "path": "docs/CONTROLLER_SCALING.md",
+   "sha256": "0c85fd62ab25886df846d926a552f4d356d493856231fa346fa88067317fff51"
+  },
+  {
+   "last_commit": "aa2982113d249013e5e652b1cfad8f13d4d36b88",
+   "path": "docs/PERFORMANCE_REPORT.md",
+   "sha256": "98355898a5da7545275b1e6bfd3f93c282844561912da04f095d09f1d1ee8a13"
+  }
+ ],
+ "note": "commit lineage of each inventoried file; verified by extract.py --check wherever repository history exists"
+}
