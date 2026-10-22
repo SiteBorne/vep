@@ -1,0 +1,4083 @@
+{
+ "host": {
+  "cpus": 4,
+  "platform": "Linux-7.0.0-1017-azure-x86_64-with-glibc2.39",
+  "python": "3.14.8"
+ },
+ "interpreter_startup": {
+  "min_ms": 10.6,
+  "python_I_pass_median_ms": 10.8
+ },
+ "kind": "scale profile",
+ "load_avg_1m_at_start": 1.1943359375,
+ "package": "0.6.0b1",
+ "runs_per_size": 3,
+ "sizes": {
+  "100": {
+   "files": 100,
+   "raw": [
+    {
+     "callers": {
+      "cas_get": {
+       "(outside)": 3,
+       "cas_verify": 202,
+       "certify": 4,
+       "evaluate": 4,
+       "export_bundle": 2,
+       "policy_check": 106,
+       "queue_enqueue": 3,
+       "worker_run_one": 2
+      },
+      "cas_put": {
+       "(outside)": 1,
+       "certify": 2,
+       "evaluate": 5,
+       "take_snapshot": 102
+      },
+      "cas_verify": {
+       "(outside)": 101,
+       "cas_put": 101
+      },
+      "materialize": {
+       "evaluate": 1
+      },
+      "read_files": {
+       "take_snapshot": 101,
+       "tree_hash": 202
+      },
+      "tree_hash": {
+       "evaluate": 2
+      },
+      "verify_snapshot": {
+       "evaluate": 1
+      }
+     },
+     "child_cpu_s": 0.1114,
+     "child_ru_inblock": 0,
+     "child_ru_oublock": 16,
+     "counters": {
+      "(outside)": {
+       "bytes_hashed": 56915.0,
+       "opens": 20.0,
+       "sqlite_acquire_s": 1e-05,
+       "sqlite_body_s": 0.0001,
+       "sqlite_commit_s": 0.001
+      },
+      "cas_get": {
+       "bytes_hashed": 601829.0,
+       "bytes_read": 601829.0,
+       "opens": 326.0
+      },
+      "cas_put": {
+       "bytes_hashed": 192029.0,
+       "cas_hits": 101.0,
+       "cas_misses": 9.0,
+       "chmods": 9.0,
+       "mkdirs": 9.0,
+       "opens": 18.0
+      },
+      "certify": {
+       "bytes_hashed": 11058.0,
+       "bytes_read": 119.0,
+       "opens": 1.0,
+       "sqlite_acquire_s": 1e-05,
+       "sqlite_body_s": 0.00022,
+       "sqlite_commit_s": 0.00112
+      },
+      "evaluate": {
+       "bytes_hashed": 140171.0,
+       "bytes_read": 9209.0,
+       "chmods": 111.0,
+       "mkdirs": 2.0,
+       "opens": 12.0,
+       "sqlite_acquire_s": 4e-05,
+       "sqlite_body_s": 0.00085,
+       "sqlite_commit_s": 0.00327
+      },
+      "independent_verify": {
+       "bytes_hashed": 5152.0
+      },
+      "materialize": {
+       "chmods": 4.0,
+       "mkdirs": 1.0,
+       "opens": 101.0
+      },
+      "policy_check": {
+       "bytes_hashed": 59651.0,
+       "sqlite_acquire_s": 1e-05,
+       "sqlite_body_s": 0.00015,
+       "sqlite_commit_s": 0.00059
+      },
+      "queue_enqueue": {
+       "bytes_hashed": 3585.0,
+       "sqlite_acquire_s": 1e-05,
+       "sqlite_body_s": 7e-05,
+       "sqlite_commit_s": 0.0005
+      },
+      "read_files": {
+       "opens": 606.0
+      },
+      "sign": {
+       "bytes_hashed": 64.0,
+       "bytes_read": 476.0,
+       "opens": 4.0
+      },
+      "take_snapshot": {
+       "bytes_hashed": 27322.0,
+       "sqlite_acquire_s": 1e-05,
+       "sqlite_body_s": 4e-05,
+       "sqlite_commit_s": 0.00054
+      },
+      "test_subprocess": {
+       "bytes_read": 689.0,
+       "opens": 5.0
+      },
+      "tree_hash": {
+       "bytes_hashed": 369532.0
+      },
+      "verify_snapshot": {
+       "bytes_hashed": 13661.0
+      },
+      "worker_run_one": {
+       "bytes_hashed": 3308.0,
+       "sqlite_acquire_s": 1e-05,
+       "sqlite_body_s": 0.00148,
+       "sqlite_commit_s": 0.00108
+      }
+     },
+     "parent_cpu_s": 0.0809,
+     "peak_tree_rss_mb": 57.7,
+     "stages": {
+      "cas_get": {
+       "calls": 326,
+       "cpu_excl_s": 0.00757,
+       "cpu_incl_s": 0.00757,
+       "excl_s": 0.00756,
+       "incl_s": 0.00756
+      },
+      "cas_put": {
+       "calls": 110,
+       "cpu_excl_s": 0.00462,
+       "cpu_incl_s": 0.00728,
+       "excl_s": 0.10351,
+       "incl_s": 0.10615
+      },
+      "cas_verify": {
+       "calls": 202,
+       "cpu_excl_s": 0.00067,
+       "cpu_incl_s": 0.00496,
+       "excl_s": 0.00069,
+       "incl_s": 0.00495
+      },
+      "certify": {
+       "calls": 1,
+       "cpu_excl_s": 0.00605,
+       "cpu_incl_s": 0.00698,
+       "excl_s": 0.0073,
+       "incl_s": 0.00865
+      },
+      "evaluate": {
+       "calls": 1,
+       "cpu_excl_s": 0.01635,
+       "cpu_incl_s": 0.04169,
+       "excl_s": 0.01962,
+       "incl_s": 0.20588
+      },
+      "export_bundle": {
+       "calls": 1,
+       "cpu_excl_s": 0.00106,
+       "cpu_incl_s": 0.00116,
+       "excl_s": 0.00106,
+       "incl_s": 0.00116
+      },
+      "independent_verify": {
+       "calls": 1,
+       "cpu_excl_s": 0.00119,
+       "cpu_incl_s": 0.00119,
+       "excl_s": 0.00119,
+       "incl_s": 0.00119
+      },
+      "materialize": {
+       "calls": 1,
+       "cpu_excl_s": 0.00293,
+       "cpu_incl_s": 0.00293,
+       "excl_s": 0.00293,
+       "incl_s": 0.00293
+      },
+      "policy_check": {
+       "calls": 1,
+       "cpu_excl_s": 0.00929,
+       "cpu_incl_s": 0.01158,
+       "excl_s": 0.00995,
+       "incl_s": 0.01225
+      },
+      "queue_enqueue": {
+       "calls": 1,
+       "cpu_excl_s": 0.00456,
+       "cpu_incl_s": 0.00472,
+       "excl_s": 0.00488,
+       "incl_s": 0.00504
+      },
+      "read_files": {
+       "calls": 303,
+       "cpu_excl_s": 0.00479,
+       "cpu_incl_s": 0.00479,
+       "excl_s": 0.00474,
+       "incl_s": 0.00474
+      },
+      "report_validation": {
+       "calls": 1,
+       "cpu_excl_s": 0.00018,
+       "cpu_incl_s": 0.00018,
+       "excl_s": 0.00018,
+       "incl_s": 0.00018
+      },
+      "scan_tree": {
+       "calls": 3,
+       "cpu_excl_s": 0.00371,
+       "cpu_incl_s": 0.00371,
+       "excl_s": 0.00332,
+       "incl_s": 0.00332
+      },
+      "sign": {
+       "calls": 2,
+       "cpu_excl_s": 0.00078,
+       "cpu_incl_s": 0.00078,
+       "excl_s": 0.00078,
+       "incl_s": 0.00078
+      },
+      "take_snapshot": {
+       "calls": 1,
+       "cpu_excl_s": 0.00361,
+       "cpu_incl_s": 0.01181,
+       "excl_s": 0.00422,
+       "incl_s": 0.01254
+      },
+      "test_subprocess": {
+       "calls": 1,
+       "cpu_excl_s": 0.00116,
+       "cpu_incl_s": 0.00116,
+       "excl_s": 0.06376,
+       "incl_s": 0.06376
+      },
+      "tree_hash": {
+       "calls": 2,
+       "cpu_excl_s": 0.00174,
+       "cpu_incl_s": 0.0065,
+       "excl_s": 0.00174,
+       "incl_s": 0.00645
+      },
+      "verify_snapshot": {
+       "calls": 1,
+       "cpu_excl_s": 3e-05,
+       "cpu_incl_s": 3e-05,
+       "excl_s": 3e-05,
+       "incl_s": 3e-05
+      },
+      "worker_run_one": {
+       "calls": 1,
+       "cpu_excl_s": 0.00384,
+       "cpu_incl_s": 0.0526,
+       "excl_s": 0.00502,
+       "incl_s": 0.21965
+      }
+     },
+     "tree_hash_calls": 2,
+     "wall_s": 0.2504,
+     "warmup": true
+    },
+    {
+     "callers": {
+      "cas_get": {
+       "(outside)": 3,
+       "cas_verify": 202,
+       "certify": 4,
+       "evaluate": 4,
+       "export_bundle": 2,
+       "policy_check": 106,
+       "queue_enqueue": 3,
+       "worker_run_one": 2
+      },
+      "cas_put": {
+       "(outside)": 1,
+       "certify": 2,
+       "evaluate": 5,
+       "take_snapshot": 102
+      },
+      "cas_verify": {
+       "(outside)": 101,
+       "cas_put": 101
+      },
+      "materialize": {
+       "evaluate": 1
+      },
+      "read_files": {
+       "take_snapshot": 101,
+       "tree_hash": 202
+      },
+      "tree_hash": {
+       "evaluate": 2
+      },
+      "verify_snapshot": {
+       "evaluate": 1
+      }
+     },
+     "child_cpu_s": 0.0946,
+     "child_ru_inblock": 0,
+     "child_ru_oublock": 16,
+     "counters": {
+      "(outside)": {
+       "bytes_hashed": 56915.0,
+       "opens": 14.0,
+       "sqlite_acquire_s": 1e-05,
+       "sqlite_body_s": 0.0001,
+       "sqlite_commit_s": 0.00105
+      },
+      "cas_get": {
+       "bytes_hashed": 601829.0,
+       "bytes_read": 601829.0,
+       "opens": 326.0
+      },
+      "cas_put": {
+       "bytes_hashed": 192029.0,
+       "cas_hits": 101.0,
+       "cas_misses": 9.0,
+       "chmods": 9.0,
+       "mkdirs": 9.0,
+       "opens": 18.0
+      },
+      "certify": {
+       "bytes_hashed": 11058.0,
+       "bytes_read": 119.0,
+       "opens": 1.0,
+       "sqlite_acquire_s": 1e-05,
+       "sqlite_body_s": 0.00022,
+       "sqlite_commit_s": 0.00098
+      },
+      "evaluate": {
+       "bytes_hashed": 140171.0,
+       "bytes_read": 9209.0,
+       "chmods": 111.0,
+       "mkdirs": 2.0,
+       "opens": 12.0,
+       "sqlite_acquire_s": 4e-05,
+       "sqlite_body_s": 0.00092,
+       "sqlite_commit_s": 0.0032
+      },
+      "independent_verify": {
+       "bytes_hashed": 5152.0
+      },
+      "materialize": {
+       "chmods": 4.0,
+       "mkdirs": 1.0,
+       "opens": 101.0
+      },
+      "policy_check": {
+       "bytes_hashed": 59651.0,
+       "sqlite_acquire_s": 1e-05,
+       "sqlite_body_s": 0.00012,
+       "sqlite_commit_s": 0.00055
+      },
+      "queue_enqueue": {
+       "bytes_hashed": 3585.0,
+       "sqlite_acquire_s": 1e-05,
+       "sqlite_body_s": 7e-05,
+       "sqlite_commit_s": 0.00054
+      },
+      "read_files": {
+       "opens": 606.0
+      },
+      "sign": {
+       "bytes_hashed": 64.0,
+       "bytes_read": 476.0,
+       "opens": 4.0
+      },
+      "take_snapshot": {
+       "bytes_hashed": 27322.0,
+       "sqlite_acquire_s": 1e-05,
+       "sqlite_body_s": 5e-05,
+       "sqlite_commit_s": 0.00054
+      },
+      "test_subprocess": {
+       "bytes_read": 689.0,
+       "opens": 5.0
+      },
+      "tree_hash": {
+       "bytes_hashed": 369532.0
+      },
+      "verify_snapshot": {
+       "bytes_hashed": 13661.0
+      },
+      "worker_run_one": {
+       "bytes_hashed": 3308.0,
+       "sqlite_acquire_s": 2e-05,
+       "sqlite_body_s": 0.00147,
+       "sqlite_commit_s": 0.00107
+      }
+     },
+     "parent_cpu_s": 0.0791,
+     "peak_tree_rss_mb": 58.1,
+     "stages": {
+      "cas_get": {
+       "calls": 326,
+       "cpu_excl_s": 0.00742,
+       "cpu_incl_s": 0.00742,
+       "excl_s": 0.0074,
+       "incl_s": 0.0074
+      },
+      "cas_put": {
+       "calls": 110,
+       "cpu_excl_s": 0.00358,
+       "cpu_incl_s": 0.00606,
+       "excl_s": 0.03746,
+       "incl_s": 0.03993
+      },
+      "cas_verify": {
+       "calls": 202,
+       "cpu_excl_s": 0.00067,
+       "cpu_incl_s": 0.00478,
+       "excl_s": 0.00069,
+       "incl_s": 0.00478
+      },
+      "certify": {
+       "calls": 1,
+       "cpu_excl_s": 0.00602,
+       "cpu_incl_s": 0.0068,
+       "excl_s": 0.00714,
+       "incl_s": 0.00835
+      },
+      "evaluate": {
+       "calls": 1,
+       "cpu_excl_s": 0.01624,
+       "cpu_incl_s": 0.03959,
+       "excl_s": 0.01939,
+       "incl_s": 0.10815
+      },
+      "export_bundle": {
+       "calls": 1,
+       "cpu_excl_s": 0.00106,
+       "cpu_incl_s": 0.00114,
+       "excl_s": 0.00106,
+       "incl_s": 0.00114
+      },
+      "independent_verify": {
+       "calls": 1,
+       "cpu_excl_s": 0.00117,
+       "cpu_incl_s": 0.00117,
+       "excl_s": 0.00117,
+       "incl_s": 0.00117
+      },
+      "materialize": {
+       "calls": 1,
+       "cpu_excl_s": 0.00295,
+       "cpu_incl_s": 0.00295,
+       "excl_s": 0.00295,
+       "incl_s": 0.00295
+      },
+      "policy_check": {
+       "calls": 1,
+       "cpu_excl_s": 0.00887,
+       "cpu_incl_s": 0.0112,
+       "excl_s": 0.0107,
+       "incl_s": 0.01303
+      },
+      "queue_enqueue": {
+       "calls": 1,
+       "cpu_excl_s": 0.00451,
+       "cpu_incl_s": 0.00467,
+       "excl_s": 0.00493,
+       "incl_s": 0.00509
+      },
+      "read_files": {
+       "calls": 303,
+       "cpu_excl_s": 0.00475,
+       "cpu_incl_s": 0.00475,
+       "excl_s": 0.00473,
+       "incl_s": 0.00473
+      },
+      "report_validation": {
+       "calls": 1,
+       "cpu_excl_s": 0.00018,
+       "cpu_incl_s": 0.00018,
+       "excl_s": 0.00018,
+       "incl_s": 0.00018
+      },
+      "scan_tree": {
+       "calls": 3,
+       "cpu_excl_s": 0.0033,
+       "cpu_incl_s": 0.0033,
+       "excl_s": 0.00306,
+       "incl_s": 0.00306
+      },
+      "sign": {
+       "calls": 2,
+       "cpu_excl_s": 0.00059,
+       "cpu_incl_s": 0.00059,
+       "excl_s": 0.00059,
+       "incl_s": 0.00059
+      },
+      "take_snapshot": {
+       "calls": 1,
+       "cpu_excl_s": 0.00383,
+       "cpu_incl_s": 0.01205,
+       "excl_s": 0.00441,
+       "incl_s": 0.04442
+      },
+      "test_subprocess": {
+       "calls": 1,
+       "cpu_excl_s": 0.00134,
+       "cpu_incl_s": 0.00134,
+       "excl_s": 0.06375,
+       "incl_s": 0.06375
+      },
+      "tree_hash": {
+       "calls": 2,
+       "cpu_excl_s": 0.00173,
+       "cpu_incl_s": 0.00628,
+       "excl_s": 0.00174,
+       "incl_s": 0.00628
+      },
+      "verify_snapshot": {
+       "calls": 1,
+       "cpu_excl_s": 3e-05,
+       "cpu_incl_s": 3e-05,
+       "excl_s": 3e-05,
+       "incl_s": 3e-05
+      },
+      "worker_run_one": {
+       "calls": 1,
+       "cpu_excl_s": 0.00366,
+       "cpu_incl_s": 0.05016,
+       "excl_s": 0.00479,
+       "incl_s": 0.1214
+      }
+     },
+     "tree_hash_calls": 2,
+     "wall_s": 0.1845,
+     "warmup": false
+    },
+    {
+     "callers": {
+      "cas_get": {
+       "(outside)": 3,
+       "cas_verify": 202,
+       "certify": 4,
+       "evaluate": 4,
+       "export_bundle": 2,
+       "policy_check": 106,
+       "queue_enqueue": 3,
+       "worker_run_one": 2
+      },
+      "cas_put": {
+       "(outside)": 1,
+       "certify": 2,
+       "evaluate": 5,
+       "take_snapshot": 102
+      },
+      "cas_verify": {
+       "(outside)": 101,
+       "cas_put": 101
+      },
+      "materialize": {
+       "evaluate": 1
+      },
+      "read_files": {
+       "take_snapshot": 101,
+       "tree_hash": 202
+      },
+      "tree_hash": {
+       "evaluate": 2
+      },
+      "verify_snapshot": {
+       "evaluate": 1
+      }
+     },
+     "child_cpu_s": 0.0913,
+     "child_ru_inblock": 0,
+     "child_ru_oublock": 16,
+     "counters": {
+      "(outside)": {
+       "bytes_hashed": 56915.0,
+       "opens": 12.0,
+       "sqlite_acquire_s": 1e-05,
+       "sqlite_body_s": 0.0001,
+       "sqlite_commit_s": 0.001
+      },
+      "cas_get": {
+       "bytes_hashed": 601829.0,
+       "bytes_read": 601829.0,
+       "opens": 326.0
+      },
+      "cas_put": {
+       "bytes_hashed": 192029.0,
+       "cas_hits": 101.0,
+       "cas_misses": 9.0,
+       "chmods": 9.0,
+       "mkdirs": 9.0,
+       "opens": 18.0
+      },
+      "certify": {
+       "bytes_hashed": 11058.0,
+       "bytes_read": 119.0,
+       "opens": 1.0,
+       "sqlite_acquire_s": 1e-05,
+       "sqlite_body_s": 0.00022,
+       "sqlite_commit_s": 0.00101
+      },
+      "evaluate": {
+       "bytes_hashed": 140171.0,
+       "bytes_read": 9209.0,
+       "chmods": 111.0,
+       "mkdirs": 2.0,
+       "opens": 12.0,
+       "sqlite_acquire_s": 4e-05,
+       "sqlite_body_s": 0.00093,
+       "sqlite_commit_s": 0.00356
+      },
+      "independent_verify": {
+       "bytes_hashed": 5152.0
+      },
+      "materialize": {
+       "chmods": 4.0,
+       "mkdirs": 1.0,
+       "opens": 101.0
+      },
+      "policy_check": {
+       "bytes_hashed": 59651.0,
+       "sqlite_acquire_s": 2e-05,
+       "sqlite_body_s": 9e-05,
+       "sqlite_commit_s": 0.00057
+      },
+      "queue_enqueue": {
+       "bytes_hashed": 3585.0,
+       "sqlite_acquire_s": 1e-05,
+       "sqlite_body_s": 7e-05,
+       "sqlite_commit_s": 0.00053
+      },
+      "read_files": {
+       "opens": 606.0
+      },
+      "sign": {
+       "bytes_hashed": 64.0,
+       "bytes_read": 476.0,
+       "opens": 4.0
+      },
+      "take_snapshot": {
+       "bytes_hashed": 27322.0,
+       "sqlite_acquire_s": 1e-05,
+       "sqlite_body_s": 4e-05,
+       "sqlite_commit_s": 0.00049
+      },
+      "test_subprocess": {
+       "bytes_read": 689.0,
+       "opens": 5.0
+      },
+      "tree_hash": {
+       "bytes_hashed": 369532.0
+      },
+      "verify_snapshot": {
+       "bytes_hashed": 13661.0
+      },
+      "worker_run_one": {
+       "bytes_hashed": 3308.0,
+       "sqlite_acquire_s": 1e-05,
+       "sqlite_body_s": 0.00149,
+       "sqlite_commit_s": 0.00099
+      }
+     },
+     "parent_cpu_s": 0.0794,
+     "peak_tree_rss_mb": 58.3,
+     "stages": {
+      "cas_get": {
+       "calls": 326,
+       "cpu_excl_s": 0.00751,
+       "cpu_incl_s": 0.00751,
+       "excl_s": 0.0075,
+       "incl_s": 0.0075
+      },
+      "cas_put": {
+       "calls": 110,
+       "cpu_excl_s": 0.00322,
+       "cpu_incl_s": 0.00579,
+       "excl_s": 0.0054,
+       "incl_s": 0.00799
+      },
+      "cas_verify": {
+       "calls": 202,
+       "cpu_excl_s": 0.00067,
+       "cpu_incl_s": 0.00487,
+       "excl_s": 0.0007,
+       "incl_s": 0.00488
+      },
+      "certify": {
+       "calls": 1,
+       "cpu_excl_s": 0.00599,
+       "cpu_incl_s": 0.0068,
+       "excl_s": 0.00743,
+       "incl_s": 0.00871
+      },
+      "evaluate": {
+       "calls": 1,
+       "cpu_excl_s": 0.01752,
+       "cpu_incl_s": 0.04074,
+       "excl_s": 0.0224,
+       "incl_s": 0.11002
+      },
+      "export_bundle": {
+       "calls": 1,
+       "cpu_excl_s": 0.00102,
+       "cpu_incl_s": 0.00115,
+       "excl_s": 0.00102,
+       "incl_s": 0.00115
+      },
+      "independent_verify": {
+       "calls": 1,
+       "cpu_excl_s": 0.00115,
+       "cpu_incl_s": 0.00115,
+       "excl_s": 0.00115,
+       "incl_s": 0.00115
+      },
+      "materialize": {
+       "calls": 1,
+       "cpu_excl_s": 0.00316,
+       "cpu_incl_s": 0.00316,
+       "excl_s": 0.0031,
+       "incl_s": 0.0031
+      },
+      "policy_check": {
+       "calls": 1,
+       "cpu_excl_s": 0.00854,
+       "cpu_incl_s": 0.01083,
+       "excl_s": 0.00941,
+       "incl_s": 0.0117
+      },
+      "queue_enqueue": {
+       "calls": 1,
+       "cpu_excl_s": 0.0045,
+       "cpu_incl_s": 0.00466,
+       "excl_s": 0.00486,
+       "incl_s": 0.00502
+      },
+      "read_files": {
+       "calls": 303,
+       "cpu_excl_s": 0.00473,
+       "cpu_incl_s": 0.00473,
+       "excl_s": 0.0047,
+       "incl_s": 0.0047
+      },
+      "report_validation": {
+       "calls": 1,
+       "cpu_excl_s": 0.00017,
+       "cpu_incl_s": 0.00017,
+       "excl_s": 0.00017,
+       "incl_s": 0.00017
+      },
+      "scan_tree": {
+       "calls": 3,
+       "cpu_excl_s": 0.00333,
+       "cpu_incl_s": 0.00333,
+       "excl_s": 0.00309,
+       "incl_s": 0.00309
+      },
+      "sign": {
+       "calls": 2,
+       "cpu_excl_s": 0.00075,
+       "cpu_incl_s": 0.00075,
+       "excl_s": 0.00075,
+       "incl_s": 0.00075
+      },
+      "take_snapshot": {
+       "calls": 1,
+       "cpu_excl_s": 0.00358,
+       "cpu_incl_s": 0.01157,
+       "excl_s": 0.00415,
+       "incl_s": 0.01235
+      },
+      "test_subprocess": {
+       "calls": 1,
+       "cpu_excl_s": 0.00121,
+       "cpu_incl_s": 0.00121,
+       "excl_s": 0.06376,
+       "incl_s": 0.06376
+      },
+      "tree_hash": {
+       "calls": 2,
+       "cpu_excl_s": 0.00171,
+       "cpu_incl_s": 0.00633,
+       "excl_s": 0.00173,
+       "incl_s": 0.00633
+      },
+      "verify_snapshot": {
+       "calls": 1,
+       "cpu_excl_s": 3e-05,
+       "cpu_incl_s": 3e-05,
+       "excl_s": 3e-05,
+       "incl_s": 3e-05
+      },
+      "worker_run_one": {
+       "calls": 1,
+       "cpu_excl_s": 0.00371,
+       "cpu_incl_s": 0.05136,
+       "excl_s": 0.00516,
+       "incl_s": 0.124
+      }
+     },
+     "tree_hash_calls": 2,
+     "wall_s": 0.1544,
+     "warmup": false
+    },
+    {
+     "callers": {
+      "cas_get": {
+       "(outside)": 3,
+       "cas_verify": 202,
+       "certify": 4,
+       "evaluate": 4,
+       "export_bundle": 2,
+       "policy_check": 106,
+       "queue_enqueue": 3,
+       "worker_run_one": 2
+      },
+      "cas_put": {
+       "(outside)": 1,
+       "certify": 2,
+       "evaluate": 5,
+       "take_snapshot": 102
+      },
+      "cas_verify": {
+       "(outside)": 101,
+       "cas_put": 101
+      },
+      "materialize": {
+       "evaluate": 1
+      },
+      "read_files": {
+       "take_snapshot": 101,
+       "tree_hash": 202
+      },
+      "tree_hash": {
+       "evaluate": 2
+      },
+      "verify_snapshot": {
+       "evaluate": 1
+      }
+     },
+     "child_cpu_s": 0.1015,
+     "child_ru_inblock": 0,
+     "child_ru_oublock": 16,
+     "counters": {
+      "(outside)": {
+       "bytes_hashed": 56915.0,
+       "opens": 16.0,
+       "sqlite_acquire_s": 1e-05,
+       "sqlite_body_s": 9e-05,
+       "sqlite_commit_s": 0.00104
+      },
+      "cas_get": {
+       "bytes_hashed": 601829.0,
+       "bytes_read": 601829.0,
+       "opens": 326.0
+      },
+      "cas_put": {
+       "bytes_hashed": 192029.0,
+       "cas_hits": 101.0,
+       "cas_misses": 9.0,
+       "chmods": 9.0,
+       "mkdirs": 9.0,
+       "opens": 18.0
+      },
+      "certify": {
+       "bytes_hashed": 11058.0,
+       "bytes_read": 119.0,
+       "opens": 1.0,
+       "sqlite_acquire_s": 1e-05,
+       "sqlite_body_s": 0.00022,
+       "sqlite_commit_s": 0.00106
+      },
+      "evaluate": {
+       "bytes_hashed": 140171.0,
+       "bytes_read": 9209.0,
+       "chmods": 111.0,
+       "mkdirs": 2.0,
+       "opens": 12.0,
+       "sqlite_acquire_s": 4e-05,
+       "sqlite_body_s": 0.00083,
+       "sqlite_commit_s": 0.05537
+      },
+      "independent_verify": {
+       "bytes_hashed": 5152.0
+      },
+      "materialize": {
+       "chmods": 4.0,
+       "mkdirs": 1.0,
+       "opens": 101.0
+      },
+      "policy_check": {
+       "bytes_hashed": 59651.0,
+       "sqlite_acquire_s": 1e-05,
+       "sqlite_body_s": 9e-05,
+       "sqlite_commit_s": 0.00065
+      },
+      "queue_enqueue": {
+       "bytes_hashed": 3585.0,
+       "sqlite_acquire_s": 1e-05,
+       "sqlite_body_s": 7e-05,
+       "sqlite_commit_s": 0.00056
+      },
+      "read_files": {
+       "opens": 606.0
+      },
+      "sign": {
+       "bytes_hashed": 64.0,
+       "bytes_read": 476.0,
+       "opens": 4.0
+      },
+      "take_snapshot": {
+       "bytes_hashed": 27322.0,
+       "sqlite_acquire_s": 1e-05,
+       "sqlite_body_s": 4e-05,
+       "sqlite_commit_s": 0.00053
+      },
+      "test_subprocess": {
+       "bytes_read": 689.0,
+       "opens": 5.0
+      },
+      "tree_hash": {
+       "bytes_hashed": 369532.0
+      },
+      "verify_snapshot": {
+       "bytes_hashed": 13661.0
+      },
+      "worker_run_one": {
+       "bytes_hashed": 3308.0,
+       "sqlite_acquire_s": 1e-05,
+       "sqlite_body_s": 0.00148,
+       "sqlite_commit_s": 0.00113
+      }
+     },
+     "parent_cpu_s": 0.0807,
+     "peak_tree_rss_mb": 58.4,
+     "stages": {
+      "cas_get": {
+       "calls": 326,
+       "cpu_excl_s": 0.00752,
+       "cpu_incl_s": 0.00752,
+       "excl_s": 0.00747,
+       "incl_s": 0.00747
+      },
+      "cas_put": {
+       "calls": 110,
+       "cpu_excl_s": 0.00325,
+       "cpu_incl_s": 0.00581,
+       "excl_s": 0.00544,
+       "incl_s": 0.00797
+      },
+      "cas_verify": {
+       "calls": 202,
+       "cpu_excl_s": 0.00066,
+       "cpu_incl_s": 0.00483,
+       "excl_s": 0.00069,
+       "incl_s": 0.00481
+      },
+      "certify": {
+       "calls": 1,
+       "cpu_excl_s": 0.00647,
+       "cpu_incl_s": 0.00728,
+       "excl_s": 0.00744,
+       "incl_s": 0.00874
+      },
+      "evaluate": {
+       "calls": 1,
+       "cpu_excl_s": 0.01743,
+       "cpu_incl_s": 0.04106,
+       "excl_s": 0.07197,
+       "incl_s": 0.15976
+      },
+      "export_bundle": {
+       "calls": 1,
+       "cpu_excl_s": 0.00106,
+       "cpu_incl_s": 0.00115,
+       "excl_s": 0.00106,
+       "incl_s": 0.00115
+      },
+      "independent_verify": {
+       "calls": 1,
+       "cpu_excl_s": 0.00116,
+       "cpu_incl_s": 0.00116,
+       "excl_s": 0.00116,
+       "incl_s": 0.00116
+      },
+      "materialize": {
+       "calls": 1,
+       "cpu_excl_s": 0.00301,
+       "cpu_incl_s": 0.00301,
+       "excl_s": 0.00301,
+       "incl_s": 0.00301
+      },
+      "policy_check": {
+       "calls": 1,
+       "cpu_excl_s": 0.00855,
+       "cpu_incl_s": 0.01082,
+       "excl_s": 0.00927,
+       "incl_s": 0.01154
+      },
+      "queue_enqueue": {
+       "calls": 1,
+       "cpu_excl_s": 0.00456,
+       "cpu_incl_s": 0.00475,
+       "excl_s": 0.00485,
+       "incl_s": 0.00503
+      },
+      "read_files": {
+       "calls": 303,
+       "cpu_excl_s": 0.00508,
+       "cpu_incl_s": 0.00508,
+       "excl_s": 0.00501,
+       "incl_s": 0.00501
+      },
+      "report_validation": {
+       "calls": 1,
+       "cpu_excl_s": 0.00017,
+       "cpu_incl_s": 0.00017,
+       "excl_s": 0.00017,
+       "incl_s": 0.00017
+      },
+      "scan_tree": {
+       "calls": 3,
+       "cpu_excl_s": 0.00355,
+       "cpu_incl_s": 0.00355,
+       "excl_s": 0.00313,
+       "incl_s": 0.00313
+      },
+      "sign": {
+       "calls": 2,
+       "cpu_excl_s": 0.00098,
+       "cpu_incl_s": 0.00098,
+       "excl_s": 0.00083,
+       "incl_s": 0.00083
+      },
+      "take_snapshot": {
+       "calls": 1,
+       "cpu_excl_s": 0.00356,
+       "cpu_incl_s": 0.01182,
+       "excl_s": 0.00423,
+       "incl_s": 0.01249
+      },
+      "test_subprocess": {
+       "calls": 1,
+       "cpu_excl_s": 0.00116,
+       "cpu_incl_s": 0.00116,
+       "excl_s": 0.0638,
+       "incl_s": 0.0638
+      },
+      "tree_hash": {
+       "calls": 2,
+       "cpu_excl_s": 0.00177,
+       "cpu_incl_s": 0.00659,
+       "excl_s": 0.00177,
+       "incl_s": 0.00653
+      },
+      "verify_snapshot": {
+       "calls": 1,
+       "cpu_excl_s": 3e-05,
+       "cpu_incl_s": 3e-05,
+       "excl_s": 3e-05,
+       "incl_s": 3e-05
+      },
+      "worker_run_one": {
+       "calls": 1,
+       "cpu_excl_s": 0.00388,
+       "cpu_incl_s": 0.05234,
+       "excl_s": 0.00608,
+       "incl_s": 0.1747
+      }
+     },
+     "tree_hash_calls": 2,
+     "wall_s": 0.2054,
+     "warmup": false
+    }
+   ],
+   "summary": {
+    "callers_of_io_stages_run_median": {
+     "cas_get": {
+      "(outside)": 3,
+      "cas_verify": 202,
+      "certify": 4,
+      "evaluate": 4,
+      "export_bundle": 2,
+      "policy_check": 106,
+      "queue_enqueue": 3,
+      "worker_run_one": 2
+     },
+     "cas_put": {
+      "(outside)": 1,
+      "certify": 2,
+      "evaluate": 5,
+      "take_snapshot": 102
+     },
+     "cas_verify": {
+      "(outside)": 101,
+      "cas_put": 101
+     },
+     "materialize": {
+      "evaluate": 1
+     },
+     "read_files": {
+      "take_snapshot": 101,
+      "tree_hash": 202
+     },
+     "tree_hash": {
+      "evaluate": 2
+     },
+     "verify_snapshot": {
+      "evaluate": 1
+     }
+    },
+    "child_cpu_s_median": 0.0946,
+    "counters_median_by_stage": {
+     "(outside)": {
+      "bytes_hashed": 56915.0,
+      "opens": 14.0,
+      "sqlite_acquire_s": 1e-05,
+      "sqlite_body_s": 0.0001,
+      "sqlite_commit_s": 0.00104
+     },
+     "cas_get": {
+      "bytes_hashed": 601829.0,
+      "bytes_read": 601829.0,
+      "opens": 326.0
+     },
+     "cas_put": {
+      "bytes_hashed": 192029.0,
+      "cas_hits": 101.0,
+      "cas_misses": 9.0,
+      "chmods": 9.0,
+      "mkdirs": 9.0,
+      "opens": 18.0
+     },
+     "certify": {
+      "bytes_hashed": 11058.0,
+      "bytes_read": 119.0,
+      "opens": 1.0,
+      "sqlite_acquire_s": 1e-05,
+      "sqlite_body_s": 0.00022,
+      "sqlite_commit_s": 0.00101
+     },
+     "evaluate": {
+      "bytes_hashed": 140171.0,
+      "bytes_read": 9209.0,
+      "chmods": 111.0,
+      "mkdirs": 2.0,
+      "opens": 12.0,
+      "sqlite_acquire_s": 4e-05,
+      "sqlite_body_s": 0.00092,
+      "sqlite_commit_s": 0.00356
+     },
+     "independent_verify": {
+      "bytes_hashed": 5152.0
+     },
+     "materialize": {
+      "chmods": 4.0,
+      "mkdirs": 1.0,
+      "opens": 101.0
+     },
+     "policy_check": {
+      "bytes_hashed": 59651.0,
+      "sqlite_acquire_s": 1e-05,
+      "sqlite_body_s": 9e-05,
+      "sqlite_commit_s": 0.00057
+     },
+     "queue_enqueue": {
+      "bytes_hashed": 3585.0,
+      "sqlite_acquire_s": 1e-05,
+      "sqlite_body_s": 7e-05,
+      "sqlite_commit_s": 0.00054
+     },
+     "read_files": {
+      "opens": 606.0
+     },
+     "sign": {
+      "bytes_hashed": 64.0,
+      "bytes_read": 476.0,
+      "opens": 4.0
+     },
+     "take_snapshot": {
+      "bytes_hashed": 27322.0,
+      "sqlite_acquire_s": 1e-05,
+      "sqlite_body_s": 4e-05,
+      "sqlite_commit_s": 0.00053
+     },
+     "test_subprocess": {
+      "bytes_read": 689.0,
+      "opens": 5.0
+     },
+     "tree_hash": {
+      "bytes_hashed": 369532.0
+     },
+     "verify_snapshot": {
+      "bytes_hashed": 13661.0
+     },
+     "worker_run_one": {
+      "bytes_hashed": 3308.0,
+      "sqlite_acquire_s": 1e-05,
+      "sqlite_body_s": 0.00148,
+      "sqlite_commit_s": 0.00107
+     }
+    },
+    "parent_cpu_s_median": 0.0794,
+    "peak_tree_rss_mb_median": 58.3,
+    "stages_median": {
+     "cas_get": {
+      "calls": 326,
+      "cpu_excl_s": 0.00751,
+      "cpu_incl_s": 0.00751,
+      "excl_s": 0.00747,
+      "incl_s": 0.00747
+     },
+     "cas_put": {
+      "calls": 110,
+      "cpu_excl_s": 0.00325,
+      "cpu_incl_s": 0.00581,
+      "excl_s": 0.00544,
+      "incl_s": 0.00799
+     },
+     "cas_verify": {
+      "calls": 202,
+      "cpu_excl_s": 0.00067,
+      "cpu_incl_s": 0.00483,
+      "excl_s": 0.00069,
+      "incl_s": 0.00481
+     },
+     "certify": {
+      "calls": 1,
+      "cpu_excl_s": 0.00602,
+      "cpu_incl_s": 0.0068,
+      "excl_s": 0.00743,
+      "incl_s": 0.00871
+     },
+     "evaluate": {
+      "calls": 1,
+      "cpu_excl_s": 0.01743,
+      "cpu_incl_s": 0.04074,
+      "excl_s": 0.0224,
+      "incl_s": 0.11002
+     },
+     "export_bundle": {
+      "calls": 1,
+      "cpu_excl_s": 0.00106,
+      "cpu_incl_s": 0.00115,
+      "excl_s": 0.00106,
+      "incl_s": 0.00115
+     },
+     "independent_verify": {
+      "calls": 1,
+      "cpu_excl_s": 0.00116,
+      "cpu_incl_s": 0.00116,
+      "excl_s": 0.00116,
+      "incl_s": 0.00116
+     },
+     "materialize": {
+      "calls": 1,
+      "cpu_excl_s": 0.00301,
+      "cpu_incl_s": 0.00301,
+      "excl_s": 0.00301,
+      "incl_s": 0.00301
+     },
+     "policy_check": {
+      "calls": 1,
+      "cpu_excl_s": 0.00855,
+      "cpu_incl_s": 0.01083,
+      "excl_s": 0.00941,
+      "incl_s": 0.0117
+     },
+     "queue_enqueue": {
+      "calls": 1,
+      "cpu_excl_s": 0.00451,
+      "cpu_incl_s": 0.00467,
+      "excl_s": 0.00486,
+      "incl_s": 0.00503
+     },
+     "read_files": {
+      "calls": 303,
+      "cpu_excl_s": 0.00475,
+      "cpu_incl_s": 0.00475,
+      "excl_s": 0.00473,
+      "incl_s": 0.00473
+     },
+     "report_validation": {
+      "calls": 1,
+      "cpu_excl_s": 0.00017,
+      "cpu_incl_s": 0.00017,
+      "excl_s": 0.00017,
+      "incl_s": 0.00017
+     },
+     "scan_tree": {
+      "calls": 3,
+      "cpu_excl_s": 0.00333,
+      "cpu_incl_s": 0.00333,
+      "excl_s": 0.00309,
+      "incl_s": 0.00309
+     },
+     "sign": {
+      "calls": 2,
+      "cpu_excl_s": 0.00075,
+      "cpu_incl_s": 0.00075,
+      "excl_s": 0.00075,
+      "incl_s": 0.00075
+     },
+     "take_snapshot": {
+      "calls": 1,
+      "cpu_excl_s": 0.00358,
+      "cpu_incl_s": 0.01182,
+      "excl_s": 0.00423,
+      "incl_s": 0.01249
+     },
+     "test_subprocess": {
+      "calls": 1,
+      "cpu_excl_s": 0.00121,
+      "cpu_incl_s": 0.00121,
+      "excl_s": 0.06376,
+      "incl_s": 0.06376
+     },
+     "tree_hash": {
+      "calls": 2,
+      "cpu_excl_s": 0.00173,
+      "cpu_incl_s": 0.00633,
+      "excl_s": 0.00174,
+      "incl_s": 0.00633
+     },
+     "verify_snapshot": {
+      "calls": 1,
+      "cpu_excl_s": 3e-05,
+      "cpu_incl_s": 3e-05,
+      "excl_s": 3e-05,
+      "incl_s": 3e-05
+     },
+     "worker_run_one": {
+      "calls": 1,
+      "cpu_excl_s": 0.00371,
+      "cpu_incl_s": 0.05136,
+      "excl_s": 0.00516,
+      "incl_s": 0.124
+     }
+    },
+    "wall_s": {
+     "max": 0.2054,
+     "median": 0.1845,
+     "min": 0.1544
+    }
+   }
+  },
+  "1000": {
+   "files": 1000,
+   "raw": [
+    {
+     "callers": {
+      "cas_get": {
+       "(outside)": 3,
+       "cas_verify": 2002,
+       "certify": 4,
+       "evaluate": 4,
+       "export_bundle": 2,
+       "policy_check": 1006,
+       "queue_enqueue": 3,
+       "worker_run_one": 2
+      },
+      "cas_put": {
+       "(outside)": 1,
+       "certify": 2,
+       "evaluate": 5,
+       "take_snapshot": 1002
+      },
+      "cas_verify": {
+       "(outside)": 1001,
+       "cas_put": 1001
+      },
+      "materialize": {
+       "evaluate": 1
+      },
+      "read_files": {
+       "take_snapshot": 1001,
+       "tree_hash": 2002
+      },
+      "tree_hash": {
+       "evaluate": 2
+      },
+      "verify_snapshot": {
+       "evaluate": 1
+      }
+     },
+     "child_cpu_s": 0.2448,
+     "child_ru_inblock": 0,
+     "child_ru_oublock": 24,
+     "counters": {
+      "(outside)": {
+       "bytes_hashed": 545391.0,
+       "opens": 42.0,
+       "sqlite_acquire_s": 1e-05,
+       "sqlite_body_s": 0.0001,
+       "sqlite_commit_s": 0.00105
+      },
+      "cas_get": {
+       "bytes_hashed": 5974049.0,
+       "bytes_read": 5974049.0,
+       "opens": 3026.0
+      },
+      "cas_put": {
+       "bytes_hashed": 1880595.0,
+       "cas_hits": 1001.0,
+       "cas_misses": 9.0,
+       "chmods": 9.0,
+       "mkdirs": 9.0,
+       "opens": 18.0
+      },
+      "certify": {
+       "bytes_hashed": 26827.0,
+       "bytes_read": 119.0,
+       "opens": 1.0,
+       "sqlite_acquire_s": 1e-05,
+       "sqlite_body_s": 0.00022,
+       "sqlite_commit_s": 0.00113
+      },
+      "evaluate": {
+       "bytes_hashed": 1183521.0,
+       "bytes_read": 12731.0,
+       "chmods": 1018.0,
+       "mkdirs": 2.0,
+       "opens": 19.0,
+       "sqlite_acquire_s": 4e-05,
+       "sqlite_body_s": 0.00086,
+       "sqlite_commit_s": 0.00301
+      },
+      "independent_verify": {
+       "bytes_hashed": 5159.0
+      },
+      "materialize": {
+       "chmods": 11.0,
+       "mkdirs": 1.0,
+       "opens": 1001.0
+      },
+      "policy_check": {
+       "bytes_hashed": 579647.0,
+       "sqlite_acquire_s": 1e-05,
+       "sqlite_body_s": 0.00016,
+       "sqlite_commit_s": 0.00059
+      },
+      "queue_enqueue": {
+       "bytes_hashed": 19345.0,
+       "sqlite_acquire_s": 1e-05,
+       "sqlite_body_s": 7e-05,
+       "sqlite_commit_s": 0.00059
+      },
+      "read_files": {
+       "opens": 6006.0
+      },
+      "sign": {
+       "bytes_hashed": 64.0,
+       "bytes_read": 476.0,
+       "opens": 4.0
+      },
+      "take_snapshot": {
+       "bytes_hashed": 271560.0,
+       "sqlite_acquire_s": 1e-05,
+       "sqlite_body_s": 0.00014,
+       "sqlite_commit_s": 0.00052
+      },
+      "test_subprocess": {
+       "bytes_read": 6190.0,
+       "opens": 5.0
+      },
+      "tree_hash": {
+       "bytes_hashed": 3735648.0
+      },
+      "verify_snapshot": {
+       "bytes_hashed": 135780.0
+      },
+      "worker_run_one": {
+       "bytes_hashed": 19068.0,
+       "sqlite_acquire_s": 1e-05,
+       "sqlite_body_s": 0.00319,
+       "sqlite_commit_s": 0.00104
+      }
+     },
+     "parent_cpu_s": 0.4004,
+     "peak_tree_rss_mb": 64.3,
+     "stages": {
+      "cas_get": {
+       "calls": 3026,
+       "cpu_excl_s": 0.06426,
+       "cpu_incl_s": 0.06426,
+       "excl_s": 0.06381,
+       "incl_s": 0.06381
+      },
+      "cas_put": {
+       "calls": 1010,
+       "cpu_excl_s": 0.01684,
+       "cpu_incl_s": 0.04154,
+       "excl_s": 0.02173,
+       "incl_s": 0.04663
+      },
+      "cas_verify": {
+       "calls": 2002,
+       "cpu_excl_s": 0.00666,
+       "cpu_incl_s": 0.04832,
+       "excl_s": 0.00683,
+       "incl_s": 0.04833
+      },
+      "certify": {
+       "calls": 1,
+       "cpu_excl_s": 0.00796,
+       "cpu_incl_s": 0.00879,
+       "excl_s": 0.00976,
+       "incl_s": 0.01149
+      },
+      "evaluate": {
+       "calls": 1,
+       "cpu_excl_s": 0.05259,
+       "cpu_incl_s": 0.22195,
+       "excl_s": 0.0554,
+       "incl_s": 0.38739
+      },
+      "export_bundle": {
+       "calls": 1,
+       "cpu_excl_s": 0.00136,
+       "cpu_incl_s": 0.00146,
+       "excl_s": 0.00115,
+       "incl_s": 0.00125
+      },
+      "independent_verify": {
+       "calls": 1,
+       "cpu_excl_s": 0.00114,
+       "cpu_incl_s": 0.00114,
+       "excl_s": 0.00114,
+       "incl_s": 0.00114
+      },
+      "materialize": {
+       "calls": 1,
+       "cpu_excl_s": 0.03015,
+       "cpu_incl_s": 0.03015,
+       "excl_s": 0.02996,
+       "incl_s": 0.02996
+      },
+      "policy_check": {
+       "calls": 1,
+       "cpu_excl_s": 0.04693,
+       "cpu_incl_s": 0.06798,
+       "excl_s": 0.04731,
+       "incl_s": 0.06816
+      },
+      "queue_enqueue": {
+       "calls": 1,
+       "cpu_excl_s": 0.00611,
+       "cpu_incl_s": 0.00629,
+       "excl_s": 0.00679,
+       "incl_s": 0.00697
+      },
+      "read_files": {
+       "calls": 3003,
+       "cpu_excl_s": 0.04658,
+       "cpu_incl_s": 0.04658,
+       "excl_s": 0.0459,
+       "incl_s": 0.0459
+      },
+      "report_validation": {
+       "calls": 1,
+       "cpu_excl_s": 0.00495,
+       "cpu_incl_s": 0.00495,
+       "excl_s": 0.00493,
+       "incl_s": 0.00493
+      },
+      "scan_tree": {
+       "calls": 3,
+       "cpu_excl_s": 0.02668,
+       "cpu_incl_s": 0.02668,
+       "excl_s": 0.02607,
+       "incl_s": 0.02607
+      },
+      "sign": {
+       "calls": 2,
+       "cpu_excl_s": 0.00061,
+       "cpu_incl_s": 0.00061,
+       "excl_s": 0.00061,
+       "incl_s": 0.00061
+      },
+      "take_snapshot": {
+       "calls": 1,
+       "cpu_excl_s": 0.02839,
+       "cpu_incl_s": 0.09694,
+       "excl_s": 0.02874,
+       "incl_s": 0.09745
+      },
+      "test_subprocess": {
+       "calls": 1,
+       "cpu_excl_s": 0.00393,
+       "cpu_incl_s": 0.00393,
+       "excl_s": 0.16411,
+       "incl_s": 0.16411
+      },
+      "tree_hash": {
+       "calls": 2,
+       "cpu_excl_s": 0.01583,
+       "cpu_incl_s": 0.06056,
+       "excl_s": 0.0158,
+       "incl_s": 0.0601
+      },
+      "verify_snapshot": {
+       "calls": 1,
+       "cpu_excl_s": 0.0001,
+       "cpu_incl_s": 0.0001,
+       "excl_s": 0.0001,
+       "incl_s": 0.0001
+      },
+      "worker_run_one": {
+       "calls": 1,
+       "cpu_excl_s": 0.00538,
+       "cpu_incl_s": 0.23623,
+       "excl_s": 0.00678,
+       "incl_s": 0.40577
+      }
+     },
+     "tree_hash_calls": 2,
+     "wall_s": 0.5718,
+     "warmup": true
+    },
+    {
+     "callers": {
+      "cas_get": {
+       "(outside)": 3,
+       "cas_verify": 2002,
+       "certify": 4,
+       "evaluate": 4,
+       "export_bundle": 2,
+       "policy_check": 1006,
+       "queue_enqueue": 3,
+       "worker_run_one": 2
+      },
+      "cas_put": {
+       "(outside)": 1,
+       "certify": 2,
+       "evaluate": 5,
+       "take_snapshot": 1002
+      },
+      "cas_verify": {
+       "(outside)": 1001,
+       "cas_put": 1001
+      },
+      "materialize": {
+       "evaluate": 1
+      },
+      "read_files": {
+       "take_snapshot": 1001,
+       "tree_hash": 2002
+      },
+      "tree_hash": {
+       "evaluate": 2
+      },
+      "verify_snapshot": {
+       "evaluate": 1
+      }
+     },
+     "child_cpu_s": 0.2507,
+     "child_ru_inblock": 0,
+     "child_ru_oublock": 24,
+     "counters": {
+      "(outside)": {
+       "bytes_hashed": 545391.0,
+       "opens": 48.0,
+       "sqlite_acquire_s": 1e-05,
+       "sqlite_body_s": 0.00011,
+       "sqlite_commit_s": 0.00811
+      },
+      "cas_get": {
+       "bytes_hashed": 5974049.0,
+       "bytes_read": 5974049.0,
+       "opens": 3026.0
+      },
+      "cas_put": {
+       "bytes_hashed": 1880595.0,
+       "cas_hits": 1001.0,
+       "cas_misses": 9.0,
+       "chmods": 9.0,
+       "mkdirs": 9.0,
+       "opens": 18.0
+      },
+      "certify": {
+       "bytes_hashed": 26827.0,
+       "bytes_read": 119.0,
+       "opens": 1.0,
+       "sqlite_acquire_s": 1e-05,
+       "sqlite_body_s": 0.00023,
+       "sqlite_commit_s": 0.01587
+      },
+      "evaluate": {
+       "bytes_hashed": 1183521.0,
+       "bytes_read": 12731.0,
+       "chmods": 1018.0,
+       "mkdirs": 2.0,
+       "opens": 19.0,
+       "sqlite_acquire_s": 4e-05,
+       "sqlite_body_s": 0.00091,
+       "sqlite_commit_s": 0.04926
+      },
+      "independent_verify": {
+       "bytes_hashed": 5159.0
+      },
+      "materialize": {
+       "chmods": 11.0,
+       "mkdirs": 1.0,
+       "opens": 1001.0
+      },
+      "policy_check": {
+       "bytes_hashed": 579647.0,
+       "sqlite_acquire_s": 1e-05,
+       "sqlite_body_s": 0.00011,
+       "sqlite_commit_s": 0.00069
+      },
+      "queue_enqueue": {
+       "bytes_hashed": 19345.0,
+       "sqlite_acquire_s": 1e-05,
+       "sqlite_body_s": 7e-05,
+       "sqlite_commit_s": 0.00054
+      },
+      "read_files": {
+       "opens": 6006.0
+      },
+      "sign": {
+       "bytes_hashed": 64.0,
+       "bytes_read": 476.0,
+       "opens": 4.0
+      },
+      "take_snapshot": {
+       "bytes_hashed": 271560.0,
+       "sqlite_acquire_s": 1e-05,
+       "sqlite_body_s": 0.00012,
+       "sqlite_commit_s": 0.00056
+      },
+      "test_subprocess": {
+       "bytes_read": 6190.0,
+       "opens": 5.0
+      },
+      "tree_hash": {
+       "bytes_hashed": 3735648.0
+      },
+      "verify_snapshot": {
+       "bytes_hashed": 135780.0
+      },
+      "worker_run_one": {
+       "bytes_hashed": 19068.0,
+       "sqlite_acquire_s": 1e-05,
+       "sqlite_body_s": 0.00334,
+       "sqlite_commit_s": 0.0011
+      }
+     },
+     "parent_cpu_s": 0.4012,
+     "peak_tree_rss_mb": 64.3,
+     "stages": {
+      "cas_get": {
+       "calls": 3026,
+       "cpu_excl_s": 0.0633,
+       "cpu_incl_s": 0.0633,
+       "excl_s": 0.06296,
+       "incl_s": 0.06296
+      },
+      "cas_put": {
+       "calls": 1010,
+       "cpu_excl_s": 0.01736,
+       "cpu_incl_s": 0.0418,
+       "excl_s": 0.05311,
+       "incl_s": 0.07763
+      },
+      "cas_verify": {
+       "calls": 2002,
+       "cpu_excl_s": 0.0066,
+       "cpu_incl_s": 0.04778,
+       "excl_s": 0.00673,
+       "incl_s": 0.0477
+      },
+      "certify": {
+       "calls": 1,
+       "cpu_excl_s": 0.00894,
+       "cpu_incl_s": 0.01003,
+       "excl_s": 0.05188,
+       "incl_s": 0.05386
+      },
+      "evaluate": {
+       "calls": 1,
+       "cpu_excl_s": 0.05422,
+       "cpu_incl_s": 0.22112,
+       "excl_s": 0.10268,
+       "incl_s": 0.38227
+      },
+      "export_bundle": {
+       "calls": 1,
+       "cpu_excl_s": 0.00105,
+       "cpu_incl_s": 0.00117,
+       "excl_s": 0.00105,
+       "incl_s": 0.00117
+      },
+      "independent_verify": {
+       "calls": 1,
+       "cpu_excl_s": 0.00142,
+       "cpu_incl_s": 0.00142,
+       "excl_s": 0.00124,
+       "incl_s": 0.00124
+      },
+      "materialize": {
+       "calls": 1,
+       "cpu_excl_s": 0.03021,
+       "cpu_incl_s": 0.03021,
+       "excl_s": 0.03006,
+       "incl_s": 0.03006
+      },
+      "policy_check": {
+       "calls": 1,
+       "cpu_excl_s": 0.04821,
+       "cpu_incl_s": 0.06901,
+       "excl_s": 0.04862,
+       "incl_s": 0.06929
+      },
+      "queue_enqueue": {
+       "calls": 1,
+       "cpu_excl_s": 0.0061,
+       "cpu_incl_s": 0.00628,
+       "excl_s": 0.00664,
+       "incl_s": 0.00682
+      },
+      "read_files": {
+       "calls": 3003,
+       "cpu_excl_s": 0.04627,
+       "cpu_incl_s": 0.04627,
+       "excl_s": 0.04572,
+       "incl_s": 0.04572
+      },
+      "report_validation": {
+       "calls": 1,
+       "cpu_excl_s": 0.00496,
+       "cpu_incl_s": 0.00496,
+       "excl_s": 0.00495,
+       "incl_s": 0.00495
+      },
+      "scan_tree": {
+       "calls": 3,
+       "cpu_excl_s": 0.02532,
+       "cpu_incl_s": 0.02532,
+       "excl_s": 0.02477,
+       "incl_s": 0.02477
+      },
+      "sign": {
+       "calls": 2,
+       "cpu_excl_s": 0.00085,
+       "cpu_incl_s": 0.00085,
+       "excl_s": 0.00079,
+       "incl_s": 0.00079
+      },
+      "take_snapshot": {
+       "calls": 1,
+       "cpu_excl_s": 0.02807,
+       "cpu_incl_s": 0.09709,
+       "excl_s": 0.02851,
+       "incl_s": 0.13016
+      },
+      "test_subprocess": {
+       "calls": 1,
+       "cpu_excl_s": 0.00238,
+       "cpu_incl_s": 0.00238,
+       "excl_s": 0.11397,
+       "incl_s": 0.11397
+      },
+      "tree_hash": {
+       "calls": 2,
+       "cpu_excl_s": 0.01575,
+       "cpu_incl_s": 0.05878,
+       "excl_s": 0.01585,
+       "incl_s": 0.05851
+      },
+      "verify_snapshot": {
+       "calls": 1,
+       "cpu_excl_s": 0.00011,
+       "cpu_incl_s": 0.00011,
+       "excl_s": 0.00011,
+       "incl_s": 0.00011
+      },
+      "worker_run_one": {
+       "calls": 1,
+       "cpu_excl_s": 0.00574,
+       "cpu_incl_s": 0.237,
+       "excl_s": 0.00679,
+       "incl_s": 0.44301
+      }
+     },
+     "tree_hash_calls": 2,
+     "wall_s": 0.6486,
+     "warmup": false
+    },
+    {
+     "callers": {
+      "cas_get": {
+       "(outside)": 3,
+       "cas_verify": 2002,
+       "certify": 4,
+       "evaluate": 4,
+       "export_bundle": 2,
+       "policy_check": 1006,
+       "queue_enqueue": 3,
+       "worker_run_one": 2
+      },
+      "cas_put": {
+       "(outside)": 1,
+       "certify": 2,
+       "evaluate": 5,
+       "take_snapshot": 1002
+      },
+      "cas_verify": {
+       "(outside)": 1001,
+       "cas_put": 1001
+      },
+      "materialize": {
+       "evaluate": 1
+      },
+      "read_files": {
+       "take_snapshot": 1001,
+       "tree_hash": 2002
+      },
+      "tree_hash": {
+       "evaluate": 2
+      },
+      "verify_snapshot": {
+       "evaluate": 1
+      }
+     },
+     "child_cpu_s": 0.3118,
+     "child_ru_inblock": 0,
+     "child_ru_oublock": 24,
+     "counters": {
+      "(outside)": {
+       "bytes_hashed": 545391.0,
+       "opens": 68.0,
+       "sqlite_acquire_s": 1e-05,
+       "sqlite_body_s": 0.0001,
+       "sqlite_commit_s": 0.00108
+      },
+      "cas_get": {
+       "bytes_hashed": 5974049.0,
+       "bytes_read": 5974049.0,
+       "opens": 3026.0
+      },
+      "cas_put": {
+       "bytes_hashed": 1880595.0,
+       "cas_hits": 1001.0,
+       "cas_misses": 9.0,
+       "chmods": 9.0,
+       "mkdirs": 9.0,
+       "opens": 18.0
+      },
+      "certify": {
+       "bytes_hashed": 26827.0,
+       "bytes_read": 119.0,
+       "opens": 1.0,
+       "sqlite_acquire_s": 1e-05,
+       "sqlite_body_s": 0.00023,
+       "sqlite_commit_s": 0.0011
+      },
+      "evaluate": {
+       "bytes_hashed": 1183521.0,
+       "bytes_read": 12731.0,
+       "chmods": 1018.0,
+       "mkdirs": 2.0,
+       "opens": 19.0,
+       "sqlite_acquire_s": 4e-05,
+       "sqlite_body_s": 0.00102,
+       "sqlite_commit_s": 0.14394
+      },
+      "independent_verify": {
+       "bytes_hashed": 5159.0
+      },
+      "materialize": {
+       "chmods": 11.0,
+       "mkdirs": 1.0,
+       "opens": 1001.0
+      },
+      "policy_check": {
+       "bytes_hashed": 579647.0,
+       "sqlite_acquire_s": 1e-05,
+       "sqlite_body_s": 0.00012,
+       "sqlite_commit_s": 0.0007
+      },
+      "queue_enqueue": {
+       "bytes_hashed": 19345.0,
+       "sqlite_acquire_s": 1e-05,
+       "sqlite_body_s": 7e-05,
+       "sqlite_commit_s": 0.0005
+      },
+      "read_files": {
+       "opens": 6006.0
+      },
+      "sign": {
+       "bytes_hashed": 64.0,
+       "bytes_read": 476.0,
+       "opens": 4.0
+      },
+      "take_snapshot": {
+       "bytes_hashed": 271560.0,
+       "sqlite_acquire_s": 1e-05,
+       "sqlite_body_s": 0.00012,
+       "sqlite_commit_s": 0.00053
+      },
+      "test_subprocess": {
+       "bytes_read": 6190.0,
+       "opens": 5.0
+      },
+      "tree_hash": {
+       "bytes_hashed": 3735648.0
+      },
+      "verify_snapshot": {
+       "bytes_hashed": 135780.0
+      },
+      "worker_run_one": {
+       "bytes_hashed": 19068.0,
+       "sqlite_acquire_s": 1e-05,
+       "sqlite_body_s": 0.00328,
+       "sqlite_commit_s": 0.00114
+      }
+     },
+     "parent_cpu_s": 0.4042,
+     "peak_tree_rss_mb": 64.5,
+     "stages": {
+      "cas_get": {
+       "calls": 3026,
+       "cpu_excl_s": 0.06421,
+       "cpu_incl_s": 0.06421,
+       "excl_s": 0.06382,
+       "incl_s": 0.06382
+      },
+      "cas_put": {
+       "calls": 1010,
+       "cpu_excl_s": 0.01687,
+       "cpu_incl_s": 0.042,
+       "excl_s": 0.04969,
+       "incl_s": 0.07498
+      },
+      "cas_verify": {
+       "calls": 2002,
+       "cpu_excl_s": 0.00664,
+       "cpu_incl_s": 0.04863,
+       "excl_s": 0.00683,
+       "incl_s": 0.04864
+      },
+      "certify": {
+       "calls": 1,
+       "cpu_excl_s": 0.01074,
+       "cpu_incl_s": 0.01163,
+       "excl_s": 0.18098,
+       "incl_s": 0.18275
+      },
+      "evaluate": {
+       "calls": 1,
+       "cpu_excl_s": 0.05594,
+       "cpu_incl_s": 0.22213,
+       "excl_s": 0.19818,
+       "incl_s": 0.52689
+      },
+      "export_bundle": {
+       "calls": 1,
+       "cpu_excl_s": 0.00112,
+       "cpu_incl_s": 0.00124,
+       "excl_s": 0.00112,
+       "incl_s": 0.00124
+      },
+      "independent_verify": {
+       "calls": 1,
+       "cpu_excl_s": 0.00124,
+       "cpu_incl_s": 0.00124,
+       "excl_s": 0.00124,
+       "incl_s": 0.00124
+      },
+      "materialize": {
+       "calls": 1,
+       "cpu_excl_s": 0.03029,
+       "cpu_incl_s": 0.03029,
+       "excl_s": 0.03011,
+       "incl_s": 0.03011
+      },
+      "policy_check": {
+       "calls": 1,
+       "cpu_excl_s": 0.04723,
+       "cpu_incl_s": 0.06806,
+       "excl_s": 0.04774,
+       "incl_s": 0.06837
+      },
+      "queue_enqueue": {
+       "calls": 1,
+       "cpu_excl_s": 0.00599,
+       "cpu_incl_s": 0.00617,
+       "excl_s": 0.00651,
+       "incl_s": 0.00669
+      },
+      "read_files": {
+       "calls": 3003,
+       "cpu_excl_s": 0.04572,
+       "cpu_incl_s": 0.04572,
+       "excl_s": 0.04505,
+       "incl_s": 0.04505
+      },
+      "report_validation": {
+       "calls": 1,
+       "cpu_excl_s": 0.00482,
+       "cpu_incl_s": 0.00482,
+       "excl_s": 0.00482,
+       "incl_s": 0.00482
+      },
+      "scan_tree": {
+       "calls": 3,
+       "cpu_excl_s": 0.02568,
+       "cpu_incl_s": 0.02568,
+       "excl_s": 0.02485,
+       "incl_s": 0.02485
+      },
+      "sign": {
+       "calls": 2,
+       "cpu_excl_s": 0.00065,
+       "cpu_incl_s": 0.00065,
+       "excl_s": 0.00065,
+       "incl_s": 0.00065
+      },
+      "take_snapshot": {
+       "calls": 1,
+       "cpu_excl_s": 0.02785,
+       "cpu_incl_s": 0.0976,
+       "excl_s": 0.02849,
+       "incl_s": 0.12703
+      },
+      "test_subprocess": {
+       "calls": 1,
+       "cpu_excl_s": 0.00274,
+       "cpu_incl_s": 0.00274,
+       "excl_s": 0.16391,
+       "incl_s": 0.16391
+      },
+      "tree_hash": {
+       "calls": 2,
+       "cpu_excl_s": 0.01635,
+       "cpu_incl_s": 0.05871,
+       "excl_s": 0.01606,
+       "incl_s": 0.05832
+      },
+      "verify_snapshot": {
+       "calls": 1,
+       "cpu_excl_s": 0.0001,
+       "cpu_incl_s": 0.0001,
+       "excl_s": 0.0001,
+       "incl_s": 0.0001
+      },
+      "worker_run_one": {
+       "calls": 1,
+       "cpu_excl_s": 0.00565,
+       "cpu_incl_s": 0.23954,
+       "excl_s": 0.00982,
+       "incl_s": 0.71959
+      }
+     },
+     "tree_hash_calls": 2,
+     "wall_s": 0.9152,
+     "warmup": false
+    },
+    {
+     "callers": {
+      "cas_get": {
+       "(outside)": 3,
+       "cas_verify": 2002,
+       "certify": 4,
+       "evaluate": 4,
+       "export_bundle": 2,
+       "policy_check": 1006,
+       "queue_enqueue": 3,
+       "worker_run_one": 2
+      },
+      "cas_put": {
+       "(outside)": 1,
+       "certify": 2,
+       "evaluate": 5,
+       "take_snapshot": 1002
+      },
+      "cas_verify": {
+       "(outside)": 1001,
+       "cas_put": 1001
+      },
+      "materialize": {
+       "evaluate": 1
+      },
+      "read_files": {
+       "take_snapshot": 1001,
+       "tree_hash": 2002
+      },
+      "tree_hash": {
+       "evaluate": 2
+      },
+      "verify_snapshot": {
+       "evaluate": 1
+      }
+     },
+     "child_cpu_s": 0.2783,
+     "child_ru_inblock": 0,
+     "child_ru_oublock": 24,
+     "counters": {
+      "(outside)": {
+       "bytes_hashed": 545391.0,
+       "opens": 54.0,
+       "sqlite_acquire_s": 1e-05,
+       "sqlite_body_s": 0.0001,
+       "sqlite_commit_s": 0.00108
+      },
+      "cas_get": {
+       "bytes_hashed": 5974049.0,
+       "bytes_read": 5974049.0,
+       "opens": 3026.0
+      },
+      "cas_put": {
+       "bytes_hashed": 1880595.0,
+       "cas_hits": 1001.0,
+       "cas_misses": 9.0,
+       "chmods": 9.0,
+       "mkdirs": 9.0,
+       "opens": 18.0
+      },
+      "certify": {
+       "bytes_hashed": 26827.0,
+       "bytes_read": 119.0,
+       "opens": 1.0,
+       "sqlite_acquire_s": 1e-05,
+       "sqlite_body_s": 0.00023,
+       "sqlite_commit_s": 0.00107
+      },
+      "evaluate": {
+       "bytes_hashed": 1183521.0,
+       "bytes_read": 12731.0,
+       "chmods": 1018.0,
+       "mkdirs": 2.0,
+       "opens": 19.0,
+       "sqlite_acquire_s": 4e-05,
+       "sqlite_body_s": 0.00089,
+       "sqlite_commit_s": 0.0034
+      },
+      "independent_verify": {
+       "bytes_hashed": 5159.0
+      },
+      "materialize": {
+       "chmods": 11.0,
+       "mkdirs": 1.0,
+       "opens": 1001.0
+      },
+      "policy_check": {
+       "bytes_hashed": 579647.0,
+       "sqlite_acquire_s": 1e-05,
+       "sqlite_body_s": 0.00011,
+       "sqlite_commit_s": 0.00065
+      },
+      "queue_enqueue": {
+       "bytes_hashed": 19345.0,
+       "sqlite_acquire_s": 1e-05,
+       "sqlite_body_s": 7e-05,
+       "sqlite_commit_s": 0.00064
+      },
+      "read_files": {
+       "opens": 6006.0
+      },
+      "sign": {
+       "bytes_hashed": 64.0,
+       "bytes_read": 476.0,
+       "opens": 4.0
+      },
+      "take_snapshot": {
+       "bytes_hashed": 271560.0,
+       "sqlite_acquire_s": 1e-05,
+       "sqlite_body_s": 0.00012,
+       "sqlite_commit_s": 0.00056
+      },
+      "test_subprocess": {
+       "bytes_read": 6190.0,
+       "opens": 5.0
+      },
+      "tree_hash": {
+       "bytes_hashed": 3735648.0
+      },
+      "verify_snapshot": {
+       "bytes_hashed": 135780.0
+      },
+      "worker_run_one": {
+       "bytes_hashed": 19068.0,
+       "sqlite_acquire_s": 1e-05,
+       "sqlite_body_s": 0.00326,
+       "sqlite_commit_s": 0.00107
+      }
+     },
+     "parent_cpu_s": 0.4029,
+     "peak_tree_rss_mb": 64.6,
+     "stages": {
+      "cas_get": {
+       "calls": 3026,
+       "cpu_excl_s": 0.06397,
+       "cpu_incl_s": 0.06397,
+       "excl_s": 0.06338,
+       "incl_s": 0.06338
+      },
+      "cas_put": {
+       "calls": 1010,
+       "cpu_excl_s": 0.01912,
+       "cpu_incl_s": 0.04412,
+       "excl_s": 0.14488,
+       "incl_s": 0.16983
+      },
+      "cas_verify": {
+       "calls": 2002,
+       "cpu_excl_s": 0.00655,
+       "cpu_incl_s": 0.04845,
+       "excl_s": 0.00674,
+       "incl_s": 0.04823
+      },
+      "certify": {
+       "calls": 1,
+       "cpu_excl_s": 0.00798,
+       "cpu_incl_s": 0.00924,
+       "excl_s": 0.00999,
+       "incl_s": 0.02153
+      },
+      "evaluate": {
+       "calls": 1,
+       "cpu_excl_s": 0.05381,
+       "cpu_incl_s": 0.22221,
+       "excl_s": 0.06755,
+       "incl_s": 0.47477
+      },
+      "export_bundle": {
+       "calls": 1,
+       "cpu_excl_s": 0.00103,
+       "cpu_incl_s": 0.00116,
+       "excl_s": 0.00103,
+       "incl_s": 0.00116
+      },
+      "independent_verify": {
+       "calls": 1,
+       "cpu_excl_s": 0.00118,
+       "cpu_incl_s": 0.00118,
+       "excl_s": 0.00118,
+       "incl_s": 0.00118
+      },
+      "materialize": {
+       "calls": 1,
+       "cpu_excl_s": 0.03019,
+       "cpu_incl_s": 0.03019,
+       "excl_s": 0.03001,
+       "incl_s": 0.03001
+      },
+      "policy_check": {
+       "calls": 1,
+       "cpu_excl_s": 0.04756,
+       "cpu_incl_s": 0.06828,
+       "excl_s": 0.04782,
+       "incl_s": 0.06835
+      },
+      "queue_enqueue": {
+       "calls": 1,
+       "cpu_excl_s": 0.00686,
+       "cpu_incl_s": 0.00704,
+       "excl_s": 0.02744,
+       "incl_s": 0.02762
+      },
+      "read_files": {
+       "calls": 3003,
+       "cpu_excl_s": 0.04595,
+       "cpu_incl_s": 0.04595,
+       "excl_s": 0.0457,
+       "incl_s": 0.0457
+      },
+      "report_validation": {
+       "calls": 1,
+       "cpu_excl_s": 0.00491,
+       "cpu_incl_s": 0.00491,
+       "excl_s": 0.00491,
+       "incl_s": 0.00491
+      },
+      "scan_tree": {
+       "calls": 3,
+       "cpu_excl_s": 0.02532,
+       "cpu_incl_s": 0.02532,
+       "excl_s": 0.02479,
+       "incl_s": 0.02479
+      },
+      "sign": {
+       "calls": 2,
+       "cpu_excl_s": 0.00066,
+       "cpu_incl_s": 0.00066,
+       "excl_s": 0.00066,
+       "incl_s": 0.00066
+      },
+      "take_snapshot": {
+       "calls": 1,
+       "cpu_excl_s": 0.02842,
+       "cpu_incl_s": 0.09803,
+       "excl_s": 0.02923,
+       "incl_s": 0.13511
+      },
+      "test_subprocess": {
+       "calls": 1,
+       "cpu_excl_s": 0.00326,
+       "cpu_incl_s": 0.00326,
+       "excl_s": 0.16409,
+       "incl_s": 0.16409
+      },
+      "tree_hash": {
+       "calls": 2,
+       "cpu_excl_s": 0.0161,
+       "cpu_incl_s": 0.05891,
+       "excl_s": 0.01606,
+       "incl_s": 0.05854
+      },
+      "verify_snapshot": {
+       "calls": 1,
+       "cpu_excl_s": 0.0001,
+       "cpu_incl_s": 0.0001,
+       "excl_s": 0.0001,
+       "incl_s": 0.0001
+      },
+      "worker_run_one": {
+       "calls": 1,
+       "cpu_excl_s": 0.00558,
+       "cpu_incl_s": 0.23715,
+       "excl_s": 0.00722,
+       "incl_s": 0.50363
+      }
+     },
+     "tree_hash_calls": 2,
+     "wall_s": 0.7285,
+     "warmup": false
+    }
+   ],
+   "summary": {
+    "callers_of_io_stages_run_median": {
+     "cas_get": {
+      "(outside)": 3,
+      "cas_verify": 2002,
+      "certify": 4,
+      "evaluate": 4,
+      "export_bundle": 2,
+      "policy_check": 1006,
+      "queue_enqueue": 3,
+      "worker_run_one": 2
+     },
+     "cas_put": {
+      "(outside)": 1,
+      "certify": 2,
+      "evaluate": 5,
+      "take_snapshot": 1002
+     },
+     "cas_verify": {
+      "(outside)": 1001,
+      "cas_put": 1001
+     },
+     "materialize": {
+      "evaluate": 1
+     },
+     "read_files": {
+      "take_snapshot": 1001,
+      "tree_hash": 2002
+     },
+     "tree_hash": {
+      "evaluate": 2
+     },
+     "verify_snapshot": {
+      "evaluate": 1
+     }
+    },
+    "child_cpu_s_median": 0.2783,
+    "counters_median_by_stage": {
+     "(outside)": {
+      "bytes_hashed": 545391.0,
+      "opens": 54.0,
+      "sqlite_acquire_s": 1e-05,
+      "sqlite_body_s": 0.0001,
+      "sqlite_commit_s": 0.00108
+     },
+     "cas_get": {
+      "bytes_hashed": 5974049.0,
+      "bytes_read": 5974049.0,
+      "opens": 3026.0
+     },
+     "cas_put": {
+      "bytes_hashed": 1880595.0,
+      "cas_hits": 1001.0,
+      "cas_misses": 9.0,
+      "chmods": 9.0,
+      "mkdirs": 9.0,
+      "opens": 18.0
+     },
+     "certify": {
+      "bytes_hashed": 26827.0,
+      "bytes_read": 119.0,
+      "opens": 1.0,
+      "sqlite_acquire_s": 1e-05,
+      "sqlite_body_s": 0.00023,
+      "sqlite_commit_s": 0.0011
+     },
+     "evaluate": {
+      "bytes_hashed": 1183521.0,
+      "bytes_read": 12731.0,
+      "chmods": 1018.0,
+      "mkdirs": 2.0,
+      "opens": 19.0,
+      "sqlite_acquire_s": 4e-05,
+      "sqlite_body_s": 0.00091,
+      "sqlite_commit_s": 0.04926
+     },
+     "independent_verify": {
+      "bytes_hashed": 5159.0
+     },
+     "materialize": {
+      "chmods": 11.0,
+      "mkdirs": 1.0,
+      "opens": 1001.0
+     },
+     "policy_check": {
+      "bytes_hashed": 579647.0,
+      "sqlite_acquire_s": 1e-05,
+      "sqlite_body_s": 0.00011,
+      "sqlite_commit_s": 0.00069
+     },
+     "queue_enqueue": {
+      "bytes_hashed": 19345.0,
+      "sqlite_acquire_s": 1e-05,
+      "sqlite_body_s": 7e-05,
+      "sqlite_commit_s": 0.00054
+     },
+     "read_files": {
+      "opens": 6006.0
+     },
+     "sign": {
+      "bytes_hashed": 64.0,
+      "bytes_read": 476.0,
+      "opens": 4.0
+     },
+     "take_snapshot": {
+      "bytes_hashed": 271560.0,
+      "sqlite_acquire_s": 1e-05,
+      "sqlite_body_s": 0.00012,
+      "sqlite_commit_s": 0.00056
+     },
+     "test_subprocess": {
+      "bytes_read": 6190.0,
+      "opens": 5.0
+     },
+     "tree_hash": {
+      "bytes_hashed": 3735648.0
+     },
+     "verify_snapshot": {
+      "bytes_hashed": 135780.0
+     },
+     "worker_run_one": {
+      "bytes_hashed": 19068.0,
+      "sqlite_acquire_s": 1e-05,
+      "sqlite_body_s": 0.00328,
+      "sqlite_commit_s": 0.0011
+     }
+    },
+    "parent_cpu_s_median": 0.4029,
+    "peak_tree_rss_mb_median": 64.5,
+    "stages_median": {
+     "cas_get": {
+      "calls": 3026,
+      "cpu_excl_s": 0.06397,
+      "cpu_incl_s": 0.06397,
+      "excl_s": 0.06338,
+      "incl_s": 0.06338
+     },
+     "cas_put": {
+      "calls": 1010,
+      "cpu_excl_s": 0.01736,
+      "cpu_incl_s": 0.042,
+      "excl_s": 0.05311,
+      "incl_s": 0.07763
+     },
+     "cas_verify": {
+      "calls": 2002,
+      "cpu_excl_s": 0.0066,
+      "cpu_incl_s": 0.04845,
+      "excl_s": 0.00674,
+      "incl_s": 0.04823
+     },
+     "certify": {
+      "calls": 1,
+      "cpu_excl_s": 0.00894,
+      "cpu_incl_s": 0.01003,
+      "excl_s": 0.05188,
+      "incl_s": 0.05386
+     },
+     "evaluate": {
+      "calls": 1,
+      "cpu_excl_s": 0.05422,
+      "cpu_incl_s": 0.22213,
+      "excl_s": 0.10268,
+      "incl_s": 0.47477
+     },
+     "export_bundle": {
+      "calls": 1,
+      "cpu_excl_s": 0.00105,
+      "cpu_incl_s": 0.00117,
+      "excl_s": 0.00105,
+      "incl_s": 0.00117
+     },
+     "independent_verify": {
+      "calls": 1,
+      "cpu_excl_s": 0.00124,
+      "cpu_incl_s": 0.00124,
+      "excl_s": 0.00124,
+      "incl_s": 0.00124
+     },
+     "materialize": {
+      "calls": 1,
+      "cpu_excl_s": 0.03021,
+      "cpu_incl_s": 0.03021,
+      "excl_s": 0.03006,
+      "incl_s": 0.03006
+     },
+     "policy_check": {
+      "calls": 1,
+      "cpu_excl_s": 0.04756,
+      "cpu_incl_s": 0.06828,
+      "excl_s": 0.04782,
+      "incl_s": 0.06837
+     },
+     "queue_enqueue": {
+      "calls": 1,
+      "cpu_excl_s": 0.0061,
+      "cpu_incl_s": 0.00628,
+      "excl_s": 0.00664,
+      "incl_s": 0.00682
+     },
+     "read_files": {
+      "calls": 3003,
+      "cpu_excl_s": 0.04595,
+      "cpu_incl_s": 0.04595,
+      "excl_s": 0.0457,
+      "incl_s": 0.0457
+     },
+     "report_validation": {
+      "calls": 1,
+      "cpu_excl_s": 0.00491,
+      "cpu_incl_s": 0.00491,
+      "excl_s": 0.00491,
+      "incl_s": 0.00491
+     },
+     "scan_tree": {
+      "calls": 3,
+      "cpu_excl_s": 0.02532,
+      "cpu_incl_s": 0.02532,
+      "excl_s": 0.02479,
+      "incl_s": 0.02479
+     },
+     "sign": {
+      "calls": 2,
+      "cpu_excl_s": 0.00066,
+      "cpu_incl_s": 0.00066,
+      "excl_s": 0.00066,
+      "incl_s": 0.00066
+     },
+     "take_snapshot": {
+      "calls": 1,
+      "cpu_excl_s": 0.02807,
+      "cpu_incl_s": 0.0976,
+      "excl_s": 0.02851,
+      "incl_s": 0.13016
+     },
+     "test_subprocess": {
+      "calls": 1,
+      "cpu_excl_s": 0.00274,
+      "cpu_incl_s": 0.00274,
+      "excl_s": 0.16391,
+      "incl_s": 0.16391
+     },
+     "tree_hash": {
+      "calls": 2,
+      "cpu_excl_s": 0.0161,
+      "cpu_incl_s": 0.05878,
+      "excl_s": 0.01606,
+      "incl_s": 0.05851
+     },
+     "verify_snapshot": {
+      "calls": 1,
+      "cpu_excl_s": 0.0001,
+      "cpu_incl_s": 0.0001,
+      "excl_s": 0.0001,
+      "incl_s": 0.0001
+     },
+     "worker_run_one": {
+      "calls": 1,
+      "cpu_excl_s": 0.00565,
+      "cpu_incl_s": 0.23715,
+      "excl_s": 0.00722,
+      "incl_s": 0.50363
+     }
+    },
+    "wall_s": {
+     "max": 0.9152,
+     "median": 0.7285,
+     "min": 0.6486
+    }
+   }
+  },
+  "3000": {
+   "files": 3000,
+   "raw": [
+    {
+     "callers": {
+      "cas_get": {
+       "(outside)": 3,
+       "cas_verify": 6002,
+       "certify": 4,
+       "evaluate": 4,
+       "export_bundle": 2,
+       "policy_check": 3006,
+       "queue_enqueue": 3,
+       "worker_run_one": 2
+      },
+      "cas_put": {
+       "(outside)": 1,
+       "certify": 2,
+       "evaluate": 5,
+       "take_snapshot": 3002
+      },
+      "cas_verify": {
+       "(outside)": 3001,
+       "cas_put": 3001
+      },
+      "materialize": {
+       "evaluate": 1
+      },
+      "read_files": {
+       "take_snapshot": 3001,
+       "tree_hash": 6002
+      },
+      "tree_hash": {
+       "evaluate": 2
+      },
+      "verify_snapshot": {
+       "evaluate": 1
+      }
+     },
+     "child_cpu_s": 0.4855,
+     "child_ru_inblock": 0,
+     "child_ru_oublock": 48,
+     "counters": {
+      "(outside)": {
+       "bytes_hashed": 1641383.0,
+       "opens": 98.0,
+       "sqlite_acquire_s": 1e-05,
+       "sqlite_body_s": 0.00015,
+       "sqlite_commit_s": 0.09587
+      },
+      "cas_get": {
+       "bytes_hashed": 19071433.0,
+       "bytes_read": 19071433.0,
+       "opens": 9026.0
+      },
+      "cas_put": {
+       "bytes_hashed": 6040591.0,
+       "cas_hits": 3001.0,
+       "cas_misses": 9.0,
+       "chmods": 9.0,
+       "mkdirs": 9.0,
+       "opens": 18.0
+      },
+      "certify": {
+       "bytes_hashed": 44427.0,
+       "bytes_read": 119.0,
+       "opens": 1.0,
+       "sqlite_acquire_s": 1e-05,
+       "sqlite_body_s": 0.00023,
+       "sqlite_commit_s": 0.0011
+      },
+      "evaluate": {
+       "bytes_hashed": 3449705.0,
+       "bytes_read": 16731.0,
+       "chmods": 3036.0,
+       "mkdirs": 2.0,
+       "opens": 37.0,
+       "sqlite_acquire_s": 4e-05,
+       "sqlite_body_s": 0.00109,
+       "sqlite_commit_s": 0.00324
+      },
+      "independent_verify": {
+       "bytes_hashed": 5159.0
+      },
+      "materialize": {
+       "chmods": 29.0,
+       "mkdirs": 1.0,
+       "opens": 3001.0
+      },
+      "policy_check": {
+       "bytes_hashed": 1710839.0,
+       "sqlite_acquire_s": 1e-05,
+       "sqlite_body_s": 0.00011,
+       "sqlite_commit_s": 0.00064
+      },
+      "queue_enqueue": {
+       "bytes_hashed": 36945.0,
+       "sqlite_acquire_s": 1e-05,
+       "sqlite_body_s": 7e-05,
+       "sqlite_commit_s": 0.00058
+      },
+      "read_files": {
+       "opens": 18006.0
+      },
+      "sign": {
+       "bytes_hashed": 64.0,
+       "bytes_read": 476.0,
+       "opens": 4.0
+      },
+      "take_snapshot": {
+       "bytes_hashed": 819556.0,
+       "sqlite_acquire_s": 1e-05,
+       "sqlite_body_s": 0.00027,
+       "sqlite_commit_s": 0.00051
+      },
+      "test_subprocess": {
+       "bytes_read": 12390.0,
+       "opens": 5.0
+      },
+      "tree_hash": {
+       "bytes_hashed": 12043240.0
+      },
+      "verify_snapshot": {
+       "bytes_hashed": 409778.0
+      },
+      "worker_run_one": {
+       "bytes_hashed": 36668.0,
+       "sqlite_acquire_s": 1e-05,
+       "sqlite_body_s": 0.00529,
+       "sqlite_commit_s": 0.0132
+      }
+     },
+     "parent_cpu_s": 1.1166,
+     "peak_tree_rss_mb": 83.7,
+     "stages": {
+      "cas_get": {
+       "calls": 9026,
+       "cpu_excl_s": 0.19043,
+       "cpu_incl_s": 0.19043,
+       "excl_s": 0.18884,
+       "incl_s": 0.18884
+      },
+      "cas_put": {
+       "calls": 3010,
+       "cpu_excl_s": 0.04725,
+       "cpu_incl_s": 0.12192,
+       "excl_s": 0.07054,
+       "incl_s": 0.14521
+      },
+      "cas_verify": {
+       "calls": 6002,
+       "cpu_excl_s": 0.01986,
+       "cpu_incl_s": 0.14548,
+       "excl_s": 0.02031,
+       "incl_s": 0.14493
+      },
+      "certify": {
+       "calls": 1,
+       "cpu_excl_s": 0.01035,
+       "cpu_incl_s": 0.01137,
+       "excl_s": 0.01136,
+       "incl_s": 0.01397
+      },
+      "evaluate": {
+       "calls": 1,
+       "cpu_excl_s": 0.13442,
+       "cpu_incl_s": 0.62814,
+       "excl_s": 0.13745,
+       "incl_s": 0.8433
+      },
+      "export_bundle": {
+       "calls": 1,
+       "cpu_excl_s": 0.00107,
+       "cpu_incl_s": 0.00119,
+       "excl_s": 0.00107,
+       "incl_s": 0.00119
+      },
+      "independent_verify": {
+       "calls": 1,
+       "cpu_excl_s": 0.00119,
+       "cpu_incl_s": 0.00119,
+       "excl_s": 0.00119,
+       "incl_s": 0.00119
+      },
+      "materialize": {
+       "calls": 1,
+       "cpu_excl_s": 0.09122,
+       "cpu_incl_s": 0.09122,
+       "excl_s": 0.0905,
+       "incl_s": 0.0905
+      },
+      "policy_check": {
+       "calls": 1,
+       "cpu_excl_s": 0.13221,
+       "cpu_incl_s": 0.19507,
+       "excl_s": 0.1325,
+       "incl_s": 0.19466
+      },
+      "queue_enqueue": {
+       "calls": 1,
+       "cpu_excl_s": 0.00805,
+       "cpu_incl_s": 0.00827,
+       "excl_s": 0.00868,
+       "incl_s": 0.0089
+      },
+      "read_files": {
+       "calls": 9003,
+       "cpu_excl_s": 0.14473,
+       "cpu_incl_s": 0.14473,
+       "excl_s": 0.14342,
+       "incl_s": 0.14342
+      },
+      "report_validation": {
+       "calls": 1,
+       "cpu_excl_s": 0.01855,
+       "cpu_incl_s": 0.01855,
+       "excl_s": 0.0185,
+       "incl_s": 0.0185
+      },
+      "scan_tree": {
+       "calls": 3,
+       "cpu_excl_s": 0.07557,
+       "cpu_incl_s": 0.07557,
+       "excl_s": 0.07404,
+       "incl_s": 0.07404
+      },
+      "sign": {
+       "calls": 2,
+       "cpu_excl_s": 0.00071,
+       "cpu_incl_s": 0.00071,
+       "excl_s": 0.00071,
+       "incl_s": 0.00071
+      },
+      "take_snapshot": {
+       "calls": 1,
+       "cpu_excl_s": 0.08333,
+       "cpu_incl_s": 0.28989,
+       "excl_s": 0.08302,
+       "incl_s": 0.29305
+      },
+      "test_subprocess": {
+       "calls": 1,
+       "cpu_excl_s": 0.00445,
+       "cpu_incl_s": 0.00445,
+       "excl_s": 0.21402,
+       "incl_s": 0.21402
+      },
+      "tree_hash": {
+       "calls": 2,
+       "cpu_excl_s": 0.04831,
+       "cpu_incl_s": 0.1825,
+       "excl_s": 0.04798,
+       "incl_s": 0.18121
+      },
+      "verify_snapshot": {
+       "calls": 1,
+       "cpu_excl_s": 0.00025,
+       "cpu_incl_s": 0.00025,
+       "excl_s": 0.00025,
+       "incl_s": 0.00025
+      },
+      "worker_run_one": {
+       "calls": 1,
+       "cpu_excl_s": 0.00805,
+       "cpu_incl_s": 0.64772,
+       "excl_s": 0.02087,
+       "incl_s": 0.87836
+      }
+     },
+     "tree_hash_calls": 2,
+     "wall_s": 1.4558,
+     "warmup": true
+    },
+    {
+     "callers": {
+      "cas_get": {
+       "(outside)": 3,
+       "cas_verify": 6002,
+       "certify": 4,
+       "evaluate": 4,
+       "export_bundle": 2,
+       "policy_check": 3006,
+       "queue_enqueue": 3,
+       "worker_run_one": 2
+      },
+      "cas_put": {
+       "(outside)": 1,
+       "certify": 2,
+       "evaluate": 5,
+       "take_snapshot": 3002
+      },
+      "cas_verify": {
+       "(outside)": 3001,
+       "cas_put": 3001
+      },
+      "materialize": {
+       "evaluate": 1
+      },
+      "read_files": {
+       "take_snapshot": 3001,
+       "tree_hash": 6002
+      },
+      "tree_hash": {
+       "evaluate": 2
+      },
+      "verify_snapshot": {
+       "evaluate": 1
+      }
+     },
+     "child_cpu_s": 0.5122,
+     "child_ru_inblock": 0,
+     "child_ru_oublock": 48,
+     "counters": {
+      "(outside)": {
+       "bytes_hashed": 1641383.0,
+       "opens": 108.0,
+       "sqlite_acquire_s": 1e-05,
+       "sqlite_body_s": 0.0001,
+       "sqlite_commit_s": 0.00109
+      },
+      "cas_get": {
+       "bytes_hashed": 19071433.0,
+       "bytes_read": 19071433.0,
+       "opens": 9026.0
+      },
+      "cas_put": {
+       "bytes_hashed": 6040591.0,
+       "cas_hits": 3001.0,
+       "cas_misses": 9.0,
+       "chmods": 9.0,
+       "mkdirs": 9.0,
+       "opens": 18.0
+      },
+      "certify": {
+       "bytes_hashed": 44427.0,
+       "bytes_read": 119.0,
+       "opens": 1.0,
+       "sqlite_acquire_s": 1e-05,
+       "sqlite_body_s": 0.00025,
+       "sqlite_commit_s": 0.00107
+      },
+      "evaluate": {
+       "bytes_hashed": 3449705.0,
+       "bytes_read": 16731.0,
+       "chmods": 3036.0,
+       "mkdirs": 2.0,
+       "opens": 37.0,
+       "sqlite_acquire_s": 0.00017,
+       "sqlite_body_s": 0.00117,
+       "sqlite_commit_s": 0.07027
+      },
+      "independent_verify": {
+       "bytes_hashed": 5159.0
+      },
+      "materialize": {
+       "chmods": 29.0,
+       "mkdirs": 1.0,
+       "opens": 3001.0
+      },
+      "policy_check": {
+       "bytes_hashed": 1710839.0,
+       "sqlite_acquire_s": 1e-05,
+       "sqlite_body_s": 0.00011,
+       "sqlite_commit_s": 0.00067
+      },
+      "queue_enqueue": {
+       "bytes_hashed": 36945.0,
+       "sqlite_acquire_s": 1e-05,
+       "sqlite_body_s": 7e-05,
+       "sqlite_commit_s": 0.00058
+      },
+      "read_files": {
+       "opens": 18006.0
+      },
+      "sign": {
+       "bytes_hashed": 64.0,
+       "bytes_read": 476.0,
+       "opens": 4.0
+      },
+      "take_snapshot": {
+       "bytes_hashed": 819556.0,
+       "sqlite_acquire_s": 1e-05,
+       "sqlite_body_s": 0.00027,
+       "sqlite_commit_s": 0.00078
+      },
+      "test_subprocess": {
+       "bytes_read": 12390.0,
+       "opens": 5.0
+      },
+      "tree_hash": {
+       "bytes_hashed": 12043240.0
+      },
+      "verify_snapshot": {
+       "bytes_hashed": 409778.0
+      },
+      "worker_run_one": {
+       "bytes_hashed": 36668.0,
+       "sqlite_acquire_s": 1e-05,
+       "sqlite_body_s": 0.00508,
+       "sqlite_commit_s": 0.00143
+      }
+     },
+     "parent_cpu_s": 1.1156,
+     "peak_tree_rss_mb": 83.7,
+     "stages": {
+      "cas_get": {
+       "calls": 9026,
+       "cpu_excl_s": 0.18853,
+       "cpu_incl_s": 0.18853,
+       "excl_s": 0.18713,
+       "incl_s": 0.18713
+      },
+      "cas_put": {
+       "calls": 3010,
+       "cpu_excl_s": 0.04951,
+       "cpu_incl_s": 0.12468,
+       "excl_s": 0.227,
+       "incl_s": 0.30217
+      },
+      "cas_verify": {
+       "calls": 6002,
+       "cpu_excl_s": 0.01981,
+       "cpu_incl_s": 0.14528,
+       "excl_s": 0.02031,
+       "incl_s": 0.14481
+      },
+      "certify": {
+       "calls": 1,
+       "cpu_excl_s": 0.01004,
+       "cpu_incl_s": 0.01181,
+       "excl_s": 0.01121,
+       "incl_s": 0.0491
+      },
+      "evaluate": {
+       "calls": 1,
+       "cpu_excl_s": 0.13674,
+       "cpu_incl_s": 0.6304,
+       "excl_s": 0.20573,
+       "incl_s": 0.90922
+      },
+      "export_bundle": {
+       "calls": 1,
+       "cpu_excl_s": 0.00105,
+       "cpu_incl_s": 0.00116,
+       "excl_s": 0.00105,
+       "incl_s": 0.00116
+      },
+      "independent_verify": {
+       "calls": 1,
+       "cpu_excl_s": 0.00118,
+       "cpu_incl_s": 0.00118,
+       "excl_s": 0.00118,
+       "incl_s": 0.00118
+      },
+      "materialize": {
+       "calls": 1,
+       "cpu_excl_s": 0.09142,
+       "cpu_incl_s": 0.09142,
+       "excl_s": 0.09071,
+       "incl_s": 0.09071
+      },
+      "policy_check": {
+       "calls": 1,
+       "cpu_excl_s": 0.13063,
+       "cpu_incl_s": 0.19184,
+       "excl_s": 0.13112,
+       "incl_s": 0.19187
+      },
+      "queue_enqueue": {
+       "calls": 1,
+       "cpu_excl_s": 0.0079,
+       "cpu_incl_s": 0.0081,
+       "excl_s": 0.00851,
+       "incl_s": 0.00871
+      },
+      "read_files": {
+       "calls": 9003,
+       "cpu_excl_s": 0.1419,
+       "cpu_incl_s": 0.1419,
+       "excl_s": 0.13972,
+       "incl_s": 0.13972
+      },
+      "report_validation": {
+       "calls": 1,
+       "cpu_excl_s": 0.01848,
+       "cpu_incl_s": 0.01848,
+       "excl_s": 0.01842,
+       "incl_s": 0.01842
+      },
+      "scan_tree": {
+       "calls": 3,
+       "cpu_excl_s": 0.07905,
+       "cpu_incl_s": 0.07905,
+       "excl_s": 0.07623,
+       "incl_s": 0.07623
+      },
+      "sign": {
+       "calls": 2,
+       "cpu_excl_s": 0.00068,
+       "cpu_incl_s": 0.00068,
+       "excl_s": 0.00068,
+       "incl_s": 0.00068
+      },
+      "take_snapshot": {
+       "calls": 1,
+       "cpu_excl_s": 0.08327,
+       "cpu_incl_s": 0.28995,
+       "excl_s": 0.0836,
+       "incl_s": 0.42584
+      },
+      "test_subprocess": {
+       "calls": 1,
+       "cpu_excl_s": 0.00398,
+       "cpu_incl_s": 0.00398,
+       "excl_s": 0.21431,
+       "incl_s": 0.21431
+      },
+      "tree_hash": {
+       "calls": 2,
+       "cpu_excl_s": 0.0493,
+       "cpu_incl_s": 0.186,
+       "excl_s": 0.04901,
+       "incl_s": 0.1829
+      },
+      "verify_snapshot": {
+       "calls": 1,
+       "cpu_excl_s": 0.00025,
+       "cpu_incl_s": 0.00025,
+       "excl_s": 0.00025,
+       "incl_s": 0.00025
+      },
+      "worker_run_one": {
+       "calls": 1,
+       "cpu_excl_s": 0.00729,
+       "cpu_incl_s": 0.64963,
+       "excl_s": 0.00881,
+       "incl_s": 0.96725
+      }
+     },
+     "tree_hash_calls": 2,
+     "wall_s": 1.5701,
+     "warmup": false
+    },
+    {
+     "callers": {
+      "cas_get": {
+       "(outside)": 3,
+       "cas_verify": 6002,
+       "certify": 4,
+       "evaluate": 4,
+       "export_bundle": 2,
+       "policy_check": 3006,
+       "queue_enqueue": 3,
+       "worker_run_one": 2
+      },
+      "cas_put": {
+       "(outside)": 1,
+       "certify": 2,
+       "evaluate": 5,
+       "take_snapshot": 3002
+      },
+      "cas_verify": {
+       "(outside)": 3001,
+       "cas_put": 3001
+      },
+      "materialize": {
+       "evaluate": 1
+      },
+      "read_files": {
+       "take_snapshot": 3001,
+       "tree_hash": 6002
+      },
+      "tree_hash": {
+       "evaluate": 2
+      },
+      "verify_snapshot": {
+       "evaluate": 1
+      }
+     },
+     "child_cpu_s": 0.5595,
+     "child_ru_inblock": 0,
+     "child_ru_oublock": 48,
+     "counters": {
+      "(outside)": {
+       "bytes_hashed": 1641383.0,
+       "opens": 122.0,
+       "sqlite_acquire_s": 1e-05,
+       "sqlite_body_s": 0.00013,
+       "sqlite_commit_s": 0.00111
+      },
+      "cas_get": {
+       "bytes_hashed": 19071433.0,
+       "bytes_read": 19071433.0,
+       "opens": 9026.0
+      },
+      "cas_put": {
+       "bytes_hashed": 6040591.0,
+       "cas_hits": 3001.0,
+       "cas_misses": 9.0,
+       "chmods": 9.0,
+       "mkdirs": 9.0,
+       "opens": 18.0
+      },
+      "certify": {
+       "bytes_hashed": 44427.0,
+       "bytes_read": 119.0,
+       "opens": 1.0,
+       "sqlite_acquire_s": 1e-05,
+       "sqlite_body_s": 0.00026,
+       "sqlite_commit_s": 0.00157
+      },
+      "evaluate": {
+       "bytes_hashed": 3449705.0,
+       "bytes_read": 16731.0,
+       "chmods": 3036.0,
+       "mkdirs": 2.0,
+       "opens": 37.0,
+       "sqlite_acquire_s": 4e-05,
+       "sqlite_body_s": 0.00108,
+       "sqlite_commit_s": 0.00498
+      },
+      "independent_verify": {
+       "bytes_hashed": 5159.0
+      },
+      "materialize": {
+       "chmods": 29.0,
+       "mkdirs": 1.0,
+       "opens": 3001.0
+      },
+      "policy_check": {
+       "bytes_hashed": 1710839.0,
+       "sqlite_acquire_s": 1e-05,
+       "sqlite_body_s": 0.0001,
+       "sqlite_commit_s": 0.00065
+      },
+      "queue_enqueue": {
+       "bytes_hashed": 36945.0,
+       "sqlite_acquire_s": 1e-05,
+       "sqlite_body_s": 7e-05,
+       "sqlite_commit_s": 0.00066
+      },
+      "read_files": {
+       "opens": 18006.0
+      },
+      "sign": {
+       "bytes_hashed": 64.0,
+       "bytes_read": 476.0,
+       "opens": 4.0
+      },
+      "take_snapshot": {
+       "bytes_hashed": 819556.0,
+       "sqlite_acquire_s": 1e-05,
+       "sqlite_body_s": 0.00027,
+       "sqlite_commit_s": 0.12367
+      },
+      "test_subprocess": {
+       "bytes_read": 12390.0,
+       "opens": 5.0
+      },
+      "tree_hash": {
+       "bytes_hashed": 12043240.0
+      },
+      "verify_snapshot": {
+       "bytes_hashed": 409778.0
+      },
+      "worker_run_one": {
+       "bytes_hashed": 36668.0,
+       "sqlite_acquire_s": 1e-05,
+       "sqlite_body_s": 0.0052,
+       "sqlite_commit_s": 0.00107
+      }
+     },
+     "parent_cpu_s": 1.13,
+     "peak_tree_rss_mb": 83.7,
+     "stages": {
+      "cas_get": {
+       "calls": 9026,
+       "cpu_excl_s": 0.19138,
+       "cpu_incl_s": 0.19138,
+       "excl_s": 0.18956,
+       "incl_s": 0.18956
+      },
+      "cas_put": {
+       "calls": 3010,
+       "cpu_excl_s": 0.05203,
+       "cpu_incl_s": 0.12676,
+       "excl_s": 0.36494,
+       "incl_s": 0.43979
+      },
+      "cas_verify": {
+       "calls": 6002,
+       "cpu_excl_s": 0.01994,
+       "cpu_incl_s": 0.14599,
+       "excl_s": 0.02055,
+       "incl_s": 0.14559
+      },
+      "certify": {
+       "calls": 1,
+       "cpu_excl_s": 0.01131,
+       "cpu_incl_s": 0.01255,
+       "excl_s": 0.01308,
+       "incl_s": 0.0171
+      },
+      "evaluate": {
+       "calls": 1,
+       "cpu_excl_s": 0.1358,
+       "cpu_incl_s": 0.63468,
+       "excl_s": 0.1406,
+       "incl_s": 1.01368
+      },
+      "export_bundle": {
+       "calls": 1,
+       "cpu_excl_s": 0.00108,
+       "cpu_incl_s": 0.00118,
+       "excl_s": 0.00108,
+       "incl_s": 0.00118
+      },
+      "independent_verify": {
+       "calls": 1,
+       "cpu_excl_s": 0.00118,
+       "cpu_incl_s": 0.00118,
+       "excl_s": 0.00118,
+       "incl_s": 0.00118
+      },
+      "materialize": {
+       "calls": 1,
+       "cpu_excl_s": 0.09167,
+       "cpu_incl_s": 0.09167,
+       "excl_s": 0.09097,
+       "incl_s": 0.09097
+      },
+      "policy_check": {
+       "calls": 1,
+       "cpu_excl_s": 0.13586,
+       "cpu_incl_s": 0.19924,
+       "excl_s": 0.13603,
+       "incl_s": 0.19859
+      },
+      "queue_enqueue": {
+       "calls": 1,
+       "cpu_excl_s": 0.0087,
+       "cpu_incl_s": 0.00891,
+       "excl_s": 0.00919,
+       "incl_s": 0.0094
+      },
+      "read_files": {
+       "calls": 9003,
+       "cpu_excl_s": 0.14196,
+       "cpu_incl_s": 0.14196,
+       "excl_s": 0.13978,
+       "incl_s": 0.13978
+      },
+      "report_validation": {
+       "calls": 1,
+       "cpu_excl_s": 0.01739,
+       "cpu_incl_s": 0.01739,
+       "excl_s": 0.01736,
+       "incl_s": 0.01736
+      },
+      "scan_tree": {
+       "calls": 3,
+       "cpu_excl_s": 0.07655,
+       "cpu_incl_s": 0.07655,
+       "excl_s": 0.07479,
+       "incl_s": 0.07479
+      },
+      "sign": {
+       "calls": 2,
+       "cpu_excl_s": 0.00073,
+       "cpu_incl_s": 0.00073,
+       "excl_s": 0.00073,
+       "incl_s": 0.00073
+      },
+      "take_snapshot": {
+       "calls": 1,
+       "cpu_excl_s": 0.08563,
+       "cpu_incl_s": 0.29199,
+       "excl_s": 0.207,
+       "incl_s": 0.41628
+      },
+      "test_subprocess": {
+       "calls": 1,
+       "cpu_excl_s": 0.00388,
+       "cpu_incl_s": 0.00388,
+       "excl_s": 0.21402,
+       "incl_s": 0.21402
+      },
+      "tree_hash": {
+       "calls": 2,
+       "cpu_excl_s": 0.04949,
+       "cpu_incl_s": 0.18211,
+       "excl_s": 0.04919,
+       "incl_s": 0.1805
+      },
+      "verify_snapshot": {
+       "calls": 1,
+       "cpu_excl_s": 0.00027,
+       "cpu_incl_s": 0.00027,
+       "excl_s": 0.00027,
+       "incl_s": 0.00027
+      },
+      "worker_run_one": {
+       "calls": 1,
+       "cpu_excl_s": 0.00743,
+       "cpu_incl_s": 0.65478,
+       "excl_s": 0.0087,
+       "incl_s": 1.0396
+      }
+     },
+     "tree_hash_calls": 2,
+     "wall_s": 1.7776,
+     "warmup": false
+    },
+    {
+     "callers": {
+      "cas_get": {
+       "(outside)": 3,
+       "cas_verify": 6002,
+       "certify": 4,
+       "evaluate": 4,
+       "export_bundle": 2,
+       "policy_check": 3006,
+       "queue_enqueue": 3,
+       "worker_run_one": 2
+      },
+      "cas_put": {
+       "(outside)": 1,
+       "certify": 2,
+       "evaluate": 5,
+       "take_snapshot": 3002
+      },
+      "cas_verify": {
+       "(outside)": 3001,
+       "cas_put": 3001
+      },
+      "materialize": {
+       "evaluate": 1
+      },
+      "read_files": {
+       "take_snapshot": 3001,
+       "tree_hash": 6002
+      },
+      "tree_hash": {
+       "evaluate": 2
+      },
+      "verify_snapshot": {
+       "evaluate": 1
+      }
+     },
+     "child_cpu_s": 0.4667,
+     "child_ru_inblock": 0,
+     "child_ru_oublock": 48,
+     "counters": {
+      "(outside)": {
+       "bytes_hashed": 1641383.0,
+       "opens": 90.0,
+       "sqlite_acquire_s": 1e-05,
+       "sqlite_body_s": 0.00013,
+       "sqlite_commit_s": 0.00101
+      },
+      "cas_get": {
+       "bytes_hashed": 19071433.0,
+       "bytes_read": 19071433.0,
+       "opens": 9026.0
+      },
+      "cas_put": {
+       "bytes_hashed": 6040591.0,
+       "cas_hits": 3001.0,
+       "cas_misses": 9.0,
+       "chmods": 9.0,
+       "mkdirs": 9.0,
+       "opens": 18.0
+      },
+      "certify": {
+       "bytes_hashed": 44427.0,
+       "bytes_read": 119.0,
+       "opens": 1.0,
+       "sqlite_acquire_s": 1e-05,
+       "sqlite_body_s": 0.00023,
+       "sqlite_commit_s": 0.00112
+      },
+      "evaluate": {
+       "bytes_hashed": 3449705.0,
+       "bytes_read": 16731.0,
+       "chmods": 3036.0,
+       "mkdirs": 2.0,
+       "opens": 37.0,
+       "sqlite_acquire_s": 0.00017,
+       "sqlite_body_s": 0.00105,
+       "sqlite_commit_s": 0.00346
+      },
+      "independent_verify": {
+       "bytes_hashed": 5159.0
+      },
+      "materialize": {
+       "chmods": 29.0,
+       "mkdirs": 1.0,
+       "opens": 3001.0
+      },
+      "policy_check": {
+       "bytes_hashed": 1710839.0,
+       "sqlite_acquire_s": 1e-05,
+       "sqlite_body_s": 0.00011,
+       "sqlite_commit_s": 0.01625
+      },
+      "queue_enqueue": {
+       "bytes_hashed": 36945.0,
+       "sqlite_acquire_s": 1e-05,
+       "sqlite_body_s": 7e-05,
+       "sqlite_commit_s": 0.00061
+      },
+      "read_files": {
+       "opens": 18006.0
+      },
+      "sign": {
+       "bytes_hashed": 64.0,
+       "bytes_read": 476.0,
+       "opens": 4.0
+      },
+      "take_snapshot": {
+       "bytes_hashed": 819556.0,
+       "sqlite_acquire_s": 1e-05,
+       "sqlite_body_s": 0.00028,
+       "sqlite_commit_s": 0.00061
+      },
+      "test_subprocess": {
+       "bytes_read": 12390.0,
+       "opens": 5.0
+      },
+      "tree_hash": {
+       "bytes_hashed": 12043240.0
+      },
+      "verify_snapshot": {
+       "bytes_hashed": 409778.0
+      },
+      "worker_run_one": {
+       "bytes_hashed": 36668.0,
+       "sqlite_acquire_s": 1e-05,
+       "sqlite_body_s": 0.00548,
+       "sqlite_commit_s": 0.00117
+      }
+     },
+     "parent_cpu_s": 1.1176,
+     "peak_tree_rss_mb": 83.7,
+     "stages": {
+      "cas_get": {
+       "calls": 9026,
+       "cpu_excl_s": 0.19193,
+       "cpu_incl_s": 0.19193,
+       "excl_s": 0.18984,
+       "incl_s": 0.18984
+      },
+      "cas_put": {
+       "calls": 3010,
+       "cpu_excl_s": 0.04842,
+       "cpu_incl_s": 0.12405,
+       "excl_s": 0.07742,
+       "incl_s": 0.15258
+      },
+      "cas_verify": {
+       "calls": 6002,
+       "cpu_excl_s": 0.01997,
+       "cpu_incl_s": 0.14641,
+       "excl_s": 0.02049,
+       "incl_s": 0.14557
+      },
+      "certify": {
+       "calls": 1,
+       "cpu_excl_s": 0.01063,
+       "cpu_incl_s": 0.01183,
+       "excl_s": 0.0122,
+       "incl_s": 0.01467
+      },
+      "evaluate": {
+       "calls": 1,
+       "cpu_excl_s": 0.13604,
+       "cpu_incl_s": 0.63068,
+       "excl_s": 0.13911,
+       "incl_s": 0.87182
+      },
+      "export_bundle": {
+       "calls": 1,
+       "cpu_excl_s": 0.00108,
+       "cpu_incl_s": 0.00118,
+       "excl_s": 0.00108,
+       "incl_s": 0.00118
+      },
+      "independent_verify": {
+       "calls": 1,
+       "cpu_excl_s": 0.00117,
+       "cpu_incl_s": 0.00117,
+       "excl_s": 0.00117,
+       "incl_s": 0.00117
+      },
+      "materialize": {
+       "calls": 1,
+       "cpu_excl_s": 0.09362,
+       "cpu_incl_s": 0.09362,
+       "excl_s": 0.093,
+       "incl_s": 0.093
+      },
+      "policy_check": {
+       "calls": 1,
+       "cpu_excl_s": 0.13329,
+       "cpu_incl_s": 0.19678,
+       "excl_s": 0.14868,
+       "incl_s": 0.21142
+      },
+      "queue_enqueue": {
+       "calls": 1,
+       "cpu_excl_s": 0.00837,
+       "cpu_incl_s": 0.00858,
+       "excl_s": 0.00875,
+       "incl_s": 0.00896
+      },
+      "read_files": {
+       "calls": 9003,
+       "cpu_excl_s": 0.14056,
+       "cpu_incl_s": 0.14056,
+       "excl_s": 0.13958,
+       "incl_s": 0.13958
+      },
+      "report_validation": {
+       "calls": 1,
+       "cpu_excl_s": 0.01833,
+       "cpu_incl_s": 0.01833,
+       "excl_s": 0.01826,
+       "incl_s": 0.01826
+      },
+      "scan_tree": {
+       "calls": 3,
+       "cpu_excl_s": 0.07361,
+       "cpu_incl_s": 0.07361,
+       "excl_s": 0.07281,
+       "incl_s": 0.07281
+      },
+      "sign": {
+       "calls": 2,
+       "cpu_excl_s": 0.00069,
+       "cpu_incl_s": 0.00069,
+       "excl_s": 0.00069,
+       "incl_s": 0.00069
+      },
+      "take_snapshot": {
+       "calls": 1,
+       "cpu_excl_s": 0.08469,
+       "cpu_incl_s": 0.28977,
+       "excl_s": 0.08429,
+       "incl_s": 0.29178
+      },
+      "test_subprocess": {
+       "calls": 1,
+       "cpu_excl_s": 0.00404,
+       "cpu_incl_s": 0.00404,
+       "excl_s": 0.21426,
+       "incl_s": 0.21426
+      },
+      "tree_hash": {
+       "calls": 2,
+       "cpu_excl_s": 0.04844,
+       "cpu_incl_s": 0.17984,
+       "excl_s": 0.04825,
+       "incl_s": 0.17877
+      },
+      "verify_snapshot": {
+       "calls": 1,
+       "cpu_excl_s": 0.00025,
+       "cpu_incl_s": 0.00025,
+       "excl_s": 0.00025,
+       "incl_s": 0.00025
+      },
+      "worker_run_one": {
+       "calls": 1,
+       "cpu_excl_s": 0.00778,
+       "cpu_incl_s": 0.65044,
+       "excl_s": 0.00895,
+       "incl_s": 0.89559
+      }
+     },
+     "tree_hash_calls": 2,
+     "wall_s": 1.3743,
+     "warmup": false
+    }
+   ],
+   "summary": {
+    "callers_of_io_stages_run_median": {
+     "cas_get": {
+      "(outside)": 3,
+      "cas_verify": 6002,
+      "certify": 4,
+      "evaluate": 4,
+      "export_bundle": 2,
+      "policy_check": 3006,
+      "queue_enqueue": 3,
+      "worker_run_one": 2
+     },
+     "cas_put": {
+      "(outside)": 1,
+      "certify": 2,
+      "evaluate": 5,
+      "take_snapshot": 3002
+     },
+     "cas_verify": {
+      "(outside)": 3001,
+      "cas_put": 3001
+     },
+     "materialize": {
+      "evaluate": 1
+     },
+     "read_files": {
+      "take_snapshot": 3001,
+      "tree_hash": 6002
+     },
+     "tree_hash": {
+      "evaluate": 2
+     },
+     "verify_snapshot": {
+      "evaluate": 1
+     }
+    },
+    "child_cpu_s_median": 0.5122,
+    "counters_median_by_stage": {
+     "(outside)": {
+      "bytes_hashed": 1641383.0,
+      "opens": 108.0,
+      "sqlite_acquire_s": 1e-05,
+      "sqlite_body_s": 0.00013,
+      "sqlite_commit_s": 0.00109
+     },
+     "cas_get": {
+      "bytes_hashed": 19071433.0,
+      "bytes_read": 19071433.0,
+      "opens": 9026.0
+     },
+     "cas_put": {
+      "bytes_hashed": 6040591.0,
+      "cas_hits": 3001.0,
+      "cas_misses": 9.0,
+      "chmods": 9.0,
+      "mkdirs": 9.0,
+      "opens": 18.0
+     },
+     "certify": {
+      "bytes_hashed": 44427.0,
+      "bytes_read": 119.0,
+      "opens": 1.0,
+      "sqlite_acquire_s": 1e-05,
+      "sqlite_body_s": 0.00025,
+      "sqlite_commit_s": 0.00112
+     },
+     "evaluate": {
+      "bytes_hashed": 3449705.0,
+      "bytes_read": 16731.0,
+      "chmods": 3036.0,
+      "mkdirs": 2.0,
+      "opens": 37.0,
+      "sqlite_acquire_s": 0.00017,
+      "sqlite_body_s": 0.00108,
+      "sqlite_commit_s": 0.00498
+     },
+     "independent_verify": {
+      "bytes_hashed": 5159.0
+     },
+     "materialize": {
+      "chmods": 29.0,
+      "mkdirs": 1.0,
+      "opens": 3001.0
+     },
+     "policy_check": {
+      "bytes_hashed": 1710839.0,
+      "sqlite_acquire_s": 1e-05,
+      "sqlite_body_s": 0.00011,
+      "sqlite_commit_s": 0.00067
+     },
+     "queue_enqueue": {
+      "bytes_hashed": 36945.0,
+      "sqlite_acquire_s": 1e-05,
+      "sqlite_body_s": 7e-05,
+      "sqlite_commit_s": 0.00061
+     },
+     "read_files": {
+      "opens": 18006.0
+     },
+     "sign": {
+      "bytes_hashed": 64.0,
+      "bytes_read": 476.0,
+      "opens": 4.0
+     },
+     "take_snapshot": {
+      "bytes_hashed": 819556.0,
+      "sqlite_acquire_s": 1e-05,
+      "sqlite_body_s": 0.00027,
+      "sqlite_commit_s": 0.00078
+     },
+     "test_subprocess": {
+      "bytes_read": 12390.0,
+      "opens": 5.0
+     },
+     "tree_hash": {
+      "bytes_hashed": 12043240.0
+     },
+     "verify_snapshot": {
+      "bytes_hashed": 409778.0
+     },
+     "worker_run_one": {
+      "bytes_hashed": 36668.0,
+      "sqlite_acquire_s": 1e-05,
+      "sqlite_body_s": 0.0052,
+      "sqlite_commit_s": 0.00117
+     }
+    },
+    "parent_cpu_s_median": 1.1176,
+    "peak_tree_rss_mb_median": 83.7,
+    "stages_median": {
+     "cas_get": {
+      "calls": 9026,
+      "cpu_excl_s": 0.19138,
+      "cpu_incl_s": 0.19138,
+      "excl_s": 0.18956,
+      "incl_s": 0.18956
+     },
+     "cas_put": {
+      "calls": 3010,
+      "cpu_excl_s": 0.04951,
+      "cpu_incl_s": 0.12468,
+      "excl_s": 0.227,
+      "incl_s": 0.30217
+     },
+     "cas_verify": {
+      "calls": 6002,
+      "cpu_excl_s": 0.01994,
+      "cpu_incl_s": 0.14599,
+      "excl_s": 0.02049,
+      "incl_s": 0.14557
+     },
+     "certify": {
+      "calls": 1,
+      "cpu_excl_s": 0.01063,
+      "cpu_incl_s": 0.01183,
+      "excl_s": 0.0122,
+      "incl_s": 0.0171
+     },
+     "evaluate": {
+      "calls": 1,
+      "cpu_excl_s": 0.13604,
+      "cpu_incl_s": 0.63068,
+      "excl_s": 0.1406,
+      "incl_s": 0.90922
+     },
+     "export_bundle": {
+      "calls": 1,
+      "cpu_excl_s": 0.00108,
+      "cpu_incl_s": 0.00118,
+      "excl_s": 0.00108,
+      "incl_s": 0.00118
+     },
+     "independent_verify": {
+      "calls": 1,
+      "cpu_excl_s": 0.00118,
+      "cpu_incl_s": 0.00118,
+      "excl_s": 0.00118,
+      "incl_s": 0.00118
+     },
+     "materialize": {
+      "calls": 1,
+      "cpu_excl_s": 0.09167,
+      "cpu_incl_s": 0.09167,
+      "excl_s": 0.09097,
+      "incl_s": 0.09097
+     },
+     "policy_check": {
+      "calls": 1,
+      "cpu_excl_s": 0.13329,
+      "cpu_incl_s": 0.19678,
+      "excl_s": 0.13603,
+      "incl_s": 0.19859
+     },
+     "queue_enqueue": {
+      "calls": 1,
+      "cpu_excl_s": 0.00837,
+      "cpu_incl_s": 0.00858,
+      "excl_s": 0.00875,
+      "incl_s": 0.00896
+     },
+     "read_files": {
+      "calls": 9003,
+      "cpu_excl_s": 0.1419,
+      "cpu_incl_s": 0.1419,
+      "excl_s": 0.13972,
+      "incl_s": 0.13972
+     },
+     "report_validation": {
+      "calls": 1,
+      "cpu_excl_s": 0.01833,
+      "cpu_incl_s": 0.01833,
+      "excl_s": 0.01826,
+      "incl_s": 0.01826
+     },
+     "scan_tree": {
+      "calls": 3,
+      "cpu_excl_s": 0.07655,
+      "cpu_incl_s": 0.07655,
+      "excl_s": 0.07479,
+      "incl_s": 0.07479
+     },
+     "sign": {
+      "calls": 2,
+      "cpu_excl_s": 0.00069,
+      "cpu_incl_s": 0.00069,
+      "excl_s": 0.00069,
+      "incl_s": 0.00069
+     },
+     "take_snapshot": {
+      "calls": 1,
+      "cpu_excl_s": 0.08469,
+      "cpu_incl_s": 0.28995,
+      "excl_s": 0.08429,
+      "incl_s": 0.41628
+     },
+     "test_subprocess": {
+      "calls": 1,
+      "cpu_excl_s": 0.00398,
+      "cpu_incl_s": 0.00398,
+      "excl_s": 0.21426,
+      "incl_s": 0.21426
+     },
+     "tree_hash": {
+      "calls": 2,
+      "cpu_excl_s": 0.0493,
+      "cpu_incl_s": 0.18211,
+      "excl_s": 0.04901,
+      "incl_s": 0.1805
+     },
+     "verify_snapshot": {
+      "calls": 1,
+      "cpu_excl_s": 0.00025,
+      "cpu_incl_s": 0.00025,
+      "excl_s": 0.00025,
+      "incl_s": 0.00025
+     },
+     "worker_run_one": {
+      "calls": 1,
+      "cpu_excl_s": 0.00743,
+      "cpu_incl_s": 0.65044,
+      "excl_s": 0.00881,
+      "incl_s": 0.96725
+     }
+    },
+    "wall_s": {
+     "max": 1.7776,
+     "median": 1.5701,
+     "min": 1.3743
+    }
+   }
+  }
+ },
+ "warmup_runs": 1
+}
