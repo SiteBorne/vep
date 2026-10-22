@@ -22,7 +22,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        flags: ["none", "staging_fast", "staging_clone", "verified_handoff", "staging_fast,staging_clone,verified_handoff"]
+        flags: ["none", "staging_fast", "staging_clone", "verified_handoff", "staging_fast,verified_handoff", "staging_fast,staging_clone,verified_handoff"]
     env:
       VEP_PERF: ${{ matrix.flags }}
       OUT: ${{ github.workspace }}/correctness-out

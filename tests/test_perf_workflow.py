@@ -46,6 +46,15 @@ class PerfWorkflowTests(unittest.TestCase):
         self.assertIn("wait_idle.py", text)
         self.assertNotIn("--timeout 0", text)
 
+    def test_every_benchmarked_flag_arm_has_its_own_hosted_correctness_run(self):
+        text = WF.read_text()
+        arms = [a.strip('"') for a in re.search(r"ARMS=\(([^)]*)\)", text).group(1).split()]
+        matrix = set(re.findall(r'"([^"]*)"', re.search(r"flags: \[([^\]]*)\]", text).group(1)))
+        flag_arms = [a for a in arms if not a.startswith("ctl@")]
+        self.assertTrue(flag_arms)
+        for arm in flag_arms:
+            self.assertIn(arm, matrix, f"benchmarked arm {arm!r} has no hosted correctness run")
+
 
 if __name__ == "__main__":
     unittest.main()
