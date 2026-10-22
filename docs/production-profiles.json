@@ -34,7 +34,7 @@
      "status": "PASS"
     },
     "tests_claude_installer": {
-     "detail": "passed test_claude_code:11",
+     "detail": "passed test_claude_code:28",
      "status": "PASS"
     }
    },
@@ -145,8 +145,7 @@
   "PUBLIC_ANNOUNCEMENT_READY": {
    "blocking": {
     "candidate_release_artifacts_verified": "FAIL: no candidate release exists; nothing has been built, tagged or published for it",
-    "candidate_version_set": "FAIL: package version 0.5.0b1 equals the already-published release; the next version is decided but not set",
-    "hosted_ci_for_head": "UNVERIFIED: HEAD aa29821 is not on any remote branch: hosted CI has not run on it"
+    "candidate_version_set": "FAIL: package version 0.5.0b1 equals the already-published release; the next version is decided but not set"
    },
    "prerequisites": {
     "candidate_release_artifacts_verified": {
@@ -158,8 +157,8 @@
      "status": "FAIL"
     },
     "hosted_ci_for_head": {
-     "detail": "HEAD aa29821 is not on any remote branch: hosted CI has not run on it",
-     "status": "UNVERIFIED"
+     "detail": "['CI', 'CodeQL'] succeeded on 3cf2371",
+     "status": "PASS"
     },
     "packaging_install_smoke": {
      "detail": "vep_protocol-0.5.0b1-py3-none-any.whl built, installed in a fresh venv, CLI/MCP/A2A entry points and skill assets present",
@@ -169,17 +168,15 @@
    "ready": "NO"
   },
   "REFERENCE_IMPLEMENTATION_READY": {
-   "blocking": {
-    "hosted_ci_for_head": "UNVERIFIED: HEAD aa29821 is not on any remote branch: hosted CI has not run on it"
-   },
+   "blocking": {},
    "prerequisites": {
     "full_suite": {
-     "detail": "482 tests, 0 failing, 0 skipped",
+     "detail": "499 tests, 0 failing, 0 skipped",
      "status": "PASS"
     },
     "hosted_ci_for_head": {
-     "detail": "HEAD aa29821 is not on any remote branch: hosted CI has not run on it",
-     "status": "UNVERIFIED"
+     "detail": "['CI', 'CodeQL'] succeeded on 3cf2371",
+     "status": "PASS"
     },
     "packaging_install_smoke": {
      "detail": "vep_protocol-0.5.0b1-py3-none-any.whl built, installed in a fresh venv, CLI/MCP/A2A entry points and skill assets present",
@@ -194,7 +191,7 @@
      "status": "PASS"
     }
    },
-   "ready": "NO"
+   "ready": "YES"
   },
   "UNTRUSTED_EXECUTION_READY": {
    "blocking": {
@@ -214,6 +211,6 @@
    "ready": "NO"
   }
  },
- "source_commit": "aa2982113d249013e5e652b1cfad8f13d4d36b88",
+ "source_commit": "3cf237105c130281d9e925e09e27b29f2244082e",
  "tree_dirty": false
 }

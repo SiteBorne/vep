@@ -1,7 +1,7 @@
 # VEP — technical submission for Anthropic engineering review (DRAFT, NOT SUBMITTED)
 
 Nothing here states or implies that Anthropic has endorsed, reviewed, adopted or validated VEP. This is an independently inspectable description written for reviewers. It has not been sent to anyone; sending it is the maintainer's decision.
-Source: https://github.com/SiteBorne/vep, branch `protocol/claude-native-0.6`, PR #2, **exact commit: see `docs/production-profiles.json` (`source_commit`) and the Evidence index below**. Baseline release: `v0.5.0b1` (unchanged). Proposed next version: `0.6.0b1` (not set, not tagged).
+Source: https://github.com/SiteBorne/vep, branch `protocol/claude-native-0.6`, PR #2, **evaluated commit `3cf2371`** (hosted CI and CodeQL green on it; the later commit only adds the profile-results file). Baseline release: `v0.5.0b1` (unchanged). Proposed next version: `0.6.0b1` (not set, not tagged).
 
 ## 1. Technical executive summary
 VEP (Verified Evolution Protocol) makes a software change carry signed, exact-source test evidence, and lets a third party check it offline with their own trust policy, so an agent can request verification but cannot grade itself.
