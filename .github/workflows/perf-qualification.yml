@@ -3,8 +3,13 @@ name: Performance qualification (hosted Linux)
 # Reproduces the preregistered performance experiments (benchmarks/analysis/PLANNED_EXPERIMENTS.json) on a fresh GitHub-hosted VM. Manual only, read-only token, no secrets,
 # no paid infrastructure. Before each workload a bounded check waits for the declared start criterion (1-minute load average < 2.0); if the runner cannot meet it the
 # workload is NOT run and reported as environmentally invalid. The control is a pristine checkout of the baseline commit, run next to the flagged code in the same blocks.
+# GitHub only offers manual dispatch for workflows that exist on the default branch, so this file also runs on a push to the experiment branch that modifies THIS file
+# (and nothing else); that is how the hosted measurement is started without touching main. It never runs for pull requests.
 on:
   workflow_dispatch:
+  push:
+    branches: ["perf/agent-scale"]
+    paths: [".github/workflows/perf-qualification.yml"]
 
 permissions:
   contents: read

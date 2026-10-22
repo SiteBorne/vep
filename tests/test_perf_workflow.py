@@ -25,7 +25,10 @@ def load_yaml(path):
 class PerfWorkflowTests(unittest.TestCase):
     def test_parses_is_manual_only_least_privilege_and_pinned(self):
         d = load_yaml(WF)
-        self.assertEqual(set(d.get("on") or d.get(True) or d.get("true")), {"workflow_dispatch"})
+        trig = d.get("on") or d.get(True) or d.get("true")
+        self.assertEqual(set(trig), {"workflow_dispatch", "push"})
+        self.assertEqual(trig["push"]["branches"], ["perf/agent-scale"])
+        self.assertEqual(trig["push"]["paths"], [".github/workflows/perf-qualification.yml"])
         self.assertEqual(d["permissions"], {"contents": "read"})
         text = WF.read_text()
         for line in re.findall(r"uses:\s*(\S+)", text):
