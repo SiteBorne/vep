@@ -2,6 +2,28 @@
 
 All notable changes. Format: [Keep a Changelog](https://keepachangelog.com/en/1.1.0/). Versions: [PEP 440](https://peps.python.org/pep-0440/).
 
+## [0.6.0b1] - UNRELEASED (release candidate; date set when tagged)
+Protocol version unchanged (0.3); database schema unchanged (3); Evidence/Certificate schemas unchanged; new object type `DerivedAttestation` v1. Nothing here is released, tagged or pushed. Compatibility notes: `docs/COMPATIBILITY.md`; qualification: `docs/PRODUCTION_QUALIFICATION_REPORT.md`.
+
+### Added
+- **Authorized verification**: relying-party trust policies (`VEP-TP1`: issuer keys with validity, rotation and revocation, accepted evaluators, required trust, expected snapshot); bundle format 2; `vep conformance trust-policy|verify --trust-policy`; Node `authorized`; conformance suite 1.1.
+- **MCP stdio server** `vep-mcp` (12 tools, 7 resources, operator-fixed authority, stable error codes, idempotency keys, bounded outputs) over a shared `vep.services` layer.
+- **Claude Code integration**: `vep claude install|status|uninstall|plugin` (`.mcp.json`, Skill with three workflows, CLAUDE.md block, guard hook; backups and conflict detection). **Claude Agent SDK** options builder `vep.agent_sdk`.
+- **A2A 1.0 agent** `vep-a2a` (bearer auth, token expiry, task deadline, idempotent on message id, cancellation).
+- **Exact-input evidence reuse**: `DerivedAttestation`, bundle format 3, `vep reuse derive|export|verify`, `vep_reuse_evidence`, Python and Node derivation-chain verification, conformance suite 1.2.
+- Normative [CORE_PROTOCOL_SPEC](docs/CORE_PROTOCOL_SPEC.md), machine-enforced readiness profiles (`scripts/profile_check.py`), fault-injection map, compatibility matrix, performance profile and qualification report.
+
+### Changed
+- `vep conformance export` writes bundle format 2 by default; v1 bundles verify as `INTERNAL_CONSISTENCY_ONLY`; `vep conformance verify` needs a trust policy or `--internal-only`.
+- Build-action identities are `bact2-` (timeout, isolation and declared dependencies included); results record `SINGLE_RUN` or `TWO_RUN_MATCH`; earlier cache entries are misses.
+
+### Security
+- **Fixed:** the bundle verifier trusted keys and expectations carried by the bundle it was verifying (reproduced in `tests/test_trust_anchor_risk.py`).
+- **Fixed:** build-cache identity omitted inputs that change the executed contract.
+
+### Known limitations
+Claude Code live use and the Agent SDK live run are not verified; hosted CI has not run on this work; MCP remote HTTP is not offered; A2A is not qualified for public exposure; no external review.
+
 ## [0.5.0b1] - UNRELEASED (date set when tagged)
 Public beta candidate. Protocol version unchanged (0.3); database schema 2 → 3 (additive); object schemas unchanged (Evidence/Certificate 2, others 1). Scope and limits: `docs/BETA_SCOPE.md`, `docs/RELEASE_NOTES.md`.
 

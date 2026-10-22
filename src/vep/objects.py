@@ -66,6 +66,15 @@ SPECS: dict[str, dict[str, Any]] = {
         "snapshot_id": _f("id:Snapshot"), "policy_id": _f("id:ExecutionPolicy"),
         "evidence_id": _f("id:Evidence"), "evidence_envelope_digest": _f("digest"),
         "issuer_key_id": _f("digest"), "issued_at": _f("ts")}),
+    "DerivedAttestation": S(prefix="datt", fields={
+        "candidate_id": _f("id:Candidate"), "objective_id": _f("id:Objective"),
+        "snapshot_id": _f("id:Snapshot"), "policy_id": _f("id:ExecutionPolicy"),
+        "original_evidence_id": _f("id:Evidence"), "original_evidence_envelope_digest": _f("digest"),
+        "original_candidate_id": _f("id:Candidate"), "original_objective_id": _f("id:Objective"),
+        "reuse_mode": _f("enum", values=["EXACT_INPUT"]),
+        "trust_level": _f("enum", values=["TRUSTED_LOCAL", "ISOLATED_VERIFIED"]), "evaluator_id": _f("str", max_len=256),
+        "runner_digest": _f("digest"), "environment_digest": _f("digest"),
+        "issuer_key_id": _f("digest"), "issued_at": _f("ts")}),
     "Observation": S(prefix="obs", fields={
         "subject": _f("str"), "metric": _f("str"), "value": _f("decimal"), "unit": _f("str"),
         "source": _f("enum", values=["measured", "simulated", "supplied"]),

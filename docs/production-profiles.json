@@ -1,0 +1,215 @@
+{
+ "note": "a profile is YES only when all of its own prerequisites PASS; there is no umbrella PRODUCTION_READY",
+ "profiles": {
+  "A2A_INTEGRATION_READY": {
+   "blocking": {},
+   "prerequisites": {
+    "tests_a2a": {
+     "detail": "passed test_a2a_server:9",
+     "status": "PASS"
+    },
+    "tests_lost_response_and_capabilities": {
+     "detail": "passed test_fault_injection:12",
+     "status": "PASS"
+    }
+   },
+   "ready": "YES",
+   "scope": "authenticated JSON-RPC on loopback by default; streaming exercised in tests, push notifications not offered; not qualified for public-internet exposure"
+  },
+  "CLAUDE_INTEGRATION_READY": {
+   "blocking": {
+    "claude_live_tool_use": "UNVERIFIED: no recorded live Claude Code tool call: needs the user's approval of the project server and an authorized model run"
+   },
+   "prerequisites": {
+    "claude_client_discovery": {
+     "detail": "claude mcp get found the project server: vep: Scope: Project config (shared via .mcp.json) Status: \u23f8 Pending approval (run `claude` to approve) To remove this se",
+     "status": "PASS"
+    },
+    "claude_live_tool_use": {
+     "detail": "no recorded live Claude Code tool call: needs the user's approval of the project server and an authorized model run",
+     "status": "UNVERIFIED"
+    },
+    "claude_plugin_validate": {
+     "detail": "\u2714 Validation passed",
+     "status": "PASS"
+    },
+    "tests_claude_installer": {
+     "detail": "passed test_claude_code:28",
+     "status": "PASS"
+    }
+   },
+   "ready": "NO"
+  },
+  "CORE_PROTOCOL_CONFORMANT": {
+   "blocking": {},
+   "prerequisites": {
+    "node_vectors": {
+     "detail": "119/119 vectors agree; 160/160 vectors agree; 194/194 vectors agree",
+     "status": "PASS"
+    },
+    "python_vectors": {
+     "detail": "473 vector evaluations agree",
+     "status": "PASS"
+    },
+    "reason_code_coverage": {
+     "detail": "every authorized and derived reason code has a vector",
+     "status": "PASS"
+    },
+    "spec_present": {
+     "detail": "docs/CORE_PROTOCOL_SPEC.md",
+     "status": "PASS"
+    },
+    "suites_regenerate": {
+     "detail": "suites 1.0, 1.1, 1.2 regenerate byte-identically",
+     "status": "PASS"
+    }
+   },
+   "ready": "YES"
+  },
+  "CORE_PROTOCOL_PRODUCTION_READY": {
+   "blocking": {},
+   "prerequisites": {
+    "node_vectors": {
+     "detail": "119/119 vectors agree; 160/160 vectors agree; 194/194 vectors agree",
+     "status": "PASS"
+    },
+    "python_vectors": {
+     "detail": "473 vector evaluations agree",
+     "status": "PASS"
+    },
+    "reason_code_coverage": {
+     "detail": "every authorized and derived reason code has a vector",
+     "status": "PASS"
+    },
+    "spec_present": {
+     "detail": "docs/CORE_PROTOCOL_SPEC.md",
+     "status": "PASS"
+    },
+    "suites_regenerate": {
+     "detail": "suites 1.0, 1.1, 1.2 regenerate byte-identically",
+     "status": "PASS"
+    },
+    "tests_adversarial": {
+     "detail": "passed test_adversarial:21, test_hardening:17, test_execution:27",
+     "status": "PASS"
+    },
+    "tests_compat_migration": {
+     "detail": "passed test_compat:13, test_migration_fixtures:8, test_candidates:15, test_controller:14",
+     "status": "PASS"
+    },
+    "tests_fault_injection": {
+     "detail": "passed test_fault_injection:12",
+     "status": "PASS"
+    },
+    "tests_reuse_chain": {
+     "detail": "passed test_evidence_reuse:7",
+     "status": "PASS"
+    },
+    "tests_trust_anchor": {
+     "detail": "passed test_trust_anchor_risk:2, test_trust_policy:7",
+     "status": "PASS"
+    }
+   },
+   "ready": "YES",
+   "scope": "the Core Profile as specified (verification semantics, trust policy, derived attestations); says nothing about the reference implementation's hosting or hostile code"
+  },
+  "ISOLATED_EXECUTION_READY": {
+   "blocking": {},
+   "prerequisites": {
+    "isolation_evidence_current": {
+     "detail": "isolation-critical files changed since 1e1c5b1: none",
+     "status": "PASS"
+    }
+   },
+   "ready": "YES"
+  },
+  "MCP_INTEGRATION_READY": {
+   "blocking": {},
+   "prerequisites": {
+    "mcp_remote_http_not_offered": {
+     "detail": "vep-mcp refuses any transport but stdio (exit 2); nothing remote to qualify",
+     "status": "PASS"
+    },
+    "tests_agent_sdk_contract": {
+     "detail": "passed test_agent_sdk:4",
+     "status": "PASS"
+    },
+    "tests_mcp_stdio": {
+     "detail": "passed test_mcp_server:10",
+     "status": "PASS"
+    }
+   },
+   "ready": "YES",
+   "scope": "local stdio transport only; remote HTTP is not offered"
+  },
+  "PUBLIC_ANNOUNCEMENT_READY": {
+   "blocking": {
+    "candidate_release_artifacts_verified": "FAIL: no candidate release exists; nothing has been built, tagged or published for it"
+   },
+   "prerequisites": {
+    "candidate_release_artifacts_verified": {
+     "detail": "no candidate release exists; nothing has been built, tagged or published for it",
+     "status": "FAIL"
+    },
+    "candidate_version_set": {
+     "detail": "0.6.0b1",
+     "status": "PASS"
+    },
+    "hosted_ci_for_head": {
+     "detail": "['CI', 'CodeQL'] succeeded on 45b0b24",
+     "status": "PASS"
+    },
+    "packaging_install_smoke": {
+     "detail": "vep_protocol-0.6.0b1-py3-none-any.whl built, installed in a fresh venv, CLI/MCP/A2A entry points and skill assets present",
+     "status": "PASS"
+    }
+   },
+   "ready": "NO"
+  },
+  "REFERENCE_IMPLEMENTATION_READY": {
+   "blocking": {},
+   "prerequisites": {
+    "full_suite": {
+     "detail": "499 tests, 0 failing, 0 skipped",
+     "status": "PASS"
+    },
+    "hosted_ci_for_head": {
+     "detail": "['CI', 'CodeQL'] succeeded on 45b0b24",
+     "status": "PASS"
+    },
+    "packaging_install_smoke": {
+     "detail": "vep_protocol-0.6.0b1-py3-none-any.whl built, installed in a fresh venv, CLI/MCP/A2A entry points and skill assets present",
+     "status": "PASS"
+    },
+    "tests_compat_migration": {
+     "detail": "passed test_compat:13, test_migration_fixtures:8, test_candidates:15, test_controller:14",
+     "status": "PASS"
+    },
+    "tests_fault_injection": {
+     "detail": "passed test_fault_injection:12",
+     "status": "PASS"
+    }
+   },
+   "ready": "YES"
+  },
+  "UNTRUSTED_EXECUTION_READY": {
+   "blocking": {
+    "escape_testing": "FAIL: none recorded",
+    "external_security_review": "FAIL: none: condition not met: external_security_review"
+   },
+   "prerequisites": {
+    "escape_testing": {
+     "detail": "none recorded",
+     "status": "FAIL"
+    },
+    "external_security_review": {
+     "detail": "none: condition not met: external_security_review",
+     "status": "FAIL"
+    }
+   },
+   "ready": "NO"
+  }
+ },
+ "source_commit": "45b0b241801aee2497651e75e2ad90d9871ca1dd",
+ "tree_dirty": false
+}

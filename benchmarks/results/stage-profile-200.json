@@ -1,0 +1,289 @@
+{
+ "host": {
+  "platform": "macOS-15.6-arm64-arm-64bit-Mach-O",
+  "python": "3.14.7"
+ },
+ "kind": "stage profile (inclusive wall times; stages overlap)",
+ "package": "0.5.0b1",
+ "project": {
+  "files": 402,
+  "tests": 200
+ },
+ "raw": [
+  {
+   "counts": {
+    "cas_put (inclusive; nested in snapshot/evidence)": 817,
+    "certification (inclusive of signing)": 1,
+    "evaluate_total (inclusive)": 1,
+    "policy_validation": 1,
+    "protected_test_run (subprocess incl. worker startup)": 1,
+    "signing": 3,
+    "snapshot_blob_verification": 1,
+    "snapshot_construction (scan+hash+CAS put)": 2,
+    "sqlite_write_tx (incl. lock wait + body)": 20,
+    "staged_tree_hash_checks (before+after run)": 2,
+    "staging_materialize": 1
+   },
+   "full_workflow_ms": 321.3,
+   "reuse_derive_export_verify_ms": 23.5,
+   "stages_ms": {
+    "cas_put (inclusive; nested in snapshot/evidence)": 12.4,
+    "certification (inclusive of signing)": 7.6,
+    "evaluate_total (inclusive)": 264.4,
+    "policy_validation": 22.5,
+    "protected_test_run (subprocess incl. worker startup)": 131.6,
+    "signing": 0.5,
+    "snapshot_blob_verification": 7.9,
+    "snapshot_construction (scan+hash+CAS put)": 22.1,
+    "sqlite_write_tx (incl. lock wait + body)": 13.1,
+    "staged_tree_hash_checks (before+after run)": 15.5,
+    "staging_materialize": 43.8
+   },
+   "warmup": true
+  },
+  {
+   "counts": {
+    "cas_put (inclusive; nested in snapshot/evidence)": 817,
+    "certification (inclusive of signing)": 1,
+    "evaluate_total (inclusive)": 1,
+    "policy_validation": 1,
+    "protected_test_run (subprocess incl. worker startup)": 1,
+    "signing": 3,
+    "snapshot_blob_verification": 1,
+    "snapshot_construction (scan+hash+CAS put)": 2,
+    "sqlite_write_tx (incl. lock wait + body)": 20,
+    "staged_tree_hash_checks (before+after run)": 2,
+    "staging_materialize": 1
+   },
+   "full_workflow_ms": 322.8,
+   "reuse_derive_export_verify_ms": 23.8,
+   "stages_ms": {
+    "cas_put (inclusive; nested in snapshot/evidence)": 12.6,
+    "certification (inclusive of signing)": 7.5,
+    "evaluate_total (inclusive)": 264.6,
+    "policy_validation": 22.9,
+    "protected_test_run (subprocess incl. worker startup)": 131.3,
+    "signing": 0.4,
+    "snapshot_blob_verification": 8.1,
+    "snapshot_construction (scan+hash+CAS put)": 22.8,
+    "sqlite_write_tx (incl. lock wait + body)": 13.6,
+    "staged_tree_hash_checks (before+after run)": 15.9,
+    "staging_materialize": 42.9
+   },
+   "warmup": false
+  },
+  {
+   "counts": {
+    "cas_put (inclusive; nested in snapshot/evidence)": 817,
+    "certification (inclusive of signing)": 1,
+    "evaluate_total (inclusive)": 1,
+    "policy_validation": 1,
+    "protected_test_run (subprocess incl. worker startup)": 1,
+    "signing": 3,
+    "snapshot_blob_verification": 1,
+    "snapshot_construction (scan+hash+CAS put)": 2,
+    "sqlite_write_tx (incl. lock wait + body)": 20,
+    "staged_tree_hash_checks (before+after run)": 2,
+    "staging_materialize": 1
+   },
+   "full_workflow_ms": 322.1,
+   "reuse_derive_export_verify_ms": 22.8,
+   "stages_ms": {
+    "cas_put (inclusive; nested in snapshot/evidence)": 13.3,
+    "certification (inclusive of signing)": 7.4,
+    "evaluate_total (inclusive)": 263.6,
+    "policy_validation": 22.9,
+    "protected_test_run (subprocess incl. worker startup)": 127.7,
+    "signing": 0.4,
+    "snapshot_blob_verification": 8.8,
+    "snapshot_construction (scan+hash+CAS put)": 23.5,
+    "sqlite_write_tx (incl. lock wait + body)": 13.6,
+    "staged_tree_hash_checks (before+after run)": 16.8,
+    "staging_materialize": 43.1
+   },
+   "warmup": false
+  },
+  {
+   "counts": {
+    "cas_put (inclusive; nested in snapshot/evidence)": 817,
+    "certification (inclusive of signing)": 1,
+    "evaluate_total (inclusive)": 1,
+    "policy_validation": 1,
+    "protected_test_run (subprocess incl. worker startup)": 1,
+    "signing": 3,
+    "snapshot_blob_verification": 1,
+    "snapshot_construction (scan+hash+CAS put)": 2,
+    "sqlite_write_tx (incl. lock wait + body)": 20,
+    "staged_tree_hash_checks (before+after run)": 2,
+    "staging_materialize": 1
+   },
+   "full_workflow_ms": 316.1,
+   "reuse_derive_export_verify_ms": 23.3,
+   "stages_ms": {
+    "cas_put (inclusive; nested in snapshot/evidence)": 12.3,
+    "certification (inclusive of signing)": 7.3,
+    "evaluate_total (inclusive)": 259.8,
+    "policy_validation": 21.6,
+    "protected_test_run (subprocess incl. worker startup)": 128.7,
+    "signing": 0.3,
+    "snapshot_blob_verification": 7.9,
+    "snapshot_construction (scan+hash+CAS put)": 21.7,
+    "sqlite_write_tx (incl. lock wait + body)": 13.7,
+    "staged_tree_hash_checks (before+after run)": 16.2,
+    "staging_materialize": 42.1
+   },
+   "warmup": false
+  },
+  {
+   "counts": {
+    "cas_put (inclusive; nested in snapshot/evidence)": 817,
+    "certification (inclusive of signing)": 1,
+    "evaluate_total (inclusive)": 1,
+    "policy_validation": 1,
+    "protected_test_run (subprocess incl. worker startup)": 1,
+    "signing": 3,
+    "snapshot_blob_verification": 1,
+    "snapshot_construction (scan+hash+CAS put)": 2,
+    "sqlite_write_tx (incl. lock wait + body)": 20,
+    "staged_tree_hash_checks (before+after run)": 2,
+    "staging_materialize": 1
+   },
+   "full_workflow_ms": 320.3,
+   "reuse_derive_export_verify_ms": 22.7,
+   "stages_ms": {
+    "cas_put (inclusive; nested in snapshot/evidence)": 12.9,
+    "certification (inclusive of signing)": 7.2,
+    "evaluate_total (inclusive)": 263.8,
+    "policy_validation": 22.2,
+    "protected_test_run (subprocess incl. worker startup)": 131.0,
+    "signing": 0.4,
+    "snapshot_blob_verification": 7.9,
+    "snapshot_construction (scan+hash+CAS put)": 22.6,
+    "sqlite_write_tx (incl. lock wait + body)": 13.6,
+    "staged_tree_hash_checks (before+after run)": 16.0,
+    "staging_materialize": 44.6
+   },
+   "warmup": false
+  },
+  {
+   "counts": {
+    "cas_put (inclusive; nested in snapshot/evidence)": 817,
+    "certification (inclusive of signing)": 1,
+    "evaluate_total (inclusive)": 1,
+    "policy_validation": 1,
+    "protected_test_run (subprocess incl. worker startup)": 1,
+    "signing": 3,
+    "snapshot_blob_verification": 1,
+    "snapshot_construction (scan+hash+CAS put)": 2,
+    "sqlite_write_tx (incl. lock wait + body)": 20,
+    "staged_tree_hash_checks (before+after run)": 2,
+    "staging_materialize": 1
+   },
+   "full_workflow_ms": 350.1,
+   "reuse_derive_export_verify_ms": 22.5,
+   "stages_ms": {
+    "cas_put (inclusive; nested in snapshot/evidence)": 12.2,
+    "certification (inclusive of signing)": 8.1,
+    "evaluate_total (inclusive)": 292.6,
+    "policy_validation": 22.4,
+    "protected_test_run (subprocess incl. worker startup)": 132.0,
+    "signing": 0.4,
+    "snapshot_blob_verification": 7.7,
+    "snapshot_construction (scan+hash+CAS put)": 21.7,
+    "sqlite_write_tx (incl. lock wait + body)": 13.6,
+    "staged_tree_hash_checks (before+after run)": 16.3,
+    "staging_materialize": 42.1
+   },
+   "warmup": false
+  },
+  {
+   "counts": {
+    "cas_put (inclusive; nested in snapshot/evidence)": 817,
+    "certification (inclusive of signing)": 1,
+    "evaluate_total (inclusive)": 1,
+    "policy_validation": 1,
+    "protected_test_run (subprocess incl. worker startup)": 1,
+    "signing": 3,
+    "snapshot_blob_verification": 1,
+    "snapshot_construction (scan+hash+CAS put)": 2,
+    "sqlite_write_tx (incl. lock wait + body)": 20,
+    "staged_tree_hash_checks (before+after run)": 2,
+    "staging_materialize": 1
+   },
+   "full_workflow_ms": 315.0,
+   "reuse_derive_export_verify_ms": 21.8,
+   "stages_ms": {
+    "cas_put (inclusive; nested in snapshot/evidence)": 12.3,
+    "certification (inclusive of signing)": 6.9,
+    "evaluate_total (inclusive)": 259.5,
+    "policy_validation": 21.6,
+    "protected_test_run (subprocess incl. worker startup)": 130.4,
+    "signing": 0.4,
+    "snapshot_blob_verification": 7.6,
+    "snapshot_construction (scan+hash+CAS put)": 22.0,
+    "sqlite_write_tx (incl. lock wait + body)": 12.9,
+    "staged_tree_hash_checks (before+after run)": 16.2,
+    "staging_materialize": 42.3
+   },
+   "warmup": false
+  },
+  {
+   "counts": {
+    "cas_put (inclusive; nested in snapshot/evidence)": 817,
+    "certification (inclusive of signing)": 1,
+    "evaluate_total (inclusive)": 1,
+    "policy_validation": 1,
+    "protected_test_run (subprocess incl. worker startup)": 1,
+    "signing": 3,
+    "snapshot_blob_verification": 1,
+    "snapshot_construction (scan+hash+CAS put)": 2,
+    "sqlite_write_tx (incl. lock wait + body)": 20,
+    "staged_tree_hash_checks (before+after run)": 2,
+    "staging_materialize": 1
+   },
+   "full_workflow_ms": 310.2,
+   "reuse_derive_export_verify_ms": 21.9,
+   "stages_ms": {
+    "cas_put (inclusive; nested in snapshot/evidence)": 12.0,
+    "certification (inclusive of signing)": 7.3,
+    "evaluate_total (inclusive)": 255.8,
+    "policy_validation": 21.1,
+    "protected_test_run (subprocess incl. worker startup)": 128.4,
+    "signing": 0.3,
+    "snapshot_blob_verification": 7.3,
+    "snapshot_construction (scan+hash+CAS put)": 21.5,
+    "sqlite_write_tx (incl. lock wait + body)": 13.0,
+    "staged_tree_hash_checks (before+after run)": 16.1,
+    "staging_materialize": 41.1
+   },
+   "warmup": false
+  }
+ ],
+ "runs": 7,
+ "summary": {
+  "full_workflow_ms": {
+   "max": 350.1,
+   "median": 320.3,
+   "min": 310.2
+  },
+  "reuse_derive_export_verify_ms": {
+   "max": 23.8,
+   "median": 22.7,
+   "min": 21.8
+  },
+  "stages_median_ms": {
+   "cas_put (inclusive; nested in snapshot/evidence)": 12.3,
+   "certification (inclusive of signing)": 7.3,
+   "evaluate_total (inclusive)": 263.6,
+   "policy_validation": 22.2,
+   "protected_test_run (subprocess incl. worker startup)": 130.4,
+   "signing": 0.4,
+   "snapshot_blob_verification": 7.9,
+   "snapshot_construction (scan+hash+CAS put)": 22.0,
+   "sqlite_write_tx (incl. lock wait + body)": 13.6,
+   "staged_tree_hash_checks (before+after run)": 16.2,
+   "staging_materialize": 42.3
+  }
+ },
+ "warmup_runs": 1
+}

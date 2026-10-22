@@ -13,7 +13,7 @@ from . import (audits, budgets, builds, cache_planner, candidates, certificates,
 from .canonical import strict_loads
 from .errors import AuthorizationError, VepError
 from .evidence import KeyStore
-from .workspace import Workspace
+from .workspace import Workspace, utcnow
 
 EXIT_UNEXPECTED = 70
 
@@ -186,21 +186,41 @@ def cmd_compose(a):
 
 
 def cmd_conformance(a):
-    ws = _ws(a) if a.action == "export" else None
+    from . import trustpolicy
     if a.action == "export":
-        b = conformance.export_bundle(ws, a.certificate, a.require_trust)
+        b = conformance.export_bundle(_ws(a), a.certificate, a.require_trust, version=a.bundle_version)
         if a.out:
             Path(a.out).write_text(json.dumps(b, indent=1, sort_keys=True))
-            _emit(a, {"bundle": a.out, "certificate_id": a.certificate})
+            _emit(a, {"bundle": a.out, "certificate_id": a.certificate, "bundle_version": a.bundle_version})
         else:
             _emit(a, b)
         return 0
+    if a.action == "trust-policy":  # a trust policy naming THIS workspace's signing key as the only issuer (the owner is the relying party)
+        ws = _ws(a)
+        ks = KeyStore(ws)
+        with ws.db.read() as c:
+            row = c.execute("SELECT public_key_hex FROM trusted_keys WHERE key_id=?", (ks.key_id(),)).fetchone()
+        if not a.snapshot:
+            raise ValueError("--snapshot is required: a trust policy must state the source snapshot it expects")
+        pol = trustpolicy.make_policy(a.name, [trustpolicy.issuer(bytes.fromhex(row["public_key_hex"]))], [a.evaluator], a.require_trust,
+                                      snapshot_id=a.snapshot, objective_id=a.objective, policy_id=a.policy, evidence_versions=(2,), certificate_versions=(2,))
+        _emit(a, pol)
+        return 0
     if a.action == "verify":
-        r = conformance.verify_bundle(json.loads(Path(a.bundle).read_text()))
+        bundle = json.loads(Path(a.bundle).read_text())
+        if a.trust_policy:
+            if not a.now:
+                raise ValueError("--now (the relying party's UTC time, YYYY-MM-DDTHH:MM:SSZ) is required with --trust-policy")
+            r = trustpolicy.verify_authorized(bundle, json.loads(Path(a.trust_policy).read_text()), a.now)
+        elif a.internal_only:
+            r = conformance.verify_bundle(bundle)
+            r["warning"] = "internal consistency only: the bundle supplied its own keys and expectations; this does NOT establish that any trusted party issued it"
+        else:
+            raise ValueError("specify --trust-policy FILE --now TIME for authorized verification, or --internal-only to accept an internal-consistency result")
     else:
         suite = conformance.load_suite(a.suite)
         bad = [v["id"] for v in suite["vectors"] if not conformance.check_vector(v, conformance.run_vector(v))]
-        r = {"valid": not bad, "vectors": len(suite["vectors"]), "disagreements": bad, "verifier": "reference (python)"}
+        r = {"valid": not bad, "vectors": len(suite["vectors"]), "disagreements": bad, "verifier": "reference (python)", "suite_version": suite["suite_version"]}
     _emit(a, r)
     return 0 if r["valid"] else 4
 
@@ -312,6 +332,46 @@ def cmd_simulate(a):
     _emit(a, simulation.run_report(p, with_sensitivity=a.sensitivity))
 
 
+def cmd_claude(a):
+    from . import claude_code
+    if a.action == "plugin":
+        if not a.out:
+            raise ValueError("--out DIR is required for `claude plugin`")
+        _emit(a, claude_code.write_plugin(a.out, version=versions.PACKAGE_VERSION)); return 0
+    if a.action == "status":
+        _emit(a, claude_code.status(a.root)); return 0
+    if a.action == "uninstall":
+        _emit(a, claude_code.uninstall(a.root, dry_run=a.dry_run)); return 0
+    authority = tuple(x for x in a.authority.split(",") if x) if a.authority else (
+        claude_code.AUTHORITY_EVALUATING if a.allow_evaluate else claude_code.AUTHORITY_DEFAULT)
+    r = claude_code.install(a.root, authority=authority, unisolated_execution=a.allow_evaluate, hooks=not a.no_hooks, claude_md=not a.no_claude_md,
+                            force=a.force, dry_run=a.dry_run, command=a.mcp_command.split() if a.mcp_command else None)
+    _emit(a, r)
+    return 3 if r["status"] == "CONFLICT" else 0
+
+
+def cmd_reuse(a):
+    from . import trustpolicy
+    from . import reuse
+    ws = _ws(a)
+    if a.action == "derive":
+        att, digest = reuse.derive(ws, a.candidate)
+        _emit(a, {"attestation_id": att.id, "original_evidence_id": att["original_evidence_id"], "original_candidate_id": att["original_candidate_id"],
+                  "trust_level": att["trust_level"], "reuse_mode": att["reuse_mode"], "envelope_digest": digest,
+                  "note": "a derived attestation is not a certificate; candidate status is unchanged"}); return 0
+    if a.action == "export":
+        out = json.dumps(reuse.export_bundle(ws, a.candidate), indent=1, sort_keys=True)
+        if a.out:
+            Path(a.out).write_text(out + "\n"); _emit(a, {"bundle": a.out, "bundle_version": 3})
+        else:
+            print(out)
+        return 0
+    pol = _load_json(a.trust_policy)
+    r = trustpolicy.verify_derived_authorized(_load_json(a.bundle), pol, a.now or utcnow())
+    _emit(a, r)
+    return 0 if r["valid"] else 3
+
+
 def _common(sp):
     sp.add_argument("--json", action="store_true", help="machine-readable JSON output")
     sp.add_argument("--root", default=".", help="workspace root (default: cwd)")
@@ -354,10 +414,17 @@ def build_parser() -> argparse.ArgumentParser:
     s.add_argument("--snapshot", required=True); s.add_argument("--old")
     s = add("compose", cmd_compose, "compose two candidates; a clean merge still needs full evaluation")
     s.add_argument("--objective", required=True); s.add_argument("candidate_a"); s.add_argument("candidate_b")
-    s = add("conformance", cmd_conformance, "export a portable certificate bundle, verify one offline, or run the frozen vectors (reference verifier)")
-    s.add_argument("action", choices=["export", "verify", "vectors"]); s.add_argument("--certificate"); s.add_argument("--bundle")
-    s.add_argument("--out"); s.add_argument("--suite", default="conformance/vectors/suite-1.0.json")
+    s = add("conformance", cmd_conformance, "export a portable certificate bundle, verify one (authorized by a trust policy, or internal-only), or run the frozen vectors")
+    s.add_argument("action", choices=["export", "verify", "vectors", "trust-policy"]); s.add_argument("--certificate"); s.add_argument("--bundle")
+    s.add_argument("--out"); s.add_argument("--suite", default="conformance/vectors/suite-1.2.json")
+    s.add_argument("--bundle-version", type=int, choices=[1, 2], default=2, help="2 (default): no embedded keys, needs a trust policy; 1: legacy self-contained bundle")
+    s.add_argument("--trust-policy"); s.add_argument("--now"); s.add_argument("--internal-only", action="store_true")
+    s.add_argument("--name", default="local-workspace"); s.add_argument("--evaluator", default="vep-local-evaluator/*"); s.add_argument("--snapshot")
+    s.add_argument("--objective"); s.add_argument("--policy")
     s.add_argument("--require-trust", default="TRUSTED_LOCAL", choices=["TRUSTED_LOCAL", "ISOLATED_VERIFIED"])
+    s = add("reuse", cmd_reuse, "exact-input evidence reuse: derive/export a DerivedAttestation, or verify one against a relying-party trust policy")
+    s.add_argument("action", choices=["derive", "export", "verify"]); s.add_argument("--candidate"); s.add_argument("--out")
+    s.add_argument("--bundle"); s.add_argument("--trust-policy"); s.add_argument("--now")
     s = add("build", cmd_build, "run a content-addressed build action over a snapshot, with verified result cache")
     s.add_argument("action", choices=["run", "stats"]); s.add_argument("--snapshot"); s.add_argument("--output", action="append", default=[])
     s.add_argument("--timeout", type=int, default=300); s.add_argument("--trusted-local-execution", action="store_true")
@@ -403,6 +470,13 @@ def build_parser() -> argparse.ArgumentParser:
     s = add("isolation", cmd_isolation, "probe or plan Docker+gVisor isolation (offline)")
     s.add_argument("action", choices=["probe", "plan", "detect", "verify"]); s.add_argument("--image"); s.add_argument("--out")
     s.add_argument("--source"); s.add_argument("--cmd", nargs="+")
+    s = add("claude", cmd_claude, "install/inspect/remove the Claude Code integration (.mcp.json, Skill, CLAUDE.md block, guard hook) or write a plugin")
+    s.add_argument("action", choices=["install", "status", "uninstall", "plugin"]); s.add_argument("--out")
+    s.add_argument("--authority", help="comma-separated read,register,evaluate,export (default read,register)")
+    s.add_argument("--allow-evaluate", action="store_true", help="grant evaluate+export and --trusted-local-execution: candidate code runs unisolated on this host")
+    s.add_argument("--no-hooks", action="store_true"); s.add_argument("--no-claude-md", action="store_true")
+    s.add_argument("--force", action="store_true", help="replace conflicting files/entries (a backup is kept)"); s.add_argument("--dry-run", action="store_true")
+    s.add_argument("--mcp-command", help="command (and leading args) that starts the server, default vep-mcp or `python -m vep.mcp_server`")
     s = add("simulate", cmd_simulate, "seeded synthetic cost/reliability simulation")
     s.add_argument("--tasks", type=int, default=20000); s.add_argument("--seed", type=int, default=20261019)
     s.add_argument("--sensitivity", action="store_true")

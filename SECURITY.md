@@ -1,7 +1,7 @@
 # Security Policy
 
 ## Supported versions
-Only the latest prerelease (`0.5.0b1` once published; before that `0.4.0a1`) receives fixes. VEP is pre-release software; see the trust-model limits below before relying on it.
+Only the latest prerelease (`0.5.0b1` today; `0.6.0b1` once released) receives fixes. VEP is pre-release software; see the trust-model limits below before relying on it.
 
 ## Reporting a vulnerability — privately
 **Please do not file public issues or pull requests for security problems.**

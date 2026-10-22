@@ -277,5 +277,82 @@
    }
   },
   "fmt": "{:.1f}%"
+ },
+ {
+  "id": "vec12",
+  "text": "194",
+  "expr": "n",
+  "vars": {
+   "n": {
+    "file": "conformance/vectors/suite-1.2.json",
+    "path": [
+     "vectors"
+    ],
+    "len": true
+   }
+  },
+  "fmt": "{}"
+ },
+ {
+  "id": "mcptools",
+  "text": "12",
+  "expr": "n",
+  "vars": {
+   "n": {
+    "file": "benchmarks/results/mcp-context-profile.json",
+    "path": [
+     "tools"
+    ]
+   }
+  },
+  "fmt": "{}"
+ },
+ {
+  "id": "reuse200",
+  "text": "14.1x",
+  "expr": "a/b",
+  "vars": {
+   "a": {
+    "file": "benchmarks/results/stage-profile-200.json",
+    "path": [
+     "summary",
+     "full_workflow_ms",
+     "median"
+    ]
+   },
+   "b": {
+    "file": "benchmarks/results/stage-profile-200.json",
+    "path": [
+     "summary",
+     "reuse_derive_export_verify_ms",
+     "median"
+    ]
+   }
+  },
+  "fmt": "{:.1f}x"
+ },
+ {
+  "id": "reuse1000",
+  "text": "17.6x",
+  "expr": "a/b",
+  "vars": {
+   "a": {
+    "file": "benchmarks/results/stage-profile-1000.json",
+    "path": [
+     "summary",
+     "full_workflow_ms",
+     "median"
+    ]
+   },
+   "b": {
+    "file": "benchmarks/results/stage-profile-1000.json",
+    "path": [
+     "summary",
+     "reuse_derive_export_verify_ms",
+     "median"
+    ]
+   }
+  },
+  "fmt": "{:.1f}x"
  }
 ]

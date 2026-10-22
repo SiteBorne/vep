@@ -229,7 +229,7 @@ def version_consistency(root: Path = ROOT) -> dict:
     v["__init__"] = _re.search(r'__version__\s*=\s*"([^"]+)"', (root / "src/vep/__init__.py").read_text()).group(1)
     v["versions.py"] = _re.search(r'PACKAGE_VERSION\s*=\s*"([^"]+)"', (root / "src/vep/versions.py").read_text()).group(1)
     ch = (root / "CHANGELOG.md").read_text()
-    m = _re.search(r"^## \[([^\]]+)\]", ch, _re.M)
+    m = next((x for x in _re.finditer(r"^## \[([^\]]+)\]", ch, _re.M) if x.group(1).lower() != "unreleased"), None)  # Keep a Changelog puts [Unreleased] first
     v["CHANGELOG"] = m.group(1) if m else "MISSING"
     return v
 

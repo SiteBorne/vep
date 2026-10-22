@@ -24,3 +24,6 @@ dependencies; more than one run.
 
 ## Final re-run at the release-candidate source (commit `4d0216a`, version `0.5.0b1`)
 Both projects: upstream CERTIFIED, benign change CERTIFIED, mutant REJECTED by the project's own tests, mutant plus covering test REJECTED, post-certification edit rejected, bundle verified by the Python and Node verifiers. Reports: `pyflakes.json`, `more-itertools.json`; the previous runs are kept in `earlier/` (`*-run-3-before-0.5.0b1.json`).
+
+## Re-run for the 0.6 candidate (tool commit `7071dee`, package 0.6.0b1)
+Fresh read-only clones of the same pinned revisions (`pyflakes` 4.0.3 `8526af8`, `more-itertools` v11.2.1 `4aeb433`). Both: upstream CERTIFIED, benign CERTIFIED, mutant REJECTED by the project's own tests, mutant plus covering test REJECTED, post-certification edit rejected; the upstream certificate verifies as an **authorized** v2 bundle against a trust policy in Python and Node. Reports: `pyflakes-0.6-candidate.json`, `more-itertools-0.6-candidate.json`. Same limits as above (trusted-local, one host, one run, no third-party dependencies).

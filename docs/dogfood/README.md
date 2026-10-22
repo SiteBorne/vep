@@ -31,3 +31,5 @@ workflow; the change is small; token cost is zero because no model was involved 
 | `run-5-release-candidate` | **DOGFOOD_PASS** | Run at commit `4d0216a` (the release-candidate source, version `0.5.0b1`), same base `11391fe` and candidate `9d79210`. The report's `tool_tree_dirty: true` reflects only pending renames of earlier external reports into `docs/external/earlier/` at that moment; no source file was modified. |
 
 Host-specific absolute paths (the scratch interpreter location and home directory) were replaced by placeholders in these records in a separate commit; no measurement or outcome value was changed.
+
+| `run-6-0.6-candidate` | **DOGFOOD_PASS** | Re-run for the 0.6 candidate (tool commit `7071dee`, package 0.6.0b1, base/candidate are the rewritten-history equivalents of `11391fe`/`9d79210`): 365 passed, 2 skipped (Node-dependent), negative control rejected, post-certification edit invalidates; the certificate also verifies as an **authorized** v2 bundle against a trust policy in Python and Node (`AUTHORIZED`). |

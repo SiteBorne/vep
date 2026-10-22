@@ -16,7 +16,7 @@ import sys
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
-CHECKED = ["docs/ANNOUNCEMENT.md", "docs/WHY_VEP.md", "docs/COMPARISON.md", "docs/FAQ.md", "docs/SECURITY_LIMITATIONS.md"]
+CHECKED = ["docs/ANNOUNCEMENT.md", "docs/WHY_VEP.md", "docs/COMPARISON.md", "docs/FAQ.md", "docs/SECURITY_LIMITATIONS.md", "docs/ANNOUNCEMENT_NEXT.md"]
 TAG = re.compile(r"\[C:([A-Za-z0-9_\-]+)\]")
 FIGURE = re.compile(r"(?<![\w.])\d+(?:\.\d+)?\s?(?:%|x\b|×|ms\b|s\b|jobs|vectors|tests|workers)")
 

@@ -47,6 +47,24 @@ def timed(fn):
                  "child_cpu_s": round((r1.ru_utime - r0.ru_utime) + (r1.ru_stime - r0.ru_stime), 3)}
 
 
+def authorized_check(ws, cid, snapshot_id, work, node, repo):
+    """Verify the exported v2 bundle against a trust policy built by the relying party (here: the workspace's own key), in Python and Node."""
+    import time
+    from vep import conformance, trustpolicy
+    with ws.db.read() as c:
+        raw = bytes.fromhex(c.execute("SELECT public_key_hex FROM trusted_keys").fetchone()["public_key_hex"])
+    pol = trustpolicy.make_policy("relying-party", [trustpolicy.issuer(raw)], ["vep-local-evaluator/*"], "TRUSTED_LOCAL", snapshot_id=snapshot_id)
+    b2 = conformance.export_bundle(ws, cid, version=2)
+    now = time.strftime("%Y-%m-%dT%H:%M:%SZ", time.gmtime())
+    py = trustpolicy.verify_authorized(b2, pol, now)
+    out = {"python_assurance": py.get("assurance"), "python_valid": py["valid"], "node": "NOT_RUN (node missing)"}
+    if node:
+        (work / "bundle2.json").write_text(json.dumps(b2)); (work / "policy.json").write_text(json.dumps(pol))
+        r = subprocess.run([node, str(repo / "conformance" / "node" / "verify.mjs"), "authorized", str(work / "bundle2.json"), str(work / "policy.json"), now], capture_output=True, text=True)
+        out["node"] = json.loads(r.stdout).get("assurance") if r.returncode == 0 else "FAILED"
+    return out
+
+
 def main() -> int:
     ap = argparse.ArgumentParser()
     ap.add_argument("--project", required=True)
@@ -140,6 +158,7 @@ def main() -> int:
                 "live_tree_checks": v["checks_passed"], "bundle_python_reference": conformance.verify_bundle(bundle)["valid"],
                 "bundle_node_independent": (json.loads(subprocess.run([node, str(REPO / "conformance/node/verify.mjs"), "bundle", str(bp)],
                                                                       capture_output=True, text=True).stdout)["valid"] if node else "NOT_RUN")})
+            report["verification"]["authorized_verification"] = authorized_check(ws, cid, cands["upstream"].id, work, node, REPO)
             ch = work / "changed"
             shutil.copytree(tree, ch)
             tp = ch / spec["invalidate"]["path"]

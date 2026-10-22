@@ -1,0 +1,31 @@
+{
+ "note": "token numbers are bytes/4 estimates, not provider usage",
+ "per_tool_definition_bytes": {
+  "vep_budget_status": 494,
+  "vep_candidate_register": 718,
+  "vep_candidate_state": 473,
+  "vep_evaluate": 582,
+  "vep_explain_failure": 634,
+  "vep_export_evidence": 624,
+  "vep_job_status": 612,
+  "vep_objective_create": 757,
+  "vep_read_artifact": 572,
+  "vep_reuse_evidence": 607,
+  "vep_status": 380,
+  "vep_verify_certificate": 704
+ },
+ "response_bytes": {
+  "vep_candidate_register": 273,
+  "vep_candidate_state": 392,
+  "vep_objective_create": 369,
+  "vep_status": 407
+ },
+ "tools": 12,
+ "tools_list_bytes": 7170,
+ "tools_list_tokens_estimate": 1792,
+ "vep_status_latency_ms": {
+  "median": 40.64,
+  "n": 60,
+  "p95": 42.41
+ }
+}
