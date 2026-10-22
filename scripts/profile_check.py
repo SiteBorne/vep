@@ -31,8 +31,8 @@ PROFILES: dict[str, list[str]] = {
                                        "sdist_contents_clean", "hosted_ci_for_head", "code_scanning_clean_for_head"],
     "MCP_STDIO_READY": ["tests_mcp_stdio", "tests_agent_sdk_contract", "mcp_remote_http_not_offered", "installed_wheel_mcp"],
     "A2A_LOOPBACK_READY": ["tests_a2a", "tests_lost_response_and_capabilities", "installed_wheel_a2a", "a2a_restart_limitation_documented"],
-    "CLAUDE_PACKAGE_READY": ["tests_claude_installer", "tests_claude_installer_security", "claude_plugin_validate", "claude_client_discovery"],
-    "CLAUDE_LIVE_E2E_READY": ["claude_live_tool_use"],
+    "CLAUDE_PACKAGE_READY": ["tests_claude_installer", "tests_claude_installer_security", "tests_claude_live_harness", "claude_plugin_validate", "claude_client_discovery"],
+    "CLAUDE_LIVE_E2E_READY": ["tests_claude_live_harness", "claude_live_tool_use"],
     "PLUGIN_DIRECTORY_PRECHECK_READY": ["tests_plugin_directory", "plugin_folder_validate", "plugin_folder_on_remote_branch"],
     "PLUGIN_PORTAL_VALIDATED": ["plugin_portal_report"],
     "RELEASE_CANDIDATE_READY": ["candidate_version_set", "implementation_frozen", "real_world_evidence_fresh", "local_gate_go_on_implementation",
@@ -232,6 +232,7 @@ def read_json(rel: str):
 def extra(R: dict, junit: Junit, run_packaging: bool, head: str, branch: str, version: str) -> None:
     R["tests_claude_installer_security"] = junit.files("test_claude_code_security")
     R["tests_plugin_directory"] = junit.files("test_plugin_directory")
+    R["tests_claude_live_harness"] = junit.files("test_claude_live_harness")
     e2e = read_json("docs/evidence/installed-wheel-e2e.json")
     def e2e_part(prefixes):
         if not e2e:
@@ -285,7 +286,7 @@ def extra(R: dict, junit: Junit, run_packaging: bool, head: str, branch: str, ve
     portal = read_json("docs/evidence/plugin-portal-validation.json")
     R["plugin_portal_report"] = (PASS, "portal report recorded") if portal and portal.get("blocking") == 0 else (UNVERIFIED, "PORTAL_VALIDATION=NOT_RUN: needs an authenticated claude.ai/directory/manage Validate report")
     # provenance: frozen implementation, fresh evidence, gate record
-    impl = sh("git", "log", "-1", "--format=%H", head, "--", *IMPL_CORE).stdout.strip()
+    impl = sh("git", "log", "-1", "--format=%H", head, "--", *IMPL_NONDOC).stdout.strip()
     nondoc = sh("git", "diff", "--name-only", head, "HEAD", "--", *IMPL_NONDOC).stdout.split()
     R["implementation_frozen"] = (PASS, f"IMPLEMENTATION_SHA {impl[:7]}; no non-documentation file differs between the evaluated commit {head[:7]} and HEAD") if not nondoc \
         else (FAIL, f"non-documentation files changed after the evaluated commit: {nondoc[:5]}")
@@ -385,7 +386,7 @@ def main() -> int:
     head = git_head()
     evaluated = a.evaluated_commit or head
     profiles = evaluate_profiles(results)
-    impl = sh("git", "log", "-1", "--format=%H", evaluated, "--", *IMPL_CORE).stdout.strip()
+    impl = sh("git", "log", "-1", "--format=%H", evaluated, "--", *IMPL_NONDOC).stdout.strip()
     runs = sh("gh", "run", "list", "--commit", evaluated, "--json", "workflowName,conclusion,url")
     ev_files = ["docs/evidence/installed-wheel-e2e.json", "docs/evidence/release-gate-summary.json", "docs/dogfood/vep-on-vep-run-6-0.6-candidate.json",
                 "docs/external/pyflakes-0.6-candidate.json", "docs/external/more-itertools-0.6-candidate.json", "conformance/vectors/suite-1.2.json"]

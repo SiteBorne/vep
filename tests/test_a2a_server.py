@@ -133,13 +133,17 @@ class CardAndTransportTests(A2ABase):
         self.assertEqual(self.n_candidates(), 0)
 
     def test_token_expiry_is_enforced(self):
-        exp = time.strftime("%Y-%m-%dT%H:%M:%SZ", time.gmtime(time.time() + 3))
-        url = self.start("read", False, "--token-expires", exp)
-        ok = self.rpc(url, "GetTask", {"id": "nope"})
-        self.assertEqual(ok.status_code, 200)  # authenticated; the task simply does not exist
-        time.sleep(3.5)
+        # deterministic: no wall-clock race between server start-up and the expiry instant
+        past = time.strftime("%Y-%m-%dT%H:%M:%SZ", time.gmtime(time.time() - 60))
+        url = self.start("read", False, "--token-expires", past)
         r = self.rpc(url, "GetTask", {"id": "nope"})
         self.assertEqual((r.status_code, r.json()["error"]["message"]), (401, "token expired"))
+        future = time.strftime("%Y-%m-%dT%H:%M:%SZ", time.gmtime(time.time() + 3600))
+        url2 = self.start("read", False, "--token-expires", future)
+        ok = self.rpc(url2, "GetTask", {"id": "nope"})
+        self.assertEqual(ok.status_code, 200)  # authenticated; the task simply does not exist
+        bad = self.rpc(url2, "GetTask", {"id": "nope"}, token="x" * 32)
+        self.assertEqual((bad.status_code, bad.json()["error"]["message"]), (401, "missing or invalid bearer token"))
 
 
 class A2AFlowTests(A2ABase):
