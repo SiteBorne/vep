@@ -20,6 +20,8 @@ def run(*a):
 class AnalysisTests(unittest.TestCase):
     def test_dataset_validates_and_regenerates_byte_identically(self):
         self.assertEqual(V.validate(), [])
+        if subprocess.run(["git", "-C", str(ROOT), "rev-parse", "--is-shallow-repository"], capture_output=True, text=True).stdout.strip() == "true":
+            self.skipTest("shallow clone: per-file last-commit ids cannot be reproduced (every file reports the single fetched commit)")
         self.assertEqual(run(str(A / "extract.py"), "--check").returncode, 0)
         self.assertEqual(run(str(A / "render_baseline.py"), "--check").returncode, 0)
 
