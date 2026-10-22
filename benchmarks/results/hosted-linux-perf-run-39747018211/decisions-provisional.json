@@ -1,0 +1,719 @@
+{
+ "control_arm": "ctl@/home/runner/work/vep/vep/perf-tools/control/src",
+ "decisions": [
+  {
+   "arm": "none",
+   "decision": "REJECT",
+   "detail": {
+    "cold_guard_n100": {
+     "diff_s": -0.0008,
+     "rel_ci95": [
+      -0.0243,
+      0.014
+     ],
+     "rel_diff": -0.0052,
+     "rule": "preregistered Welch 95%",
+     "verdict": "NO_MEASURABLE_ADVANTAGE"
+    },
+    "cpu_n1000": {
+     "bootstrap": {
+      "diff_ci95_s": [
+       -0.005,
+       0.005
+      ],
+      "mean_paired_diff_s": 0.0,
+      "mean_rel_diff": 0.0001,
+      "median_paired_diff_s": 0.0,
+      "pairs": 10,
+      "rel_ci95": [
+       -0.0094,
+       0.0095
+      ],
+      "rule": "paired bootstrap 95% (same thresholds)",
+      "verdict": "NO_MEASURABLE_ADVANTAGE"
+     },
+     "welch": {
+      "diff_s": 0.0,
+      "rel_ci95": [
+       -0.0106,
+       0.0106
+      ],
+      "rel_diff": 0.0,
+      "rule": "preregistered Welch 95%",
+      "verdict": "NO_MEASURABLE_ADVANTAGE"
+     }
+    },
+    "cpu_n3000": {
+     "bootstrap": {
+      "diff_ci95_s": [
+       -0.0083,
+       0.0117
+      ],
+      "mean_paired_diff_s": 0.0017,
+      "mean_rel_diff": 0.0013,
+      "median_paired_diff_s": 0.0,
+      "pairs": 6,
+      "rel_ci95": [
+       -0.0061,
+       0.0087
+      ],
+      "rule": "paired bootstrap 95% (same thresholds)",
+      "verdict": "NO_MEASURABLE_ADVANTAGE"
+     },
+     "welch": {
+      "diff_s": 0.0017,
+      "rel_ci95": [
+       -0.0068,
+       0.0092
+      ],
+      "rel_diff": 0.0012,
+      "rule": "preregistered Welch 95%",
+      "verdict": "NO_MEASURABLE_ADVANTAGE"
+     }
+    },
+    "memory_largest": {
+     "arm_mb": 54.9076,
+     "control_mb": 54.89
+    },
+    "wall_n1000": {
+     "arm_mean_s": 0.594,
+     "bootstrap": {
+      "diff_ci95_s": [
+       -0.0025,
+       0.0012
+      ],
+      "mean_paired_diff_s": -0.0003,
+      "mean_rel_diff": -0.0005,
+      "median_paired_diff_s": 0.0003,
+      "pairs": 10,
+      "rel_ci95": [
+       -0.0041,
+       0.0021
+      ],
+      "rule": "paired bootstrap 95% (same thresholds)",
+      "verdict": "NO_MEASURABLE_ADVANTAGE"
+     },
+     "control_mean_s": 0.5943,
+     "welch": {
+      "diff_s": -0.0003,
+      "rel_ci95": [
+       -0.0052,
+       0.0041
+      ],
+      "rel_diff": -0.0005,
+      "rule": "preregistered Welch 95%",
+      "verdict": "NO_MEASURABLE_ADVANTAGE"
+     }
+    },
+    "wall_n3000": {
+     "arm_mean_s": 1.4002,
+     "bootstrap": {
+      "diff_ci95_s": [
+       -0.0012,
+       0.0119
+      ],
+      "mean_paired_diff_s": 0.0041,
+      "mean_rel_diff": 0.003,
+      "median_paired_diff_s": 0.0014,
+      "pairs": 6,
+      "rel_ci95": [
+       -0.0009,
+       0.0086
+      ],
+      "rule": "paired bootstrap 95% (same thresholds)",
+      "verdict": "NO_MEASURABLE_ADVANTAGE"
+     },
+     "control_mean_s": 1.396,
+     "welch": {
+      "diff_s": 0.0041,
+      "rel_ci95": [
+       -0.0039,
+       0.0098
+      ],
+      "rel_diff": 0.003,
+      "rule": "preregistered Welch 95%",
+      "verdict": "NO_MEASURABLE_ADVANTAGE"
+     }
+    }
+   },
+   "environment_valid": true,
+   "reasons": [
+    "n=1000: wall verdict Welch=NO_MEASURABLE_ADVANTAGE bootstrap=NO_MEASURABLE_ADVANTAGE (rel diff -0.1%, CI [-0.0052, 0.0041])",
+    "n=3000: wall verdict Welch=NO_MEASURABLE_ADVANTAGE bootstrap=NO_MEASURABLE_ADVANTAGE (rel diff +0.3%, CI [-0.0039, 0.0098])"
+   ]
+  },
+  {
+   "arm": "staging_fast",
+   "decision": "REJECT",
+   "detail": {
+    "cold_guard_n100": {
+     "diff_s": -0.0027,
+     "rel_ci95": [
+      -0.0404,
+      0.0046
+     ],
+     "rel_diff": -0.0179,
+     "rule": "preregistered Welch 95%",
+     "verdict": "NO_MEASURABLE_ADVANTAGE"
+    },
+    "cpu_n1000": {
+     "bootstrap": {
+      "diff_ci95_s": [
+       -0.037,
+       -0.025
+      ],
+      "mean_paired_diff_s": -0.031,
+      "mean_rel_diff": -0.0587,
+      "median_paired_diff_s": -0.035,
+      "pairs": 10,
+      "rel_ci95": [
+       -0.0698,
+       -0.0475
+      ],
+      "rule": "paired bootstrap 95% (same thresholds)",
+      "verdict": "NO_MEASURABLE_ADVANTAGE"
+     },
+     "welch": {
+      "diff_s": -0.031,
+      "rel_ci95": [
+       -0.0697,
+       -0.048
+      ],
+      "rel_diff": -0.0588,
+      "rule": "preregistered Welch 95%",
+      "verdict": "NO_MEASURABLE_ADVANTAGE"
+     }
+    },
+    "cpu_n3000": {
+     "bootstrap": {
+      "diff_ci95_s": [
+       -0.0883,
+       -0.075
+      ],
+      "mean_paired_diff_s": -0.0817,
+      "mean_rel_diff": -0.0605,
+      "median_paired_diff_s": -0.085,
+      "pairs": 6,
+      "rel_ci95": [
+       -0.0654,
+       -0.0557
+      ],
+      "rule": "paired bootstrap 95% (same thresholds)",
+      "verdict": "NO_MEASURABLE_ADVANTAGE"
+     },
+     "welch": {
+      "diff_s": -0.0817,
+      "rel_ci95": [
+       -0.0669,
+       -0.0542
+      ],
+      "rel_diff": -0.0606,
+      "rule": "preregistered Welch 95%",
+      "verdict": "NO_MEASURABLE_ADVANTAGE"
+     }
+    },
+    "memory_largest": {
+     "arm_mb": 54.8815,
+     "control_mb": 54.89
+    },
+    "wall_n1000": {
+     "arm_mean_s": 0.5677,
+     "bootstrap": {
+      "diff_ci95_s": [
+       -0.0293,
+       -0.0243
+      ],
+      "mean_paired_diff_s": -0.0265,
+      "mean_rel_diff": -0.0446,
+      "median_paired_diff_s": -0.0261,
+      "pairs": 10,
+      "rel_ci95": [
+       -0.049,
+       -0.041
+      ],
+      "rule": "paired bootstrap 95% (same thresholds)",
+      "verdict": "NO_MEASURABLE_ADVANTAGE"
+     },
+     "control_mean_s": 0.5943,
+     "welch": {
+      "diff_s": -0.0265,
+      "rel_ci95": [
+       -0.0495,
+       -0.0398
+      ],
+      "rel_diff": -0.0447,
+      "rule": "preregistered Welch 95%",
+      "verdict": "NO_MEASURABLE_ADVANTAGE"
+     }
+    },
+    "wall_n3000": {
+     "arm_mean_s": 1.3163,
+     "bootstrap": {
+      "diff_ci95_s": [
+       -0.0827,
+       -0.0758
+      ],
+      "mean_paired_diff_s": -0.0797,
+      "mean_rel_diff": -0.0571,
+      "median_paired_diff_s": -0.0813,
+      "pairs": 6,
+      "rel_ci95": [
+       -0.0591,
+       -0.0544
+      ],
+      "rule": "paired bootstrap 95% (same thresholds)",
+      "verdict": "NO_MEASURABLE_ADVANTAGE"
+     },
+     "control_mean_s": 1.396,
+     "welch": {
+      "diff_s": -0.0797,
+      "rel_ci95": [
+       -0.0612,
+       -0.053
+      ],
+      "rel_diff": -0.0571,
+      "rule": "preregistered Welch 95%",
+      "verdict": "NO_MEASURABLE_ADVANTAGE"
+     }
+    }
+   },
+   "environment_valid": true,
+   "reasons": [
+    "n=1000: wall verdict Welch=NO_MEASURABLE_ADVANTAGE bootstrap=NO_MEASURABLE_ADVANTAGE (rel diff -4.5%, CI [-0.0495, -0.0398])",
+    "n=3000: wall verdict Welch=NO_MEASURABLE_ADVANTAGE bootstrap=NO_MEASURABLE_ADVANTAGE (rel diff -5.7%, CI [-0.0612, -0.053])"
+   ]
+  },
+  {
+   "arm": "staging_fast,staging_clone,verified_handoff",
+   "decision": "REJECT",
+   "detail": {
+    "cold_guard_n100": {
+     "diff_s": -0.0043,
+     "rel_ci95": [
+      -0.0471,
+      -0.009
+     ],
+     "rel_diff": -0.0281,
+     "rule": "preregistered Welch 95%",
+     "verdict": "NO_MEASURABLE_ADVANTAGE"
+    },
+    "cpu_n1000": {
+     "bootstrap": {
+      "diff_ci95_s": [
+       -0.041,
+       -0.032
+      ],
+      "mean_paired_diff_s": -0.036,
+      "mean_rel_diff": -0.0683,
+      "median_paired_diff_s": -0.03,
+      "pairs": 10,
+      "rel_ci95": [
+       -0.0777,
+       -0.0605
+      ],
+      "rule": "paired bootstrap 95% (same thresholds)",
+      "verdict": "NO_MEASURABLE_ADVANTAGE"
+     },
+     "welch": {
+      "diff_s": -0.036,
+      "rel_ci95": [
+       -0.0796,
+       -0.057
+      ],
+      "rel_diff": -0.0683,
+      "rule": "preregistered Welch 95%",
+      "verdict": "NO_MEASURABLE_ADVANTAGE"
+     }
+    },
+    "cpu_n3000": {
+     "bootstrap": {
+      "diff_ci95_s": [
+       -0.1033,
+       -0.0883
+      ],
+      "mean_paired_diff_s": -0.0967,
+      "mean_rel_diff": -0.0717,
+      "median_paired_diff_s": -0.1,
+      "pairs": 6,
+      "rel_ci95": [
+       -0.0768,
+       -0.0657
+      ],
+      "rule": "paired bootstrap 95% (same thresholds)",
+      "verdict": "NO_MEASURABLE_ADVANTAGE"
+     },
+     "welch": {
+      "diff_s": -0.0967,
+      "rel_ci95": [
+       -0.0814,
+       -0.062
+      ],
+      "rel_diff": -0.0717,
+      "rule": "preregistered Welch 95%",
+      "verdict": "NO_MEASURABLE_ADVANTAGE"
+     }
+    },
+    "memory_largest": {
+     "arm_mb": 60.4642,
+     "control_mb": 54.89
+    },
+    "wall_n1000": {
+     "arm_mean_s": 0.5612,
+     "bootstrap": {
+      "diff_ci95_s": [
+       -0.0358,
+       -0.0308
+      ],
+      "mean_paired_diff_s": -0.0331,
+      "mean_rel_diff": -0.0556,
+      "median_paired_diff_s": -0.0325,
+      "pairs": 10,
+      "rel_ci95": [
+       -0.06,
+       -0.052
+      ],
+      "rule": "paired bootstrap 95% (same thresholds)",
+      "verdict": "NO_MEASURABLE_ADVANTAGE"
+     },
+     "control_mean_s": 0.5943,
+     "welch": {
+      "diff_s": -0.0331,
+      "rel_ci95": [
+       -0.0608,
+       -0.0505
+      ],
+      "rel_diff": -0.0556,
+      "rule": "preregistered Welch 95%",
+      "verdict": "NO_MEASURABLE_ADVANTAGE"
+     }
+    },
+    "wall_n3000": {
+     "arm_mean_s": 1.2991,
+     "bootstrap": {
+      "diff_ci95_s": [
+       -0.1015,
+       -0.0918
+      ],
+      "mean_paired_diff_s": -0.097,
+      "mean_rel_diff": -0.0695,
+      "median_paired_diff_s": -0.0986,
+      "pairs": 6,
+      "rel_ci95": [
+       -0.0725,
+       -0.0659
+      ],
+      "rule": "paired bootstrap 95% (same thresholds)",
+      "verdict": "NO_MEASURABLE_ADVANTAGE"
+     },
+     "control_mean_s": 1.396,
+     "welch": {
+      "diff_s": -0.097,
+      "rel_ci95": [
+       -0.0736,
+       -0.0654
+      ],
+      "rel_diff": -0.0695,
+      "rule": "preregistered Welch 95%",
+      "verdict": "NO_MEASURABLE_ADVANTAGE"
+     }
+    }
+   },
+   "environment_valid": true,
+   "reasons": [
+    "n=1000: wall verdict Welch=NO_MEASURABLE_ADVANTAGE bootstrap=NO_MEASURABLE_ADVANTAGE (rel diff -5.6%, CI [-0.0608, -0.0505])",
+    "n=3000: wall verdict Welch=NO_MEASURABLE_ADVANTAGE bootstrap=NO_MEASURABLE_ADVANTAGE (rel diff -7.0%, CI [-0.0736, -0.0654])"
+   ]
+  },
+  {
+   "arm": "staging_fast,verified_handoff",
+   "decision": "INCONCLUSIVE",
+   "detail": {
+    "cold_guard_n100": {
+     "diff_s": -0.008,
+     "rel_ci95": [
+      -0.0712,
+      -0.0336
+     ],
+     "rel_diff": -0.0524,
+     "rule": "preregistered Welch 95%",
+     "verdict": "NO_MEASURABLE_ADVANTAGE"
+    },
+    "cpu_n1000": {
+     "bootstrap": {
+      "diff_ci95_s": [
+       -0.078,
+       -0.064
+      ],
+      "mean_paired_diff_s": -0.071,
+      "mean_rel_diff": -0.1347,
+      "median_paired_diff_s": -0.07,
+      "pairs": 10,
+      "rel_ci95": [
+       -0.1477,
+       -0.1213
+      ],
+      "rule": "paired bootstrap 95% (same thresholds)",
+      "verdict": "VEP_FASTER"
+     },
+     "welch": {
+      "diff_s": -0.071,
+      "rel_ci95": [
+       -0.1517,
+       -0.1178
+      ],
+      "rel_diff": -0.1347,
+      "rule": "preregistered Welch 95%",
+      "verdict": "VEP_FASTER"
+     }
+    },
+    "cpu_n3000": {
+     "bootstrap": {
+      "diff_ci95_s": [
+       -0.2217,
+       -0.2033
+      ],
+      "mean_paired_diff_s": -0.2133,
+      "mean_rel_diff": -0.1582,
+      "median_paired_diff_s": -0.215,
+      "pairs": 6,
+      "rel_ci95": [
+       -0.164,
+       -0.1509
+      ],
+      "rule": "paired bootstrap 95% (same thresholds)",
+      "verdict": "VEP_FASTER"
+     },
+     "welch": {
+      "diff_s": -0.2133,
+      "rel_ci95": [
+       -0.1659,
+       -0.1505
+      ],
+      "rel_diff": -0.1582,
+      "rule": "preregistered Welch 95%",
+      "verdict": "VEP_FASTER"
+     }
+    },
+    "memory_largest": {
+     "arm_mb": 60.4818,
+     "control_mb": 54.89
+    },
+    "wall_n1000": {
+     "arm_mean_s": 0.5258,
+     "bootstrap": {
+      "diff_ci95_s": [
+       -0.0726,
+       -0.064
+      ],
+      "mean_paired_diff_s": -0.0685,
+      "mean_rel_diff": -0.1152,
+      "median_paired_diff_s": -0.0693,
+      "pairs": 10,
+      "rel_ci95": [
+       -0.1217,
+       -0.1079
+      ],
+      "rule": "paired bootstrap 95% (same thresholds)",
+      "verdict": "VEP_FASTER"
+     },
+     "control_mean_s": 0.5943,
+     "welch": {
+      "diff_s": -0.0685,
+      "rel_ci95": [
+       -0.1226,
+       -0.1079
+      ],
+      "rel_diff": -0.1153,
+      "rule": "preregistered Welch 95%",
+      "verdict": "VEP_FASTER"
+     }
+    },
+    "wall_n3000": {
+     "arm_mean_s": 1.1873,
+     "bootstrap": {
+      "diff_ci95_s": [
+       -0.2134,
+       -0.2047
+      ],
+      "mean_paired_diff_s": -0.2088,
+      "mean_rel_diff": -0.1495,
+      "median_paired_diff_s": -0.2076,
+      "pairs": 6,
+      "rel_ci95": [
+       -0.1524,
+       -0.1468
+      ],
+      "rule": "paired bootstrap 95% (same thresholds)",
+      "verdict": "VEP_FASTER"
+     },
+     "control_mean_s": 1.396,
+     "welch": {
+      "diff_s": -0.2088,
+      "rel_ci95": [
+       -0.1538,
+       -0.1453
+      ],
+      "rel_diff": -0.1495,
+      "rule": "preregistered Welch 95%",
+      "verdict": "VEP_FASTER"
+     }
+    }
+   },
+   "environment_valid": true,
+   "reasons": [
+    "hosted correctness gate result missing"
+   ]
+  },
+  {
+   "arm": "verified_handoff",
+   "decision": "REJECT",
+   "detail": {
+    "cold_guard_n100": {
+     "diff_s": -0.005,
+     "rel_ci95": [
+      -0.0517,
+      -0.0134
+     ],
+     "rel_diff": -0.0326,
+     "rule": "preregistered Welch 95%",
+     "verdict": "NO_MEASURABLE_ADVANTAGE"
+    },
+    "cpu_n1000": {
+     "bootstrap": {
+      "diff_ci95_s": [
+       -0.043,
+       -0.037
+      ],
+      "mean_paired_diff_s": -0.04,
+      "mean_rel_diff": -0.0759,
+      "median_paired_diff_s": -0.04,
+      "pairs": 10,
+      "rel_ci95": [
+       -0.0813,
+       -0.0704
+      ],
+      "rule": "paired bootstrap 95% (same thresholds)",
+      "verdict": "NO_MEASURABLE_ADVANTAGE"
+     },
+     "welch": {
+      "diff_s": -0.04,
+      "rel_ci95": [
+       -0.0846,
+       -0.0672
+      ],
+      "rel_diff": -0.0759,
+      "rule": "preregistered Welch 95%",
+      "verdict": "NO_MEASURABLE_ADVANTAGE"
+     }
+    },
+    "cpu_n3000": {
+     "bootstrap": {
+      "diff_ci95_s": [
+       -0.1367,
+       -0.1067
+      ],
+      "mean_paired_diff_s": -0.1233,
+      "mean_rel_diff": -0.0914,
+      "median_paired_diff_s": -0.13,
+      "pairs": 6,
+      "rel_ci95": [
+       -0.101,
+       -0.0794
+      ],
+      "rule": "paired bootstrap 95% (same thresholds)",
+      "verdict": "INCONCLUSIVE"
+     },
+     "welch": {
+      "diff_s": -0.1233,
+      "rel_ci95": [
+       -0.1027,
+       -0.0802
+      ],
+      "rel_diff": -0.0915,
+      "rule": "preregistered Welch 95%",
+      "verdict": "INCONCLUSIVE"
+     }
+    },
+    "memory_largest": {
+     "arm_mb": 60.4863,
+     "control_mb": 54.89
+    },
+    "wall_n1000": {
+     "arm_mean_s": 0.5518,
+     "bootstrap": {
+      "diff_ci95_s": [
+       -0.0449,
+       -0.0406
+      ],
+      "mean_paired_diff_s": -0.0425,
+      "mean_rel_diff": -0.0715,
+      "median_paired_diff_s": -0.0417,
+      "pairs": 10,
+      "rel_ci95": [
+       -0.0753,
+       -0.0685
+      ],
+      "rule": "paired bootstrap 95% (same thresholds)",
+      "verdict": "NO_MEASURABLE_ADVANTAGE"
+     },
+     "control_mean_s": 0.5943,
+     "welch": {
+      "diff_s": -0.0425,
+      "rel_ci95": [
+       -0.0763,
+       -0.0668
+      ],
+      "rel_diff": -0.0715,
+      "rule": "preregistered Welch 95%",
+      "verdict": "NO_MEASURABLE_ADVANTAGE"
+     }
+    },
+    "wall_n3000": {
+     "arm_mean_s": 1.275,
+     "bootstrap": {
+      "diff_ci95_s": [
+       -0.1281,
+       -0.1123
+      ],
+      "mean_paired_diff_s": -0.1211,
+      "mean_rel_diff": -0.0867,
+      "median_paired_diff_s": -0.1228,
+      "pairs": 6,
+      "rel_ci95": [
+       -0.0915,
+       -0.0805
+      ],
+      "rule": "paired bootstrap 95% (same thresholds)",
+      "verdict": "NO_MEASURABLE_ADVANTAGE"
+     },
+     "control_mean_s": 1.396,
+     "welch": {
+      "diff_s": -0.1211,
+      "rel_ci95": [
+       -0.094,
+       -0.0795
+      ],
+      "rel_diff": -0.0867,
+      "rule": "preregistered Welch 95%",
+      "verdict": "NO_MEASURABLE_ADVANTAGE"
+     }
+    }
+   },
+   "environment_valid": true,
+   "reasons": [
+    "n=1000: wall verdict Welch=NO_MEASURABLE_ADVANTAGE bootstrap=NO_MEASURABLE_ADVANTAGE (rel diff -7.1%, CI [-0.0763, -0.0668])",
+    "n=3000: wall verdict Welch=NO_MEASURABLE_ADVANTAGE bootstrap=NO_MEASURABLE_ADVANTAGE (rel diff -8.7%, CI [-0.094, -0.0795])"
+   ]
+  }
+ ],
+ "rules": {
+  "absolute_s": 0.05,
+  "cold_guard_relative": 0.05,
+  "memory_growth": 0.25,
+  "relative": 0.1,
+  "wall_sizes": [
+   1000,
+   3000
+  ]
+ }
+}
