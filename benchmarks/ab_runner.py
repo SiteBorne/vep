@@ -33,7 +33,9 @@ def one(arm: str, n: int, change: str) -> dict:
     tmp = Path(tempfile.mkdtemp(prefix="vep-ab-"))
     root = tmp / "p"
     root.mkdir()
-    env = dict(os.environ, VEP_PERF=arm or "none")
+    env = dict(os.environ, VEP_PERF="none" if arm.startswith("ctl@") else (arm or "none"))
+    if arm.startswith("ctl@"):  # pristine control: a separate source tree (for example a worktree of the baseline commit), no flags
+        env["VEP_SRC"] = arm[4:]
     t0 = time.perf_counter()
     p = subprocess.Popen([sys.executable, str(HERE / "workflow_once.py"), "--n", str(n), "--root", str(root), "--change", change], env=env, stdout=subprocess.PIPE, stderr=subprocess.PIPE, text=True)
     _, status, ru = os.wait4(p.pid, 0)

@@ -2,7 +2,7 @@
 preregistered rule; the production default of a flag is changed only when the experiment passes. Environment override: VEP_PERF=flag1,flag2 (or `none`).
 
 staging_fast      Experiment A1: create each directory once and each staged file with O_EXCL|O_NOFOLLOW at its final mode (no per-file mkdir/chmod by path)
-staging_clone     Experiment A2: copy-on-write clone (macOS clonefile) of a CAS blob instead of reading it; falls back to a normal write; never a hard link
+staging_clone     Experiment A2: copy-on-write clone (macOS clonefile, Linux FICLONE) of a CAS blob instead of reading it; falls back to a normal write; never a hard link
 verified_handoff  Experiment B: one verifying read of every blob per evaluation; the verified bytes (bounded in memory) are reused for staging
 """
 from __future__ import annotations

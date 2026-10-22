@@ -1,0 +1,143 @@
+name: Performance qualification (hosted Linux)
+
+# Reproduces the preregistered performance experiments (benchmarks/analysis/PLANNED_EXPERIMENTS.json) on a fresh GitHub-hosted VM. Manual only, read-only token, no secrets,
+# no paid infrastructure. Before each workload a bounded check waits for the declared start criterion (1-minute load average < 2.0); if the runner cannot meet it the
+# workload is NOT run and reported as environmentally invalid. The control is a pristine checkout of the baseline commit, run next to the flagged code in the same blocks.
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  flags-on-tests:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 60
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+      - uses: actions/setup-python@5fda3b95a4ea91299a34e894583c3862153e4b97 # v7.0.0
+        with:
+          python-version: "3.14"
+      - name: Install
+        run: python -m pip install -e ".[dev]"
+      - name: Whole suite with every performance flag ON
+        env:
+          VEP_PERF: staging_fast,staging_clone,verified_handoff
+        run: python -m pytest -q -p no:cacheprovider
+      - name: Invariant suite with every performance flag ON
+        env:
+          VEP_PERF: staging_fast,staging_clone,verified_handoff
+        run: python benchmarks/invariants/check_invariants.py --run
+
+  benchmark:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 330
+    env:
+      BASELINE_COMMIT: 1ab17af60450c4d558bab5c1c4260024ade45355
+      IDLE_WAIT_SECONDS: "900"
+      RESULTS: ${{ github.workspace }}/perf-results
+      TOOLS: ${{ github.workspace }}/perf-tools
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+          fetch-depth: 0
+      - uses: actions/setup-python@5fda3b95a4ea91299a34e894583c3862153e4b97 # v7.0.0
+        with:
+          python-version: "3.14"
+      - name: Identify the code under test and make a pristine control checkout
+        run: |
+          set -euo pipefail
+          mkdir -p "$RESULTS" "$TOOLS"
+          git rev-parse HEAD > "$RESULTS/head-commit.txt"
+          git worktree add "$TOOLS/control" "$BASELINE_COMMIT"
+          git -C "$TOOLS/control" rev-parse HEAD > "$RESULTS/control-commit.txt"
+          git diff --name-only "$BASELINE_COMMIT" HEAD -- src pyproject.toml > "$RESULTS/runtime-files-changed-vs-control.txt"
+          cat "$RESULTS/runtime-files-changed-vs-control.txt"
+      - name: Record the environment
+        run: |
+          set -euo pipefail
+          python - <<'PY'
+          import json, os, sys
+          sys.path.insert(0, "benchmarks")
+          import envinfo
+          json.dump({"host": envinfo.host_info(), "probe": envinfo.env_probe()}, open(os.environ["RESULTS"] + "/environment.json", "w"), indent=1)
+          PY
+          df -T "$TOOLS" > "$RESULTS/filesystem.txt"
+      - name: Build the measurement environments (no VEP installed in either)
+        run: |
+          set -euo pipefail
+          python -m venv "$TOOLS/evalenv"
+          "$TOOLS/evalenv/bin/pip" install -q "cryptography==50.0.2"
+          python -m venv "$TOOLS/tmenv"
+          "$TOOLS/tmenv/bin/pip" install -q "pytest==9.1.1" "pytest-testmon==2.2.0"
+          "$TOOLS/evalenv/bin/pip" freeze > "$RESULTS/pip-freeze-evalenv.txt"
+          "$TOOLS/tmenv/bin/pip" freeze > "$RESULTS/pip-freeze-tmenv.txt"
+          if "$TOOLS/evalenv/bin/python" -I -c "import vep" 2>/dev/null; then echo "::error::vep is importable in the evaluation interpreter"; exit 1; fi
+      - name: Clone the pinned external projects (read-only) and verify their revisions
+        run: |
+          set -euo pipefail
+          python - <<'PY'
+          import json, os, subprocess, sys
+          specs = json.load(open("benchmarks/external/projects.json"))
+          tools, results = os.environ["TOOLS"], os.environ["RESULTS"]
+          for name, s in specs.items():
+              d = f"{tools}/src-{name}"
+              subprocess.run(["git", "clone", "-q", "--no-checkout", s["url"], d], check=True)
+              subprocess.run(["git", "-C", d, "checkout", "-q", s["commit"]], check=True)
+              head = subprocess.run(["git", "-C", d, "rev-parse", "HEAD"], check=True, capture_output=True, text=True).stdout.strip()
+              open(f"{results}/pin-{name}.txt", "w").write(head + "\n")
+              if head != s["commit"]:
+                  sys.exit(f"pin mismatch for {name}: {head} != {s['commit']}")
+          PY
+      - name: Factorial A/B on the full protected workflow (control, A, B, A+B, clone fallback)
+        run: |
+          set -uo pipefail
+          export PYTHONPATH="$GITHUB_WORKSPACE/src"
+          PY="$TOOLS/evalenv/bin/python"
+          ARMS=("ctl@$TOOLS/control/src" none staging_fast verified_handoff staging_fast,verified_handoff staging_fast,staging_clone,verified_handoff)
+          for spec in "100 10" "200 10" "1000 10" "3000 6" "8000 4"; do
+            set -- $spec
+            if python benchmarks/wait_idle.py --timeout "$IDLE_WAIT_SECONDS" --label "ab-$1" --out "$RESULTS/idle-ab-$1.json"; then
+              "$PY" benchmarks/ab_runner.py --n "$1" --arms "${ARMS[@]}" --blocks "$2" --warmups 2 --out "$RESULTS/ab-n$1-factorial.json" 2>&1 | tee "$RESULTS/log-ab-n$1.txt"
+            else
+              echo "::warning::runner did not reach load < 2.0; ab n=$1 NOT run (environmentally invalid)"
+            fi
+          done
+      - name: Scale profile of the control path (stage times, counters)
+        run: |
+          set -uo pipefail
+          export PYTHONPATH="$GITHUB_WORKSPACE/src"
+          if python benchmarks/wait_idle.py --timeout "$IDLE_WAIT_SECONDS" --label profile --out "$RESULTS/idle-profile.json"; then
+            VEP_PERF=none "$TOOLS/evalenv/bin/python" benchmarks/profile_scale.py --sizes 100 1000 3000 --runs 3 --out "$RESULTS/scale-profile-none.json" 2>&1 | tee "$RESULTS/log-profile-none.txt"
+            VEP_PERF=staging_fast,verified_handoff "$TOOLS/evalenv/bin/python" benchmarks/profile_scale.py --sizes 100 1000 3000 --runs 3 --no-alloc --out "$RESULTS/scale-profile-opt.json" 2>&1 | tee "$RESULTS/log-profile-opt.txt"
+          fi
+      - name: Agent workflow benchmark - pyflakes 4.0.3 and more-itertools v11.2.1
+        run: |
+          set -uo pipefail
+          export PYTHONPATH="$GITHUB_WORKSPACE/src"
+          for proj in pyflakes more-itertools; do
+            reps=5; [ "$proj" = "more-itertools" ] && reps=3
+            if python benchmarks/wait_idle.py --timeout "$IDLE_WAIT_SECONDS" --label "aw-$proj" --out "$RESULTS/idle-aw-$proj.json"; then
+              "$TOOLS/evalenv/bin/python" benchmarks/agent_workflow.py --project "$proj" --src "$TOOLS/src-$proj" --evalpy "$TOOLS/evalenv/bin/python" --testmon-py "$TOOLS/tmenv/bin/python" \
+                --opt-flags staging_fast,verified_handoff --reps "$reps" --include-large --out "$RESULTS/agent-workflow-$proj.json" 2>&1 | tee "$RESULTS/log-agent-workflow-$proj.txt"
+            fi
+          done
+      - name: Worker scaling on short and long real tests
+        run: |
+          set -uo pipefail
+          export PYTHONPATH="$GITHUB_WORKSPACE/src"
+          for proj in pyflakes more-itertools; do
+            if python benchmarks/wait_idle.py --timeout "$IDLE_WAIT_SECONDS" --label "ws-$proj" --out "$RESULTS/idle-ws-$proj.json"; then
+              "$TOOLS/evalenv/bin/python" benchmarks/worker_scaling.py --project "$proj" --src "$TOOLS/src-$proj" --evalpy "$TOOLS/evalenv/bin/python" --candidates 8 --workers 1 2 4 8 \
+                --reps 4 --out "$RESULTS/worker-scaling-$proj.json" 2>&1 | tee "$RESULTS/log-worker-scaling-$proj.txt"
+            fi
+          done
+      - uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
+        if: always()
+        with:
+          name: perf-qualification
+          path: perf-results/
+          if-no-files-found: error

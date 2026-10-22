@@ -228,12 +228,41 @@ def _clonefile():
     return fn
 
 
+def _ficlone():
+    """Linux reflink: ioctl(FICLONE) on filesystems that support it (btrfs, xfs with reflink, some overlay setups); EOPNOTSUPP/EXDEV elsewhere means fall back."""
+    import fcntl
+    FICLONE = 0x40049409
+
+    def clone(src_path: bytes, dst_path: bytes, _flags: int) -> int:
+        try:
+            sfd = os.open(src_path, os.O_RDONLY | os.O_NOFOLLOW | getattr(os, "O_CLOEXEC", 0))
+        except OSError:
+            return -1
+        try:
+            dfd = os.open(dst_path, os.O_WRONLY | os.O_CREAT | os.O_EXCL | os.O_NOFOLLOW | getattr(os, "O_CLOEXEC", 0), 0o600)
+        except OSError:
+            os.close(sfd)
+            return -1
+        try:
+            fcntl.ioctl(dfd, FICLONE, sfd)
+            return 0
+        except OSError:
+            try:
+                os.unlink(dst_path)  # nothing cloned: remove the empty file so the normal write path can create it exclusively
+            except OSError:
+                pass
+            return -1
+        finally:
+            os.close(dfd); os.close(sfd)
+    return clone
+
+
 def _materialize_fast(ws: Workspace, snap: VEPObject, dest: Path, readonly: bool, scope: BlobScope | None) -> None:
     """Same result as the plain path: identical bytes, modes and read-only directories. Directories are created once; each file is created exclusively without
     following symlinks at its final mode and written through the descriptor. With `staging_clone` a macOS CoW clone replaces the read where the filesystem supports
     it (a distinct inode; the CAS blob is never linked or modified); any failure falls back to a normal write."""
     use = scope if perf.enabled("verified_handoff") else None
-    clone = _clonefile() if perf.enabled("staging_clone") and sys.platform == "darwin" else None
+    clone = (_clonefile() if sys.platform == "darwin" else _ficlone() if sys.platform.startswith("linux") else None) if perf.enabled("staging_clone") else None
     base = str(dest)
     made: set[str] = {base}
     flags = os.O_WRONLY | os.O_CREAT | os.O_EXCL | os.O_NOFOLLOW | getattr(os, "O_CLOEXEC", 0)
