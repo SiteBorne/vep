@@ -14,17 +14,17 @@
  },
  "candidates": {
   "benign": {
-   "candidate_id": "cand-b2e8441a28ab9a24c01334ede333a3d99edce4ecaeaf61c7a86de05873f6130d",
+   "candidate_id": "cand-02ec2e9f302aa570bd40bba88ed9adbdd04cb08fb88ec1c1b73a0dc999f5325d",
    "cost": {
-    "child_cpu_s": 1.009,
-    "wall_s": 1.218
+    "child_cpu_s": 1.912,
+    "wall_s": 4.0
    },
    "result": {
-    "candidate_id": "cand-b2e8441a28ab9a24c01334ede333a3d99edce4ecaeaf61c7a86de05873f6130d",
+    "candidate_id": "cand-02ec2e9f302aa570bd40bba88ed9adbdd04cb08fb88ec1c1b73a0dc999f5325d",
     "candidate_status": "CERTIFIED",
-    "certificate_id": "cert-e20ddad0b1a0f846224465c72fcd67d0003445c045b113e41dbfba638a20e947",
-    "evidence_id": "evd-53d9992ced84d39dff6781ac5e1938db44edc025ed9bb69a570d61106c7730c1",
-    "job": "job-409b7f7e242e3b7a01a9accacce38782",
+    "certificate_id": "cert-f60c10565615cf3d275c16d5fa6bccb8105ff5f4c71ee417b52afa241ad4d37a",
+    "evidence_id": "evd-e3793ae07325064701875ad8a9822a967c8b8fe5102df76facf51da6d734f4e1",
+    "job": "job-36bec1fa181fdabe96cfa243ccc2e81e",
     "outcome": "SUCCEEDED",
     "reason": null,
     "trust_level": "TRUSTED_LOCAL",
@@ -40,16 +40,16 @@
    }
   },
   "mutant": {
-   "candidate_id": "cand-e0e21d947d18efff547af0f0b6c2b816986584222b228cf7b30f900b763f4b8c",
+   "candidate_id": "cand-23b1110c63b992b6ef6cd5bd2ad2aad8b5fd95f9f76b37b7a721df364ede4ba5",
    "cost": {
-    "child_cpu_s": 1.045,
-    "wall_s": 1.224
+    "child_cpu_s": 2.036,
+    "wall_s": 4.579
    },
    "result": {
-    "candidate_id": "cand-e0e21d947d18efff547af0f0b6c2b816986584222b228cf7b30f900b763f4b8c",
+    "candidate_id": "cand-23b1110c63b992b6ef6cd5bd2ad2aad8b5fd95f9f76b37b7a721df364ede4ba5",
     "candidate_status": "REJECTED",
-    "evidence_id": "evd-980f83ad069247870f19367dd07ad47c77590d9239760bd9cbeb4d2b4b7ef758",
-    "job": "job-7d785faa4ad1db7ec399cc9e19dfbe84",
+    "evidence_id": "evd-4083cb5abca2a681c95b6a769dc4194d86b4cde85cfe662220f6d0429edff813",
+    "job": "job-66b9cb3796643c2c3c2e1d9f0613d704",
     "outcome": "SUCCEEDED",
     "reason": null,
     "trust_level": "TRUSTED_LOCAL",
@@ -65,16 +65,16 @@
    }
   },
   "mutant_plus_new_test": {
-   "candidate_id": "cand-5c30e9b4c9b30f7f73c8a72482269bf57afb472a17dfbafcd22386b1da9f7321",
+   "candidate_id": "cand-65d6c99ce0a242556f1dd691ae576c5284910205883681f86d371762daaaa08d",
    "cost": {
-    "child_cpu_s": 1.059,
-    "wall_s": 1.222
+    "child_cpu_s": 1.976,
+    "wall_s": 3.641
    },
    "result": {
-    "candidate_id": "cand-5c30e9b4c9b30f7f73c8a72482269bf57afb472a17dfbafcd22386b1da9f7321",
+    "candidate_id": "cand-65d6c99ce0a242556f1dd691ae576c5284910205883681f86d371762daaaa08d",
     "candidate_status": "REJECTED",
-    "evidence_id": "evd-80437c87b7aaeb15cff8ec4348b4e0b33a2ea2d4351ff7c8fe57a608c2b7946d",
-    "job": "job-2626867ca984ddb3dedce0952ed81bf6",
+    "evidence_id": "evd-e0d584ffbe256dbb73bd3979337ca5e07917a6c3b8fc0af7368c8ccf95d4764c",
+    "job": "job-800262e54066ee493ee8260a23881f33",
     "outcome": "SUCCEEDED",
     "reason": null,
     "trust_level": "TRUSTED_LOCAL",
@@ -90,17 +90,17 @@
    }
   },
   "upstream": {
-   "candidate_id": "cand-b0f5b1cd3f52563c6cf3979d1a7934abc6c9f280eaefd8d38dedaeb953a4e07b",
+   "candidate_id": "cand-33720cee44aa33921141ee43456dbdb95f877a3d6c33dc56da7c0a78ba857507",
    "cost": {
-    "child_cpu_s": 1.033,
-    "wall_s": 1.222
+    "child_cpu_s": 1.984,
+    "wall_s": 6.049
    },
    "result": {
-    "candidate_id": "cand-b0f5b1cd3f52563c6cf3979d1a7934abc6c9f280eaefd8d38dedaeb953a4e07b",
+    "candidate_id": "cand-33720cee44aa33921141ee43456dbdb95f877a3d6c33dc56da7c0a78ba857507",
     "candidate_status": "CERTIFIED",
-    "certificate_id": "cert-a783272276126f412076b487bf34ea56126d378b6b2662991e6020675aaf63ae",
-    "evidence_id": "evd-a5d43a750ad42b3c9b976d19574c50eaf2dfa42086be532e7b73823c23f00697",
-    "job": "job-0ac6fdf66ac64ebba50bfe9cfc29240a",
+    "certificate_id": "cert-b7cc3d8b40857ff9bd8d4be1c6a6164bd4724a1fa87ed5f21e7b08a2816f82d6",
+    "evidence_id": "evd-7e55ff7196614dc7437193e67b60a0b539a2f239457dd48d27f3c5597e014af7",
+    "job": "job-5e60a10acf5ad8e9dd5a061c7afd06a4",
     "outcome": "SUCCEEDED",
     "reason": null,
     "trust_level": "TRUSTED_LOCAL",
@@ -118,14 +118,14 @@
  },
  "classification": "LOCALLY_VERIFIED (trusted-local, one host)",
  "direct_reference": {
-  "child_cpu_s": 0.898,
+  "child_cpu_s": 1.535,
   "command": "python -I -m unittest discover -s pyflakes/test -p test_*.py -t .",
   "returncode": 0,
   "summary": [
-   "Ran 795 tests in 0.787s",
+   "Ran 795 tests in 4.123s",
    "OK (skipped=28)"
   ],
-  "wall_s": 0.973
+  "wall_s": 4.376
  },
  "kind": "external project through VEP",
  "limits": [
@@ -152,10 +152,10 @@
  },
  "report_version": 1,
  "tool": {
-  "package": "0.5.0b1",
+  "package": "0.6.0b1",
   "platform": "macOS-15.6-arm64-arm-64bit-Mach-O",
   "python": "3.14.7",
-  "vep_commit": "c6b2623d071cec87acdce43ad71532f00cae42e4"
+  "vep_commit": "7071dee8fc403e00a5a721a7a1bba22f81305478"
  },
  "verification": {
   "authorized_verification": {

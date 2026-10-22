@@ -32,4 +32,4 @@ workflow; the change is small; token cost is zero because no model was involved 
 
 Host-specific absolute paths (the scratch interpreter location and home directory) were replaced by placeholders in these records in a separate commit; no measurement or outcome value was changed.
 
-| `run-6-0.6-candidate` | **DOGFOOD_PASS** | Re-run for the 0.6 candidate (tool commit `c6b2623`, base/candidate are the rewritten-history equivalents of `11391fe`/`9d79210`): 365 passed, 2 skipped (Node-dependent), negative control rejected, post-certification edit invalidates; the certificate also verifies as an **authorized** v2 bundle against a trust policy in Python and Node (`AUTHORIZED`). |
+| `run-6-0.6-candidate` | **DOGFOOD_PASS** | Re-run for the 0.6 candidate (tool commit `7071dee`, package 0.6.0b1, base/candidate are the rewritten-history equivalents of `11391fe`/`9d79210`): 365 passed, 2 skipped (Node-dependent), negative control rejected, post-certification edit invalidates; the certificate also verifies as an **authorized** v2 bundle against a trust policy in Python and Node (`AUTHORIZED`). |

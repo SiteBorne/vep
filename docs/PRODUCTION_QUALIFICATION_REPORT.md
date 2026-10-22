@@ -34,7 +34,7 @@ its own prerequisites pass; there is no umbrella `PRODUCTION_READY`. Definitions
 * Optimization: one candidate (object parse cache) measured below the preregistered threshold and was reverted; others were rejected for soundness ([PERFORMANCE_REPORT.md](PERFORMANCE_REPORT.md)).
 
 ## Version decision
-Proposed next version: **`0.6.0b1`** (not `1.0.0`). Reasons: new public interfaces (MCP, A2A, `vep claude`, `vep reuse`), a new bundle default (format 2) and verification semantics, a new object type and corrected cache identities, all additive or behind explicit flags, with the protocol version (`0.3`), Evidence/Certificate schemas and database schema (`3`) unchanged. It is **not set** in the repository: bumping and tagging need your decision.
+Candidate version: **`0.6.0b1`** (not `1.0.0`), set in `pyproject.toml`, `vep.__version__` and `vep.versions.PACKAGE_VERSION`. Protocol version (`0.3`), Evidence/Certificate schemas and database schema (`3`) are unchanged because their compatibility contracts did not change; the additions are a new object type, new bundle formats, new default export format, corrected cache identities and new optional interfaces ([COMPATIBILITY](COMPATIBILITY.md)). Nothing is tagged or released; `v0.5.0b1` is unmoved.
 
 ## To reach the remaining profiles
 1. (Done) the work is on PR #2 so hosted CI and CodeQL run on the exact commit.

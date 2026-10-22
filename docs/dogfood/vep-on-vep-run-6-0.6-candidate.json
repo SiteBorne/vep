@@ -2,7 +2,7 @@
  "baseline": {
   "base_snapshot_id": "snap-62bf8365e19b7f2fb2268bd12d8328bf2b32b624ceae6805b24b624b05f61070",
   "min_passing_tests": 300,
-  "objective_id": "obj-1d7d8fe594e7177911b518e8166e03ec13839a89846f3d049b842c0b2f9e48b3",
+  "objective_id": "obj-09829c3467ecff84ecd5b8d613853afe9d00e1e871cf6722dddff1c15419eaae",
   "policy_id": "pol-d4d8f0dd0782cce3a7520f45fce31dc57ec1a41f3f28174f237b157410fd097f",
   "protected_patterns": [
    "conftest.py",
@@ -22,7 +22,7 @@
   "required_test_files": 29
  },
  "candidate": {
-  "candidate_id": "cand-8c0d234c33b5c055c89d002b1f48d9f31468f8b03159639dcd0de249dc994053",
+  "candidate_id": "cand-6bdbd63db722cd61693b2fc6fea78cfaf12eae8c5defae03ae8c679164b27beb",
   "diff": {
    "added": [
     "tests/test_cli_build.py"
@@ -89,19 +89,19 @@
  ],
  "negative_control": {
   "as_expected": true,
-  "candidate_id": "cand-10e28cec3f34b04b0f6b084408014cd33ab4a156bc3166d9faa74a7bc5778253",
+  "candidate_id": "cand-6bc447d7a16d5ab58a2b6fd8c69b7701eeff9f9a5a5adef9925dc9651087069e",
   "cost": {
-   "child_cpu_s": 57.622,
-   "peak_child_rss_mb": 73.7,
-   "wall_s": 89.462
+   "child_cpu_s": 68.212,
+   "peak_child_rss_mb": 66.9,
+   "wall_s": 120.919
   },
   "description": "candidate's new tests with the base implementation of src files",
   "expected": "REJECTED",
   "result": {
-   "candidate_id": "cand-10e28cec3f34b04b0f6b084408014cd33ab4a156bc3166d9faa74a7bc5778253",
+   "candidate_id": "cand-6bc447d7a16d5ab58a2b6fd8c69b7701eeff9f9a5a5adef9925dc9651087069e",
    "candidate_status": "REJECTED",
-   "evidence_id": "evd-f172f5433dfbd757bccb1f69cca66b60a543381a44b3d3faf7edbc4398b2c28e",
-   "job": "job-14718b814a828c2100a2ecb3089c5d98",
+   "evidence_id": "evd-11f3a1dcef73f0853d78588f132756cbeb1e7a482e61fd649285e016dcaf331b",
+   "job": "job-d02e12e1220b9ae5722b8cf1881ff9ab",
    "outcome": "SUCCEEDED",
    "reason": null,
    "trust_level": "TRUSTED_LOCAL",
@@ -112,7 +112,7 @@
  "report_version": 1,
  "run": {
   "budget": {
-   "account": "objective:obj-1d7d8fe594e7177911b518e8166e03ec13839a89846f3d049b842c0b2f9e48b3",
+   "account": "objective:obj-09829c3467ecff84ecd5b8d613853afe9d00e1e871cf6722dddff1c15419eaae",
    "available": "0.998",
    "kind": "objective",
    "limit": "1",
@@ -123,27 +123,27 @@
    "uncertain": "0"
   },
   "controller_result": {
-   "candidate_id": "cand-8c0d234c33b5c055c89d002b1f48d9f31468f8b03159639dcd0de249dc994053",
+   "candidate_id": "cand-6bdbd63db722cd61693b2fc6fea78cfaf12eae8c5defae03ae8c679164b27beb",
    "candidate_status": "CERTIFIED",
-   "certificate_id": "cert-c77019331abbfbbfcdd026d60d5a80cae22e1ad9d9bdc3411df1658c96c959d2",
-   "evidence_id": "evd-1a7238b4c698f05ec8209b53eb756f2f5bc6c1920b611be05472b69e970f3566",
-   "job": "job-384043725b47f07034ffea8e8edf4a5d",
+   "certificate_id": "cert-4984cf7ff2d500a41601d0a9d50319ef6430e712f9b93a01d24bc54cf8136a00",
+   "evidence_id": "evd-ba0646e9cf4ec3690961540299584b0ce5849eb8a2783b6a9238123e613239e1",
+   "job": "job-0c706499a81e4047bb5baed139856dda",
    "outcome": "SUCCEEDED",
    "reason": null,
    "trust_level": "TRUSTED_LOCAL",
    "verdict": "PASS"
   },
   "cost": {
-   "child_cpu_s": 48.776,
-   "peak_child_rss_mb": 75.8,
-   "wall_s": 78.43
+   "child_cpu_s": 68.68,
+   "peak_child_rss_mb": 71.5,
+   "wall_s": 112.743
   },
   "evidence_trust_level": "TRUSTED_LOCAL",
   "job": {
    "attempts": 1,
    "failure_class": null,
    "fence": 1,
-   "id": "job-384043725b47f07034ffea8e8edf4a5d",
+   "id": "job-0c706499a81e4047bb5baed139856dda",
    "mode": "trusted-local",
    "state": "SUCCEEDED"
   },
@@ -168,11 +168,11 @@
  "tool": {
   "db_schema": 3,
   "evaluator_python": "<evaluator venv>/bin/python",
-  "package": "0.5.0b1",
+  "package": "0.6.0b1",
   "platform": "macOS-15.6-arm64-arm-64bit-Mach-O",
   "protocol": "0.3",
   "python": "3.14.7",
-  "tool_commit": "c6b2623d071cec87acdce43ad71532f00cae42e4",
+  "tool_commit": "7071dee8fc403e00a5a721a7a1bba22f81305478",
   "tool_tree_dirty": false
  },
  "verification": {
@@ -183,7 +183,7 @@
   },
   "bundle_node_independent": {
    "assurance": "INTERNAL_CONSISTENCY_ONLY",
-   "certificate_id": "cert-c77019331abbfbbfcdd026d60d5a80cae22e1ad9d9bdc3411df1658c96c959d2",
+   "certificate_id": "cert-4984cf7ff2d500a41601d0a9d50319ef6430e712f9b93a01d24bc54cf8136a00",
    "code": null,
    "snapshot_id": "snap-d26273f8ec3a9b5576dd6c8549cd3da410845b4f55e7c71d4902a7fa293288f7",
    "trust_level": "TRUSTED_LOCAL",
@@ -191,13 +191,13 @@
   },
   "bundle_python_reference": {
    "assurance": "INTERNAL_CONSISTENCY_ONLY",
-   "certificate_id": "cert-c77019331abbfbbfcdd026d60d5a80cae22e1ad9d9bdc3411df1658c96c959d2",
+   "certificate_id": "cert-4984cf7ff2d500a41601d0a9d50319ef6430e712f9b93a01d24bc54cf8136a00",
    "code": null,
    "snapshot_id": "snap-d26273f8ec3a9b5576dd6c8549cd3da410845b4f55e7c71d4902a7fa293288f7",
    "trust_level": "TRUSTED_LOCAL",
    "valid": true
   },
-  "certificate_id": "cert-c77019331abbfbbfcdd026d60d5a80cae22e1ad9d9bdc3411df1658c96c959d2",
+  "certificate_id": "cert-4984cf7ff2d500a41601d0a9d50319ef6430e712f9b93a01d24bc54cf8136a00",
   "certified": true,
   "certified_snapshot_id": "snap-d26273f8ec3a9b5576dd6c8549cd3da410845b4f55e7c71d4902a7fa293288f7",
   "current_source_check": [
