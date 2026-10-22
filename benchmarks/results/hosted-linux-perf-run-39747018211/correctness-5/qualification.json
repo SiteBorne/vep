@@ -1,0 +1,16 @@
+{
+ "flags": "staging_fast,staging_clone,verified_handoff",
+ "tests_run": 555,
+ "tests_failed": 4,
+ "tests_skipped": 2,
+ "skipped": [
+  "tests.test_benchmark_analysis.AnalysisTests::test_history_ledger_is_verified_against_git_when_history_exists",
+  "tests.test_staging_adversarial.OptimizedPathAdversarial::test_unsupported_clone_falls_back_to_a_normal_write"
+ ],
+ "invariants_executed": 15,
+ "invariants_expected": 15,
+ "qualified": false,
+ "problems": [
+  "4 failing tests, e.g. ['tests.test_benchmark_analysis.AnalysisTests::test_dataset_validates_and_regenerates_byte_identically', 'tests.test_benchmark_analysis.AnalysisTests::test_every_tracked_benchmark_artifact_is_inventoried', 'tests.test_benchmark_analysis.AnalysisTests::test_extraction_is_identical_in_a_shallow_clean_checkout']"
+ ]
+}

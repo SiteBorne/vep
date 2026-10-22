@@ -1,0 +1,43 @@
+{
+ "label": "ws-more-itertools",
+ "timeout_s": 900,
+ "interval_s": 10,
+ "result": {
+  "criterion": "load_avg_1m < 2.0",
+  "achieved": true,
+  "first_ok_sample": {
+   "t_s": 44.0,
+   "load_avg_1m": 1.76,
+   "cpu_idle_pct": 99.75
+  },
+  "samples": 5,
+  "min_load_avg_1m": 1.76
+ },
+ "samples_detail": [
+  {
+   "t_s": 0.0,
+   "load_avg_1m": 3.34,
+   "cpu_idle_pct": 99.5
+  },
+  {
+   "t_s": 11.0,
+   "load_avg_1m": 2.98,
+   "cpu_idle_pct": 99.75
+  },
+  {
+   "t_s": 22.0,
+   "load_avg_1m": 2.67,
+   "cpu_idle_pct": 100.0
+  },
+  {
+   "t_s": 33.0,
+   "load_avg_1m": 2.26,
+   "cpu_idle_pct": 99.75
+  },
+  {
+   "t_s": 44.0,
+   "load_avg_1m": 1.76,
+   "cpu_idle_pct": 99.75
+  }
+ ]
+}
