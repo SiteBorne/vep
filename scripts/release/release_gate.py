@@ -93,7 +93,7 @@ def g_discovery(c: Ctx):
 
 def g_units(c: Ctx):
     u = G.run([PY, "-m", "unittest", "discover", "-s", "tests", "-t", "."])
-    p = G.run([PY, "-m", "pytest", "-q", "-rs", "-p", "no:cacheprovider"])
+    p = G.run([PY, "-m", "pytest", "-q", "-rsf", "-p", "no:cacheprovider"])
     ran = count_line(u.stderr, r"Ran (\d+) tests?")
     skipped_u = count_line(u.stderr, r"skipped=(\d+)") or 0
     passed = count_line(p.stdout, r"(\d+) passed")
@@ -102,8 +102,9 @@ def g_units(c: Ctx):
     c.facts.update(unittest_ran=ran, pytest_passed=passed)
     ok = (u.returncode == 0 and "\nOK" in u.stderr and p.returncode == 0 and ran and ran == passed
           and not skipped_u and not skipped_p and not failed)
+    names = [ln[:160] for ln in p.stdout.splitlines() if ln.startswith("FAILED ")][:3]
     return G.gate("PASS" if ok else "FAIL", f"unittest ran={ran} rc={u.returncode} skipped={skipped_u}; pytest passed={passed} "
-                  f"failed={failed} skipped={skipped_p}", unittest_ran=ran, pytest_passed=passed, failed=failed,
+                  f"failed={failed} skipped={skipped_p}" + (f"; {names}" if names else ""), unittest_ran=ran, pytest_passed=passed, failed=failed,
                   skipped=skipped_u + skipped_p, not_run=0)
 
 
@@ -310,7 +311,7 @@ def g_pycompat(c, skip=False):
             continue
         v = c.venv(f"py{ver}", exe)
         pip = str(v / "bin" / "pip")
-        r = G.run([pip, "install", "-q", "--no-cache-dir", str(c.wheel), "pytest", "build", "setuptools>=68"])
+        r = G.run([pip, "install", "-q", "--no-cache-dir", f"{c.wheel}[mcp,a2a,claude]", "pytest", "build", "setuptools>=68"])
         if r.returncode:
             out[ver] = "FAIL (install)"; problems.append(f"{ver} install"); continue
         t = G.run([str(v / "bin" / "python"), "-m", "unittest", "discover", "-s", "tests", "-t", "."], cwd=srcdir)
