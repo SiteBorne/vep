@@ -356,6 +356,14 @@ def build() -> Builder:
         rel = str(p.relative_to(ROOT))
         if p.is_file() and not any(x["path"] == rel for x in b.sources):
             b.source(rel, "hosted_run_artifact", "MEASURED", cohort="hosted-linux-azure-4cpu", note="supporting artifact of the hosted performance run (environment, idle checks, pins, logs)")
+    for d in sorted((ROOT / "benchmarks/results").glob("hosted-linux-perf-run-*")):
+        run = d.name.rsplit("-", 1)[1]
+        # preserved raw artifacts of one hosted run: inventoried so nothing is lost, but analysed per run by benchmarks/analysis/decide.py
+        # and deliberately NOT merged into the master observations (pooling different runs would hide run-to-run variance)
+        cls = "HISTORICAL" if (d / "STATUS.md").exists() and "PROVISIONAL" in (d / "STATUS.md").read_text() else "MEASURED"
+        for p in sorted(x for x in d.rglob("*") if x.is_file()):
+            b.source(str(p.relative_to(ROOT)), "hosted_run_artifact", cls, cohort="hosted-linux-azure-4cpu",
+                     note=f"raw artifact of hosted performance run {run}, preserved unaltered (see STATUS.md in the run directory)")
     reports(b)
     return b
 

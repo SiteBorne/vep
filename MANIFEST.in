@@ -15,3 +15,5 @@ recursive-include benchmarks *.json
 exclude launch-gate.json
 graft tests/fixtures
 graft plugins
+prune benchmarks/results/hosted-linux-perf-run-39719640989
+prune benchmarks/results/hosted-linux-perf-run-39721614817
