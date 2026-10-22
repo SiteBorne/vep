@@ -80,7 +80,7 @@ def advisory(ws: Workspace, candidate_id: str, *, root: Path | None, previous_sn
     if not mods:
         rc, ran = 0, 0
     else:
-        r = subprocess.run([sys.executable, "-I", "-m", "unittest", *mods], cwd=root, capture_output=True, text=True, timeout=timeout_s)
+        r = subprocess.run([sys.executable, "-m", "unittest", *mods], cwd=root, capture_output=True, text=True, timeout=timeout_s)
         rc, ran = r.returncode, len(mods)
     return _base(candidate_id, "advisory", outcome="ADVISORY_FEEDBACK", assurance="ADVISORY_ONLY (heuristic selection; not evidence, not a certificate)", executed=True, certificate_id=None,
                  advisory_pass=rc == 0, test_modules_run=ran, selection="static import graph; dynamic imports and non-Python dependencies are not seen",
