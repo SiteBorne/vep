@@ -111,10 +111,10 @@ def _private_dir(path: Path) -> None:
     os.chmod(path, PRIVATE_DIR)
 
 
-def server_entry(authority: tuple[str, ...] = AUTHORITY_DEFAULT, trusted_local: bool = False, command: list[str] | None = None) -> dict:
+def server_entry(authority: tuple[str, ...] = AUTHORITY_DEFAULT, unisolated_execution: bool = False, command: list[str] | None = None) -> dict:
     cmd = command or ([shutil.which("vep-mcp")] if shutil.which("vep-mcp") else [sys.executable, "-m", "vep.mcp_server"])
     args = cmd[1:] + ["--root", "${CLAUDE_PROJECT_DIR:-.}", "--authority", ",".join(authority)]
-    if trusted_local:
+    if unisolated_execution:
         args.append("--trusted-local-execution")
     return {"command": cmd[0], "args": args}
 
@@ -172,12 +172,12 @@ def _backup(root: Path, stamp: str, rel: Path, actions: list) -> None:
     actions.append({"backup": str(rel), "to": str(dst.relative_to(root))})
 
 
-def install(project: str | Path, *, authority: tuple[str, ...] = AUTHORITY_DEFAULT, trusted_local: bool = False, hooks: bool = True,
+def install(project: str | Path, *, authority: tuple[str, ...] = AUTHORITY_DEFAULT, unisolated_execution: bool = False, hooks: bool = True,
             claude_md: bool = True, force: bool = False, dry_run: bool = False, command: list[str] | None = None) -> dict:
     root = Path(project).resolve()
     if not root.is_dir():
         raise IntegrationConflict(f"{root} is not a directory")
-    if trusted_local and "evaluate" not in authority:
+    if unisolated_execution and "evaluate" not in authority:
         raise IntegrationConflict("--trusted-local-execution only makes sense together with the 'evaluate' authority")
     prev = _load_manifest(root)
     prev_files = prev.get("files", {})
@@ -215,7 +215,7 @@ def install(project: str | Path, *, authority: tuple[str, ...] = AUTHORITY_DEFAU
         if (why := _check_target(root, tp)):
             raise IntegrationConflict(why)
     mcp = _read_json(mcp_path)
-    entry = server_entry(authority, trusted_local, command)
+    entry = server_entry(authority, unisolated_execution, command)
     servers = mcp.setdefault("mcpServers", {})
     mcp_action = "create" if SERVER not in servers else None
     if SERVER in servers:
@@ -260,7 +260,7 @@ def install(project: str | Path, *, authority: tuple[str, ...] = AUTHORITY_DEFAU
             settings_new = _dump(settings)
             plan.append({"file": ".claude/settings.json", "action": "update" if mine else ("update" if set_path.exists() else "create")})
 
-    report = {"project": str(root), "dry_run": dry_run, "authority": list(authority), "trusted_local_execution": trusted_local,
+    report = {"project": str(root), "dry_run": dry_run, "authority": list(authority), "unisolated_execution": unisolated_execution,
               "plan": plan, "conflicts": conflicts}
     if conflicts:
         report["status"] = "CONFLICT"
@@ -288,7 +288,7 @@ def install(project: str | Path, *, authority: tuple[str, ...] = AUTHORITY_DEFAU
         _atomic_write(set_path, settings_new, PRIVATE_FILE)
     _atomic_write(root / MANIFEST, _dump({
         "installed_by": "vep claude install", "files": files_meta, "mcp_entry_sha": _sha(json.dumps(entry, sort_keys=True).encode()),
-        "claude_md": bool(claude_md), "hooks": bool(hooks), "authority": list(authority), "trusted_local_execution": trusted_local}), PRIVATE_FILE)
+        "claude_md": bool(claude_md), "hooks": bool(hooks), "authority": list(authority), "unisolated_execution": unisolated_execution}), PRIVATE_FILE)
     report.update(status="INSTALLED", backups=backups)
     return report
 
@@ -318,7 +318,7 @@ def status(project: str | Path) -> dict:
     except IntegrationConflict as exc:
         comp["hook:PreToolUse"] = f"unreadable: {exc}"
     if m:
-        out["authority"], out["trusted_local_execution"] = m.get("authority"), m.get("trusted_local_execution")
+        out["authority"], out["unisolated_execution"] = m.get("authority"), m.get("unisolated_execution", m.get("trusted_local_execution"))
     return out
 
 

@@ -69,8 +69,8 @@ class InstallerTests(unittest.TestCase):
 
     def test_authority_is_operator_chosen_and_trusted_local_needs_evaluate(self):
         with self.assertRaises(cc.IntegrationConflict):
-            cc.install(self.root, trusted_local=True)
-        cc.install(self.root, authority=cc.AUTHORITY_EVALUATING, trusted_local=True)
+            cc.install(self.root, unisolated_execution=True)
+        cc.install(self.root, authority=cc.AUTHORITY_EVALUATING, unisolated_execution=True)
         args = json.loads((self.root / ".mcp.json").read_text())["mcpServers"]["vep"]["args"]
         self.assertIn("--trusted-local-execution", args); self.assertIn("read,register,evaluate,export", args)
 

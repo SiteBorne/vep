@@ -5,47 +5,47 @@
   "UNTRUSTED_EXECUTION_ISOLATION": "UNVERIFIED"
  },
  "decision": "GO",
- "elapsed_seconds": 316.6,
+ "elapsed_seconds": 1490.0,
  "environment": {
   "platform": "macOS-15.6-arm64-arm-64bit-Mach-O",
   "python": "3.14.7"
  },
  "gates": {
   "ADVERSARIAL_TESTS": {
-   "detail": "adversarial+trust+isolation+release regression: ran=92 rc=0",
-   "ran": 92,
-   "seconds": 30.1,
+   "detail": "adversarial+trust+isolation+release regression: ran=94 rc=0",
+   "ran": 94,
+   "seconds": 72.2,
    "status": "PASS",
    "tail": ""
   },
   "ARTIFACT_INTEGRITY": {
    "artifacts": {
-    "vep_protocol-0.4.0a1-py3-none-any.whl": "1dd970a300536b65d5f81d6476d9b4db65abb5306fa02342fae00714368f263c",
-    "vep_protocol-0.4.0a1.tar.gz": "63911862cc60949034e557bfd46df807dd5c75fb153c1a70b9f3f7440c632bc8"
+    "vep_protocol-0.6.0b1-py3-none-any.whl": "ce7a05f3e674bcdef94ef346d0d7ed53534d42c3b9efd8b8d9a0c45f20d3677b",
+    "vep_protocol-0.6.0b1.tar.gz": "bea2b7e812e8a953fa56305654f34210f838a5f1a2de4904f674f8ed553d32f5"
    },
    "detail": "checksums verified; no keys/db/env/machine paths/secrets in wheel or sdist",
-   "seconds": 0.1,
+   "seconds": 0.5,
    "status": "PASS"
   },
   "CLI_SMOKE_TEST": {
    "checks": 18,
    "detail": "18 clean-room checks; failing: []",
-   "seconds": 1.9,
+   "seconds": 3.9,
    "status": "PASS"
   },
   "DEMO": {
    "detail": "rc=0",
-   "seconds": 0.2,
+   "seconds": 0.4,
    "status": "PASS"
   },
   "DEPENDENCY_AUDIT": {
    "detail": "No known vulnerabilities found",
-   "seconds": 1.1,
+   "seconds": 3.3,
    "status": "PASS"
   },
   "DOCUMENTATION": {
    "detail": "24 required docs present; no unsupported claims; quickstart executed against installed wheel",
-   "seconds": 1.4,
+   "seconds": 11.3,
    "status": "PASS"
   },
   "HOSTED_ATTESTATION": {
@@ -57,9 +57,9 @@
    "status": "NOT_RUN"
   },
   "INVARIANT_TESTS": {
-   "detail": "invariant suites: ran=84 rc=0",
-   "ran": 84,
-   "seconds": 2.3,
+   "detail": "invariant suites: ran=87 rc=0",
+   "ran": 87,
+   "seconds": 14.5,
    "status": "PASS",
    "tail": ""
   },
@@ -85,37 +85,37 @@
     "server_os": null
    },
    "detail": "no VEP_ISOLATION_IMAGE configured; capability report only",
-   "seconds": 0.0,
+   "seconds": 0.1,
    "status": "UNVERIFIED",
    "untrusted_code_claim": "NOT ALLOWED"
   },
   "PACKAGE_BUILD": {
-   "detail": "vep_protocol-0.4.0a1-py3-none-any.whl, vep_protocol-0.4.0a1.tar.gz; twine check rc=0 Checking <repo>/dist/vep_protocol-0.4.0a1-py3-none-any.whl: \u001b[32mPASSED\u001b[0m\nChecking <repo>/dist/vep_protocol-0.4.0a1.tar.gz: \u001b[32mPASSED\u001b[0m\n",
-   "seconds": 2.4,
+   "detail": "vep_protocol-0.6.0b1-py3-none-any.whl, vep_protocol-0.6.0b1.tar.gz; twine check rc=0 Checking <repo>/dist/vep_protocol-0.6.0b1-py3-none-any.whl: \u001b[32mPASSED\u001b[0m\nChecking <repo>/dist/vep_protocol-0.6.0b1.tar.gz: \u001b[32mPASSED\u001b[0m\n",
+   "seconds": 6.1,
    "status": "PASS"
   },
   "PACKAGE_INSTALLATION": {
    "detail": "wheel and sdist install cleanly; pip check ok",
-   "seconds": 8.1,
+   "seconds": 40.3,
    "status": "PASS"
   },
   "PROTOCOL_COMPATIBILITY": {
    "detail": "frozen-fixture compatibility: ran=13 rc=0",
    "fixture_sha256": "3979f34b945424be84347a327a3b0bc9ba56615d533b95bff86e5b2344137e63",
    "ran": 13,
-   "seconds": 0.7,
+   "seconds": 5.5,
    "status": "PASS",
    "tail": ""
   },
   "PYTHON_COMPATIBILITY": {
    "detail": "tests run from the extracted sdist against the installed wheel on every supported interpreter",
-   "seconds": 180.1,
+   "seconds": 807.5,
    "status": "PASS",
    "versions": {
-    "3.11": "PASS ran=312",
-    "3.12": "PASS ran=312",
-    "3.13": "PASS ran=312",
-    "3.14": "PASS ran=312"
+    "3.11": "PASS ran=499",
+    "3.12": "PASS ran=499",
+    "3.13": "PASS ran=499",
+    "3.14": "PASS ran=499"
    }
   },
   "RELEASE_PROVENANCE": {
@@ -125,12 +125,14 @@
    "workflows": [
     "release.yml",
     "codeql.yml",
-    "ci.yml"
+    "benchmark-qualification.yml",
+    "ci.yml",
+    "isolation.yml"
    ]
   },
   "SECRET_SCAN": {
    "detail": "0 findings; working tree, all reachable history and release artifacts scanned (values are never printed)",
-   "seconds": 2.0,
+   "seconds": 17.7,
    "status": "PASS"
   },
   "SECURITY_REVIEW": {
@@ -143,41 +145,41 @@
    "classification": "SYNTHETIC",
    "detail": "identical=True",
    "result_sha256": "f79dda0d25e3e90b48aa6718aa6b1ce261d0a7657de458d1a0f92352a62c0ebf",
-   "seconds": 0.7,
+   "seconds": 1.7,
    "status": "PASS"
   },
   "SOURCE_INTEGRITY": {
-   "commit": "1256ee6fd606a2b3733ee48d0fdc4367e2c7f51d",
-   "detail": "clean tree at 1256ee6fd606, version 0.4.0a1",
+   "commit": "d76ce17d332c668b7758365aeb6605f17fd11478",
+   "detail": "clean tree at d76ce17d332c, version 0.6.0b1",
    "seconds": 0.1,
    "status": "PASS",
-   "tree": "e5f8e4830b9e119b4315be4b3d5c625f2eda3908",
+   "tree": "263e01d41de3c9063f966c7788743847d3c7a5ba",
    "versions": {
-    "CHANGELOG": "0.4.0a1",
-    "__init__": "0.4.0a1",
-    "pyproject": "0.4.0a1",
-    "versions.py": "0.4.0a1"
+    "CHANGELOG": "0.6.0b1",
+    "__init__": "0.6.0b1",
+    "pyproject": "0.6.0b1",
+    "versions.py": "0.6.0b1"
    }
   },
   "TEST_DISCOVERY": {
-   "detail": "unittest=312 pytest=312",
-   "pytest": 312,
-   "seconds": 0.4,
+   "detail": "unittest=499 pytest=499",
+   "pytest": 499,
+   "seconds": 5.4,
    "status": "PASS",
-   "unittest": 312
+   "unittest": 499
   },
   "UNIT_TESTS": {
-   "detail": "unittest ran=312 rc=0 skipped=0; pytest passed=312 failed=0 skipped=0",
+   "detail": "unittest ran=499 rc=0 skipped=0; pytest passed=499 failed=0 skipped=0",
    "failed": 0,
    "not_run": 0,
-   "pytest_passed": 312,
-   "seconds": 84.9,
+   "pytest_passed": 499,
+   "seconds": 499.5,
    "skipped": 0,
    "status": "PASS",
-   "unittest_ran": 312
+   "unittest_ran": 499
   }
  },
- "generated_at": "2026-10-19T17:54:21Z",
+ "generated_at": "2026-10-22T01:14:13Z",
  "package": "vep-protocol",
  "required_gates": [
   "SOURCE_INTEGRITY",
@@ -199,12 +201,12 @@
   "PYTHON_COMPATIBILITY"
  ],
  "schema": "vep-release-gate/1",
- "source_commit": "1256ee6fd606a2b3733ee48d0fdc4367e2c7f51d",
- "source_tree": "e5f8e4830b9e119b4315be4b3d5c625f2eda3908",
+ "source_commit": "d76ce17d332c668b7758365aeb6605f17fd11478",
+ "source_tree": "263e01d41de3c9063f966c7788743847d3c7a5ba",
  "test_counts": {
-  "discovered": 312,
-  "pytest": 312,
-  "unittest": 312
+  "discovered": 499,
+  "pytest": 499,
+  "unittest": 499
  },
- "version": "0.4.0a1"
+ "version": "0.6.0b1"
 }

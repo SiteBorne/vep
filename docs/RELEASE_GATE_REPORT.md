@@ -1,8 +1,8 @@
 # Release Gate Report
 
-**Decision: GO**  ·  package `vep-protocol 0.4.0a1`  ·  source `1256ee6fd606a2b3733ee48d0fdc4367e2c7f51d`
+**Decision: GO**  ·  package `vep-protocol 0.6.0b1`  ·  source `d76ce17d332c668b7758365aeb6605f17fd11478`
 
-Generated 2026-10-19T17:54:21Z on macOS-15.6-arm64-arm-64bit-Mach-O / Python 3.14.7. Produced by `scripts/release_check.sh`; machine-readable twin: `release-gate.json`.
+Generated 2026-10-22T01:14:13Z on macOS-15.6-arm64-arm-64bit-Mach-O / Python 3.14.7. Produced by `scripts/release_check.sh`; machine-readable twin: `release-gate.json`.
 
 ## Capabilities
 
@@ -15,14 +15,14 @@ Generated 2026-10-19T17:54:21Z on macOS-15.6-arm64-arm-64bit-Mach-O / Python 3.1
 
 | Gate | Required | Status | Detail |
 |---|---|---|---|
-| SOURCE_INTEGRITY | yes | **PASS** | clean tree at 1256ee6fd606, version 0.4.0a1 |
-| TEST_DISCOVERY | yes | **PASS** | unittest=312 pytest=312 |
-| UNIT_TESTS | yes | **PASS** | unittest ran=312 rc=0 skipped=0; pytest passed=312 failed=0 skipped=0 |
-| ADVERSARIAL_TESTS | yes | **PASS** | adversarial+trust+isolation+release regression: ran=92 rc=0 |
-| INVARIANT_TESTS | yes | **PASS** | invariant suites: ran=84 rc=0 |
+| SOURCE_INTEGRITY | yes | **PASS** | clean tree at d76ce17d332c, version 0.6.0b1 |
+| TEST_DISCOVERY | yes | **PASS** | unittest=499 pytest=499 |
+| UNIT_TESTS | yes | **PASS** | unittest ran=499 rc=0 skipped=0; pytest passed=499 failed=0 skipped=0 |
+| ADVERSARIAL_TESTS | yes | **PASS** | adversarial+trust+isolation+release regression: ran=94 rc=0 |
+| INVARIANT_TESTS | yes | **PASS** | invariant suites: ran=87 rc=0 |
 | DEMO | yes | **PASS** | rc=0 |
 | SIMULATION_REPRODUCIBILITY | yes | **PASS** | identical=True |
-| PACKAGE_BUILD | yes | **PASS** | vep_protocol-0.4.0a1-py3-none-any.whl, vep_protocol-0.4.0a1.tar.gz; twine check rc=0 Checking <repo>/dist/vep_protocol-0.4.0a1-py3-none-any.whl: [32mPASSED[0m Checking <repo>/dist/vep_protocol-0.4.0a1.tar.gz: [32mPASSED[0m  |
+| PACKAGE_BUILD | yes | **PASS** | vep_protocol-0.6.0b1-py3-none-any.whl, vep_protocol-0.6.0b1.tar.gz; twine check rc=0 Checking <repo>/dist/vep_protocol-0.6.0b1-py3-none-any.whl: [32mPASSED[0m Checking <repo>/dist/vep_protocol-0.6.0b1.tar.gz: [32mPASSED[0m  |
 | PACKAGE_INSTALLATION | yes | **PASS** | wheel and sdist install cleanly; pip check ok |
 | CLI_SMOKE_TEST | yes | **PASS** | 18 clean-room checks; failing: [] |
 | ARTIFACT_INTEGRITY | yes | **PASS** | checksums verified; no keys/db/env/machine paths/secrets in wheel or sdist |

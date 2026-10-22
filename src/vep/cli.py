@@ -344,7 +344,7 @@ def cmd_claude(a):
         _emit(a, claude_code.uninstall(a.root, dry_run=a.dry_run)); return 0
     authority = tuple(x for x in a.authority.split(",") if x) if a.authority else (
         claude_code.AUTHORITY_EVALUATING if a.allow_evaluate else claude_code.AUTHORITY_DEFAULT)
-    r = claude_code.install(a.root, authority=authority, trusted_local=a.allow_evaluate, hooks=not a.no_hooks, claude_md=not a.no_claude_md,
+    r = claude_code.install(a.root, authority=authority, unisolated_execution=a.allow_evaluate, hooks=not a.no_hooks, claude_md=not a.no_claude_md,
                             force=a.force, dry_run=a.dry_run, command=a.mcp_command.split() if a.mcp_command else None)
     _emit(a, r)
     return 3 if r["status"] == "CONFLICT" else 0
