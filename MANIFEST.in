@@ -18,3 +18,4 @@ graft plugins
 prune benchmarks/results/hosted-linux-perf-run-39719640989
 prune benchmarks/results/hosted-linux-perf-run-39721614817
 prune benchmarks/results/hosted-linux-perf-run-39747018211
+prune benchmarks/results/hosted-linux-perf-run-39755218641

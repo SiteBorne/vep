@@ -1,0 +1,41 @@
+{
+ "host": {
+  "platform": "Linux-6.17.0-1022-azure-x86_64-with-glibc2.39",
+  "machine": "x86_64",
+  "cpus": 4,
+  "python": "3.14.8",
+  "system": "Linux",
+  "kernel": "6.17.0-1022-azure",
+  "mem_total_mb": 15989.7,
+  "mem_available_mb_at_probe": 14675.5,
+  "swap": "total = 3071M free = 3071M",
+  "cpu_model": "AMD EPYC 9V74 80-Core Processor",
+  "os_release": {
+   "PRETTY_NAME": "Ubuntu 24.04.5 LTS",
+   "NAME": "Ubuntu",
+   "VERSION_ID": "24.04",
+   "VERSION": "24.04.5 LTS (Noble Numbat)"
+  },
+  "power": [
+   "not applicable (virtual machine)"
+  ],
+  "runner": {
+   "ImageOS": "ubuntu24",
+   "ImageVersion": "20261012.334.1",
+   "RUNNER_OS": "Linux",
+   "RUNNER_ARCH": "X64",
+   "RUNNER_NAME": "GitHub Actions 1000000409",
+   "GITHUB_RUN_ID": "39755218641",
+   "GITHUB_RUN_ATTEMPT": "1",
+   "GITHUB_SHA": "a521f4e4552c7518425b6cffdb6cf4393b060c3b",
+   "GITHUB_REPOSITORY": "SiteBorne/vep",
+   "GITHUB_WORKFLOW": "Performance qualification (hosted Linux)",
+   "GITHUB_REF": "refs/heads/perf/agent-scale"
+  }
+ },
+ "probe": {
+  "load_avg_1m": 0.54,
+  "cpu_idle_pct": 100.0,
+  "mem_available_mb": 14715.5
+ }
+}

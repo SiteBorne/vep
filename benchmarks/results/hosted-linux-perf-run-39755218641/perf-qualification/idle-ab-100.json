@@ -1,0 +1,23 @@
+{
+ "label": "ab-100",
+ "timeout_s": 900,
+ "interval_s": 10,
+ "result": {
+  "criterion": "load_avg_1m < 2.0",
+  "achieved": true,
+  "first_ok_sample": {
+   "t_s": 0.0,
+   "load_avg_1m": 0.78,
+   "cpu_idle_pct": 96.99
+  },
+  "samples": 1,
+  "min_load_avg_1m": 0.78
+ },
+ "samples_detail": [
+  {
+   "t_s": 0.0,
+   "load_avg_1m": 0.78,
+   "cpu_idle_pct": 96.99
+  }
+ ]
+}

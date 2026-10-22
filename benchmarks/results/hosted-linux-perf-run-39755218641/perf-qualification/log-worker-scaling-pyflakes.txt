@@ -1,0 +1,5 @@
+rep 0: w1=1.10j/s w2=1.94j/s w4=2.64j/s w8=2.44j/s
+rep 1: w1=1.08j/s w2=2.08j/s w4=2.65j/s w8=2.40j/s
+rep 2: w1=1.08j/s w2=1.99j/s w4=2.11j/s w8=2.36j/s
+rep 3: w1=1.08j/s w2=1.82j/s w4=2.68j/s w8=2.46j/s
+rep 4: w1=1.05j/s w2=2.07j/s w4=2.60j/s w8=2.31j/s

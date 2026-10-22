@@ -1,0 +1,12 @@
+n=100 run 0: wall=0.1548s child_cpu=0.0887s rss=56.0MB
+n=100 run 1: wall=0.1747s child_cpu=0.0945s rss=56.3MB
+n=100 run 2: wall=0.2175s child_cpu=0.1001s rss=55.5MB
+n=100 run 3: wall=0.172s child_cpu=0.0943s rss=55.0MB
+n=1000 run 0: wall=0.599s child_cpu=0.2461s rss=62.7MB
+n=1000 run 1: wall=0.5265s child_cpu=0.2298s rss=62.8MB
+n=1000 run 2: wall=0.5281s child_cpu=0.2295s rss=62.8MB
+n=1000 run 3: wall=0.6356s child_cpu=0.2511s rss=62.9MB
+n=3000 run 0: wall=1.5218s child_cpu=0.518s rss=82.2MB
+n=3000 run 1: wall=1.42s child_cpu=0.4918s rss=82.3MB
+n=3000 run 2: wall=1.3605s child_cpu=0.4908s rss=82.3MB
+n=3000 run 3: wall=1.3521s child_cpu=0.464s rss=82.3MB

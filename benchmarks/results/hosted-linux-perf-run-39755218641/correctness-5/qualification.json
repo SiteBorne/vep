@@ -1,0 +1,14 @@
+{
+ "flags": "staging_fast,staging_clone,verified_handoff",
+ "tests_run": 555,
+ "tests_failed": 0,
+ "tests_skipped": 2,
+ "skipped": [
+  "tests.test_benchmark_analysis.AnalysisTests::test_history_ledger_is_verified_against_git_when_history_exists",
+  "tests.test_staging_adversarial.OptimizedPathAdversarial::test_unsupported_clone_falls_back_to_a_normal_write"
+ ],
+ "invariants_executed": 15,
+ "invariants_expected": 15,
+ "qualified": true,
+ "problems": []
+}

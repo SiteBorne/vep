@@ -1,0 +1,112 @@
+{
+ "flags": "staging_fast",
+ "invariants": [
+  {
+   "id": "I01",
+   "name": "Exact snapshot identity",
+   "passed": true,
+   "tests": 4,
+   "summary": "4 passed in 1.76s"
+  },
+  {
+   "id": "I02",
+   "name": "Immutable CAS content, verify-on-read",
+   "passed": true,
+   "tests": 3,
+   "summary": "3 passed in 0.13s"
+  },
+  {
+   "id": "I03",
+   "name": "Complete content verification of a snapshot",
+   "passed": true,
+   "tests": 2,
+   "summary": "2 passed in 0.59s"
+  },
+  {
+   "id": "I04",
+   "name": "Staged tree equals the snapshot and is exact/read-only",
+   "passed": true,
+   "tests": 3,
+   "summary": "3 passed in 0.46s"
+  },
+  {
+   "id": "I05",
+   "name": "Protected acceptance policy",
+   "passed": true,
+   "tests": 3,
+   "summary": "3 passed in 0.27s"
+  },
+  {
+   "id": "I06",
+   "name": "Correct test discovery and execution (no false green)",
+   "passed": true,
+   "tests": 4,
+   "summary": "4 passed in 0.83s"
+  },
+  {
+   "id": "I07",
+   "name": "No false certificate",
+   "passed": true,
+   "tests": 3,
+   "summary": "3 passed in 0.25s"
+  },
+  {
+   "id": "I08",
+   "name": "Evidence signatures and source binding",
+   "passed": true,
+   "tests": 4,
+   "summary": "4 passed in 1.80s"
+  },
+  {
+   "id": "I09",
+   "name": "External relying-party trust",
+   "passed": true,
+   "tests": 3,
+   "summary": "3 passed in 0.47s"
+  },
+  {
+   "id": "I10",
+   "name": "Derived-attestation chain verification",
+   "passed": true,
+   "tests": 3,
+   "summary": "3 passed in 1.00s"
+  },
+  {
+   "id": "I11",
+   "name": "Runner/environment compatibility of cached results",
+   "passed": true,
+   "tests": 3,
+   "summary": "3 passed in 0.61s"
+  },
+  {
+   "id": "I12",
+   "name": "Cancellation, recovery and lease fencing",
+   "passed": true,
+   "tests": 4,
+   "summary": "4 passed in 4.34s"
+  },
+  {
+   "id": "I13",
+   "name": "No unapproved execution against the host",
+   "passed": true,
+   "tests": 3,
+   "summary": "3 passed in 0.25s"
+  },
+  {
+   "id": "I14",
+   "name": "Safe concurrent candidates",
+   "passed": true,
+   "tests": 3,
+   "summary": "3 passed in 2.77s"
+  },
+  {
+   "id": "I15",
+   "name": "Cache corruption, symlink races and filesystem mutation",
+   "passed": true,
+   "tests": 4,
+   "summary": "4 passed in 0.30s"
+  }
+ ],
+ "all_passed": true,
+ "executed": 15
+}
