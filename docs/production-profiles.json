@@ -144,8 +144,7 @@
   },
   "PUBLIC_ANNOUNCEMENT_READY": {
    "blocking": {
-    "candidate_release_artifacts_verified": "FAIL: no candidate release exists; nothing has been built, tagged or published for it",
-    "candidate_version_set": "FAIL: package version 0.5.0b1 equals the already-published release; the next version is decided but not set"
+    "candidate_release_artifacts_verified": "FAIL: no candidate release exists; nothing has been built, tagged or published for it"
    },
    "prerequisites": {
     "candidate_release_artifacts_verified": {
@@ -153,15 +152,15 @@
      "status": "FAIL"
     },
     "candidate_version_set": {
-     "detail": "package version 0.5.0b1 equals the already-published release; the next version is decided but not set",
-     "status": "FAIL"
+     "detail": "0.6.0b1",
+     "status": "PASS"
     },
     "hosted_ci_for_head": {
-     "detail": "['CI', 'CodeQL'] succeeded on 3cf2371",
+     "detail": "['CI', 'CodeQL'] succeeded on 45b0b24",
      "status": "PASS"
     },
     "packaging_install_smoke": {
-     "detail": "vep_protocol-0.5.0b1-py3-none-any.whl built, installed in a fresh venv, CLI/MCP/A2A entry points and skill assets present",
+     "detail": "vep_protocol-0.6.0b1-py3-none-any.whl built, installed in a fresh venv, CLI/MCP/A2A entry points and skill assets present",
      "status": "PASS"
     }
    },
@@ -175,11 +174,11 @@
      "status": "PASS"
     },
     "hosted_ci_for_head": {
-     "detail": "['CI', 'CodeQL'] succeeded on 3cf2371",
+     "detail": "['CI', 'CodeQL'] succeeded on 45b0b24",
      "status": "PASS"
     },
     "packaging_install_smoke": {
-     "detail": "vep_protocol-0.5.0b1-py3-none-any.whl built, installed in a fresh venv, CLI/MCP/A2A entry points and skill assets present",
+     "detail": "vep_protocol-0.6.0b1-py3-none-any.whl built, installed in a fresh venv, CLI/MCP/A2A entry points and skill assets present",
      "status": "PASS"
     },
     "tests_compat_migration": {
@@ -211,6 +210,6 @@
    "ready": "NO"
   }
  },
- "source_commit": "3cf237105c130281d9e925e09e27b29f2244082e",
+ "source_commit": "45b0b241801aee2497651e75e2ad90d9871ca1dd",
  "tree_dirty": false
 }
