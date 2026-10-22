@@ -53,7 +53,7 @@ def verify(ws: Workspace, candidate_id: str, *, mode: str = "fresh", worker_name
     # fresh protected evaluation (explicit `fresh`, or the declared fallback of `reuse_if_identical`)
     controller.enqueue(ws, candidate_id)
     res = controller.run_one(ws, controller.LocalToolWorker(worker_name, execution.TRUSTED_LOCAL_AUTH))
-    st = res.get("candidate_status") if res else None
+    st = (res or {}).get("candidate_status") or candidates.get_state(ws, candidate_id)["status"]  # a policy rejection fails the job but REJECTS the candidate
     out = _base(candidate_id, mode, executed=True, elapsed_s=round(time.perf_counter() - t0, 4), candidate_status=st,
                 reuse_attempted=mode == "reuse_if_identical")
     if st == "CERTIFIED":
