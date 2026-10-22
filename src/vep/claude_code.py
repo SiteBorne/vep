@@ -318,7 +318,7 @@ def status(project: str | Path) -> dict:
     except IntegrationConflict as exc:
         comp["hook:PreToolUse"] = f"unreadable: {exc}"
     if m:
-        out["authority"], out["unisolated_execution"] = m.get("authority"), m.get("unisolated_execution", m.get("trusted_local_execution"))
+        out["authority"], out["unisolated_execution"] = m.get("authority"), m.get("unisolated_execution")
     return out
 
 
