@@ -238,6 +238,95 @@ def reports(b: Builder):
             b.source(rel, "experiment_plan", "PROPOSED", note="predeclared experiments and endpoints; contains no measurements")
 
 
+def env_valid(blocks) -> tuple[bool, str]:
+    """Declared reporting criteria: 1-minute load average < 2.0 and CPU idle >= 75% in every analysed block."""
+    loads = [b["env"].get("load_avg_1m") for b in blocks if b.get("env")]
+    idles = [b["env"].get("cpu_idle_pct") for b in blocks if b.get("env")]
+    if not loads:
+        return False, "no per-block environment samples recorded"
+    ok = max(loads) < 2.0 and min(i for i in idles if i is not None) >= 75.0
+    return ok, f"load avg {min(loads):.1f}-{max(loads):.1f}, minimum CPU idle {min(i for i in idles if i is not None):.1f}%"
+
+
+def ab(b: Builder, rel: str):
+    d = json.loads((ROOT / rel).read_text())
+    ok, why = env_valid(d["blocks"])
+    cls = "MEASURED" if ok else "INVALID_ENVIRONMENT"
+    host = d["host"]
+    s = b.source(rel, "ab_experiment", cls, cohort=cohort_of(host), project=f"synthetic-{d['n_files']}-files", vep_commit=d.get("vep_commit"), host=host,
+                 note=f"balanced randomized paired blocks; {why}" + ("" if ok else " (declared criteria NOT met: not citable as a quiet-machine result)"))
+    for arm, sm in d["summary"].items():
+        for metric, st in sm.items():
+            raw = [bl["runs"][arm][metric] for bl in d["blocks"] if bl in d["blocks"] and arm in bl["runs"] and metric in bl["runs"][arm] and "error" not in bl["runs"][arm]]
+            b.add(s, scenario=f"ab_n{d['n_files']}_{d['change']}", operation=f"ab:{arm}", config=arm, assurance="VEP_PROTECTED_FRESH_CERTIFICATE", metric=metric, units="MB" if "rss" in metric else "s",
+                  stats=stats(st), samples=raw[:len(raw)], warmups=d["warmup_blocks"], samples_n=st["n"], variance={"sd": st["sd"]}, correctness_gate={"valid_blocks": d["valid_blocks"], "excluded": len(d["excluded"])},
+                  limitations=["synthetic project; same process image per arm; flags via VEP_PERF"] + ([] if ok else [why]))
+    for pair, c in d["comparisons"].items():
+        for m in ("wall_s", "cpu_s"):
+            if m in c:
+                b.comps.append({"source_path": rel, "source_sha256": s["sha256"], "cohort": s["cohort"], "classification": cls, "project": s["project"], "scenario": f"ab_n{d['n_files']}",
+                                "comparison": f"{pair}:{m}", "welch_preregistered": c[m]["welch_preregistered"], "paired_bootstrap": c[m]["paired_bootstrap"], "cpu_mean_ratio": None,
+                                "assurance_note": "same assurance on both sides (fresh protected certificate)"})
+
+
+def scale(b: Builder, rel: str):
+    d = json.loads((ROOT / rel).read_text())
+    s = b.source(rel, "scale_profile", "MEASURED" if d.get("load_avg_1m_at_start", 99) < 2.0 else "INVALID_ENVIRONMENT", cohort=cohort_of(d["host"]), project="synthetic-scale", host={**d["host"], "load_avg_1m_at_start": d.get("load_avg_1m_at_start")},
+                 note=f"stage profile with instrumentation overhead; load avg at start {d.get('load_avg_1m_at_start')}")
+    for n, sz in d["sizes"].items():
+        sm = sz["summary"]
+        b.add(s, scenario=f"scale_{n}", operation="full_workflow", config="vep_full", assurance="VEP_PROTECTED_FRESH_CERTIFICATE", metric="wall_s", units="s", stats=sm["wall_s"],
+              samples=[r["wall_s"] for r in sz["raw"] if not r["warmup"]], samples_n=d["runs_per_size"], warmups=d["warmup_runs"], limitations=["instrumented run: use for ranking stages, not absolute speed"])
+        for st, v in sm["stages_median"].items():
+            b.add(s, scenario=f"scale_{n}", operation=f"stage:{st}", config="vep_full", assurance="VEP_PROTECTED_FRESH_CERTIFICATE", metric="excl_s", units="s", stats={"median": v["excl_s"]},
+                  samples_n=d["runs_per_size"], warmups=d["warmup_runs"], limitations=[f"inclusive {v['incl_s']} s; calls {v['calls']}"])
+
+
+def agent(b: Builder, rel: str):
+    d = json.loads((ROOT / rel).read_text())
+    envs = [r["env"] for sc in d["scenarios"].values() for r in sc["raw"] if not r["warmup"]]
+    ok, why = env_valid([{"env": e} for e in envs])
+    cls = "MEASURED" if ok else "INVALID_ENVIRONMENT"
+    s = b.source(rel, "agent_workflow", cls, cohort=cohort_of(d["host"]), project=d["project"], project_commit=d["project_commit"], host=d["host"],
+                 note=f"deterministic agent traces; each repetition is ONE independent sample per system and step (steps of one repetition are not independent); {why}")
+    for sc, body in d["scenarios"].items():
+        reps = [r for r in body["raw"] if not r["warmup"]]
+        systems = sorted({k for r in reps for k in r["systems"]})
+        for system in systems:
+            labels = []
+            for r in reps:
+                for st in r["systems"].get(system, {}).get("steps", []):
+                    if st["label"] not in labels:
+                        labels.append(st["label"])
+            for label in labels:
+                for metric in ("wall_s", "feedback_s", "verdict_s", "authorized_s", "cpu_s", "rss_mb"):
+                    xs = [st[metric] for r in reps for st in r["systems"].get(system, {}).get("steps", []) if st["label"] == label and st.get(metric) is not None]
+                    if not xs:
+                        continue
+                    oks = [st.get("outcome_ok") for r in reps for st in r["systems"].get(system, {}).get("steps", []) if st["label"] == label and "outcome_ok" in st]
+                    outs = sorted({st.get("outcome") for r in reps for st in r["systems"].get(system, {}).get("steps", []) if st["label"] == label and st.get("outcome")})
+                    b.add(s, scenario=sc, operation=f"{sc}:{label}", config=system, assurance=("VEP_PROTECTED_FRESH_CERTIFICATE" if system in ("VEP_BASE", "VEP_OPT") else
+                          "BUILD_CACHE_HIT_NO_CERTIFICATE" if False else ASSUR_BY_CONFIG.get(system, "NONE_EXIT_CODE_ONLY") if system in ("DIRECT_SEQ", "DIRECT_PAR", "TESTMON") else "VEP_PROTECTED_FRESH_CERTIFICATE"),
+                          metric=metric, units="MB" if metric == "rss_mb" else "s", stats={"mean": sum(xs) / len(xs), "median": sorted(xs)[len(xs) // 2], "min": min(xs), "max": max(xs), "n": len(xs)},
+                          samples=xs, samples_n=len(xs), warmups=d["warmups"], correctness_gate={"outcome_ok_all": all(o for o in oks if o is not None) if oks else None, "outcomes": outs},
+                          cache_eligibility="derived attestation used only where the step was eligible; outcome field says which" if system == "VEP_REUSE" else "n/a",
+                          limitations=["steps of one repetition are correlated; only repetitions are independent"] + ([] if ok else [why]))
+
+
+def workers(b: Builder, rel: str):
+    d = json.loads((ROOT / rel).read_text())
+    ok, why = env_valid([{"env": r["env"]} for r in d["raw"] if not r["warmup"]])
+    s = b.source(rel, "worker_scaling", "MEASURED" if ok else "INVALID_ENVIRONMENT", cohort=cohort_of(d["host"]), project=d["project"], project_commit=d["project_commit"], host=d["host"],
+                 note=f"{d['candidates_per_rep']} candidates per repetition; {why}")
+    for w, sm in d["summary"].items():
+        for key, metric, unit in (("vep_jobs_per_s", "throughput_jobs_per_s", "jobs/s"), ("vep_p95_latency_s", "p95_latency_s", "s"), ("vep_cpu_total_s", "child_cpu_s", "s"), ("vep_rss_children_max_mb", "peak_child_rss_mb", "MB")):
+            if sm.get(key):
+                b.add(s, scenario=f"worker_scaling_{d['candidates_per_rep']}", operation=f"workers={w}", config=f"vep_{w}_workers", assurance="VEP_PROTECTED_FRESH_CERTIFICATE", metric=metric, units=unit, stats=stats(sm[key]),
+                      samples_n=sm[key]["n"], warmups=d["warmups"], correctness_gate={"all_certified_once": sm.get("vep_all_certified_once")}, limitations=[] if ok else [why])
+        b.add(s, scenario=f"worker_scaling_{d['candidates_per_rep']}", operation=f"workers={w}", config=f"direct_{w}_parallel", assurance="NONE_EXIT_CODE_ONLY", metric="throughput_jobs_per_s", units="jobs/s",
+              stats=stats(sm["direct_jobs_per_s"]), samples_n=sm["direct_jobs_per_s"]["n"], warmups=d["warmups"], limitations=[] if ok else [why])
+
+
 def build() -> Builder:
     b = Builder()
     paired(b, "benchmarks/results/paired-pyflakes.json")
@@ -249,6 +338,15 @@ def build() -> Builder:
     scaling(b)
     stage_profiles(b)
     misc(b)
+    for pat, fn in (("benchmarks/results/ab-*.json", ab), ("benchmarks/results/scale-profile-*.json", scale), ("benchmarks/results/agent-workflow-*.json", agent), ("benchmarks/results/worker-scaling-*.json", workers),
+                    ("benchmarks/results/hosted-linux-perf/ab-*.json", ab), ("benchmarks/results/hosted-linux-perf/scale-profile-*.json", scale),
+                    ("benchmarks/results/hosted-linux-perf/agent-workflow-*.json", agent), ("benchmarks/results/hosted-linux-perf/worker-scaling-*.json", workers)):
+        for p in sorted(ROOT.glob(pat)):
+            fn(b, str(p.relative_to(ROOT)))
+    for p in sorted((ROOT / "benchmarks/results/hosted-linux-perf").glob("*")) if (ROOT / "benchmarks/results/hosted-linux-perf").exists() else []:
+        rel = str(p.relative_to(ROOT))
+        if p.is_file() and not any(x["path"] == rel for x in b.sources):
+            b.source(rel, "hosted_run_artifact", "MEASURED", cohort="hosted-linux-azure-4cpu", note="supporting artifact of the hosted performance run (environment, idle checks, pins, logs)")
     reports(b)
     return b
 

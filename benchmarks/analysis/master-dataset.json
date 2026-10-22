@@ -2429,6 +2429,450 @@
     "verdict": "NO_MEASURABLE_ADVANTAGE",
     "welch_df": 4.5
    }
+  },
+  {
+   "assurance_note": "same assurance on both sides (fresh protected certificate)",
+   "classification": "INVALID_ENVIRONMENT",
+   "cohort": "macos-arm64-12cpu-local",
+   "comparison": "staging_fast,verified_handoff_vs_none:wall_s",
+   "cpu_mean_ratio": null,
+   "paired_bootstrap": {
+    "diff_ci95_s": [
+     -0.5802,
+     -0.011
+    ],
+    "mean_paired_diff_s": -0.2756,
+    "mean_rel_diff": -0.123,
+    "median_paired_diff_s": -0.194,
+    "pairs": 10,
+    "rel_ci95": [
+     -0.2407,
+     0.0019
+    ],
+    "rule": "paired bootstrap 95% (same thresholds)",
+    "verdict": "INCONCLUSIVE"
+   },
+   "project": "synthetic-1000-files",
+   "scenario": "ab_n1000",
+   "source_path": "benchmarks/results/ab-local-macos-n1000-factorial.json",
+   "source_sha256": "1bb9e257f74c578a7c2b9cd3b3a6622e150e7f6b5ea930f85bf91574119144e1",
+   "welch_preregistered": {
+    "diff_s": -0.2756,
+    "rel_ci95": [
+     -0.464,
+     0.1395
+    ],
+    "rel_diff": -0.1622,
+    "rule": "preregistered Welch 95%",
+    "verdict": "INCONCLUSIVE"
+   }
+  },
+  {
+   "assurance_note": "same assurance on both sides (fresh protected certificate)",
+   "classification": "INVALID_ENVIRONMENT",
+   "cohort": "macos-arm64-12cpu-local",
+   "comparison": "staging_fast,verified_handoff_vs_none:cpu_s",
+   "cpu_mean_ratio": null,
+   "paired_bootstrap": {
+    "diff_ci95_s": [
+     -0.235,
+     -0.095
+    ],
+    "mean_paired_diff_s": -0.162,
+    "mean_rel_diff": -0.1231,
+    "median_paired_diff_s": -0.16,
+    "pairs": 10,
+    "rel_ci95": [
+     -0.172,
+     -0.0755
+    ],
+    "rule": "paired bootstrap 95% (same thresholds)",
+    "verdict": "INCONCLUSIVE"
+   },
+   "project": "synthetic-1000-files",
+   "scenario": "ab_n1000",
+   "source_path": "benchmarks/results/ab-local-macos-n1000-factorial.json",
+   "source_sha256": "1bb9e257f74c578a7c2b9cd3b3a6622e150e7f6b5ea930f85bf91574119144e1",
+   "welch_preregistered": {
+    "diff_s": -0.162,
+    "rel_ci95": [
+     -0.2514,
+     -0.0045
+    ],
+    "rel_diff": -0.128,
+    "rule": "preregistered Welch 95%",
+    "verdict": "INCONCLUSIVE"
+   }
+  },
+  {
+   "assurance_note": "same assurance on both sides (fresh protected certificate)",
+   "classification": "INVALID_ENVIRONMENT",
+   "cohort": "macos-arm64-12cpu-local",
+   "comparison": "staging_fast_vs_none:wall_s",
+   "cpu_mean_ratio": null,
+   "paired_bootstrap": {
+    "diff_ci95_s": [
+     -0.6893,
+     0.0153
+    ],
+    "mean_paired_diff_s": -0.3056,
+    "mean_rel_diff": -0.1362,
+    "median_paired_diff_s": -0.2582,
+    "pairs": 10,
+    "rel_ci95": [
+     -0.2884,
+     0.0444
+    ],
+    "rule": "paired bootstrap 95% (same thresholds)",
+    "verdict": "INCONCLUSIVE"
+   },
+   "project": "synthetic-1000-files",
+   "scenario": "ab_n1000",
+   "source_path": "benchmarks/results/ab-local-macos-n1000-factorial.json",
+   "source_sha256": "1bb9e257f74c578a7c2b9cd3b3a6622e150e7f6b5ea930f85bf91574119144e1",
+   "welch_preregistered": {
+    "diff_s": -0.3056,
+    "rel_ci95": [
+     -0.4938,
+     0.134
+    ],
+    "rel_diff": -0.1799,
+    "rule": "preregistered Welch 95%",
+    "verdict": "INCONCLUSIVE"
+   }
+  },
+  {
+   "assurance_note": "same assurance on both sides (fresh protected certificate)",
+   "classification": "INVALID_ENVIRONMENT",
+   "cohort": "macos-arm64-12cpu-local",
+   "comparison": "staging_fast_vs_none:cpu_s",
+   "cpu_mean_ratio": null,
+   "paired_bootstrap": {
+    "diff_ci95_s": [
+     -0.245,
+     -0.006
+    ],
+    "mean_paired_diff_s": -0.131,
+    "mean_rel_diff": -0.0961,
+    "median_paired_diff_s": -0.165,
+    "pairs": 10,
+    "rel_ci95": [
+     -0.1772,
+     0.0053
+    ],
+    "rule": "paired bootstrap 95% (same thresholds)",
+    "verdict": "INCONCLUSIVE"
+   },
+   "project": "synthetic-1000-files",
+   "scenario": "ab_n1000",
+   "source_path": "benchmarks/results/ab-local-macos-n1000-factorial.json",
+   "source_sha256": "1bb9e257f74c578a7c2b9cd3b3a6622e150e7f6b5ea930f85bf91574119144e1",
+   "welch_preregistered": {
+    "diff_s": -0.131,
+    "rel_ci95": [
+     -0.2482,
+     0.0412
+    ],
+    "rel_diff": -0.1035,
+    "rule": "preregistered Welch 95%",
+    "verdict": "INCONCLUSIVE"
+   }
+  },
+  {
+   "assurance_note": "same assurance on both sides (fresh protected certificate)",
+   "classification": "INVALID_ENVIRONMENT",
+   "cohort": "macos-arm64-12cpu-local",
+   "comparison": "verified_handoff_vs_none:wall_s",
+   "cpu_mean_ratio": null,
+   "paired_bootstrap": {
+    "diff_ci95_s": [
+     -0.4812,
+     0.0034
+    ],
+    "mean_paired_diff_s": -0.2415,
+    "mean_rel_diff": -0.1081,
+    "median_paired_diff_s": -0.2047,
+    "pairs": 10,
+    "rel_ci95": [
+     -0.2369,
+     0.0484
+    ],
+    "rule": "paired bootstrap 95% (same thresholds)",
+    "verdict": "INCONCLUSIVE"
+   },
+   "project": "synthetic-1000-files",
+   "scenario": "ab_n1000",
+   "source_path": "benchmarks/results/ab-local-macos-n1000-factorial.json",
+   "source_sha256": "1bb9e257f74c578a7c2b9cd3b3a6622e150e7f6b5ea930f85bf91574119144e1",
+   "welch_preregistered": {
+    "diff_s": -0.2415,
+    "rel_ci95": [
+     -0.4523,
+     0.168
+    ],
+    "rel_diff": -0.1422,
+    "rule": "preregistered Welch 95%",
+    "verdict": "INCONCLUSIVE"
+   }
+  },
+  {
+   "assurance_note": "same assurance on both sides (fresh protected certificate)",
+   "classification": "INVALID_ENVIRONMENT",
+   "cohort": "macos-arm64-12cpu-local",
+   "comparison": "verified_handoff_vs_none:cpu_s",
+   "cpu_mean_ratio": null,
+   "paired_bootstrap": {
+    "diff_ci95_s": [
+     -0.235,
+     -0.043
+    ],
+    "mean_paired_diff_s": -0.135,
+    "mean_rel_diff": -0.1003,
+    "median_paired_diff_s": -0.125,
+    "pairs": 10,
+    "rel_ci95": [
+     -0.1757,
+     -0.0271
+    ],
+    "rule": "paired bootstrap 95% (same thresholds)",
+    "verdict": "INCONCLUSIVE"
+   },
+   "project": "synthetic-1000-files",
+   "scenario": "ab_n1000",
+   "source_path": "benchmarks/results/ab-local-macos-n1000-factorial.json",
+   "source_sha256": "1bb9e257f74c578a7c2b9cd3b3a6622e150e7f6b5ea930f85bf91574119144e1",
+   "welch_preregistered": {
+    "diff_s": -0.135,
+    "rel_ci95": [
+     -0.2437,
+     0.0305
+    ],
+    "rel_diff": -0.1066,
+    "rule": "preregistered Welch 95%",
+    "verdict": "INCONCLUSIVE"
+   }
+  },
+  {
+   "assurance_note": "same assurance on both sides (fresh protected certificate)",
+   "classification": "INVALID_ENVIRONMENT",
+   "cohort": "macos-arm64-12cpu-local",
+   "comparison": "staging_fast,verified_handoff_vs_none:wall_s",
+   "cpu_mean_ratio": null,
+   "paired_bootstrap": {
+    "diff_ci95_s": [
+     -0.1065,
+     -0.0129
+    ],
+    "mean_paired_diff_s": -0.0493,
+    "mean_rel_diff": -0.0963,
+    "median_paired_diff_s": -0.0266,
+    "pairs": 10,
+    "rel_ci95": [
+     -0.1873,
+     -0.0318
+    ],
+    "rule": "paired bootstrap 95% (same thresholds)",
+    "verdict": "NO_MEASURABLE_ADVANTAGE"
+   },
+   "project": "synthetic-200-files",
+   "scenario": "ab_n200",
+   "source_path": "benchmarks/results/ab-local-macos-n200-factorial.json",
+   "source_sha256": "509fad3ee9fae748599f4a1efca798b1e286304869f88baf7ea61f6c080bef7a",
+   "welch_preregistered": {
+    "diff_s": -0.0493,
+    "rel_ci95": [
+     -0.2588,
+     0.0196
+    ],
+    "rel_diff": -0.1196,
+    "rule": "preregistered Welch 95%",
+    "verdict": "NO_MEASURABLE_ADVANTAGE"
+   }
+  },
+  {
+   "assurance_note": "same assurance on both sides (fresh protected certificate)",
+   "classification": "INVALID_ENVIRONMENT",
+   "cohort": "macos-arm64-12cpu-local",
+   "comparison": "staging_fast,verified_handoff_vs_none:cpu_s",
+   "cpu_mean_ratio": null,
+   "paired_bootstrap": {
+    "diff_ci95_s": [
+     -0.066,
+     -0.001
+    ],
+    "mean_paired_diff_s": -0.03,
+    "mean_rel_diff": -0.072,
+    "median_paired_diff_s": -0.01,
+    "pairs": 10,
+    "rel_ci95": [
+     -0.1562,
+     0.0026
+    ],
+    "rule": "paired bootstrap 95% (same thresholds)",
+    "verdict": "NO_MEASURABLE_ADVANTAGE"
+   },
+   "project": "synthetic-200-files",
+   "scenario": "ab_n200",
+   "source_path": "benchmarks/results/ab-local-macos-n200-factorial.json",
+   "source_sha256": "509fad3ee9fae748599f4a1efca798b1e286304869f88baf7ea61f6c080bef7a",
+   "welch_preregistered": {
+    "diff_s": -0.03,
+    "rel_ci95": [
+     -0.1962,
+     0.0192
+    ],
+    "rel_diff": -0.0885,
+    "rule": "preregistered Welch 95%",
+    "verdict": "NO_MEASURABLE_ADVANTAGE"
+   }
+  },
+  {
+   "assurance_note": "same assurance on both sides (fresh protected certificate)",
+   "classification": "INVALID_ENVIRONMENT",
+   "cohort": "macos-arm64-12cpu-local",
+   "comparison": "staging_fast_vs_none:wall_s",
+   "cpu_mean_ratio": null,
+   "paired_bootstrap": {
+    "diff_ci95_s": [
+     -0.0858,
+     -0.0095
+    ],
+    "mean_paired_diff_s": -0.0393,
+    "mean_rel_diff": -0.078,
+    "median_paired_diff_s": -0.0152,
+    "pairs": 10,
+    "rel_ci95": [
+     -0.1528,
+     -0.0248
+    ],
+    "rule": "paired bootstrap 95% (same thresholds)",
+    "verdict": "NO_MEASURABLE_ADVANTAGE"
+   },
+   "project": "synthetic-200-files",
+   "scenario": "ab_n200",
+   "source_path": "benchmarks/results/ab-local-macos-n200-factorial.json",
+   "source_sha256": "509fad3ee9fae748599f4a1efca798b1e286304869f88baf7ea61f6c080bef7a",
+   "welch_preregistered": {
+    "diff_s": -0.0393,
+    "rel_ci95": [
+     -0.2376,
+     0.0466
+    ],
+    "rel_diff": -0.0955,
+    "rule": "preregistered Welch 95%",
+    "verdict": "NO_MEASURABLE_ADVANTAGE"
+   }
+  },
+  {
+   "assurance_note": "same assurance on both sides (fresh protected certificate)",
+   "classification": "INVALID_ENVIRONMENT",
+   "cohort": "macos-arm64-12cpu-local",
+   "comparison": "staging_fast_vs_none:cpu_s",
+   "cpu_mean_ratio": null,
+   "paired_bootstrap": {
+    "diff_ci95_s": [
+     -0.047,
+     -0.005
+    ],
+    "mean_paired_diff_s": -0.024,
+    "mean_rel_diff": -0.0631,
+    "median_paired_diff_s": -0.01,
+    "pairs": 10,
+    "rel_ci95": [
+     -0.1186,
+     -0.0135
+    ],
+    "rule": "paired bootstrap 95% (same thresholds)",
+    "verdict": "NO_MEASURABLE_ADVANTAGE"
+   },
+   "project": "synthetic-200-files",
+   "scenario": "ab_n200",
+   "source_path": "benchmarks/results/ab-local-macos-n200-factorial.json",
+   "source_sha256": "509fad3ee9fae748599f4a1efca798b1e286304869f88baf7ea61f6c080bef7a",
+   "welch_preregistered": {
+    "diff_s": -0.024,
+    "rel_ci95": [
+     -0.1855,
+     0.0439
+    ],
+    "rel_diff": -0.0708,
+    "rule": "preregistered Welch 95%",
+    "verdict": "NO_MEASURABLE_ADVANTAGE"
+   }
+  },
+  {
+   "assurance_note": "same assurance on both sides (fresh protected certificate)",
+   "classification": "INVALID_ENVIRONMENT",
+   "cohort": "macos-arm64-12cpu-local",
+   "comparison": "verified_handoff_vs_none:wall_s",
+   "cpu_mean_ratio": null,
+   "paired_bootstrap": {
+    "diff_ci95_s": [
+     -0.0666,
+     0.0308
+    ],
+    "mean_paired_diff_s": -0.0104,
+    "mean_rel_diff": -0.0038,
+    "median_paired_diff_s": 0.0121,
+    "pairs": 10,
+    "rel_ci95": [
+     -0.103,
+     0.0794
+    ],
+    "rule": "paired bootstrap 95% (same thresholds)",
+    "verdict": "NO_MEASURABLE_ADVANTAGE"
+   },
+   "project": "synthetic-200-files",
+   "scenario": "ab_n200",
+   "source_path": "benchmarks/results/ab-local-macos-n200-factorial.json",
+   "source_sha256": "509fad3ee9fae748599f4a1efca798b1e286304869f88baf7ea61f6c080bef7a",
+   "welch_preregistered": {
+    "diff_s": -0.0104,
+    "rel_ci95": [
+     -0.1783,
+     0.1278
+    ],
+    "rel_diff": -0.0253,
+    "rule": "preregistered Welch 95%",
+    "verdict": "NO_MEASURABLE_ADVANTAGE"
+   }
+  },
+  {
+   "assurance_note": "same assurance on both sides (fresh protected certificate)",
+   "classification": "INVALID_ENVIRONMENT",
+   "cohort": "macos-arm64-12cpu-local",
+   "comparison": "verified_handoff_vs_none:cpu_s",
+   "cpu_mean_ratio": null,
+   "paired_bootstrap": {
+    "diff_ci95_s": [
+     -0.031,
+     0.029
+    ],
+    "mean_paired_diff_s": 0.001,
+    "mean_rel_diff": 0.0192,
+    "median_paired_diff_s": 0.005,
+    "pairs": 10,
+    "rel_ci95": [
+     -0.0673,
+     0.1048
+    ],
+    "rule": "paired bootstrap 95% (same thresholds)",
+    "verdict": "NO_MEASURABLE_ADVANTAGE"
+   },
+   "project": "synthetic-200-files",
+   "scenario": "ab_n200",
+   "source_path": "benchmarks/results/ab-local-macos-n200-factorial.json",
+   "source_sha256": "509fad3ee9fae748599f4a1efca798b1e286304869f88baf7ea61f6c080bef7a",
+   "welch_preregistered": {
+    "diff_s": 0.001,
+    "rel_ci95": [
+     -0.109,
+     0.1149
+    ],
+    "rel_diff": 0.0029,
+    "rule": "preregistered Welch 95%",
+    "verdict": "NO_MEASURABLE_ADVANTAGE"
+   }
   }
  ],
  "dataset_version": 1,
@@ -18941,9 +19385,2504 @@
    "variance": null,
    "vep_commit": null,
    "warmups": null
+  },
+  {
+   "assurance": "VEP_PROTECTED_FRESH_CERTIFICATE",
+   "cache_eligibility": "n/a",
+   "classification": "INVALID_ENVIRONMENT",
+   "cohort": "macos-arm64-12cpu-local",
+   "confidence_interval": {
+    "hi": 1.396823,
+    "lo": 1.135177,
+    "method": "student-t 95% of the mean of the raw samples",
+    "n": 10
+   },
+   "config": "none",
+   "correctness_gate": {
+    "excluded": 0,
+    "valid_blocks": 10
+   },
+   "host": {
+    "cpus": 12,
+    "load_avg_1m_at_start": 9.16015625,
+    "platform": "macOS-15.6-arm64-arm-64bit-Mach-O",
+    "python": "3.14.7"
+   },
+   "id": "00285",
+   "limitations": [
+    "synthetic project; same process image per arm; flags via VEP_PERF",
+    "load avg 8.5-10.2, minimum CPU idle 45.5%"
+   ],
+   "metric": "cpu_s",
+   "operation": "ab:none",
+   "project": "synthetic-1000-files",
+   "project_commit": null,
+   "samples": [
+    1.2400000000000002,
+    1.2399999999999998,
+    1.1500000000000001,
+    1.16,
+    1.1,
+    1.2600000000000002,
+    1.02,
+    1.3700000000000003,
+    1.6,
+    1.52
+   ],
+   "samples_n": 10,
+   "scenario": "ab_n1000_new",
+   "source_path": "benchmarks/results/ab-local-macos-n1000-factorial.json",
+   "source_sha256": "1bb9e257f74c578a7c2b9cd3b3a6622e150e7f6b5ea930f85bf91574119144e1",
+   "stats": {
+    "max": 1.6,
+    "mean": 1.266,
+    "median": 1.24,
+    "min": 1.02,
+    "n": 10,
+    "sd": 0.1829
+   },
+   "units": "s",
+   "variance": {
+    "sd": 0.1829
+   },
+   "vep_commit": null,
+   "warmups": 2
+  },
+  {
+   "assurance": "VEP_PROTECTED_FRESH_CERTIFICATE",
+   "cache_eligibility": "n/a",
+   "classification": "INVALID_ENVIRONMENT",
+   "cohort": "macos-arm64-12cpu-local",
+   "confidence_interval": {
+    "hi": 1.707155,
+    "lo": 0.975284,
+    "method": "student-t 95% of the mean of the raw samples",
+    "n": 10
+   },
+   "config": "none",
+   "correctness_gate": {
+    "excluded": 0,
+    "valid_blocks": 10
+   },
+   "host": {
+    "cpus": 12,
+    "load_avg_1m_at_start": 9.16015625,
+    "platform": "macOS-15.6-arm64-arm-64bit-Mach-O",
+    "python": "3.14.7"
+   },
+   "id": "00286",
+   "limitations": [
+    "synthetic project; same process image per arm; flags via VEP_PERF",
+    "load avg 8.5-10.2, minimum CPU idle 45.5%"
+   ],
+   "metric": "evaluate_s",
+   "operation": "ab:none",
+   "project": "synthetic-1000-files",
+   "project_commit": null,
+   "samples": [
+    1.2087832080142107,
+    1.0964510000194423,
+    1.0138452909886837,
+    1.0678327499772422,
+    0.9842713749967515,
+    1.2482363750168588,
+    0.8338454169861507,
+    1.480263500008732,
+    2.426433291984722,
+    2.0522325419879053
+   ],
+   "samples_n": 10,
+   "scenario": "ab_n1000_new",
+   "source_path": "benchmarks/results/ab-local-macos-n1000-factorial.json",
+   "source_sha256": "1bb9e257f74c578a7c2b9cd3b3a6622e150e7f6b5ea930f85bf91574119144e1",
+   "stats": {
+    "max": 2.4264,
+    "mean": 1.3412,
+    "median": 1.1526,
+    "min": 0.8338,
+    "n": 10,
+    "sd": 0.5116
+   },
+   "units": "s",
+   "variance": {
+    "sd": 0.5116
+   },
+   "vep_commit": null,
+   "warmups": 2
+  },
+  {
+   "assurance": "VEP_PROTECTED_FRESH_CERTIFICATE",
+   "cache_eligibility": "n/a",
+   "classification": "INVALID_ENVIRONMENT",
+   "cohort": "macos-arm64-12cpu-local",
+   "confidence_interval": {
+    "hi": 0.453836,
+    "lo": 0.271946,
+    "method": "student-t 95% of the mean of the raw samples",
+    "n": 10
+   },
+   "config": "none",
+   "correctness_gate": {
+    "excluded": 0,
+    "valid_blocks": 10
+   },
+   "host": {
+    "cpus": 12,
+    "load_avg_1m_at_start": 9.16015625,
+    "platform": "macOS-15.6-arm64-arm-64bit-Mach-O",
+    "python": "3.14.7"
+   },
+   "id": "00287",
+   "limitations": [
+    "synthetic project; same process image per arm; flags via VEP_PERF",
+    "load avg 8.5-10.2, minimum CPU idle 45.5%"
+   ],
+   "metric": "materialize_s",
+   "operation": "ab:none",
+   "project": "synthetic-1000-files",
+   "project_commit": null,
+   "samples": [
+    0.36430500002461486,
+    0.26170741600799374,
+    0.2565473330032546,
+    0.3293557500001043,
+    0.2475102919852361,
+    0.3432333749951795,
+    0.23527054200530984,
+    0.46232191601302475,
+    0.5941750000056345,
+    0.5344857920135837
+   ],
+   "samples_n": 10,
+   "scenario": "ab_n1000_new",
+   "source_path": "benchmarks/results/ab-local-macos-n1000-factorial.json",
+   "source_sha256": "1bb9e257f74c578a7c2b9cd3b3a6622e150e7f6b5ea930f85bf91574119144e1",
+   "stats": {
+    "max": 0.5942,
+    "mean": 0.3629,
+    "median": 0.3363,
+    "min": 0.2353,
+    "n": 10,
+    "sd": 0.1271
+   },
+   "units": "s",
+   "variance": {
+    "sd": 0.1271
+   },
+   "vep_commit": null,
+   "warmups": 2
+  },
+  {
+   "assurance": "VEP_PROTECTED_FRESH_CERTIFICATE",
+   "cache_eligibility": "n/a",
+   "classification": "INVALID_ENVIRONMENT",
+   "cohort": "macos-arm64-12cpu-local",
+   "confidence_interval": {
+    "hi": 43.678536,
+    "lo": 41.708318,
+    "method": "student-t 95% of the mean of the raw samples",
+    "n": 10
+   },
+   "config": "none",
+   "correctness_gate": {
+    "excluded": 0,
+    "valid_blocks": 10
+   },
+   "host": {
+    "cpus": 12,
+    "load_avg_1m_at_start": 9.16015625,
+    "platform": "macOS-15.6-arm64-arm-64bit-Mach-O",
+    "python": "3.14.7"
+   },
+   "id": "00288",
+   "limitations": [
+    "synthetic project; same process image per arm; flags via VEP_PERF",
+    "load avg 8.5-10.2, minimum CPU idle 45.5%"
+   ],
+   "metric": "rss_child_max_mb",
+   "operation": "ab:none",
+   "project": "synthetic-1000-files",
+   "project_commit": null,
+   "samples": [
+    42.450944,
+    43.597824,
+    43.483136,
+    42.287104,
+    42.991616,
+    41.074688,
+    42.663936,
+    45.694976,
+    41.189376,
+    41.500672
+   ],
+   "samples_n": 10,
+   "scenario": "ab_n1000_new",
+   "source_path": "benchmarks/results/ab-local-macos-n1000-factorial.json",
+   "source_sha256": "1bb9e257f74c578a7c2b9cd3b3a6622e150e7f6b5ea930f85bf91574119144e1",
+   "stats": {
+    "max": 45.695,
+    "mean": 42.6934,
+    "median": 42.5574,
+    "min": 41.0747,
+    "n": 10,
+    "sd": 1.3772
+   },
+   "units": "MB",
+   "variance": {
+    "sd": 1.3772
+   },
+   "vep_commit": null,
+   "warmups": 2
+  },
+  {
+   "assurance": "VEP_PROTECTED_FRESH_CERTIFICATE",
+   "cache_eligibility": "n/a",
+   "classification": "INVALID_ENVIRONMENT",
+   "cohort": "macos-arm64-12cpu-local",
+   "confidence_interval": {
+    "hi": 2.144081,
+    "lo": 1.253478,
+    "method": "student-t 95% of the mean of the raw samples",
+    "n": 10
+   },
+   "config": "none",
+   "correctness_gate": {
+    "excluded": 0,
+    "valid_blocks": 10
+   },
+   "host": {
+    "cpus": 12,
+    "load_avg_1m_at_start": 9.16015625,
+    "platform": "macOS-15.6-arm64-arm-64bit-Mach-O",
+    "python": "3.14.7"
+   },
+   "id": "00289",
+   "limitations": [
+    "synthetic project; same process image per arm; flags via VEP_PERF",
+    "load avg 8.5-10.2, minimum CPU idle 45.5%"
+   ],
+   "metric": "wall_s",
+   "operation": "ab:none",
+   "project": "synthetic-1000-files",
+   "project_commit": null,
+   "samples": [
+    1.5645394590101205,
+    1.414223250001669,
+    1.2960887500084937,
+    1.3648870409815572,
+    1.2370225420163479,
+    1.6145437080122065,
+    1.0865222089923918,
+    1.8338844579993747,
+    3.0418705419870093,
+    2.5342150420183316
+   ],
+   "samples_n": 10,
+   "scenario": "ab_n1000_new",
+   "source_path": "benchmarks/results/ab-local-macos-n1000-factorial.json",
+   "source_sha256": "1bb9e257f74c578a7c2b9cd3b3a6622e150e7f6b5ea930f85bf91574119144e1",
+   "stats": {
+    "max": 3.0419,
+    "mean": 1.6988,
+    "median": 1.4894,
+    "min": 1.0865,
+    "n": 10,
+    "sd": 0.6225
+   },
+   "units": "s",
+   "variance": {
+    "sd": 0.6225
+   },
+   "vep_commit": null,
+   "warmups": 2
+  },
+  {
+   "assurance": "VEP_PROTECTED_FRESH_CERTIFICATE",
+   "cache_eligibility": "n/a",
+   "classification": "INVALID_ENVIRONMENT",
+   "cohort": "macos-arm64-12cpu-local",
+   "confidence_interval": {
+    "hi": 1.278824,
+    "lo": 0.991176,
+    "method": "student-t 95% of the mean of the raw samples",
+    "n": 10
+   },
+   "config": "staging_fast",
+   "correctness_gate": {
+    "excluded": 0,
+    "valid_blocks": 10
+   },
+   "host": {
+    "cpus": 12,
+    "load_avg_1m_at_start": 9.16015625,
+    "platform": "macOS-15.6-arm64-arm-64bit-Mach-O",
+    "python": "3.14.7"
+   },
+   "id": "00290",
+   "limitations": [
+    "synthetic project; same process image per arm; flags via VEP_PERF",
+    "load avg 8.5-10.2, minimum CPU idle 45.5%"
+   ],
+   "metric": "cpu_s",
+   "operation": "ab:staging_fast",
+   "project": "synthetic-1000-files",
+   "project_commit": null,
+   "samples": [
+    1.0199999999999998,
+    1.03,
+    0.9800000000000001,
+    1.0,
+    1.38,
+    1.2600000000000002,
+    0.93,
+    1.05,
+    1.1500000000000001,
+    1.55
+   ],
+   "samples_n": 10,
+   "scenario": "ab_n1000_new",
+   "source_path": "benchmarks/results/ab-local-macos-n1000-factorial.json",
+   "source_sha256": "1bb9e257f74c578a7c2b9cd3b3a6622e150e7f6b5ea930f85bf91574119144e1",
+   "stats": {
+    "max": 1.55,
+    "mean": 1.135,
+    "median": 1.04,
+    "min": 0.93,
+    "n": 10,
+    "sd": 0.2011
+   },
+   "units": "s",
+   "variance": {
+    "sd": 0.2011
+   },
+   "vep_commit": null,
+   "warmups": 2
+  },
+  {
+   "assurance": "VEP_PROTECTED_FRESH_CERTIFICATE",
+   "cache_eligibility": "n/a",
+   "classification": "INVALID_ENVIRONMENT",
+   "cohort": "macos-arm64-12cpu-local",
+   "confidence_interval": {
+    "hi": 1.349726,
+    "lo": 0.79103,
+    "method": "student-t 95% of the mean of the raw samples",
+    "n": 10
+   },
+   "config": "staging_fast",
+   "correctness_gate": {
+    "excluded": 0,
+    "valid_blocks": 10
+   },
+   "host": {
+    "cpus": 12,
+    "load_avg_1m_at_start": 9.16015625,
+    "platform": "macOS-15.6-arm64-arm-64bit-Mach-O",
+    "python": "3.14.7"
+   },
+   "id": "00291",
+   "limitations": [
+    "synthetic project; same process image per arm; flags via VEP_PERF",
+    "load avg 8.5-10.2, minimum CPU idle 45.5%"
+   ],
+   "metric": "evaluate_s",
+   "operation": "ab:staging_fast",
+   "project": "synthetic-1000-files",
+   "project_commit": null,
+   "samples": [
+    0.8879479579918552,
+    0.9184215420100372,
+    0.7661327089881524,
+    0.8035150420037098,
+    1.4382373749976978,
+    1.2405258340004366,
+    0.7608731250220444,
+    0.8962735419918317,
+    0.9959757920005359,
+    1.9958782909961883
+   ],
+   "samples_n": 10,
+   "scenario": "ab_n1000_new",
+   "source_path": "benchmarks/results/ab-local-macos-n1000-factorial.json",
+   "source_sha256": "1bb9e257f74c578a7c2b9cd3b3a6622e150e7f6b5ea930f85bf91574119144e1",
+   "stats": {
+    "max": 1.9959,
+    "mean": 1.0704,
+    "median": 0.9073,
+    "min": 0.7609,
+    "n": 10,
+    "sd": 0.3905
+   },
+   "units": "s",
+   "variance": {
+    "sd": 0.3905
+   },
+   "vep_commit": null,
+   "warmups": 2
+  },
+  {
+   "assurance": "VEP_PROTECTED_FRESH_CERTIFICATE",
+   "cache_eligibility": "n/a",
+   "classification": "INVALID_ENVIRONMENT",
+   "cohort": "macos-arm64-12cpu-local",
+   "confidence_interval": {
+    "hi": 0.37706,
+    "lo": 0.174915,
+    "method": "student-t 95% of the mean of the raw samples",
+    "n": 10
+   },
+   "config": "staging_fast",
+   "correctness_gate": {
+    "excluded": 0,
+    "valid_blocks": 10
+   },
+   "host": {
+    "cpus": 12,
+    "load_avg_1m_at_start": 9.16015625,
+    "platform": "macOS-15.6-arm64-arm-64bit-Mach-O",
+    "python": "3.14.7"
+   },
+   "id": "00292",
+   "limitations": [
+    "synthetic project; same process image per arm; flags via VEP_PERF",
+    "load avg 8.5-10.2, minimum CPU idle 45.5%"
+   ],
+   "metric": "materialize_s",
+   "operation": "ab:staging_fast",
+   "project": "synthetic-1000-files",
+   "project_commit": null,
+   "samples": [
+    0.20219762501074,
+    0.2195786669908557,
+    0.184897083992837,
+    0.19538229197496548,
+    0.38024695799686015,
+    0.32144179099122994,
+    0.18812883301870897,
+    0.20802779201767407,
+    0.22558175001177005,
+    0.6343904160021339
+   ],
+   "samples_n": 10,
+   "scenario": "ab_n1000_new",
+   "source_path": "benchmarks/results/ab-local-macos-n1000-factorial.json",
+   "source_sha256": "1bb9e257f74c578a7c2b9cd3b3a6622e150e7f6b5ea930f85bf91574119144e1",
+   "stats": {
+    "max": 0.6344,
+    "mean": 0.276,
+    "median": 0.2138,
+    "min": 0.1849,
+    "n": 10,
+    "sd": 0.1413
+   },
+   "units": "s",
+   "variance": {
+    "sd": 0.1413
+   },
+   "vep_commit": null,
+   "warmups": 2
+  },
+  {
+   "assurance": "VEP_PROTECTED_FRESH_CERTIFICATE",
+   "cache_eligibility": "n/a",
+   "classification": "INVALID_ENVIRONMENT",
+   "cohort": "macos-arm64-12cpu-local",
+   "confidence_interval": {
+    "hi": 43.046802,
+    "lo": 41.409441,
+    "method": "student-t 95% of the mean of the raw samples",
+    "n": 10
+   },
+   "config": "staging_fast",
+   "correctness_gate": {
+    "excluded": 0,
+    "valid_blocks": 10
+   },
+   "host": {
+    "cpus": 12,
+    "load_avg_1m_at_start": 9.16015625,
+    "platform": "macOS-15.6-arm64-arm-64bit-Mach-O",
+    "python": "3.14.7"
+   },
+   "id": "00293",
+   "limitations": [
+    "synthetic project; same process image per arm; flags via VEP_PERF",
+    "load avg 8.5-10.2, minimum CPU idle 45.5%"
+   ],
+   "metric": "rss_child_max_mb",
+   "operation": "ab:staging_fast",
+   "project": "synthetic-1000-files",
+   "project_commit": null,
+   "samples": [
+    42.876928,
+    42.582016,
+    43.876352,
+    43.204608,
+    40.976384,
+    40.271872,
+    43.040768,
+    42.5984,
+    41.648128,
+    41.20576
+   ],
+   "samples_n": 10,
+   "scenario": "ab_n1000_new",
+   "source_path": "benchmarks/results/ab-local-macos-n1000-factorial.json",
+   "source_sha256": "1bb9e257f74c578a7c2b9cd3b3a6622e150e7f6b5ea930f85bf91574119144e1",
+   "stats": {
+    "max": 43.8764,
+    "mean": 42.2281,
+    "median": 42.5902,
+    "min": 40.2719,
+    "n": 10,
+    "sd": 1.1445
+   },
+   "units": "MB",
+   "variance": {
+    "sd": 1.1445
+   },
+   "vep_commit": null,
+   "warmups": 2
+  },
+  {
+   "assurance": "VEP_PROTECTED_FRESH_CERTIFICATE",
+   "cache_eligibility": "n/a",
+   "classification": "INVALID_ENVIRONMENT",
+   "cohort": "macos-arm64-12cpu-local",
+   "confidence_interval": {
+    "hi": 1.742538,
+    "lo": 1.043824,
+    "method": "student-t 95% of the mean of the raw samples",
+    "n": 10
+   },
+   "config": "staging_fast",
+   "correctness_gate": {
+    "excluded": 0,
+    "valid_blocks": 10
+   },
+   "host": {
+    "cpus": 12,
+    "load_avg_1m_at_start": 9.16015625,
+    "platform": "macOS-15.6-arm64-arm-64bit-Mach-O",
+    "python": "3.14.7"
+   },
+   "id": "00294",
+   "limitations": [
+    "synthetic project; same process image per arm; flags via VEP_PERF",
+    "load avg 8.5-10.2, minimum CPU idle 45.5%"
+   ],
+   "metric": "wall_s",
+   "operation": "ab:staging_fast",
+   "project": "synthetic-1000-files",
+   "project_commit": null,
+   "samples": [
+    1.1226958330080379,
+    1.1590103749767877,
+    1.0348708750098012,
+    1.064756290987134,
+    1.8694905000156723,
+    1.6325685000047088,
+    0.9959384999820031,
+    1.1799917919852305,
+    1.3423928330012131,
+    2.530094750021817
+   ],
+   "samples_n": 10,
+   "scenario": "ab_n1000_new",
+   "source_path": "benchmarks/results/ab-local-macos-n1000-factorial.json",
+   "source_sha256": "1bb9e257f74c578a7c2b9cd3b3a6622e150e7f6b5ea930f85bf91574119144e1",
+   "stats": {
+    "max": 2.5301,
+    "mean": 1.3932,
+    "median": 1.1695,
+    "min": 0.9959,
+    "n": 10,
+    "sd": 0.4884
+   },
+   "units": "s",
+   "variance": {
+    "sd": 0.4884
+   },
+   "vep_commit": null,
+   "warmups": 2
+  },
+  {
+   "assurance": "VEP_PROTECTED_FRESH_CERTIFICATE",
+   "cache_eligibility": "n/a",
+   "classification": "INVALID_ENVIRONMENT",
+   "cohort": "macos-arm64-12cpu-local",
+   "confidence_interval": {
+    "hi": 1.206066,
+    "lo": 1.001934,
+    "method": "student-t 95% of the mean of the raw samples",
+    "n": 10
+   },
+   "config": "staging_fast,verified_handoff",
+   "correctness_gate": {
+    "excluded": 0,
+    "valid_blocks": 10
+   },
+   "host": {
+    "cpus": 12,
+    "load_avg_1m_at_start": 9.16015625,
+    "platform": "macOS-15.6-arm64-arm-64bit-Mach-O",
+    "python": "3.14.7"
+   },
+   "id": "00295",
+   "limitations": [
+    "synthetic project; same process image per arm; flags via VEP_PERF",
+    "load avg 8.5-10.2, minimum CPU idle 45.5%"
+   ],
+   "metric": "cpu_s",
+   "operation": "ab:staging_fast,verified_handoff",
+   "project": "synthetic-1000-files",
+   "project_commit": null,
+   "samples": [
+    0.9400000000000001,
+    1.0,
+    1.08,
+    0.9900000000000001,
+    1.0799999999999998,
+    1.24,
+    0.93,
+    1.22,
+    1.22,
+    1.34
+   ],
+   "samples_n": 10,
+   "scenario": "ab_n1000_new",
+   "source_path": "benchmarks/results/ab-local-macos-n1000-factorial.json",
+   "source_sha256": "1bb9e257f74c578a7c2b9cd3b3a6622e150e7f6b5ea930f85bf91574119144e1",
+   "stats": {
+    "max": 1.34,
+    "mean": 1.104,
+    "median": 1.08,
+    "min": 0.93,
+    "n": 10,
+    "sd": 0.1427
+   },
+   "units": "s",
+   "variance": {
+    "sd": 0.1427
+   },
+   "vep_commit": null,
+   "warmups": 2
+  },
+  {
+   "assurance": "VEP_PROTECTED_FRESH_CERTIFICATE",
+   "cache_eligibility": "n/a",
+   "classification": "INVALID_ENVIRONMENT",
+   "cohort": "macos-arm64-12cpu-local",
+   "confidence_interval": {
+    "hi": 1.279853,
+    "lo": 0.860104,
+    "method": "student-t 95% of the mean of the raw samples",
+    "n": 10
+   },
+   "config": "staging_fast,verified_handoff",
+   "correctness_gate": {
+    "excluded": 0,
+    "valid_blocks": 10
+   },
+   "host": {
+    "cpus": 12,
+    "load_avg_1m_at_start": 9.16015625,
+    "platform": "macOS-15.6-arm64-arm-64bit-Mach-O",
+    "python": "3.14.7"
+   },
+   "id": "00296",
+   "limitations": [
+    "synthetic project; same process image per arm; flags via VEP_PERF",
+    "load avg 8.5-10.2, minimum CPU idle 45.5%"
+   ],
+   "metric": "evaluate_s",
+   "operation": "ab:staging_fast,verified_handoff",
+   "project": "synthetic-1000-files",
+   "project_commit": null,
+   "samples": [
+    0.779419250000501,
+    0.9115166249976028,
+    0.9546760829980485,
+    0.8281609999830835,
+    0.9514192499918863,
+    1.581230791984126,
+    0.7346990840160288,
+    1.2630457920022309,
+    1.2642344170017168,
+    1.4313847910088953
+   ],
+   "samples_n": 10,
+   "scenario": "ab_n1000_new",
+   "source_path": "benchmarks/results/ab-local-macos-n1000-factorial.json",
+   "source_sha256": "1bb9e257f74c578a7c2b9cd3b3a6622e150e7f6b5ea930f85bf91574119144e1",
+   "stats": {
+    "max": 1.5812,
+    "mean": 1.07,
+    "median": 0.953,
+    "min": 0.7347,
+    "n": 10,
+    "sd": 0.2934
+   },
+   "units": "s",
+   "variance": {
+    "sd": 0.2934
+   },
+   "vep_commit": null,
+   "warmups": 2
+  },
+  {
+   "assurance": "VEP_PROTECTED_FRESH_CERTIFICATE",
+   "cache_eligibility": "n/a",
+   "classification": "INVALID_ENVIRONMENT",
+   "cohort": "macos-arm64-12cpu-local",
+   "confidence_interval": {
+    "hi": 0.375869,
+    "lo": 0.170397,
+    "method": "student-t 95% of the mean of the raw samples",
+    "n": 10
+   },
+   "config": "staging_fast,verified_handoff",
+   "correctness_gate": {
+    "excluded": 0,
+    "valid_blocks": 10
+   },
+   "host": {
+    "cpus": 12,
+    "load_avg_1m_at_start": 9.16015625,
+    "platform": "macOS-15.6-arm64-arm-64bit-Mach-O",
+    "python": "3.14.7"
+   },
+   "id": "00297",
+   "limitations": [
+    "synthetic project; same process image per arm; flags via VEP_PERF",
+    "load avg 8.5-10.2, minimum CPU idle 45.5%"
+   ],
+   "metric": "materialize_s",
+   "operation": "ab:staging_fast,verified_handoff",
+   "project": "synthetic-1000-files",
+   "project_commit": null,
+   "samples": [
+    0.15765325000393204,
+    0.25827891600783914,
+    0.23811595799634233,
+    0.1535022919997573,
+    0.2240943340002559,
+    0.643852125009289,
+    0.15876125000067987,
+    0.29202400002395734,
+    0.27462891599861905,
+    0.3304163750144653
+   ],
+   "samples_n": 10,
+   "scenario": "ab_n1000_new",
+   "source_path": "benchmarks/results/ab-local-macos-n1000-factorial.json",
+   "source_sha256": "1bb9e257f74c578a7c2b9cd3b3a6622e150e7f6b5ea930f85bf91574119144e1",
+   "stats": {
+    "max": 0.6439,
+    "mean": 0.2731,
+    "median": 0.2482,
+    "min": 0.1535,
+    "n": 10,
+    "sd": 0.1436
+   },
+   "units": "s",
+   "variance": {
+    "sd": 0.1436
+   },
+   "vep_commit": null,
+   "warmups": 2
+  },
+  {
+   "assurance": "VEP_PROTECTED_FRESH_CERTIFICATE",
+   "cache_eligibility": "n/a",
+   "classification": "INVALID_ENVIRONMENT",
+   "cohort": "macos-arm64-12cpu-local",
+   "confidence_interval": {
+    "hi": 43.969577,
+    "lo": 41.889136,
+    "method": "student-t 95% of the mean of the raw samples",
+    "n": 10
+   },
+   "config": "staging_fast,verified_handoff",
+   "correctness_gate": {
+    "excluded": 0,
+    "valid_blocks": 10
+   },
+   "host": {
+    "cpus": 12,
+    "load_avg_1m_at_start": 9.16015625,
+    "platform": "macOS-15.6-arm64-arm-64bit-Mach-O",
+    "python": "3.14.7"
+   },
+   "id": "00298",
+   "limitations": [
+    "synthetic project; same process image per arm; flags via VEP_PERF",
+    "load avg 8.5-10.2, minimum CPU idle 45.5%"
+   ],
+   "metric": "rss_child_max_mb",
+   "operation": "ab:staging_fast,verified_handoff",
+   "project": "synthetic-1000-files",
+   "project_commit": null,
+   "samples": [
+    44.138496,
+    44.433408,
+    42.369024,
+    42.467328,
+    40.730624,
+    41.549824,
+    43.040768,
+    45.367296,
+    43.565056,
+    41.631744
+   ],
+   "samples_n": 10,
+   "scenario": "ab_n1000_new",
+   "source_path": "benchmarks/results/ab-local-macos-n1000-factorial.json",
+   "source_sha256": "1bb9e257f74c578a7c2b9cd3b3a6622e150e7f6b5ea930f85bf91574119144e1",
+   "stats": {
+    "max": 45.3673,
+    "mean": 42.9294,
+    "median": 42.754,
+    "min": 40.7306,
+    "n": 10,
+    "sd": 1.4542
+   },
+   "units": "MB",
+   "variance": {
+    "sd": 1.4542
+   },
+   "vep_commit": null,
+   "warmups": 2
+  },
+  {
+   "assurance": "VEP_PROTECTED_FRESH_CERTIFICATE",
+   "cache_eligibility": "n/a",
+   "classification": "INVALID_ENVIRONMENT",
+   "cohort": "macos-arm64-12cpu-local",
+   "confidence_interval": {
+    "hi": 1.692551,
+    "lo": 1.15379,
+    "method": "student-t 95% of the mean of the raw samples",
+    "n": 10
+   },
+   "config": "staging_fast,verified_handoff",
+   "correctness_gate": {
+    "excluded": 0,
+    "valid_blocks": 10
+   },
+   "host": {
+    "cpus": 12,
+    "load_avg_1m_at_start": 9.16015625,
+    "platform": "macOS-15.6-arm64-arm-64bit-Mach-O",
+    "python": "3.14.7"
+   },
+   "id": "00299",
+   "limitations": [
+    "synthetic project; same process image per arm; flags via VEP_PERF",
+    "load avg 8.5-10.2, minimum CPU idle 45.5%"
+   ],
+   "metric": "wall_s",
+   "operation": "ab:staging_fast,verified_handoff",
+   "project": "synthetic-1000-files",
+   "project_commit": null,
+   "samples": [
+    1.0405607080028858,
+    1.1852859159989748,
+    1.2602871670096647,
+    1.1155031670059543,
+    1.3348660419869702,
+    2.061135166994063,
+    0.9884422920003999,
+    1.6747919589979574,
+    1.678886124980636,
+    1.891944875009358
+   ],
+   "samples_n": 10,
+   "scenario": "ab_n1000_new",
+   "source_path": "benchmarks/results/ab-local-macos-n1000-factorial.json",
+   "source_sha256": "1bb9e257f74c578a7c2b9cd3b3a6622e150e7f6b5ea930f85bf91574119144e1",
+   "stats": {
+    "max": 2.0611,
+    "mean": 1.4232,
+    "median": 1.2976,
+    "min": 0.9884,
+    "n": 10,
+    "sd": 0.3766
+   },
+   "units": "s",
+   "variance": {
+    "sd": 0.3766
+   },
+   "vep_commit": null,
+   "warmups": 2
+  },
+  {
+   "assurance": "VEP_PROTECTED_FRESH_CERTIFICATE",
+   "cache_eligibility": "n/a",
+   "classification": "INVALID_ENVIRONMENT",
+   "cohort": "macos-arm64-12cpu-local",
+   "confidence_interval": {
+    "hi": 1.260699,
+    "lo": 1.001301,
+    "method": "student-t 95% of the mean of the raw samples",
+    "n": 10
+   },
+   "config": "verified_handoff",
+   "correctness_gate": {
+    "excluded": 0,
+    "valid_blocks": 10
+   },
+   "host": {
+    "cpus": 12,
+    "load_avg_1m_at_start": 9.16015625,
+    "platform": "macOS-15.6-arm64-arm-64bit-Mach-O",
+    "python": "3.14.7"
+   },
+   "id": "00300",
+   "limitations": [
+    "synthetic project; same process image per arm; flags via VEP_PERF",
+    "load avg 8.5-10.2, minimum CPU idle 45.5%"
+   ],
+   "metric": "cpu_s",
+   "operation": "ab:verified_handoff",
+   "project": "synthetic-1000-files",
+   "project_commit": null,
+   "samples": [
+    0.9800000000000001,
+    1.12,
+    1.02,
+    1.02,
+    1.2500000000000004,
+    1.1799999999999997,
+    1.02,
+    0.89,
+    1.42,
+    1.41
+   ],
+   "samples_n": 10,
+   "scenario": "ab_n1000_new",
+   "source_path": "benchmarks/results/ab-local-macos-n1000-factorial.json",
+   "source_sha256": "1bb9e257f74c578a7c2b9cd3b3a6622e150e7f6b5ea930f85bf91574119144e1",
+   "stats": {
+    "max": 1.42,
+    "mean": 1.131,
+    "median": 1.07,
+    "min": 0.89,
+    "n": 10,
+    "sd": 0.1813
+   },
+   "units": "s",
+   "variance": {
+    "sd": 0.1813
+   },
+   "vep_commit": null,
+   "warmups": 2
+  },
+  {
+   "assurance": "VEP_PROTECTED_FRESH_CERTIFICATE",
+   "cache_eligibility": "n/a",
+   "classification": "INVALID_ENVIRONMENT",
+   "cohort": "macos-arm64-12cpu-local",
+   "confidence_interval": {
+    "hi": 1.34122,
+    "lo": 0.853713,
+    "method": "student-t 95% of the mean of the raw samples",
+    "n": 10
+   },
+   "config": "verified_handoff",
+   "correctness_gate": {
+    "excluded": 0,
+    "valid_blocks": 10
+   },
+   "host": {
+    "cpus": 12,
+    "load_avg_1m_at_start": 9.16015625,
+    "platform": "macOS-15.6-arm64-arm-64bit-Mach-O",
+    "python": "3.14.7"
+   },
+   "id": "00301",
+   "limitations": [
+    "synthetic project; same process image per arm; flags via VEP_PERF",
+    "load avg 8.5-10.2, minimum CPU idle 45.5%"
+   ],
+   "metric": "evaluate_s",
+   "operation": "ab:verified_handoff",
+   "project": "synthetic-1000-files",
+   "project_commit": null,
+   "samples": [
+    0.8779029170109425,
+    0.9164380000147503,
+    0.8375980830169283,
+    0.853340666013537,
+    1.348164082999574,
+    1.212256917002378,
+    0.8507838330115192,
+    0.7854027500143275,
+    1.6534777079941705,
+    1.6392988750012591
+   ],
+   "samples_n": 10,
+   "scenario": "ab_n1000_new",
+   "source_path": "benchmarks/results/ab-local-macos-n1000-factorial.json",
+   "source_sha256": "1bb9e257f74c578a7c2b9cd3b3a6622e150e7f6b5ea930f85bf91574119144e1",
+   "stats": {
+    "max": 1.6535,
+    "mean": 1.0975,
+    "median": 0.8972,
+    "min": 0.7854,
+    "n": 10,
+    "sd": 0.3408
+   },
+   "units": "s",
+   "variance": {
+    "sd": 0.3408
+   },
+   "vep_commit": null,
+   "warmups": 2
+  },
+  {
+   "assurance": "VEP_PROTECTED_FRESH_CERTIFICATE",
+   "cache_eligibility": "n/a",
+   "classification": "INVALID_ENVIRONMENT",
+   "cohort": "macos-arm64-12cpu-local",
+   "confidence_interval": {
+    "hi": 0.391535,
+    "lo": 0.208989,
+    "method": "student-t 95% of the mean of the raw samples",
+    "n": 10
+   },
+   "config": "verified_handoff",
+   "correctness_gate": {
+    "excluded": 0,
+    "valid_blocks": 10
+   },
+   "host": {
+    "cpus": 12,
+    "load_avg_1m_at_start": 9.16015625,
+    "platform": "macOS-15.6-arm64-arm-64bit-Mach-O",
+    "python": "3.14.7"
+   },
+   "id": "00302",
+   "limitations": [
+    "synthetic project; same process image per arm; flags via VEP_PERF",
+    "load avg 8.5-10.2, minimum CPU idle 45.5%"
+   ],
+   "metric": "materialize_s",
+   "operation": "ab:verified_handoff",
+   "project": "synthetic-1000-files",
+   "project_commit": null,
+   "samples": [
+    0.22841312500531785,
+    0.22276462498120964,
+    0.19211470798472874,
+    0.19527662501786835,
+    0.47808762500062585,
+    0.2711720839724876,
+    0.20110124998609535,
+    0.24604895900120027,
+    0.4872076249739621,
+    0.4804325830191374
+   ],
+   "samples_n": 10,
+   "scenario": "ab_n1000_new",
+   "source_path": "benchmarks/results/ab-local-macos-n1000-factorial.json",
+   "source_sha256": "1bb9e257f74c578a7c2b9cd3b3a6622e150e7f6b5ea930f85bf91574119144e1",
+   "stats": {
+    "max": 0.4872,
+    "mean": 0.3003,
+    "median": 0.2372,
+    "min": 0.1921,
+    "n": 10,
+    "sd": 0.1276
+   },
+   "units": "s",
+   "variance": {
+    "sd": 0.1276
+   },
+   "vep_commit": null,
+   "warmups": 2
+  },
+  {
+   "assurance": "VEP_PROTECTED_FRESH_CERTIFICATE",
+   "cache_eligibility": "n/a",
+   "classification": "INVALID_ENVIRONMENT",
+   "cohort": "macos-arm64-12cpu-local",
+   "confidence_interval": {
+    "hi": 44.04562,
+    "lo": 42.445516,
+    "method": "student-t 95% of the mean of the raw samples",
+    "n": 10
+   },
+   "config": "verified_handoff",
+   "correctness_gate": {
+    "excluded": 0,
+    "valid_blocks": 10
+   },
+   "host": {
+    "cpus": 12,
+    "load_avg_1m_at_start": 9.16015625,
+    "platform": "macOS-15.6-arm64-arm-64bit-Mach-O",
+    "python": "3.14.7"
+   },
+   "id": "00303",
+   "limitations": [
+    "synthetic project; same process image per arm; flags via VEP_PERF",
+    "load avg 8.5-10.2, minimum CPU idle 45.5%"
+   ],
+   "metric": "rss_child_max_mb",
+   "operation": "ab:verified_handoff",
+   "project": "synthetic-1000-files",
+   "project_commit": null,
+   "samples": [
+    43.25376,
+    43.188224,
+    45.006848,
+    43.139072,
+    42.92608,
+    43.49952,
+    43.810816,
+    44.56448,
+    41.69728,
+    41.3696
+   ],
+   "samples_n": 10,
+   "scenario": "ab_n1000_new",
+   "source_path": "benchmarks/results/ab-local-macos-n1000-factorial.json",
+   "source_sha256": "1bb9e257f74c578a7c2b9cd3b3a6622e150e7f6b5ea930f85bf91574119144e1",
+   "stats": {
+    "max": 45.0068,
+    "mean": 43.2456,
+    "median": 43.221,
+    "min": 41.3696,
+    "n": 10,
+    "sd": 1.1185
+   },
+   "units": "MB",
+   "variance": {
+    "sd": 1.1185
+   },
+   "vep_commit": null,
+   "warmups": 2
+  },
+  {
+   "assurance": "VEP_PROTECTED_FRESH_CERTIFICATE",
+   "cache_eligibility": "n/a",
+   "classification": "INVALID_ENVIRONMENT",
+   "cohort": "macos-arm64-12cpu-local",
+   "confidence_interval": {
+    "hi": 1.795511,
+    "lo": 1.119081,
+    "method": "student-t 95% of the mean of the raw samples",
+    "n": 10
+   },
+   "config": "verified_handoff",
+   "correctness_gate": {
+    "excluded": 0,
+    "valid_blocks": 10
+   },
+   "host": {
+    "cpus": 12,
+    "load_avg_1m_at_start": 9.16015625,
+    "platform": "macOS-15.6-arm64-arm-64bit-Mach-O",
+    "python": "3.14.7"
+   },
+   "id": "00304",
+   "limitations": [
+    "synthetic project; same process image per arm; flags via VEP_PERF",
+    "load avg 8.5-10.2, minimum CPU idle 45.5%"
+   ],
+   "metric": "wall_s",
+   "operation": "ab:verified_handoff",
+   "project": "synthetic-1000-files",
+   "project_commit": null,
+   "samples": [
+    1.1186018750013318,
+    1.2661342089995742,
+    1.1070956670155283,
+    1.1278531670104712,
+    1.8078694170108065,
+    1.5220890000055078,
+    1.1373858750157524,
+    1.0232873750210274,
+    2.148844999988796,
+    2.313798749994021
+   ],
+   "samples_n": 10,
+   "scenario": "ab_n1000_new",
+   "source_path": "benchmarks/results/ab-local-macos-n1000-factorial.json",
+   "source_sha256": "1bb9e257f74c578a7c2b9cd3b3a6622e150e7f6b5ea930f85bf91574119144e1",
+   "stats": {
+    "max": 2.3138,
+    "mean": 1.4573,
+    "median": 1.2018,
+    "min": 1.0233,
+    "n": 10,
+    "sd": 0.4728
+   },
+   "units": "s",
+   "variance": {
+    "sd": 0.4728
+   },
+   "vep_commit": null,
+   "warmups": 2
+  },
+  {
+   "assurance": "VEP_PROTECTED_FRESH_CERTIFICATE",
+   "cache_eligibility": "n/a",
+   "classification": "INVALID_ENVIRONMENT",
+   "cohort": "macos-arm64-12cpu-local",
+   "confidence_interval": {
+    "hi": 0.37379,
+    "lo": 0.30421,
+    "method": "student-t 95% of the mean of the raw samples",
+    "n": 10
+   },
+   "config": "none",
+   "correctness_gate": {
+    "excluded": 0,
+    "valid_blocks": 10
+   },
+   "host": {
+    "cpus": 12,
+    "load_avg_1m_at_start": 9.291015625,
+    "platform": "macOS-15.6-arm64-arm-64bit-Mach-O",
+    "python": "3.14.7"
+   },
+   "id": "00305",
+   "limitations": [
+    "synthetic project; same process image per arm; flags via VEP_PERF",
+    "load avg 7.9-9.8, minimum CPU idle 45.2%"
+   ],
+   "metric": "cpu_s",
+   "operation": "ab:none",
+   "project": "synthetic-200-files",
+   "project_commit": null,
+   "samples": [
+    0.27,
+    0.32000000000000006,
+    0.32000000000000006,
+    0.35000000000000003,
+    0.31000000000000005,
+    0.35000000000000003,
+    0.36000000000000004,
+    0.44999999999999996,
+    0.36000000000000004,
+    0.30000000000000004
+   ],
+   "samples_n": 10,
+   "scenario": "ab_n200_new",
+   "source_path": "benchmarks/results/ab-local-macos-n200-factorial.json",
+   "source_sha256": "509fad3ee9fae748599f4a1efca798b1e286304869f88baf7ea61f6c080bef7a",
+   "stats": {
+    "max": 0.45,
+    "mean": 0.339,
+    "median": 0.335,
+    "min": 0.27,
+    "n": 10,
+    "sd": 0.0486
+   },
+   "units": "s",
+   "variance": {
+    "sd": 0.0486
+   },
+   "vep_commit": null,
+   "warmups": 2
+  },
+  {
+   "assurance": "VEP_PROTECTED_FRESH_CERTIFICATE",
+   "cache_eligibility": "n/a",
+   "classification": "INVALID_ENVIRONMENT",
+   "cohort": "macos-arm64-12cpu-local",
+   "confidence_interval": {
+    "hi": 0.362277,
+    "lo": 0.27104,
+    "method": "student-t 95% of the mean of the raw samples",
+    "n": 10
+   },
+   "config": "none",
+   "correctness_gate": {
+    "excluded": 0,
+    "valid_blocks": 10
+   },
+   "host": {
+    "cpus": 12,
+    "load_avg_1m_at_start": 9.291015625,
+    "platform": "macOS-15.6-arm64-arm-64bit-Mach-O",
+    "python": "3.14.7"
+   },
+   "id": "00306",
+   "limitations": [
+    "synthetic project; same process image per arm; flags via VEP_PERF",
+    "load avg 7.9-9.8, minimum CPU idle 45.2%"
+   ],
+   "metric": "evaluate_s",
+   "operation": "ab:none",
+   "project": "synthetic-200-files",
+   "project_commit": null,
+   "samples": [
+    0.26563762497971766,
+    0.2968108749773819,
+    0.2972550829872489,
+    0.30840949999401346,
+    0.2868862089817412,
+    0.3096440410008654,
+    0.31583841700921766,
+    0.49214587500318885,
+    0.31508979201316833,
+    0.2788670000154525
+   ],
+   "samples_n": 10,
+   "scenario": "ab_n200_new",
+   "source_path": "benchmarks/results/ab-local-macos-n200-factorial.json",
+   "source_sha256": "509fad3ee9fae748599f4a1efca798b1e286304869f88baf7ea61f6c080bef7a",
+   "stats": {
+    "max": 0.4921,
+    "mean": 0.3167,
+    "median": 0.3028,
+    "min": 0.2656,
+    "n": 10,
+    "sd": 0.0638
+   },
+   "units": "s",
+   "variance": {
+    "sd": 0.0638
+   },
+   "vep_commit": null,
+   "warmups": 2
+  },
+  {
+   "assurance": "VEP_PROTECTED_FRESH_CERTIFICATE",
+   "cache_eligibility": "n/a",
+   "classification": "INVALID_ENVIRONMENT",
+   "cohort": "macos-arm64-12cpu-local",
+   "confidence_interval": {
+    "hi": 0.065218,
+    "lo": 0.043372,
+    "method": "student-t 95% of the mean of the raw samples",
+    "n": 10
+   },
+   "config": "none",
+   "correctness_gate": {
+    "excluded": 0,
+    "valid_blocks": 10
+   },
+   "host": {
+    "cpus": 12,
+    "load_avg_1m_at_start": 9.291015625,
+    "platform": "macOS-15.6-arm64-arm-64bit-Mach-O",
+    "python": "3.14.7"
+   },
+   "id": "00307",
+   "limitations": [
+    "synthetic project; same process image per arm; flags via VEP_PERF",
+    "load avg 7.9-9.8, minimum CPU idle 45.2%"
+   ],
+   "metric": "materialize_s",
+   "operation": "ab:none",
+   "project": "synthetic-200-files",
+   "project_commit": null,
+   "samples": [
+    0.042881500005023554,
+    0.049177250009961426,
+    0.04929399999673478,
+    0.05361416601226665,
+    0.04593820800073445,
+    0.051230416022008285,
+    0.05557420902187005,
+    0.09607554101967253,
+    0.054376124986447394,
+    0.044787999999243766
+   ],
+   "samples_n": 10,
+   "scenario": "ab_n200_new",
+   "source_path": "benchmarks/results/ab-local-macos-n200-factorial.json",
+   "source_sha256": "509fad3ee9fae748599f4a1efca798b1e286304869f88baf7ea61f6c080bef7a",
+   "stats": {
+    "max": 0.0961,
+    "mean": 0.0543,
+    "median": 0.0503,
+    "min": 0.0429,
+    "n": 10,
+    "sd": 0.0153
+   },
+   "units": "s",
+   "variance": {
+    "sd": 0.0153
+   },
+   "vep_commit": null,
+   "warmups": 2
+  },
+  {
+   "assurance": "VEP_PROTECTED_FRESH_CERTIFICATE",
+   "cache_eligibility": "n/a",
+   "classification": "INVALID_ENVIRONMENT",
+   "cohort": "macos-arm64-12cpu-local",
+   "confidence_interval": {
+    "hi": 40.577794,
+    "lo": 39.982334,
+    "method": "student-t 95% of the mean of the raw samples",
+    "n": 10
+   },
+   "config": "none",
+   "correctness_gate": {
+    "excluded": 0,
+    "valid_blocks": 10
+   },
+   "host": {
+    "cpus": 12,
+    "load_avg_1m_at_start": 9.291015625,
+    "platform": "macOS-15.6-arm64-arm-64bit-Mach-O",
+    "python": "3.14.7"
+   },
+   "id": "00308",
+   "limitations": [
+    "synthetic project; same process image per arm; flags via VEP_PERF",
+    "load avg 7.9-9.8, minimum CPU idle 45.2%"
+   ],
+   "metric": "rss_child_max_mb",
+   "operation": "ab:none",
+   "project": "synthetic-200-files",
+   "project_commit": null,
+   "samples": [
+    40.747008,
+    40.484864,
+    40.534016,
+    39.747584,
+    40.026112,
+    40.779776,
+    40.484864,
+    39.714816,
+    39.796736,
+    40.484864
+   ],
+   "samples_n": 10,
+   "scenario": "ab_n200_new",
+   "source_path": "benchmarks/results/ab-local-macos-n200-factorial.json",
+   "source_sha256": "509fad3ee9fae748599f4a1efca798b1e286304869f88baf7ea61f6c080bef7a",
+   "stats": {
+    "max": 40.7798,
+    "mean": 40.2801,
+    "median": 40.4849,
+    "min": 39.7148,
+    "n": 10,
+    "sd": 0.4162
+   },
+   "units": "MB",
+   "variance": {
+    "sd": 0.4162
+   },
+   "vep_commit": null,
+   "warmups": 2
+  },
+  {
+   "assurance": "VEP_PROTECTED_FRESH_CERTIFICATE",
+   "cache_eligibility": "n/a",
+   "classification": "INVALID_ENVIRONMENT",
+   "cohort": "macos-arm64-12cpu-local",
+   "confidence_interval": {
+    "hi": 0.46881,
+    "lo": 0.355316,
+    "method": "student-t 95% of the mean of the raw samples",
+    "n": 10
+   },
+   "config": "none",
+   "correctness_gate": {
+    "excluded": 0,
+    "valid_blocks": 10
+   },
+   "host": {
+    "cpus": 12,
+    "load_avg_1m_at_start": 9.291015625,
+    "platform": "macOS-15.6-arm64-arm-64bit-Mach-O",
+    "python": "3.14.7"
+   },
+   "id": "00309",
+   "limitations": [
+    "synthetic project; same process image per arm; flags via VEP_PERF",
+    "load avg 7.9-9.8, minimum CPU idle 45.2%"
+   ],
+   "metric": "wall_s",
+   "operation": "ab:none",
+   "project": "synthetic-200-files",
+   "project_commit": null,
+   "samples": [
+    0.34468308300711215,
+    0.3837025410030037,
+    0.3862124170118477,
+    0.4054107080155518,
+    0.3708844170032535,
+    0.40659845899790525,
+    0.41851533300359733,
+    0.6269401659956202,
+    0.41684379198704846,
+    0.3608395000046585
+   ],
+   "samples_n": 10,
+   "scenario": "ab_n200_new",
+   "source_path": "benchmarks/results/ab-local-macos-n200-factorial.json",
+   "source_sha256": "509fad3ee9fae748599f4a1efca798b1e286304869f88baf7ea61f6c080bef7a",
+   "stats": {
+    "max": 0.6269,
+    "mean": 0.4121,
+    "median": 0.3958,
+    "min": 0.3447,
+    "n": 10,
+    "sd": 0.0793
+   },
+   "units": "s",
+   "variance": {
+    "sd": 0.0793
+   },
+   "vep_commit": null,
+   "warmups": 2
+  },
+  {
+   "assurance": "VEP_PROTECTED_FRESH_CERTIFICATE",
+   "cache_eligibility": "n/a",
+   "classification": "INVALID_ENVIRONMENT",
+   "cohort": "macos-arm64-12cpu-local",
+   "confidence_interval": {
+    "hi": 0.337176,
+    "lo": 0.292824,
+    "method": "student-t 95% of the mean of the raw samples",
+    "n": 10
+   },
+   "config": "staging_fast",
+   "correctness_gate": {
+    "excluded": 0,
+    "valid_blocks": 10
+   },
+   "host": {
+    "cpus": 12,
+    "load_avg_1m_at_start": 9.291015625,
+    "platform": "macOS-15.6-arm64-arm-64bit-Mach-O",
+    "python": "3.14.7"
+   },
+   "id": "00310",
+   "limitations": [
+    "synthetic project; same process image per arm; flags via VEP_PERF",
+    "load avg 7.9-9.8, minimum CPU idle 45.2%"
+   ],
+   "metric": "cpu_s",
+   "operation": "ab:staging_fast",
+   "project": "synthetic-200-files",
+   "project_commit": null,
+   "samples": [
+    0.25,
+    0.32000000000000006,
+    0.32000000000000006,
+    0.30000000000000004,
+    0.33000000000000007,
+    0.33999999999999997,
+    0.35000000000000003,
+    0.35000000000000003,
+    0.30000000000000004,
+    0.29000000000000004
+   ],
+   "samples_n": 10,
+   "scenario": "ab_n200_new",
+   "source_path": "benchmarks/results/ab-local-macos-n200-factorial.json",
+   "source_sha256": "509fad3ee9fae748599f4a1efca798b1e286304869f88baf7ea61f6c080bef7a",
+   "stats": {
+    "max": 0.35,
+    "mean": 0.315,
+    "median": 0.32,
+    "min": 0.25,
+    "n": 10,
+    "sd": 0.031
+   },
+   "units": "s",
+   "variance": {
+    "sd": 0.031
+   },
+   "vep_commit": null,
+   "warmups": 2
+  },
+  {
+   "assurance": "VEP_PROTECTED_FRESH_CERTIFICATE",
+   "cache_eligibility": "n/a",
+   "classification": "INVALID_ENVIRONMENT",
+   "cohort": "macos-arm64-12cpu-local",
+   "confidence_interval": {
+    "hi": 0.297936,
+    "lo": 0.27312,
+    "method": "student-t 95% of the mean of the raw samples",
+    "n": 10
+   },
+   "config": "staging_fast",
+   "correctness_gate": {
+    "excluded": 0,
+    "valid_blocks": 10
+   },
+   "host": {
+    "cpus": 12,
+    "load_avg_1m_at_start": 9.291015625,
+    "platform": "macOS-15.6-arm64-arm-64bit-Mach-O",
+    "python": "3.14.7"
+   },
+   "id": "00311",
+   "limitations": [
+    "synthetic project; same process image per arm; flags via VEP_PERF",
+    "load avg 7.9-9.8, minimum CPU idle 45.2%"
+   ],
+   "metric": "evaluate_s",
+   "operation": "ab:staging_fast",
+   "project": "synthetic-200-files",
+   "project_commit": null,
+   "samples": [
+    0.25212437502341345,
+    0.28728404198773205,
+    0.2930415830051061,
+    0.2722310000099242,
+    0.28912025000317954,
+    0.3049776249972638,
+    0.30268808401888236,
+    0.3052238749805838,
+    0.27817679100553505,
+    0.2704147079784889
+   ],
+   "samples_n": 10,
+   "scenario": "ab_n200_new",
+   "source_path": "benchmarks/results/ab-local-macos-n200-factorial.json",
+   "source_sha256": "509fad3ee9fae748599f4a1efca798b1e286304869f88baf7ea61f6c080bef7a",
+   "stats": {
+    "max": 0.3052,
+    "mean": 0.2855,
+    "median": 0.2882,
+    "min": 0.2521,
+    "n": 10,
+    "sd": 0.0173
+   },
+   "units": "s",
+   "variance": {
+    "sd": 0.0173
+   },
+   "vep_commit": null,
+   "warmups": 2
+  },
+  {
+   "assurance": "VEP_PROTECTED_FRESH_CERTIFICATE",
+   "cache_eligibility": "n/a",
+   "classification": "INVALID_ENVIRONMENT",
+   "cohort": "macos-arm64-12cpu-local",
+   "confidence_interval": {
+    "hi": 0.043019,
+    "lo": 0.037684,
+    "method": "student-t 95% of the mean of the raw samples",
+    "n": 10
+   },
+   "config": "staging_fast",
+   "correctness_gate": {
+    "excluded": 0,
+    "valid_blocks": 10
+   },
+   "host": {
+    "cpus": 12,
+    "load_avg_1m_at_start": 9.291015625,
+    "platform": "macOS-15.6-arm64-arm-64bit-Mach-O",
+    "python": "3.14.7"
+   },
+   "id": "00312",
+   "limitations": [
+    "synthetic project; same process image per arm; flags via VEP_PERF",
+    "load avg 7.9-9.8, minimum CPU idle 45.2%"
+   ],
+   "metric": "materialize_s",
+   "operation": "ab:staging_fast",
+   "project": "synthetic-200-files",
+   "project_commit": null,
+   "samples": [
+    0.033487040986074135,
+    0.040476374997524545,
+    0.04264041699934751,
+    0.03790945900254883,
+    0.03908075002254918,
+    0.04517454101005569,
+    0.04273091701907106,
+    0.04551054199691862,
+    0.03890725001110695,
+    0.03759750002063811
+   ],
+   "samples_n": 10,
+   "scenario": "ab_n200_new",
+   "source_path": "benchmarks/results/ab-local-macos-n200-factorial.json",
+   "source_sha256": "509fad3ee9fae748599f4a1efca798b1e286304869f88baf7ea61f6c080bef7a",
+   "stats": {
+    "max": 0.0455,
+    "mean": 0.0404,
+    "median": 0.0398,
+    "min": 0.0335,
+    "n": 10,
+    "sd": 0.0037
+   },
+   "units": "s",
+   "variance": {
+    "sd": 0.0037
+   },
+   "vep_commit": null,
+   "warmups": 2
+  },
+  {
+   "assurance": "VEP_PROTECTED_FRESH_CERTIFICATE",
+   "cache_eligibility": "n/a",
+   "classification": "INVALID_ENVIRONMENT",
+   "cohort": "macos-arm64-12cpu-local",
+   "confidence_interval": {
+    "hi": 40.38423,
+    "lo": 39.900647,
+    "method": "student-t 95% of the mean of the raw samples",
+    "n": 10
+   },
+   "config": "staging_fast",
+   "correctness_gate": {
+    "excluded": 0,
+    "valid_blocks": 10
+   },
+   "host": {
+    "cpus": 12,
+    "load_avg_1m_at_start": 9.291015625,
+    "platform": "macOS-15.6-arm64-arm-64bit-Mach-O",
+    "python": "3.14.7"
+   },
+   "id": "00313",
+   "limitations": [
+    "synthetic project; same process image per arm; flags via VEP_PERF",
+    "load avg 7.9-9.8, minimum CPU idle 45.2%"
+   ],
+   "metric": "rss_child_max_mb",
+   "operation": "ab:staging_fast",
+   "project": "synthetic-200-files",
+   "project_commit": null,
+   "samples": [
+    39.518208,
+    40.435712,
+    40.484864,
+    40.534016,
+    40.1408,
+    40.337408,
+    40.026112,
+    39.911424,
+    39.747584,
+    40.288256
+   ],
+   "samples_n": 10,
+   "scenario": "ab_n200_new",
+   "source_path": "benchmarks/results/ab-local-macos-n200-factorial.json",
+   "source_sha256": "509fad3ee9fae748599f4a1efca798b1e286304869f88baf7ea61f6c080bef7a",
+   "stats": {
+    "max": 40.534,
+    "mean": 40.1424,
+    "median": 40.2145,
+    "min": 39.5182,
+    "n": 10,
+    "sd": 0.338
+   },
+   "units": "MB",
+   "variance": {
+    "sd": 0.338
+   },
+   "vep_commit": null,
+   "warmups": 2
+  },
+  {
+   "assurance": "VEP_PROTECTED_FRESH_CERTIFICATE",
+   "cache_eligibility": "n/a",
+   "classification": "INVALID_ENVIRONMENT",
+   "cohort": "macos-arm64-12cpu-local",
+   "confidence_interval": {
+    "hi": 0.390444,
+    "lo": 0.354994,
+    "method": "student-t 95% of the mean of the raw samples",
+    "n": 10
+   },
+   "config": "staging_fast",
+   "correctness_gate": {
+    "excluded": 0,
+    "valid_blocks": 10
+   },
+   "host": {
+    "cpus": 12,
+    "load_avg_1m_at_start": 9.291015625,
+    "platform": "macOS-15.6-arm64-arm-64bit-Mach-O",
+    "python": "3.14.7"
+   },
+   "id": "00314",
+   "limitations": [
+    "synthetic project; same process image per arm; flags via VEP_PERF",
+    "load avg 7.9-9.8, minimum CPU idle 45.2%"
+   ],
+   "metric": "wall_s",
+   "operation": "ab:staging_fast",
+   "project": "synthetic-200-files",
+   "project_commit": null,
+   "samples": [
+    0.32541687501361594,
+    0.37261525000212714,
+    0.38297575002070516,
+    0.35413445901940577,
+    0.3744461250025779,
+    0.4018043329997454,
+    0.398936749988934,
+    0.4015878330101259,
+    0.3602325420069974,
+    0.3550408330047503
+   ],
+   "samples_n": 10,
+   "scenario": "ab_n200_new",
+   "source_path": "benchmarks/results/ab-local-macos-n200-factorial.json",
+   "source_sha256": "509fad3ee9fae748599f4a1efca798b1e286304869f88baf7ea61f6c080bef7a",
+   "stats": {
+    "max": 0.4018,
+    "mean": 0.3727,
+    "median": 0.3735,
+    "min": 0.3254,
+    "n": 10,
+    "sd": 0.0248
+   },
+   "units": "s",
+   "variance": {
+    "sd": 0.0248
+   },
+   "vep_commit": null,
+   "warmups": 2
+  },
+  {
+   "assurance": "VEP_PROTECTED_FRESH_CERTIFICATE",
+   "cache_eligibility": "n/a",
+   "classification": "INVALID_ENVIRONMENT",
+   "cohort": "macos-arm64-12cpu-local",
+   "confidence_interval": {
+    "hi": 0.321818,
+    "lo": 0.296182,
+    "method": "student-t 95% of the mean of the raw samples",
+    "n": 10
+   },
+   "config": "staging_fast,verified_handoff",
+   "correctness_gate": {
+    "excluded": 0,
+    "valid_blocks": 10
+   },
+   "host": {
+    "cpus": 12,
+    "load_avg_1m_at_start": 9.291015625,
+    "platform": "macOS-15.6-arm64-arm-64bit-Mach-O",
+    "python": "3.14.7"
+   },
+   "id": "00315",
+   "limitations": [
+    "synthetic project; same process image per arm; flags via VEP_PERF",
+    "load avg 7.9-9.8, minimum CPU idle 45.2%"
+   ],
+   "metric": "cpu_s",
+   "operation": "ab:staging_fast,verified_handoff",
+   "project": "synthetic-200-files",
+   "project_commit": null,
+   "samples": [
+    0.28,
+    0.31999999999999995,
+    0.31999999999999995,
+    0.31000000000000005,
+    0.32999999999999996,
+    0.32999999999999996,
+    0.30000000000000004,
+    0.29000000000000004,
+    0.29000000000000004,
+    0.32
+   ],
+   "samples_n": 10,
+   "scenario": "ab_n200_new",
+   "source_path": "benchmarks/results/ab-local-macos-n200-factorial.json",
+   "source_sha256": "509fad3ee9fae748599f4a1efca798b1e286304869f88baf7ea61f6c080bef7a",
+   "stats": {
+    "max": 0.33,
+    "mean": 0.309,
+    "median": 0.315,
+    "min": 0.28,
+    "n": 10,
+    "sd": 0.0179
+   },
+   "units": "s",
+   "variance": {
+    "sd": 0.0179
+   },
+   "vep_commit": null,
+   "warmups": 2
+  },
+  {
+   "assurance": "VEP_PROTECTED_FRESH_CERTIFICATE",
+   "cache_eligibility": "n/a",
+   "classification": "INVALID_ENVIRONMENT",
+   "cohort": "macos-arm64-12cpu-local",
+   "confidence_interval": {
+    "hi": 0.277621,
+    "lo": 0.265811,
+    "method": "student-t 95% of the mean of the raw samples",
+    "n": 10
+   },
+   "config": "staging_fast,verified_handoff",
+   "correctness_gate": {
+    "excluded": 0,
+    "valid_blocks": 10
+   },
+   "host": {
+    "cpus": 12,
+    "load_avg_1m_at_start": 9.291015625,
+    "platform": "macOS-15.6-arm64-arm-64bit-Mach-O",
+    "python": "3.14.7"
+   },
+   "id": "00316",
+   "limitations": [
+    "synthetic project; same process image per arm; flags via VEP_PERF",
+    "load avg 7.9-9.8, minimum CPU idle 45.2%"
+   ],
+   "metric": "evaluate_s",
+   "operation": "ab:staging_fast,verified_handoff",
+   "project": "synthetic-200-files",
+   "project_commit": null,
+   "samples": [
+    0.2584463329985738,
+    0.2804565420083236,
+    0.26989295898238197,
+    0.2774653749947902,
+    0.28241791599430144,
+    0.2767844579939265,
+    0.269182499992894,
+    0.25877154199406505,
+    0.2741307909891475,
+    0.2696104169881437
+   ],
+   "samples_n": 10,
+   "scenario": "ab_n200_new",
+   "source_path": "benchmarks/results/ab-local-macos-n200-factorial.json",
+   "source_sha256": "509fad3ee9fae748599f4a1efca798b1e286304869f88baf7ea61f6c080bef7a",
+   "stats": {
+    "max": 0.2824,
+    "mean": 0.2717,
+    "median": 0.272,
+    "min": 0.2584,
+    "n": 10,
+    "sd": 0.0083
+   },
+   "units": "s",
+   "variance": {
+    "sd": 0.0083
+   },
+   "vep_commit": null,
+   "warmups": 2
+  },
+  {
+   "assurance": "VEP_PROTECTED_FRESH_CERTIFICATE",
+   "cache_eligibility": "n/a",
+   "classification": "INVALID_ENVIRONMENT",
+   "cohort": "macos-arm64-12cpu-local",
+   "confidence_interval": {
+    "hi": 0.0323,
+    "lo": 0.030251,
+    "method": "student-t 95% of the mean of the raw samples",
+    "n": 10
+   },
+   "config": "staging_fast,verified_handoff",
+   "correctness_gate": {
+    "excluded": 0,
+    "valid_blocks": 10
+   },
+   "host": {
+    "cpus": 12,
+    "load_avg_1m_at_start": 9.291015625,
+    "platform": "macOS-15.6-arm64-arm-64bit-Mach-O",
+    "python": "3.14.7"
+   },
+   "id": "00317",
+   "limitations": [
+    "synthetic project; same process image per arm; flags via VEP_PERF",
+    "load avg 7.9-9.8, minimum CPU idle 45.2%"
+   ],
+   "metric": "materialize_s",
+   "operation": "ab:staging_fast,verified_handoff",
+   "project": "synthetic-200-files",
+   "project_commit": null,
+   "samples": [
+    0.029551041981903836,
+    0.029262583993840963,
+    0.033713582990458235,
+    0.03113074999419041,
+    0.032782958005554974,
+    0.031872292020125315,
+    0.03253908301121555,
+    0.030659291020128876,
+    0.030548958020517603,
+    0.03069479198893532
+   ],
+   "samples_n": 10,
+   "scenario": "ab_n200_new",
+   "source_path": "benchmarks/results/ab-local-macos-n200-factorial.json",
+   "source_sha256": "509fad3ee9fae748599f4a1efca798b1e286304869f88baf7ea61f6c080bef7a",
+   "stats": {
+    "max": 0.0337,
+    "mean": 0.0313,
+    "median": 0.0309,
+    "min": 0.0293,
+    "n": 10,
+    "sd": 0.0014
+   },
+   "units": "s",
+   "variance": {
+    "sd": 0.0014
+   },
+   "vep_commit": null,
+   "warmups": 2
+  },
+  {
+   "assurance": "VEP_PROTECTED_FRESH_CERTIFICATE",
+   "cache_eligibility": "n/a",
+   "classification": "INVALID_ENVIRONMENT",
+   "cohort": "macos-arm64-12cpu-local",
+   "confidence_interval": {
+    "hi": 40.566902,
+    "lo": 39.819555,
+    "method": "student-t 95% of the mean of the raw samples",
+    "n": 10
+   },
+   "config": "staging_fast,verified_handoff",
+   "correctness_gate": {
+    "excluded": 0,
+    "valid_blocks": 10
+   },
+   "host": {
+    "cpus": 12,
+    "load_avg_1m_at_start": 9.291015625,
+    "platform": "macOS-15.6-arm64-arm-64bit-Mach-O",
+    "python": "3.14.7"
+   },
+   "id": "00318",
+   "limitations": [
+    "synthetic project; same process image per arm; flags via VEP_PERF",
+    "load avg 7.9-9.8, minimum CPU idle 45.2%"
+   ],
+   "metric": "rss_child_max_mb",
+   "operation": "ab:staging_fast,verified_handoff",
+   "project": "synthetic-200-files",
+   "project_commit": null,
+   "samples": [
+    39.862272,
+    40.157184,
+    39.632896,
+    39.944192,
+    40.38656,
+    40.189952,
+    40.779776,
+    39.862272,
+    41.336832,
+    39.780352
+   ],
+   "samples_n": 10,
+   "scenario": "ab_n200_new",
+   "source_path": "benchmarks/results/ab-local-macos-n200-factorial.json",
+   "source_sha256": "509fad3ee9fae748599f4a1efca798b1e286304869f88baf7ea61f6c080bef7a",
+   "stats": {
+    "max": 41.3368,
+    "mean": 40.1932,
+    "median": 40.0507,
+    "min": 39.6329,
+    "n": 10,
+    "sd": 0.5224
+   },
+   "units": "MB",
+   "variance": {
+    "sd": 0.5224
+   },
+   "vep_commit": null,
+   "warmups": 2
+  },
+  {
+   "assurance": "VEP_PROTECTED_FRESH_CERTIFICATE",
+   "cache_eligibility": "n/a",
+   "classification": "INVALID_ENVIRONMENT",
+   "cohort": "macos-arm64-12cpu-local",
+   "confidence_interval": {
+    "hi": 0.371159,
+    "lo": 0.354421,
+    "method": "student-t 95% of the mean of the raw samples",
+    "n": 10
+   },
+   "config": "staging_fast,verified_handoff",
+   "correctness_gate": {
+    "excluded": 0,
+    "valid_blocks": 10
+   },
+   "host": {
+    "cpus": 12,
+    "load_avg_1m_at_start": 9.291015625,
+    "platform": "macOS-15.6-arm64-arm-64bit-Mach-O",
+    "python": "3.14.7"
+   },
+   "id": "00319",
+   "limitations": [
+    "synthetic project; same process image per arm; flags via VEP_PERF",
+    "load avg 7.9-9.8, minimum CPU idle 45.2%"
+   ],
+   "metric": "wall_s",
+   "operation": "ab:staging_fast,verified_handoff",
+   "project": "synthetic-200-files",
+   "project_commit": null,
+   "samples": [
+    0.3430363330116961,
+    0.37114224999095313,
+    0.366352665994782,
+    0.3680589589930605,
+    0.37824604197521694,
+    0.37318487497395836,
+    0.3621860000130255,
+    0.3433199590072036,
+    0.36090712499571964,
+    0.3614660000021104
+   ],
+   "samples_n": 10,
+   "scenario": "ab_n200_new",
+   "source_path": "benchmarks/results/ab-local-macos-n200-factorial.json",
+   "source_sha256": "509fad3ee9fae748599f4a1efca798b1e286304869f88baf7ea61f6c080bef7a",
+   "stats": {
+    "max": 0.3782,
+    "mean": 0.3628,
+    "median": 0.3643,
+    "min": 0.343,
+    "n": 10,
+    "sd": 0.0117
+   },
+   "units": "s",
+   "variance": {
+    "sd": 0.0117
+   },
+   "vep_commit": null,
+   "warmups": 2
+  },
+  {
+   "assurance": "VEP_PROTECTED_FRESH_CERTIFICATE",
+   "cache_eligibility": "n/a",
+   "classification": "INVALID_ENVIRONMENT",
+   "cohort": "macos-arm64-12cpu-local",
+   "confidence_interval": {
+    "hi": 0.356519,
+    "lo": 0.323481,
+    "method": "student-t 95% of the mean of the raw samples",
+    "n": 10
+   },
+   "config": "verified_handoff",
+   "correctness_gate": {
+    "excluded": 0,
+    "valid_blocks": 10
+   },
+   "host": {
+    "cpus": 12,
+    "load_avg_1m_at_start": 9.291015625,
+    "platform": "macOS-15.6-arm64-arm-64bit-Mach-O",
+    "python": "3.14.7"
+   },
+   "id": "00320",
+   "limitations": [
+    "synthetic project; same process image per arm; flags via VEP_PERF",
+    "load avg 7.9-9.8, minimum CPU idle 45.2%"
+   ],
+   "metric": "cpu_s",
+   "operation": "ab:verified_handoff",
+   "project": "synthetic-200-files",
+   "project_commit": null,
+   "samples": [
+    0.34,
+    0.30000000000000004,
+    0.37000000000000005,
+    0.35000000000000003,
+    0.35000000000000003,
+    0.32999999999999996,
+    0.30999999999999994,
+    0.35000000000000003,
+    0.37000000000000005,
+    0.33000000000000007
+   ],
+   "samples_n": 10,
+   "scenario": "ab_n200_new",
+   "source_path": "benchmarks/results/ab-local-macos-n200-factorial.json",
+   "source_sha256": "509fad3ee9fae748599f4a1efca798b1e286304869f88baf7ea61f6c080bef7a",
+   "stats": {
+    "max": 0.37,
+    "mean": 0.34,
+    "median": 0.345,
+    "min": 0.3,
+    "n": 10,
+    "sd": 0.0231
+   },
+   "units": "s",
+   "variance": {
+    "sd": 0.0231
+   },
+   "vep_commit": null,
+   "warmups": 2
+  },
+  {
+   "assurance": "VEP_PROTECTED_FRESH_CERTIFICATE",
+   "cache_eligibility": "n/a",
+   "classification": "INVALID_ENVIRONMENT",
+   "cohort": "macos-arm64-12cpu-local",
+   "confidence_interval": {
+    "hi": 0.32531,
+    "lo": 0.278314,
+    "method": "student-t 95% of the mean of the raw samples",
+    "n": 10
+   },
+   "config": "verified_handoff",
+   "correctness_gate": {
+    "excluded": 0,
+    "valid_blocks": 10
+   },
+   "host": {
+    "cpus": 12,
+    "load_avg_1m_at_start": 9.291015625,
+    "platform": "macOS-15.6-arm64-arm-64bit-Mach-O",
+    "python": "3.14.7"
+   },
+   "id": "00321",
+   "limitations": [
+    "synthetic project; same process image per arm; flags via VEP_PERF",
+    "load avg 7.9-9.8, minimum CPU idle 45.2%"
+   ],
+   "metric": "evaluate_s",
+   "operation": "ab:verified_handoff",
+   "project": "synthetic-200-files",
+   "project_commit": null,
+   "samples": [
+    0.28892770799575374,
+    0.27174575001117773,
+    0.31270999999833293,
+    0.3106373749906197,
+    0.2882392499886919,
+    0.2902572920138482,
+    0.28150075001758523,
+    0.302528792002704,
+    0.387777374999132,
+    0.2837939169839956
+   ],
+   "samples_n": 10,
+   "scenario": "ab_n200_new",
+   "source_path": "benchmarks/results/ab-local-macos-n200-factorial.json",
+   "source_sha256": "509fad3ee9fae748599f4a1efca798b1e286304869f88baf7ea61f6c080bef7a",
+   "stats": {
+    "max": 0.3878,
+    "mean": 0.3018,
+    "median": 0.2896,
+    "min": 0.2717,
+    "n": 10,
+    "sd": 0.0329
+   },
+   "units": "s",
+   "variance": {
+    "sd": 0.0329
+   },
+   "vep_commit": null,
+   "warmups": 2
+  },
+  {
+   "assurance": "VEP_PROTECTED_FRESH_CERTIFICATE",
+   "cache_eligibility": "n/a",
+   "classification": "INVALID_ENVIRONMENT",
+   "cohort": "macos-arm64-12cpu-local",
+   "confidence_interval": {
+    "hi": 0.050015,
+    "lo": 0.041135,
+    "method": "student-t 95% of the mean of the raw samples",
+    "n": 10
+   },
+   "config": "verified_handoff",
+   "correctness_gate": {
+    "excluded": 0,
+    "valid_blocks": 10
+   },
+   "host": {
+    "cpus": 12,
+    "load_avg_1m_at_start": 9.291015625,
+    "platform": "macOS-15.6-arm64-arm-64bit-Mach-O",
+    "python": "3.14.7"
+   },
+   "id": "00322",
+   "limitations": [
+    "synthetic project; same process image per arm; flags via VEP_PERF",
+    "load avg 7.9-9.8, minimum CPU idle 45.2%"
+   ],
+   "metric": "materialize_s",
+   "operation": "ab:verified_handoff",
+   "project": "synthetic-200-files",
+   "project_commit": null,
+   "samples": [
+    0.04311362499720417,
+    0.03862158299307339,
+    0.048617082997225225,
+    0.049412583000957966,
+    0.043554000003496185,
+    0.04397279198747128,
+    0.04144154200912453,
+    0.04276158398715779,
+    0.06081354198977351,
+    0.04344137498992495
+   ],
+   "samples_n": 10,
+   "scenario": "ab_n200_new",
+   "source_path": "benchmarks/results/ab-local-macos-n200-factorial.json",
+   "source_sha256": "509fad3ee9fae748599f4a1efca798b1e286304869f88baf7ea61f6c080bef7a",
+   "stats": {
+    "max": 0.0608,
+    "mean": 0.0456,
+    "median": 0.0435,
+    "min": 0.0386,
+    "n": 10,
+    "sd": 0.0062
+   },
+   "units": "s",
+   "variance": {
+    "sd": 0.0062
+   },
+   "vep_commit": null,
+   "warmups": 2
+  },
+  {
+   "assurance": "VEP_PROTECTED_FRESH_CERTIFICATE",
+   "cache_eligibility": "n/a",
+   "classification": "INVALID_ENVIRONMENT",
+   "cohort": "macos-arm64-12cpu-local",
+   "confidence_interval": {
+    "hi": 40.803762,
+    "lo": 40.113537,
+    "method": "student-t 95% of the mean of the raw samples",
+    "n": 10
+   },
+   "config": "verified_handoff",
+   "correctness_gate": {
+    "excluded": 0,
+    "valid_blocks": 10
+   },
+   "host": {
+    "cpus": 12,
+    "load_avg_1m_at_start": 9.291015625,
+    "platform": "macOS-15.6-arm64-arm-64bit-Mach-O",
+    "python": "3.14.7"
+   },
+   "id": "00323",
+   "limitations": [
+    "synthetic project; same process image per arm; flags via VEP_PERF",
+    "load avg 7.9-9.8, minimum CPU idle 45.2%"
+   ],
+   "metric": "rss_child_max_mb",
+   "operation": "ab:verified_handoff",
+   "project": "synthetic-200-files",
+   "project_commit": null,
+   "samples": [
+    39.796736,
+    41.20576,
+    40.288256,
+    40.943616,
+    40.05888,
+    40.46848,
+    40.5504,
+    40.927232,
+    39.796736,
+    40.5504
+   ],
+   "samples_n": 10,
+   "scenario": "ab_n200_new",
+   "source_path": "benchmarks/results/ab-local-macos-n200-factorial.json",
+   "source_sha256": "509fad3ee9fae748599f4a1efca798b1e286304869f88baf7ea61f6c080bef7a",
+   "stats": {
+    "max": 41.2058,
+    "mean": 40.4586,
+    "median": 40.5094,
+    "min": 39.7967,
+    "n": 10,
+    "sd": 0.4825
+   },
+   "units": "MB",
+   "variance": {
+    "sd": 0.4825
+   },
+   "vep_commit": null,
+   "warmups": 2
+  },
+  {
+   "assurance": "VEP_PROTECTED_FRESH_CERTIFICATE",
+   "cache_eligibility": "n/a",
+   "classification": "INVALID_ENVIRONMENT",
+   "cohort": "macos-arm64-12cpu-local",
+   "confidence_interval": {
+    "hi": 0.431315,
+    "lo": 0.371986,
+    "method": "student-t 95% of the mean of the raw samples",
+    "n": 10
+   },
+   "config": "verified_handoff",
+   "correctness_gate": {
+    "excluded": 0,
+    "valid_blocks": 10
+   },
+   "host": {
+    "cpus": 12,
+    "load_avg_1m_at_start": 9.291015625,
+    "platform": "macOS-15.6-arm64-arm-64bit-Mach-O",
+    "python": "3.14.7"
+   },
+   "id": "00324",
+   "limitations": [
+    "synthetic project; same process image per arm; flags via VEP_PERF",
+    "load avg 7.9-9.8, minimum CPU idle 45.2%"
+   ],
+   "metric": "wall_s",
+   "operation": "ab:verified_handoff",
+   "project": "synthetic-200-files",
+   "project_commit": null,
+   "samples": [
+    0.38578908299678005,
+    0.3554646250267979,
+    0.41976145800435916,
+    0.41418629200779833,
+    0.38629458300420083,
+    0.38629008299903944,
+    0.3788569589960389,
+    0.40371741697890684,
+    0.5070317919889931,
+    0.3791150829929393
+   ],
+   "samples_n": 10,
+   "scenario": "ab_n200_new",
+   "source_path": "benchmarks/results/ab-local-macos-n200-factorial.json",
+   "source_sha256": "509fad3ee9fae748599f4a1efca798b1e286304869f88baf7ea61f6c080bef7a",
+   "stats": {
+    "max": 0.507,
+    "mean": 0.4017,
+    "median": 0.3863,
+    "min": 0.3555,
+    "n": 10,
+    "sd": 0.0415
+   },
+   "units": "s",
+   "variance": {
+    "sd": 0.0415
+   },
+   "vep_commit": null,
+   "warmups": 2
   }
  ],
  "sources": [
+  {
+   "bytes": 3740,
+   "classification": "PROPOSED",
+   "cohort": "none",
+   "git_commit": "5506e1c8b87dc21241d6bdbb7d427d5fdf9a9e81",
+   "host": {},
+   "kind": "experiment_plan",
+   "note": "predeclared experiments and endpoints; contains no measurements",
+   "observations": 0,
+   "path": "benchmarks/analysis/PLANNED_EXPERIMENTS.json",
+   "project": null,
+   "project_commit": null,
+   "sha256": "3f81324a66a9affe130ed69cc7f7a523641a98499229cafc07e9e03bd41af598",
+   "vep_commit": null
+  },
   {
    "bytes": 31120,
    "classification": "SYNTHETIC",
@@ -18957,6 +21896,46 @@
    "project": null,
    "project_commit": null,
    "sha256": "c65422b3e770c718758f26c36dfe65199b08c04f2a6adce707eb5b87814f2769",
+   "vep_commit": null
+  },
+  {
+   "bytes": 31312,
+   "classification": "INVALID_ENVIRONMENT",
+   "cohort": "macos-arm64-12cpu-local",
+   "git_commit": "b004370493cd913ca0296142ab78dcf1d164c94f",
+   "host": {
+    "cpus": 12,
+    "load_avg_1m_at_start": 9.16015625,
+    "platform": "macOS-15.6-arm64-arm-64bit-Mach-O",
+    "python": "3.14.7"
+   },
+   "kind": "ab_experiment",
+   "note": "balanced randomized paired blocks; load avg 8.5-10.2, minimum CPU idle 45.5% (declared criteria NOT met: not citable as a quiet-machine result)",
+   "observations": 20,
+   "path": "benchmarks/results/ab-local-macos-n1000-factorial.json",
+   "project": "synthetic-1000-files",
+   "project_commit": null,
+   "sha256": "1bb9e257f74c578a7c2b9cd3b3a6622e150e7f6b5ea930f85bf91574119144e1",
+   "vep_commit": null
+  },
+  {
+   "bytes": 31940,
+   "classification": "INVALID_ENVIRONMENT",
+   "cohort": "macos-arm64-12cpu-local",
+   "git_commit": "b004370493cd913ca0296142ab78dcf1d164c94f",
+   "host": {
+    "cpus": 12,
+    "load_avg_1m_at_start": 9.291015625,
+    "platform": "macOS-15.6-arm64-arm-64bit-Mach-O",
+    "python": "3.14.7"
+   },
+   "kind": "ab_experiment",
+   "note": "balanced randomized paired blocks; load avg 7.9-9.8, minimum CPU idle 45.2% (declared criteria NOT met: not citable as a quiet-machine result)",
+   "observations": 20,
+   "path": "benchmarks/results/ab-local-macos-n200-factorial.json",
+   "project": "synthetic-200-files",
+   "project_commit": null,
+   "sha256": "509fad3ee9fae748599f4a1efca798b1e286304869f88baf7ea61f6c080bef7a",
    "vep_commit": null
   },
   {

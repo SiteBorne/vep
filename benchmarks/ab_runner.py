@@ -86,7 +86,9 @@ def main() -> int:
         ms = [(b["runs"][arm]["materialize_s"] - b["runs"][base]["materialize_s"]) for b in good]
         if good:
             comps[f"{arm}_vs_{base}"]["materialize_s_mean_paired_diff"] = round(statistics.mean(ms), 4)
-    doc = {"kind": "paired A/B of VEP_PERF flag sets", "n_files": a.n, "arms": a.arms, "baseline": base, "change": a.change, "seed": a.seed, "valid_blocks": len(good), "warmup_blocks": len(warm),
+    head = subprocess.run(["git", "-C", str(HERE.parent), "rev-parse", "HEAD"], capture_output=True, text=True).stdout.strip()
+    dirty = bool(subprocess.run(["git", "-C", str(HERE.parent), "status", "--porcelain", "--untracked-files=no"], capture_output=True, text=True).stdout.strip())
+    doc = {"kind": "paired A/B of VEP_PERF flag sets", "vep_commit": head, "tree_dirty": dirty, "n_files": a.n, "arms": a.arms, "baseline": base, "change": a.change, "seed": a.seed, "valid_blocks": len(good), "warmup_blocks": len(warm),
            "excluded": excluded, "host": {"platform": platform.platform(), "cpus": os.cpu_count(), "python": platform.python_version(), "load_avg_1m_at_start": os.getloadavg()[0]},
            "summary": summary, "comparisons": comps, "blocks": blocks, "warmups": warm,
            "rule": {"relative": P.REL, "absolute_s": P.ABS, "note": "applied to wall and to CPU seconds; adoption also needs zero correctness exclusions and no cold-path regression"}}
