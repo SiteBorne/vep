@@ -1,0 +1,25 @@
+{
+ "version": 1,
+ "declared_before_measuring": true,
+ "baseline_implementation": "1ab17af (VEP 0.6.0b1 candidate); every arm below is the same code with a VEP_PERF flag set, run in fresh processes in balanced random order",
+ "design": {"blocks": "10 valid blocks per size (6 at 3000 files), 2 warm-up blocks recorded and not analysed", "pairing": "within a block, same machine state; seeded shuffle of arm order", "exclusions": "a block is excluded only when some arm fails correctness (not certified, or bundle not AUTHORIZED); exclusions are listed and an arm with any exclusion cannot be adopted",
+            "statistics": "preregistered Welch 95% interval of the relative difference and a paired bootstrap 95% interval (10,000 resamples); both must agree for adoption", "cohorts": "macOS local and hosted Linux are analysed separately and never pooled"},
+ "endpoints": {
+  "wall_full_workflow": {"unit": "s", "adopt_if": "whole 95% interval of relative difference below -10% AND mean absolute gain above 50 ms, at 1,000 and 3,000 files", "source": "docs/BENCHMARK_METHODOLOGY.md (unchanged)"},
+  "cpu_seconds": {"unit": "s", "adopt_if": "whole 95% interval of relative CPU difference below -10% AND absolute gain above 50 ms (declared before measuring)"},
+  "cold_path_guard": {"unit": "s", "reject_if": "at 100 files the optimized arm is slower than baseline by more than 5% and 50 ms (interval entirely above +5%)"},
+  "throughput_jobs_per_s": {"unit": "jobs/s", "adopt_if": "mean throughput gain of at least 10% with p95 job latency not worse by more than 10%, no stale commits, all candidates certified exactly once"},
+  "memory": {"unit": "MB", "reject_if": "peak RSS (largest child) grows by more than 25% at 3,000 files or the handoff cap is exceeded"},
+  "correctness": {"adopt_requires": "zero correctness regressions: the invariant suite (benchmarks/invariants) passes with the flag set, tests/test_staging_equivalence.py passes, and no unexplained cache hit"}
+ },
+ "experiments": {
+  "A1_staging_fast": {"flag": "staging_fast", "change": "create each directory once; create each staged file exclusively with O_NOFOLLOW at its final mode; no per-file mkdir/chmod by path", "guards": ["staged tree identical (bytes, modes)", "distinct inodes, no link into the CAS", "symlink race refused"]},
+  "A2_staging_clone": {"flag": "staging_clone", "change": "macOS clonefile copy-on-write instead of reading the blob; hard links are never used; falls back to a normal write", "guards": ["pre-run tree hash still verifies the staged tree", "CAS blob unchanged after writes to the staged file"]},
+  "B_verified_handoff": {"flag": "verified_handoff", "change": "one verifying read of each blob per evaluation (instead of three); verified bytes (bounded memory) are written during staging", "guards": ["corrupted blob never certified", "scope cap changes speed only"]},
+  "C_policy_metadata_cache": {"status": "analysed from the profile first; implemented only if pure computations remain a measurable share after A/B"},
+  "D_resource_aware_scheduling": {"workers": [1, 2, 4, 8, 16], "workloads": ["short real tests (pyflakes, ~0.5 s)", "long real tests (more-itertools, ~6 s)"], "adaptive concurrency is implemented only if throughput improves without p95 latency regression"},
+  "E_agent_fast_path": {"deliverable": "explicit API with three never-substituted outcomes: FRESH_CERTIFICATE, DERIVED_ATTESTATION, ADVISORY_FEEDBACK"},
+  "F_mcp_round_trips": {"measure": "calls and bytes for a scripted coding sequence; change only if round trips fall without changing schemas incompatibly"}
+ },
+ "claims_policy": "no performance claim is published without a measurement record and a verdict from the rule above; negative results are kept"
+}
