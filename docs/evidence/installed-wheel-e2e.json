@@ -1,0 +1,94 @@
+{
+ "installed_from_site_packages": true,
+ "ok": true,
+ "package": "0.6.0b1",
+ "steps": [
+  {
+   "detail": "2026-07-28",
+   "ok": true,
+   "step": "mcp: protocol negotiated"
+  },
+  {
+   "detail": "12",
+   "ok": true,
+   "step": "mcp: 12 tools with output schemas"
+  },
+  {
+   "detail": "",
+   "ok": true,
+   "step": "mcp: write rejected without authority"
+  },
+  {
+   "detail": "POLICY_CHECKED",
+   "ok": true,
+   "step": "mcp: candidate registered, not certified by registration"
+  },
+  {
+   "detail": "{'candidate_status': 'CERTIFIED', 'verdict': 'PASS', 'trust_level': 'TRUSTED_LOCAL', 'evidence_id': 'evd-961dcc4771294f4901e2b7daf1f98f2b819de774ac2b859741fd4e2e2460c5ee', 'certificate_id': 'cert-dde5240092df8617af008d0718b78c31cafbdf07f21b8a153eee8a90d7833aed'}",
+   "ok": true,
+   "step": "mcp: protected evaluation certified"
+  },
+  {
+   "detail": "",
+   "ok": true,
+   "step": "mcp: workspace verification valid"
+  },
+  {
+   "detail": "",
+   "ok": true,
+   "step": "verify: authorized under external trust policy (Python)"
+  },
+  {
+   "detail": "",
+   "ok": true,
+   "step": "verify: authorized under external trust policy (Node)"
+  },
+  {
+   "detail": "",
+   "ok": true,
+   "step": "verify: wrong expected snapshot rejected"
+  },
+  {
+   "detail": "SOURCE_CHANGED: current tree snap-19a6435ac650778b0bba6b46159803f79cf5f1f76921f0",
+   "ok": true,
+   "step": "verify: source mutation invalidates the exact snapshot"
+  },
+  {
+   "detail": "",
+   "ok": true,
+   "step": "mcp: unknown artifact handle rejected"
+  },
+  {
+   "detail": "3",
+   "ok": true,
+   "step": "a2a: verify_change completes only when certified"
+  },
+  {
+   "detail": "cert-d28d7896aed0dc3",
+   "ok": true,
+   "step": "a2a: artifact carries certificate id"
+  },
+  {
+   "detail": "",
+   "ok": true,
+   "step": "a2a: after restart the A2A task id is unknown (in-memory adapter state)"
+  },
+  {
+   "detail": "",
+   "ok": true,
+   "step": "a2a: after restart the VEP job and certified candidate persist"
+  },
+  {
+   "detail": "candidates=1",
+   "ok": true,
+   "step": "a2a: retrying the same message id after restart creates no second candidate"
+  },
+  {
+   "detail": "",
+   "ok": true,
+   "step": "a2a: unauthenticated call rejected"
+  }
+ ],
+ "wheel": "vep_protocol-0.6.0b1-py3-none-any.whl",
+ "wheel_sha256": "032a6f029afd86661e5f31bc422fa95850dae64c18b0506d9df9c2c9f2ac82fa"
+}

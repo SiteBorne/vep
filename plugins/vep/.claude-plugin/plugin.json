@@ -1,0 +1,14 @@
+{
+  "name": "vep",
+  "displayName": "VEP - Verified Evolution Protocol",
+  "version": "0.6.0b1",
+  "description": "Ask a local VEP server to verify a code change with protected, signed, exact-snapshot test evidence, explain a failed invariant, and export evidence a third party can check with their own trust policy.",
+  "author": {
+    "name": "SiteBorne",
+    "url": "https://github.com/SiteBorne"
+  },
+  "homepage": "https://github.com/SiteBorne/vep",
+  "repository": "https://github.com/SiteBorne/vep",
+  "license": "Apache-2.0",
+  "keywords": ["verification", "testing", "evidence", "mcp"]
+}

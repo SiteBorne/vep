@@ -1,0 +1,8 @@
+{
+  "mcpServers": {
+    "vep": {
+      "command": "python3",
+      "args": ["${CLAUDE_PLUGIN_ROOT}/server/vep_mcp.py", "--authority", "read,register"]
+    }
+  }
+}

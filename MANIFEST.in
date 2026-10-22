@@ -14,3 +14,4 @@ recursive-include docs *.json
 recursive-include benchmarks *.json
 exclude launch-gate.json
 graft tests/fixtures
+graft plugins
