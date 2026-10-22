@@ -28,7 +28,7 @@ from .evidence import KeyStore, store_signed
 from .isolation import probe
 from .objects import VEPObject
 from .policies import load_policy
-from .snapshots import make_writable, materialize, tree_snapshot_id, verify_snapshot
+from .snapshots import BlobScope, make_writable, materialize, tree_snapshot_id, verify_snapshot
 from .workspace import Workspace, utcnow
 
 TRUSTED_LOCAL_AUTH = "I-ACCEPT-NON-ISOLATED-EXECUTION"
@@ -285,14 +285,15 @@ def evaluate(ws: Workspace, candidate_id: str, *, trusted_local_authorization: s
         raise AuthorizationError("policy requires ISOLATED_VERIFIED evidence; trusted-local execution can never satisfy it "
                                  "and VEP will not fall back or relabel")
     snap = ws.get_object(cand["snapshot_id"], "Snapshot")
+    scope = BlobScope()
     if st["status"] == "PROPOSED":
-        viol = candidates.check_policy(ws, candidate_id)
+        viol = candidates.check_policy(ws, candidate_id, scope=scope)
         if viol:
             raise PolicyViolation("; ".join(viol))
         st = candidates.get_state(ws, candidate_id)
     if st["status"] != "POLICY_CHECKED":
         raise StateError(f"candidate must be POLICY_CHECKED to evaluate (is {st['status']})")
-    verify_snapshot(ws, snap)
+    verify_snapshot(ws, snap, scope)
     if st["objective_id"] != objective.id or st["snapshot_id"] != snap.id:
         raise StateError("candidate row does not match its immutable object")
     # static audits from the frozen policy, on the exact candidate snapshot
@@ -328,7 +329,8 @@ def evaluate(ws: Workspace, candidate_id: str, *, trusted_local_authorization: s
         for forbidden in (ws.root, ws.state):
             if scratch.resolve() == forbidden or forbidden in scratch.resolve().parents:
                 raise ExecutionError("staging directory lies inside the workspace; refusing")
-        materialize(ws, snap, staged)
+        materialize(ws, snap, staged, scope=scope)
+        scope.clear()
         if tree_snapshot_id(staged, excludes=()) != snap.id:
             raise ExecutionError("staged tree does not match snapshot")
         started = utcnow()

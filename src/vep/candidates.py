@@ -95,7 +95,7 @@ def transition(ws: Workspace, candidate_id: str, to_status: str, expected_versio
         return run(c)
 
 
-def check_policy(ws: Workspace, candidate_id: str, actor: str = "vep-policy-checker") -> list[str]:
+def check_policy(ws: Workspace, candidate_id: str, actor: str = "vep-policy-checker", scope=None) -> list[str]:
     """PROPOSED -> POLICY_CHECKED, or REJECTED with recorded violations."""
     st = get_state(ws, candidate_id)
     cand = ws.get_object(candidate_id, "Candidate")
@@ -103,7 +103,7 @@ def check_policy(ws: Workspace, candidate_id: str, actor: str = "vep-policy-chec
     policy = load_policy(ws, objective["policy_id"])
     base = ws.get_object(objective["base_snapshot_id"], "Snapshot")
     snap = ws.get_object(cand["snapshot_id"], "Snapshot")
-    verify_snapshot(ws, snap)
+    verify_snapshot(ws, snap, scope)
     violations = check_candidate(policy, base, snap)
     if violations:
         transition(ws, candidate_id, "REJECTED", st["version"], actor, "; ".join(violations))
