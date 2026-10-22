@@ -7,7 +7,7 @@ Ten minutes, no accounts, no network after installation. Steps 9-12 need a build
 ## 1. Install
 ```bash
 python3 -m venv .venv && . .venv/bin/activate
-pip install ./vep_protocol-0.5.0b1-py3-none-any.whl   # wheel from the GitHub release; verify it first (docs/RELEASE_PROVENANCE.md)
+pip install ./vep_protocol-0.6.0b1-py3-none-any.whl   # wheel built from this source (python -m build); for the published 0.5.0b1 wheel verify it first (docs/RELEASE_PROVENANCE.md)
 vep version
 ```
 (There is no PyPI release; install the wheel from the GitHub prerelease or from `python -m build` in a checkout. See `docs/RELEASE_PROVENANCE.md` for verifying it first.)

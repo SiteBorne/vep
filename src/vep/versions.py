@@ -1,7 +1,7 @@
 """Independent version axes. Changing one does not imply changing another."""
 from __future__ import annotations
 
-PACKAGE_VERSION = "0.5.0b1"        # distribution version (PEP 440); must equal pyproject.toml
+PACKAGE_VERSION = "0.6.0b1"        # distribution version (PEP 440); must equal pyproject.toml
 PROTOCOL_VERSION = "0.3"           # wire-level semantics: canonicalization, identity derivation, lifecycle
 CANONICAL_FORMAT = "VEP-C1"        # canonical serialization rules
 DB_SCHEMA_VERSION = 3              # SQLite layout (2 adds evidence/certificate trust columns; 3 adds controller jobs/job_events)

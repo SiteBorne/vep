@@ -2,7 +2,7 @@
 
 All notable changes. Format: [Keep a Changelog](https://keepachangelog.com/en/1.1.0/). Versions: [PEP 440](https://peps.python.org/pep-0440/).
 
-## [Unreleased] (proposed next version: 0.6.0b1)
+## [0.6.0b1] - UNRELEASED (release candidate; date set when tagged)
 Protocol version unchanged (0.3); database schema unchanged (3); Evidence/Certificate schemas unchanged; new object type `DerivedAttestation` v1. Nothing here is released, tagged or pushed. Compatibility notes: `docs/COMPATIBILITY.md`; qualification: `docs/PRODUCTION_QUALIFICATION_REPORT.md`.
 
 ### Added

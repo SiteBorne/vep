@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "vep-protocol"
-version = "0.5.0b1"
+version = "0.6.0b1"
 description = "Verified Evolution Protocol: invariant-first, agent-native verification reference MVP"
 readme = "README.md"
 license = "Apache-2.0"

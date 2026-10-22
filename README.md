@@ -1,6 +1,6 @@
 # VEP — Verified Evolution Protocol
 
-**Version 0.5.0b1 — public beta (prerelease).** A local reference implementation of an agent-native, evidence-oriented software development protocol. Apache-2.0. No accounts, no network, no paid services.
+**Version 0.6.0b1 — beta release candidate (unreleased; the published prerelease is `v0.5.0b1`).** A local reference implementation of an agent-native, evidence-oriented software development protocol. Apache-2.0. No accounts, no network, no paid services.
 
 > **Read this first.** VEP's default execution mode, `TRUSTED_LOCAL`, runs a project's code on your machine **with your permissions and no isolation**, and only after you pass `--trusted-local-execution`. Use it for code you already trust. A Docker + gVisor path (`ISOLATED_VERIFIED`) exists; its verification matrix passed on one GitHub-hosted runner but has **not** been verified on every setup (it is `UNVERIFIED` on a typical laptop without `runsc`) and is not escape-tested, so VEP makes no claim about evaluating untrusted code. Details: [SECURITY_LIMITATIONS](docs/SECURITY_LIMITATIONS.md), [SECURITY_ARCHITECTURE](docs/SECURITY_ARCHITECTURE.md).
 
@@ -31,7 +31,7 @@ Identities are domain-separated SHA-256 over canonical JSON. Candidates move thr
 ## Install (Python ≥ 3.11, Linux or macOS)
 ```bash
 python3 -m venv .venv && . .venv/bin/activate
-pip install ./vep_protocol-0.5.0b1-py3-none-any.whl     # wheel from the GitHub release (verify it first: docs/RELEASE_PROVENANCE.md)
+pip install ./vep_protocol-0.6.0b1-py3-none-any.whl     # wheel built from this source (the published 0.5.0b1 wheel predates MCP/A2A/trust policies) (verify it first: docs/RELEASE_PROVENANCE.md)
 vep version
 ```
 From a checkout: `pip install -e ".[dev]"`. A PyPI release is **not** published yet; the distribution name is `vep-protocol`.
@@ -57,7 +57,7 @@ $ vep verify --certificate "$CERT"
 {
   "checks_passed": ["certificate signature", "evidence signature", "evidence binding",
                     "candidate/objective/policy binding", "current source equals certified snapshot"],
-  "evaluator_id": "vep-local-evaluator/0.5.0b1/TRUSTED_LOCAL",
+  "evaluator_id": "vep-local-evaluator/0.6.0b1/TRUSTED_LOCAL",
   "legacy_schema": false,
   "mode": "current-source",
   "required_trust": "TRUSTED_LOCAL",

@@ -4,7 +4,7 @@ Five version axes move independently. A change on one axis never silently change
 
 | Axis | Current | Where | Bumped when |
 |---|---|---|---|
-| Package | `0.5.0b1` | `pyproject.toml`, `vep.__version__`, `vep.versions.PACKAGE_VERSION` | any release |
+| Package | `0.6.0b1` (release candidate; published: `0.5.0b1`) | `pyproject.toml`, `vep.__version__`, `vep.versions.PACKAGE_VERSION` | any release |
 | Protocol | `0.3` | `vep.versions.PROTOCOL_VERSION` | lifecycle/identity/canonicalization **semantics** change |
 | Canonical format | `VEP-C1` | `canonical.py`, RFC-0001 §2 | serialization rules change (changes every identity) |
 | Object schema | per type; Evidence/Certificate = **2**, all others = 1 | `objects.CURRENT_VERSION` | a type's fields or cross-field rules change |
@@ -21,7 +21,7 @@ Five version axes move independently. A change on one axis never silently change
 * **CLI.** Commands and flags from 0.3.0 keep working. Additions in 0.4.0a1: `vep version`, `vep isolation detect|verify`, `--field`, `--budget` (objective), `--require-trust`, `--image`/`--attestation-file` (evaluate). Exit codes are stable (`docs/VARIABLES.md`, "CLI and process"). `--json` output is a JSON object/array; field *addition* is not considered breaking, removal/renaming is.
 * **Python API.** Modules named in the README quickstart and `docs/ARCHITECTURE.md` are the supported surface; names starting with `_` are private. In alpha, minor releases may change module-level APIs with a CHANGELOG entry.
 
-## Intentional behavior changes after 0.5.0b1 (unreleased; the next package version is proposed as `0.6.0b1`, protocol version stays `0.3`)
+## Intentional behavior changes after 0.5.0b1 (package `0.6.0b1`, release candidate; protocol version stays `0.3`)
 | Change | Why | Compatibility effect |
 |---|---|---|
 | `vep conformance export` writes **bundle format 2** by default; `--bundle-version 1` keeps the old self-contained format; `vep conformance verify` requires a trust policy (or `--internal-only`) | a bundle that carries its own keys and expectations cannot authorize itself (reproduced in `tests/test_trust_anchor_risk.py`) | scripts that exported and verified v1 bundles keep working with `--bundle-version 1 --internal-only`; the result is now labelled `INTERNAL_CONSISTENCY_ONLY`. Protocol semantics are unchanged |
